@@ -1,0 +1,61 @@
+.chat-call {
+    &.base-container {
+        // display: grid;
+        display: none;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 12px;
+        background-color: $grey0;
+        order: 3000;
+        position: relative;
+
+        .chat-window.close {
+            top: -12px;
+            right: -12px;
+        }
+
+        &.shown {
+            display: grid;
+        }
+
+        legend {
+            display: none;
+        }
+
+        fieldset {
+            background-color: $superwhite;
+            border-color: $superwhite;
+            color: $grey5;
+            padding: 0;
+            border-radius: 8px;
+
+            &>.input-wrapper {
+                .icon {
+                    margin-top: 12px;
+                }
+            }
+        }
+
+        .checkbox-borders {
+            background-color: $superwhite;
+            border: 1px solid $superwhite;
+        }
+
+        input[type=tel],
+        input[type=text] {
+            padding: 12px 0 12px 12px;
+        }
+
+        .peinag.description {
+            margin-top: 0;
+        }
+
+        .peinag.button {
+            order: 1000;
+            height: 48px;
+            margin-top: 12px;
+            font-size: 16px;
+            justify-self: center;
+        }
+    }
+}

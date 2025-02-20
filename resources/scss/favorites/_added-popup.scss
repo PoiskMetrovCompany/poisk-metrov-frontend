@@ -1,0 +1,72 @@
+.added-popup {
+    &.base-container {
+        position: absolute;
+        display: none;
+        padding: 24px;
+        border-radius: 16px;
+        gap: 24px;
+        flex-direction: column;
+        background-color: $superwhite;
+        right: 100%;
+        transform: translate(-16px, 16px);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        box-shadow: $common-shadow;
+
+        &.visible {
+            display: flex;
+        }
+
+        @include media-breakpoint-down(md) {
+            right: 0;
+        }
+    }
+
+    &.title {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        color: $black1;
+    }
+
+    &.price {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        color: $orange1;
+    }
+
+    &.header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &>.action-close {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            background-color: $grey3;
+        }
+    }
+
+    &.content {
+        display: grid;
+        gap: 4px;
+    }
+
+    &.button {
+        background-color: $orange1;
+        border-radius: 16px;
+        height: 32px;
+        color: $white;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+    }
+}

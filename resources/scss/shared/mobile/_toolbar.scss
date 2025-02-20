@@ -1,0 +1,44 @@
+mobile-toolbar {
+    display: flex;
+    position: sticky;
+    flex-direction: row;
+    bottom: 0;
+    width: 100%;
+    background-color: $white;
+    border-radius: 16px 16px 0 0;
+    z-index: 20;
+    background-color: $superwhite;
+    padding: 8px 20px;
+    // gap: 32px;
+    justify-content: space-around;
+
+    @include media-breakpoint-up(md) {
+        display: none;
+    }
+
+    a {
+        display: grid;
+        justify-items: center;
+        color: $grey5;
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            background-color: $grey5;
+            margin-bottom: 6px;
+        }
+
+        div {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        &[selected=true] {
+            color: $orange1;
+
+            .icon {
+                background-color: $orange1;
+            }
+        }
+    }
+}

@@ -1,0 +1,108 @@
+.how-work-gallery {
+    &.work-base-container {
+        display: grid;
+        gap: 16px;
+
+        &>.title-flex {
+            align-items: end;
+        }
+    }
+
+    $imageWidthXxl: 520px;
+    $imageHeightXxl: 420px;
+    $imageWidthLg: 380px;
+    $imageHeightLg: 300px;
+    $imageWidthSm: 350px;
+    $imageHeightSm: 240px;
+
+    &.work-grid {
+        display: grid;
+        grid-template-columns: $imageWidthXxl 1fr;
+        gap: 100px;
+        padding: 0 100px;
+        position: relative;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        @include media-breakpoint-down(xl) {
+            grid-template-columns: $imageWidthLg 1fr;
+            padding: 40px;
+        }
+
+        @include media-breakpoint-down(lg) {
+            grid-template-columns: auto;
+            justify-items: center;
+            padding: 0;
+            gap: 24px;
+        }
+    }
+
+    &.images {
+        display: flex;
+        justify-content: flex-start;
+        overflow: auto;
+        scrollbar-width: none;
+        width: inherit;
+        height: inherit;
+        gap: 4px;
+    }
+
+    &.texts {
+        display: grid;
+        align-items: center;
+    }
+
+    &.work-container {
+        border-radius: calc($imageHeightXxl / 2);
+        object-fit: cover;
+        width: inherit;
+        height: inherit;
+
+        @include media-breakpoint-down(xl) {
+            border-radius: calc($imageHeightLg / 2);
+        }
+    }
+
+    &.gallery-with-buttons {
+        position: relative;
+        height: $imageHeightXxl;
+        width: $imageWidthXxl;
+
+        @include media-breakpoint-down(xl) {
+            height: $imageHeightLg;
+            width: $imageWidthLg;
+        }
+
+        @include media-breakpoint-down(md) {
+            height: $imageHeightSm;
+            width: $imageWidthSm;
+        }
+
+        @include media-breakpoint-down(sm) {
+            height: calc($imageHeightSm - 30px);
+            width: calc($imageWidthSm - 30px);
+        }
+
+        @include media-breakpoint-down(xs) {
+            height: calc($imageHeightSm - 60px);
+            width: calc($imageWidthSm - 60px);
+        }
+    }
+
+    &.work-title {
+        font-size: 24px;
+        line-height: 32px;
+        color: $black1;
+
+        div {
+            color: $orange1;
+        }
+
+        @include media-breakpoint-down(md) {
+            font-size: 20px;
+            line-height: 28px;
+        }
+    }
+}

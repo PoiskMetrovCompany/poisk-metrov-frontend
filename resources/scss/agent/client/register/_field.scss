@@ -1,0 +1,41 @@
+.agent {
+    &.field-title,
+    legend {
+        font-size: 12px;
+        line-height: 125%;
+        color: $black1;
+        font-weight: 400;
+    }
+
+    .input-container {
+        input {
+            height: 36px;
+        }
+    }
+
+    textarea {
+        height: fit-content;
+        border-radius: 8px;
+        padding: 8px 12px;
+        border: none;
+        font-size: 12px;
+        outline: 1.5px solid $grey2;
+        width: 100%;
+
+        &:focus,
+        &:focus-visible {
+            outline: 1.5px solid $blue;
+            color: $blue;
+        }
+
+        &:empty,
+        &::placeholder {
+            color: $grey3;
+            opacity: 1;
+        }
+
+        @include media-breakpoint-down(md) {
+            height: 200px;
+        }
+    }
+}

@@ -1,0 +1,51 @@
+.construction-progress {
+    &.base-container {
+        display: grid;
+        gap: 32px;
+    }
+
+    &.header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 500;
+    }
+
+    &.item {
+        display: grid;
+        gap: 16px;
+        //TODO: make 100%, looks better
+        width: calc(50% - 20px);
+        min-width: calc(50% - 20px);
+        max-width: calc(50% - 20px);
+
+        @include media-breakpoint-up(md) {
+            width: calc(33% - 20px);
+            min-width: calc(33% - 20px);
+            max-width: calc(33% - 20px);
+        }
+
+        img {
+            border-radius: 32px;
+            height: 150px;
+            object-fit: cover;
+            width: 100%;
+            max-width: 100%;
+
+            @include media-breakpoint-up(md) {
+                height: 200px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                height: 310px;
+            }
+        }
+    }
+
+    &.container {
+        display: flex;
+        gap: 32px;
+        height: fit-content;
+        overflow-x: auto;
+        padding-bottom: 12px;
+    }
+}

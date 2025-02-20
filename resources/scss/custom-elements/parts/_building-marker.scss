@@ -1,0 +1,18 @@
+.building-marker {
+    border: 2px solid $orange1;
+    background-color: $white;
+    border-radius: 50%;
+    min-height: inherit;
+    min-width: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+    }
+}

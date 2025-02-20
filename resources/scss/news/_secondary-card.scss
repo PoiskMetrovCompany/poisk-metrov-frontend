@@ -1,0 +1,25 @@
+.news-card-secondary {
+    grid-column: span 3;
+    grid-row: span 1;
+    border-bottom: 1.5px solid $grey2;
+    padding-top: 24px;
+    padding-bottom: 32px;
+    gap: 16px;
+    display: grid;
+    align-content: space-between;
+
+    @include media-breakpoint-down(xl) {
+        grid-column: span 6;
+    }
+
+    @include media-breakpoint-down(md) {
+        grid-column: span 2;
+    }
+
+    h6 {
+        color: $black1;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 125%;
+    }
+}

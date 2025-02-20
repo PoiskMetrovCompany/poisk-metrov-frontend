@@ -1,0 +1,113 @@
+.article {
+    &.banner {
+        &.container {
+            display: grid;
+            gap: 32px;
+        }
+
+        &.head {
+            display: grid;
+            gap: 16px;
+        }
+
+        &.date {
+            color: $orange1;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        &.title {
+            color: $black1;
+            font-size: 24px;
+            font-weight: 500;
+
+            @include media-breakpoint-up(md) {
+                font-size: 26px;
+            }
+        }
+
+        &.image {
+            width: 100%;
+            display: grid;
+            gap: 4px;
+
+            img {
+                width: inherit;
+                border-radius: 24px;
+                height: 364px;
+                object-fit: cover;
+                object-position: center center;
+
+                @include media-breakpoint-up(md) {
+                    border-radius: 32px;
+                    height: 416px
+                }
+
+                @include media-breakpoint-up(lg) {
+                    height: 448px;
+                }
+            }
+        }
+
+        &.photo-author {
+            color: $grey4;
+            font-size: 12px;
+            font-weight: 400;
+        }
+    }
+
+    &.content {
+        color: $black1;
+        font-size: 16px;
+        font-weight: 400;
+
+        @include media-breakpoint-up(md) {
+            font-size: 18px;
+        }
+    }
+
+    &.recomended {
+        display: flex;
+        gap: 28px;
+        position: relative;
+        overflow-x: auto;
+        width: fit-content;
+        top: -80px;
+
+        @include media-breakpoint-up(md) {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            top: unset;
+        }
+
+        @include media-breakpoint-down(md) {
+            max-width: calc(100vw - 32px);
+            padding-bottom: 8px;
+
+            a {
+                max-width: calc(100vw - 96px);
+                min-width: calc(100vw - 96px);
+            }
+        }
+    }
+
+    &.buttons {
+        // position: absolute;
+        // top: 16px;
+        max-width: calc(100vw - 32px);
+        padding: 0 16px;
+        z-index: 5;
+        width: 100%;
+        transform: translate(16px, 16px);
+        // left: 16px;
+
+        .arrow-button {
+            display: flex !important;
+        }
+
+        @include media-breakpoint-up(md) {
+            display: none;
+        }
+    }
+}

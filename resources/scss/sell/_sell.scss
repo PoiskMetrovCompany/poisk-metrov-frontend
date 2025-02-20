@@ -1,0 +1,58 @@
+.sell {
+    &.container {
+        display: grid;
+        gap: 80px;
+    }
+
+    &.header-container {
+       background-size: cover;
+       display: grid;
+       gap: 24px;
+       justify-self: center;
+       border-radius: 32px;
+       padding: 32px 24px 100px 24px;
+       width: 100%;
+       background-position: center;
+
+       @include media-breakpoint-up(md) {
+            padding: 44px 36px 194px 36px;
+            gap: 32px;
+       }
+
+       @include media-breakpoint-up(lg) {
+            padding: 56px 36px 208px 36px;
+            border-radius: 44px;
+            gap: 44px;
+       }
+
+       @include media-breakpoint-up(xl) {
+            gap: 42px;
+            padding-bottom: 200px;
+       }
+    }
+
+    &.signup {
+        background-color: white;
+        display: grid;
+        border-radius: 32px;
+        padding: 32px;
+    }
+
+    &.line {
+        display: none;
+
+        @include media-breakpoint-up(lg) {
+            display: block;
+        }
+    }
+
+    &.title {
+        font-size: 20px;
+        line-height: 28px;
+
+        @include media-breakpoint-up(xl) {
+            font-size: 34px;
+            line-height: 46px;
+        }
+    }
+}
