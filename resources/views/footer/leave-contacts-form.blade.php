@@ -2,6 +2,8 @@
     @csrf
     <div class="footer got-questions form form-container">
         @include('inputs.name', ['style' => 'footer'])
+        @include('inputs.last-name', ['style' => 'footer'])
+        @include('inputs.middle-name', ['style' => 'footer'])
         @include('inputs.phone', ['style' => 'footer'])
         <div class="footer got-questions form submit-button-container">
             <input type="submit" name="footer-submit-button" value=" "

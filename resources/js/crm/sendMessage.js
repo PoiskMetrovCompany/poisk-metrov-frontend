@@ -1,12 +1,12 @@
 import { CRMForm } from "./CRMForm";
 
 document.addEventListener("DOMContentLoaded", () => {
-      
+
     new CRMForm(
         "left-message",
         undefined,
         "/api/leave-request",
-        ["name", "phone", "conscent-checkbox"],
+        ["name", "last_name", "middle_name", "phone", "conscent-checkbox"],
         () => {
             const message = document.getElementById("message");
             return "Сообщение - " + message.value;
@@ -25,5 +25,5 @@ document.addEventListener("DOMContentLoaded", () => {
             messageForm.style.display = "none";
             failure.style.display = "grid";
         }
-    ); 
-}); 
+    );
+});
