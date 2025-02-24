@@ -1,4 +1,5 @@
 export function getInputsFromForm(form, inputIds) {
+
     let formInputs = [];
     const requiredComponents = ["input", "select"];
     requiredComponents.forEach(component => formInputs.push(...Array.from(form.getElementsByTagName(component))));
@@ -8,6 +9,7 @@ export function getInputsFromForm(form, inputIds) {
     formInputs.forEach(input => {
         if (inputIds.includes(input.id) && values[input.id] === undefined)
             values[input.id] = input.value;
+
     })
     return values;
 }

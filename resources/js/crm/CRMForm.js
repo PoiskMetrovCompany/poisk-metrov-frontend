@@ -1,6 +1,8 @@
 import { getInputsFromForm, clearFormInputs, sendForm, lastFormRequestResolved } from '../forms';
 import { validateName } from '../inputPatternValidation/name';
 import { validatePhone } from '../inputPatternValidation/tel';
+import {validateLastName} from "../inputPatternValidation/lastName.js";
+import {validateMiddleName} from "../inputPatternValidation/middleName.js";
 
 export class CRMForm {
     currentButton = null;
@@ -51,10 +53,15 @@ export class CRMForm {
 
     async onSubmit(e) {
         e.preventDefault();
+        console.log(this.form)
+        console.log(this.requiredFields)
         let inputs = getInputsFromForm(this.form, this.requiredFields);
         let nameValidate = validateName(this.form);
+        let lastNameValidate = validateLastName(this.form);
+        let middleNameValidate = validateMiddleName(this.form);
         let phoneValidate = validatePhone(this.form);
-        if (!(nameValidate && phoneValidate)) {
+
+        if (!(nameValidate && lastNameValidate && middleNameValidate && phoneValidate)) {
             return;
         }
         let socialNetworkName = undefined;
@@ -66,7 +73,8 @@ export class CRMForm {
         let bodyJSON = inputs;
 
         if (bodyJSON["name"]) {
-            bodyJSON["name"] = "САЙТ! " + bodyJSON["name"];
+            bodyJSON["name"] = "САЙТ! " + `${bodyJSON["name"]} ${bodyJSON["last_name"]} ${bodyJSON["middle_name"]}`;
+            console.log(bodyJSON);
         } else {
             bodyJSON["name"] = "САЙТ!";
         }

@@ -17,6 +17,8 @@
             </div>
             <div class="sub-menus inputs">
                 @include('inputs.name', ['required' => "*"])
+                @include('inputs.last-name', ['required' => "*"])
+                @include('inputs.middle-name', ['required' => "*"])
                 @include('inputs.phone', ['required' => "*"])
             </div>
             <div class="get-free-catalogue where-send-grid">

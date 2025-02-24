@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "reserve-apartment-form",
         "reserve-apartment-buttons",
         "/api/leave-request",
-        ["name", "phone", "conscent-checkbox", "make-meeting-form"],
+        ["name", "last_name", "middle_name", "conscent-checkbox", "make-meeting-form"],
         (socialNetworkName) => {
             currentSocialNetwork = socialNetworkName;
             if (socialNetworkName == "Звонок" || socialNetworkName == null) {
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 return "!!!Бронь - " + document.getElementById("building-name").textContent + ", кв. " + document.getElementById("apartment-number").textContent + " - " + socialNetworkName;
             }
-            
+
         },
         () => {
             const popup = document.getElementById("thanks-for-contacts");

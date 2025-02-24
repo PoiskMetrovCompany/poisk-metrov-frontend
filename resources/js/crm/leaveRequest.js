@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const inputs = ["name", "phone", "conscent-checkbox"];
+    const inputs = ["name", "last_name", "middle_name", "phone", "conscent-checkbox"];
     let currentSocialNetwork = null;
 
     new CRMForm(
