@@ -169,6 +169,8 @@
                         'preview' => 'Не выбрана'
                     ])
                     @include('inputs.name')
+                    @include('inputs.last-name')
+                    @include('inputs.middle-name')
                     @include('inputs.phone')
                 </div>
                 @include('common.personal-info-agreement')

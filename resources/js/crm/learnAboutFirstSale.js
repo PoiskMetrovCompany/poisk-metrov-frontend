@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "learn-about-first-sale",
         "learn-about-first-sale-buttons",
         "/api/leave-request",
-        ["name", "phone", "conscent-checkbox"],
+        ["name", "last_name", "middle_name", "phone", "conscent-checkbox"],
         (socialNetworkName) => {
             currentSocialNetwork = socialNetworkName;
             if (socialNetworkName == "Звонок" || socialNetworkName == null) {

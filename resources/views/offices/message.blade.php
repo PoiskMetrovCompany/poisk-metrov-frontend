@@ -21,6 +21,8 @@
     <form autocomplete="off" id="left-message" class="offices message form">
         @csrf
         @include('inputs.name', ['required' => '*'])
+        @include('inputs.last-name', ['required' => '*'])
+        @include('inputs.middle-name', ['required' => '*'])
         @include('inputs.phone', ['required' => '*'])
         @include('inputs.message')
         @include('common.personal-info-agreement', ['buttonText' => 'Отправить&nbsp;сообщние'])

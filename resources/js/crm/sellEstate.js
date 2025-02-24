@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "sell-building-form",
         undefined,
         "/api/leave-request",
-        ["name", "phone", "conscent-checkbox"],
+        ["name", "last_name", "middle_name", "phone", "conscent-checkbox"],
         () => {
             const buildingTypeSelect = getCustomSelect('Не выбран', 'building-type');
             const serviceTypeSelect = getCustomSelect('Не выбрана', 'service-type');

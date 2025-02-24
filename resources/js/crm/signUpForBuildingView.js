@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "signup-for-buildng-form",
         "signup-for-building-buttons",
         "/api/leave-request",
-        ["name", "phone", "conscent-checkbox"],
+        ["name", "last_name", "middle_name", "phone", "conscent-checkbox"],
         (socialNetworkName) => {
             let callType = "Звонок";
 

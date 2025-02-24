@@ -8,7 +8,7 @@
                         <div class="sub-menus title" style="width: 90%;">
                             Забронируйте квартиру прямо сейчас!
                         </div>
-                        
+
                     </div>
                     <div class="sub-menus close">
                         <div class="icon action-close d16x16 orange"></div>
@@ -20,6 +20,8 @@
             </div>
             <div class="sub-menus inputs">
                 @include('inputs.name', ['required' => "*"])
+                @include('inputs.last-name', ['required' => "*"])
+                @include('inputs.middle-name', ['required' => "*"])
                 @include('inputs.phone', ['required' => "*"])
             </div>
             <div class="get-free-catalogue where-send-grid">
