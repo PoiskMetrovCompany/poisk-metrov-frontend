@@ -1,0 +1,32 @@
+#!groovy
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent any
+    options {
+        timestamps()
+    }
+
+    environment {
+        // Задаем переменные окружения
+        SERVER_IP = '89.169.131.132'
+        PROJECT_DIR = '/var/www/poisk-metrov-frontend'
+    }
+
+    stages {
+        stage('Стягивание изменений') {
+            steps {
+                sh "ssh -o StrictHostKeyChecking=no root@${SERVER_IP} 'echo Настройка Jenkins!'"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Развертывание из main прошло успешно!'
+        }
+        failure {
+            echo 'Ошибка развёртывания!'
+        }
+    }
+}
