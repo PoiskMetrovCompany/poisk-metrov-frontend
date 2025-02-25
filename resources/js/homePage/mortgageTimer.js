@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     let currentDate = new Date(Date.now());
     const targetYear = 2025;
-    const targetMonth = 1;
-    const targetDay = 14;
+    const targetMonth = 2;
+    const targetDay = 21;
     const targetDate = new Date(targetYear, targetMonth, targetDay);
     const mortgageCard = document.querySelector(".mortgage-card.base-container");
     const times = mortgageCard.querySelectorAll(".mortgage-card.time");
