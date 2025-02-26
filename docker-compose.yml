@@ -1,0 +1,99 @@
+services:
+    mysql:
+        container_name: ${APP_NAME}_mysql
+        hostname: ${APP_NAME}_mysql
+        restart: unless-stopped
+        ports:
+            - ${MYSQL_PORT}:3306
+        build:
+            context: ${DOCKER_PATH}/mysql
+            dockerfile: Dockerfile
+        environment:
+            MYSQL_DATABASE: 'poisk-metrov'
+            MYSQL_USER: 'poiskmetrov'
+            MYSQL_PASSWORD: 'meters'
+            MYSQL_ROOT_PASSWORD: 'meters'
+        volumes:
+            - .:/docker-entrypoint-initdb.d
+            - v-db:${MYSQL_DATA}
+        networks:
+            - app
+
+    # node:
+    # rabbitmq:
+
+    php-fpm:
+        container_name: ${APP_NAME}_php-fpm
+        hostname: ${APP_NAME}_php-fpm
+        environment:
+            docker: "true"
+        build:
+            context: ${DOCKER_PATH}/php-fpm
+            dockerfile: Dockerfile
+        env_file:
+            - ${DOCKER_PATH}/php-fpm/conf/xdebug.env
+        volumes:
+            - ./:${APP_CONTAINER_PATH}
+            - ./${DOCKER_PATH}/php-fpm/conf/php.ini:${PHP_FPM_CONFIG_PATH}:ro
+        depends_on:
+            - mysql
+        networks:
+            - app
+
+#    sockets:
+#        image: ramrodpcp/websocket-server
+#        container_name: ${APP_NAME}_socket
+#        hostname: ${APP_NAME}_socket
+#        restart: always
+#        ports:
+#            - ${WS_PORT}:6001
+#        environment:
+#            LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT: null
+#            LARAVEL_WEBSOCKETS_SSL_LOCAL_PK: null
+#            LARAVEL_WEBSOCKETS_SSL_PASSPHRASE: null
+#            LARAVEL_WEBSOCKETS_APP_ID: ${PUSHER_APP_ID}
+#            LARAVEL_WEBSOCKETS_APP_KEY: ${PUSHER_APP_KEY}
+#            LARAVEL_WEBSOCKETS_APP_SECRET: ${PUSHER_APP_SECRET}
+#            LARAVEL_WEBSOCKETS_APP_DEBUG: ${APP_DEBUG}
+#            LARAVEL_WEBSOCKETS_HOST: ${PUSHER_HOST}
+#            LARAVEL_WEBSOCKETS_PORT: ${PUSHER_PORT}
+#        volumes:
+#            - .:/var/www
+#        depends_on:
+#            - php-fpm
+#        networks:
+#            - app
+
+    nginx:
+        container_name: ${APP_NAME}_nginx
+        hostname: ${APP_NAME}_nginx
+        restart: always
+        ports:
+            - ${HTTP_PORT}:80
+        build:
+            context: ${DOCKER_PATH}/nginx
+            dockerfile: Dockerfile
+        volumes:
+            - ./${DOCKER_PATH}/${HTTP_LOCAL_CONFIG_PATH}:${HTTP_CONTAINER_CONFIG_PATH}:ro
+            - ./:${APP_CONTAINER_PATH}
+        depends_on:
+            - php-fpm
+        networks:
+            - app
+
+    node:
+        container_name: ${APP_NAME}_node
+        hostname: ${APP_NAME}_node
+        image: node:lts-alpine
+        working_dir: /var/www
+        volumes:
+            - ./:${APP_CONTAINER_PATH}
+        depends_on:
+            - nginx
+networks:
+    app:
+        driver: 'bridge'
+
+volumes:
+    v-db:
+        driver: local

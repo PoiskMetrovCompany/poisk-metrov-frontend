@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Стягивание изменений') {
             steps {
-                sh "ssh -o StrictHostKeyChecking=no root@${SERVER_IP} 'echo Настройка Jenkins!'"
+                sh "ssh -l StrictHostKeyChecking=no admin ${SERVER_IP} -o 'echo Настройка Jenkins!'"
             }
         }
     }
