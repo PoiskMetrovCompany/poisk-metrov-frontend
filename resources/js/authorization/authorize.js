@@ -48,7 +48,7 @@ function phoneInputForm() {
         userInfo.set('phone', phoneNumber);
         event.target.style.opacity = 0.5;
         const response = await axios.post("/api/update-user", userInfo);
-
+        console.log(response)
         if (!response.status.toString().startsWith("2") || response.data.status == "error") {
             personalInfo.style.display = "none";
             failure.style.display = "block";
@@ -60,7 +60,7 @@ function phoneInputForm() {
     });
 
     async function confirmCode() {
-        if (!phoneNumber || codeInput.value.toString().length != 4 || waitingForCodeConfirmation) {
+        if (!phoneNumber ) {//|| codeInput.value.toString().length != 4 || waitingForCodeConfirmation) {
             return;
         }
 
