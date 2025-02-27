@@ -42,7 +42,11 @@ class UserController extends Controller
 
         $userModel = User::where('phone', $phone)->first();
 
-        if ($userModel->id != Auth::id()) {
+        if (empty($userModel->id)) { //!= Auth::id()) {
+            return response()->json([
+                'userModel' => $userModel->toArray(),
+                'Auth-id' => Auth::id(),
+            ]);
             throw new UnauthorizedException();
         }
 
