@@ -1,0 +1,284 @@
+/**/
+.apartment-card__grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.apartment-container__label,
+apartment-card__text {
+    font-size: 1em;
+}
+.apartment-container__label {
+    color: #818181;
+}
+.apartment-card__href {
+    color: #EC7D3F;
+    text-decoration: underline;
+}
+/**/
+.apartment-card {
+    width: 100%;
+    padding: 1.2em;
+    background-color: #fff;
+    margin-bottom: 0.15em;
+}
+
+.apartment-top__round {
+    border-radius: 1em 1em 0em 0em;
+}
+
+.apartment-bottom__round {
+    border-radius: 0em 0em 1em 1em;
+}
+
+.full-row{
+    flex-wrap: nowrap;
+    position: relative;
+    top: -1em;
+}
+
+
+
+.apartment-card__grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+/**/
+.revervation__grid{
+    display: flex;
+    justify-content: space-between;
+    /*align-items: center;*/
+}
+.revervation_user__card-container {
+    width: 20.5em;
+    height: fit-content;
+    padding: 1em;
+    background-color: #fff;
+    border-radius: 1em;
+}
+
+.revervation_user__card-item{
+    margin: 1.4em 0.2em;
+}
+
+.evervation_user__card-data {
+    margin: 1.1em 0em 1.2em 0em;
+}
+
+.revervation_user__card-title,
+.revervation_user__card-description,
+.apartment-card__text {
+    font-weight: 450;
+    color: #000;
+}
+.revervation_user__card-label {
+    color: #9E9E9E;
+    margin-bottom: 0.4em;
+}
+.revervation__title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.revervation__title p {
+    font-size: 1.5em;
+}
+.reservation__layout {
+    width: 68%;
+    margin: 0 auto;
+}
+
+.actions-navbar {
+    background-color: #fff;
+    border-radius: 1em;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.actions-navbar__container {
+    padding: 1em;
+}
+.actions-navbar__min {
+    width: 80%;
+    height: 3em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+.actions-navbar__item {
+    color: #9E9E9E;
+    font-weight: 450;
+}
+
+.actions-navbar__point {
+    cursor: pointer;
+}
+
+.actions-navbar__active,
+.actions-navbar__chat-active{
+    color: #000;
+}
+
+.actions-navbar__active-indicator {
+    position: relative;
+    top: 0.74em;
+    background-color: #EC7D3F;
+    width: 100%;
+    padding: 0.1em;
+}
+
+.action-form-card {
+    background-color: #fff;
+    border-radius: 1em 1em;
+    width: 100%;
+}
+
+.action-form-card__form-booking,
+.action-form-card__form-order,
+.action-form-card__mortgage-solution,
+.action-form-card__mortgage-agreement
+{
+    padding: 2em;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-form-card__form-active {
+    display: block;
+}
+
+.action-form-card__form-title {
+    width: 100%;
+    margin-bottom: 2em;
+}
+
+.action-form-card__form-accordion-title {
+    background-color: #E9E9E9;
+    border-radius: 1em 1em 0em 0em;
+    padding: 1em;
+}
+
+.action-form-card__form-accordion-title,
+.action-form-card__form-title {
+    margin-bottom: 0em;
+}
+
+.action-form-card__form-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.2em;
+}
+
+.action-form-card__title {
+    width: 28%;
+}
+
+.action-form-card__description {
+    width: 72%;
+}
+
+.action-form-card__title p,
+.action-form-card__description p {
+    font-weight: 400;
+}
+
+.action-form-card__title p {
+    color: #9E9E9E;
+}
+
+.action-form-card__description p {
+    color: #000;
+}
+
+.actions-bottom {
+    margin-top: 2em;
+    width: 55%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a.action-button,
+button.action-button {
+    border-radius: 0.8em;
+    padding: 0.8em;
+    background-color: #EC7D3F;
+    border: solid #EC7D3F 0.2em;
+    color: #fff;
+}
+
+a.action-button-outline,
+button.action-button-outline {
+    background-color: #fff!important;
+    color: #EC7D3F!important;
+}
+
+.action-accordion {
+    background-color: #fff;
+}
+
+.action-accordion__item {
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-accordion__item-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    /*width: -webkit-fill-available;*/
+    width: 90%;
+}
+
+.action-accordion__item-container p {
+
+}
+
+.action-accordion__item-container span.active {
+    color: #181817;
+    border-radius: 5em;
+    background-color: #D0F9E1;
+    font-weight: 400;
+    padding: 0.2em;
+    width: 15%;
+    text-align: center;
+    margin-left: 1em;
+}
+
+.action-accordion__item-control {
+    background-color: #D2D2D2;
+    border-radius: 5em;
+    width: 1.4em;
+    text-align: center;
+    position: relative;
+    right: 2%;
+    cursor: pointer;
+}
+
+.action-accordion__item-top {
+    background-color: #D2D2D2;
+    height: 0.1em;
+    width: 98%;
+    position: relative;
+    top: -1em;
+}
+
+.action-accordion-user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+

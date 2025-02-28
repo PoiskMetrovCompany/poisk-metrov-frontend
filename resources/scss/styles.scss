@@ -2,7 +2,7 @@
 
 @import "../../node_modules/bootstrap/scss/functions";
 
-// Default variable overrides 
+// Default variable overrides
 $body-color: $black1;
 $body-bg: $white;
 
@@ -50,6 +50,7 @@ $grid-breakpoints: (
 @import "quiz";
 @import "agent";
 @import "custom-elements";
+@import "reservation/index";
 
 .base-container {
     display: grid;
