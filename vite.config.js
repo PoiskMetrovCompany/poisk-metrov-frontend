@@ -9,6 +9,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/app.css',
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
                 'resources/js/app.js',

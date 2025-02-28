@@ -20,7 +20,11 @@
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
 
     @yield('preload-images')
-    @vite(['resources/scss/styles.scss', 'resources/js/app.js'])
+    @vite([
+        'resources/scss/styles.scss',
+        'resources/css/app.css',
+        'resources/js/app.js'
+    ])
 
     @if (App::isProduction())
         @include('scripts.clarity')

@@ -7,6 +7,7 @@ use App\Http\Controllers\CurrentCityController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Pages\ReservationController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\RealEstateController;
 use App\Http\Middleware\SyncCookiesWithTable;
@@ -28,6 +29,10 @@ use Illuminate\Support\Facades\Log;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/// Reservations
+Route::get('/my-reservation', [ReservationController::class, 'indexPage']);
+/// END
 
 Route::get('/catalogue-items', [CatalogueViewController::class, 'getFilteredCatalogueViews']);
 Route::get('/apartments-list/{complexCode}', [ApartmentController::class, 'getApartmentViewsWithFilters']);
