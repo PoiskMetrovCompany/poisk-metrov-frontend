@@ -44,13 +44,13 @@
             'fields' => [
                 [
                     [
-                        'field' => 'inputs.name', /* TODO: Создать поле в inputs */
+                        'field' => 'inputs.fio',
                         'name' => 'Фамилия, имя и отчество',
                         'placeholder' => 'Алексеев Александр Иванович',
                         'type' => 'text',
                     ],
                     [
-                        'field' => 'inputs.name', /* TODO: Создать поле в inputs */
+                        'field' => 'inputs.birth-date',
                         'name' => 'Дата рождения',
                         'placeholder' => '20.05.1995',
                         'type' => 'date',
@@ -58,7 +58,7 @@
                 ],
                 [
                     [
-                        'field' => 'inputs.name', /* TODO: Создать поле в inputs */
+                        'field' => 'inputs.citizenship',
                         'name' => 'Гражданство',
                         'type' => 'selection',
                         'values' => [
@@ -72,7 +72,7 @@
                         ]
                     ],
                     [
-                        /* TODO: Создать поле в inputs */
+                        'field' => 'inputs.name', /* TODO: Создать поле в inputs */
                         'name' => 'Ваше образование',
                         'type' => 'selection',
                         'values' => [
@@ -83,7 +83,7 @@
                 ],
                 [
                     [
-                        /* TODO: Создать поле в inputs */
+                        'field' => 'inputs.name', /* TODO: Создать поле в inputs */
                         'name' => 'Семейное положение',
                         'type' => 'selection',
                         'values' => [
@@ -94,7 +94,7 @@
                         ]
                     ],
                     [
-                        /* TODO: Создать поле в inputs */
+                        'field' => 'inputs.name', /* TODO: Создать поле в inputs */
                         'name' => 'Дети до 18 лет',
                         'type' => 'selection',
                         'values' => [
@@ -109,7 +109,7 @@
                     ]
                 ],
                 [
-                    /* TODO: Создать поле в inputs */
+                    'field' => 'inputs.name', /* TODO: Создать поле в inputs */
                     'name' => 'Ежемесячный доход',
                     'type' => 'text',
                 ]

@@ -231,6 +231,7 @@ button.action-button-outline {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    margin-bottom: 1.5em;
 }
 
 .action-accordion__item-container {
@@ -250,10 +251,11 @@ button.action-button-outline {
     border-radius: 5em;
     background-color: #D0F9E1;
     font-weight: 400;
-    padding: 0.2em;
-    width: 15%;
+    padding: 0.1em;
+    width: 11%;
     text-align: center;
     margin-left: 1em;
+    font-size: 0.8em;
 }
 
 .action-accordion__item-control {
@@ -278,7 +280,25 @@ button.action-button-outline {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 90%;
+    flex-wrap: wrap;
+    margin: 0 auto;
 }
 
+.action-accordion-user-info .inputs  {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+}
+
+.action-accordion-user-info .inputs .input-container {
+    width: 49%;
+}
+
+.action-accordion-user-info .inputs .input-container select.input-text option.list-item {
+    font-size: 1.2em;
+}
 

@@ -12,8 +12,11 @@
                         if (key_exists('placeholder', $key)) {
                             $attributes['placeholder'] = $key['placeholder'];
                         }
+                        if ($key['type'] === 'selection') {
+                            $attributes['values'] = $key['values'];
+                        }
                     @endphp
-                    @include('inputs.name', $attributes)
+                    @include($key['field'], $attributes)
                 @endif
             @endforeach
         @else
