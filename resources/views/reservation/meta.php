@@ -2,6 +2,7 @@
 $contentTitle = 'Мои брони';
 $apartment = 'Квартира-студия в ЖК Брусника, 30.2 м², этаж 9';
 $apartmentPrice = '9 615 862 ₽';
+
 $menuApartmentTitle = [
     'Жилой комплекс',
     'Девелопер',
@@ -12,12 +13,28 @@ $menuApartmentTitle = [
     'За м2',
     'Уникальность',
 ];
-$formActions = [
-    'Бронирование',
-    'Заявка на ипотеку',
-    'Ипотечное решение',
-    'Договор',
-    'Чат',
+$chatName = 'Чат';
+$menuLists = [
+    [
+        'data-section' => 'action-form-card__form-booking',
+        'name' => 'Бронирование',
+    ],
+    [
+        'data-section' => 'action-form-card__form-accordion',
+        'name' => 'Заявка на ипотеку',
+    ],
+    [
+        'data-section' => '',
+        'name' => 'Ипотечное решение',
+    ],
+    [
+        'data-section' => '',
+        'name' => 'Договор',
+    ],
+    [
+        'data-section' => '',
+        'name' => $chatName,
+    ],
 ];
 $apartmentsList = [
     [
