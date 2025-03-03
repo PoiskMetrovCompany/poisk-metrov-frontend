@@ -199,7 +199,7 @@ apartment-card__text {
 
 .actions-bottom {
     margin-top: 2em;
-    width: 55%;
+    width: 50%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -207,6 +207,7 @@ apartment-card__text {
 
 a.action-button,
 button.action-button {
+    font-size: 0.9em;
     border-radius: 0.8em;
     padding: 0.8em;
     background-color: #EC7D3F;
@@ -222,6 +223,7 @@ button.action-button-outline {
 
 .action-accordion {
     background-color: #fff;
+    border-radius: 10em;
 }
 
 .action-accordion__item {
@@ -294,11 +296,178 @@ button.action-button-outline {
     margin-bottom: 1em;
 }
 
+.action-accordion-user-info .inputs:has(> .input-container:only-child) .input-container {
+    width: 100%;
+}
+
 .action-accordion-user-info .inputs .input-container {
     width: 49%;
 }
 
-.action-accordion-user-info .inputs .input-container select.input-text option.list-item {
-    font-size: 1.2em;
+.action-accordion-user-info .inputs .input-container .dropdown {
+    width: 100%;
 }
 
+.action-accordion-user-info .inputs .input-container .dropdown .custom-dropdown.base-container.open {
+    background-color: rgb(244 244 241);
+    /*margin-top: -1%;*/
+}
+
+.action-accordion-user-info .inputs .input-container .dropdown .arrow-tailless {
+    display: block;
+    position: relative;
+    top: -40%;
+}
+
+.action-accordion-user-info .inputs .input-container .input-wrapper {
+    padding-right: 0;
+}
+
+.action-accordion-user-info .inputs  .text-item {
+    padding: 1.3em;
+}
+
+.action-accordion-user-info .inputs .input-container .input-text {
+    padding: 5px 0px 14px 24px;
+}
+
+.action-accordion-user-info .inputs .input-container .icon-inside {
+    position: relative;
+    right: 4%;
+    top: 0.4em;
+}
+
+.action-accordion-user-info__sub-dropdown {
+    margin: 2em 0em 2em 0em;
+}
+
+.action-accordion-user-info__sub-dropdown p {
+    color: #EC7D3F;
+    font-weight: 450;
+    font-size: 0.9em;
+}
+.action-accordion-user-info__dropdown-large {
+    color: #000!important;
+}
+
+.action-accordion-user-info__dropdown-large span {
+    position: relative;
+    left: 72%;
+}
+
+.action-accordion-user-info__sub-dropdown {
+    width: 100%;
+    cursor: pointer;
+}
+
+.sub-menu {
+    width: 100%;
+}
+
+.sub-menu .inputs .input-container {
+    margin-bottom: 1.2em;
+}
+
+.row-70 {
+    width: 70%!important;
+}
+
+.card-file {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-file .card-file__upload {
+    background-color: #F4F4F1;
+    border-radius: 1em;
+    padding: 1em;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    height: 9em;
+}
+
+.card-file .card-file__upload .card-file__upload-70 {
+    margin: 1.1em 0em 0em 1.1em;
+}
+
+.card-file .card-file__upload .card-file__upload-70 p {
+    font-weight: 400;
+    color: #000;
+}
+
+.card-file .card-file__upload .card-file__upload-70 div{
+    color: #9E9E9E;
+    font-size: 0.9em;
+    font-weight: 400;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.card-file .card-file__upload .card-file__upload-30 {
+    width: 30%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-file .card-file__upload .card-file__upload-30 button {
+    height: 4em;
+    font-size: 0.8em;
+    width: 100%;
+}
+
+.input-wrapper span.ico {
+    position: relative;
+    right: 1.5em;
+    top: 0.1em;
+}
+.input-wrapper span.ico-2 {
+    width: 5%;
+}
+
+.co-borrower {
+    margin-top: 3em;
+}
+.co-borrower__card {
+    background-color: #fff;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+.co-borrower__card-head p {
+    margin-bottom: 1.5em;
+}
+
+.co-borrower__card-head p {
+    font-size: 1em;
+    margin-bottom: 0.8em;
+}
+
+.co-borrower__card-head small {
+    color: #9E9E9E;
+    font-size: 0.8em;
+    font-weight: 400;
+}
+
+.co-borrower__card-body {
+    margin-top: 1em;
+}
+
+.co-borrower__card-body button {
+    width: 18%;
+    height: 3em;
+    font-size: 0.9em;
+}
+
+.co-borrower__card-content {
+
+}
+
+.action-button__ficon {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
