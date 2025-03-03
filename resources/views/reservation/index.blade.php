@@ -25,7 +25,11 @@
                 ])
 
                 @include('reservation.components._menuFormBar')
-                @include('reservation.components._formActions')
+                @include('reservation.components._formActions', [
+                    'bookings' => $bookings,
+                    'accordions' => $accordions,
+                ])
+                @include('reservation.components._add_co-borrower')
             </section>
         </section>
     </div>
