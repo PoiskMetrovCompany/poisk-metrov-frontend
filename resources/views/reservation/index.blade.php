@@ -24,7 +24,7 @@
                     'price' => '9 615 862'
                 ])
 
-                @include('reservation.components._menuFormBar')
+                @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])
                 @include('reservation.components._formActions', [
                     'bookings' => $bookings,
                     'accordions' => $accordions,
@@ -33,4 +33,6 @@
             </section>
         </section>
     </div>
+
+    @vite('resources/js/reservation/panelControlReservation.js')
 @endsection

@@ -52,6 +52,7 @@ export default defineConfig({
                 'resources/js/realEstate/realEstate.js',
                 'resources/js/plan/plan.js',
                 'resources/js/aboutUs/aboutUs.js',
+                'resources/js/reservation/panelControlReservation.js',
             ],
             refresh: true,
         }),

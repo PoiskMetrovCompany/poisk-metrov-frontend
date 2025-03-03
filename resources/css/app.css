@@ -137,6 +137,12 @@ apartment-card__text {
     width: 100%;
 }
 
+.action-form-card__form-accordion,
+.action-form-card__form-booking
+{
+    display: none;
+}
+
 .action-form-card__form-booking,
 .action-form-card__form-order,
 .action-form-card__mortgage-solution,
@@ -431,6 +437,7 @@ button.action-button-outline {
 .co-borrower {
     margin-top: 3em;
 }
+
 .co-borrower__card {
     background-color: #fff;
     padding: 1em;
