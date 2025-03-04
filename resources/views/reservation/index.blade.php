@@ -34,5 +34,8 @@
         </section>
     </div>
 
-    @vite('resources/js/reservation/panelControlReservation.js')
+    @vite([
+    'resources/js/reservation/panelControlReservation.js',
+    'resources/js/reservation/index.js'
+    ])
 @endsection

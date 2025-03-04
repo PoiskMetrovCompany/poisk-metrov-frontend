@@ -153,6 +153,7 @@ $bookings = [
 $accordions = [
     [
         'title' => 'Личные данные',
+        'key' => \Illuminate\Support\Str::uuid()->toString(),
         'fields' => [
             [
                 [
@@ -248,8 +249,7 @@ $accordions = [
     ],
     [
         'title' => 'Место работы',
-//        'leftTitleIcon' => false,
-    // TODO: подумать над тем что бы сделать компонентом
+        'key' => \Illuminate\Support\Str::uuid()->toString(),
         'fields' => [
             [
                 [
@@ -291,6 +291,7 @@ $accordions = [
         ],
         'dropdown' => [
             'title' => 'Дополнительная информация',
+            'key' => \Illuminate\Support\Str::uuid()->toString(),
             'fields' => [
                 [
                     'field' => 'inputs.dropdown.default',
@@ -341,10 +342,12 @@ $accordions = [
     ],
     [
         'title' => 'Документы',
+        'key' => \Illuminate\Support\Str::uuid()->toString(),
         'leftTitleIcon' => 'folder-icon',
         'fields' => [],
         'dropdown' => [
             'title' => 'Подтверждение дохода',
+            'key' => \Illuminate\Support\Str::uuid()->toString(),
             'fields' => [
                 [
                     'field' => 'inputs.dropdown.default',
@@ -375,8 +378,8 @@ $accordions = [
         ]
     ],
     [
-
         'title' => 'Паспортные данные',
+        'key' => \Illuminate\Support\Str::uuid()->toString(),
         'fields' => [
             [
                 [
