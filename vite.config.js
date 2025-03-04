@@ -9,6 +9,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/app.css',
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
                 'resources/js/app.js',
@@ -51,6 +52,8 @@ export default defineConfig({
                 'resources/js/realEstate/realEstate.js',
                 'resources/js/plan/plan.js',
                 'resources/js/aboutUs/aboutUs.js',
+                'resources/js/reservation/index.js',
+                'resources/js/reservation/panelControlReservation.js',
             ],
             refresh: true,
         }),
