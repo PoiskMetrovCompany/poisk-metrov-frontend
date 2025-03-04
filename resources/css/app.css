@@ -572,3 +572,38 @@ button.action-button-outline {
 .co-borrower .input-wrapper span.ico-2 {
     width: 7%;
 }
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+    nav .apartment-col,
+    .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 90%;
+    }
+    .action-accordion__item-container span.active {
+        width: 13%;
+    }
+    .input-wrapper span.ico-2 {
+        width: 7%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 button {
+        height: 3.6em;
+    }
+    .card-file__upload .card-file__upload-70 div{
+        margin-top: -1em;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+        width: 32%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+        width: 68%;
+    }
+    .co-borrower .action-accordion__item-container span.active {
+        font-size: 0.7em;
+    }
+}
+
+@media (min-width: 774px) and (max-width: 1024px) {}
+@media (min-width: 430px) and (max-width: 774px) {}
+@media (max-width: 430px) {}
