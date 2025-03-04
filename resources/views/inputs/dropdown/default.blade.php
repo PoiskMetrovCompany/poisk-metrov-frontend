@@ -5,7 +5,7 @@
         (!empty($nameInputTitle) && $nameInputTitle === 'Документ о доходах') ||
         (!empty($nameInputTitle) && $nameInputTitle === 'Вид трудового договора')
     ) {
-        $classList = 'row-70';
+        $classList = 'row-80';
     }
 @endphp
 
