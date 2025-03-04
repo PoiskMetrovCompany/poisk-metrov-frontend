@@ -12,6 +12,7 @@ $menuApartmentTitle = [
     'Стоимость',
     'За м2',
     'Уникальность',
+    ' '
 ];
 $chatName = 'Чат';
 $menuLists = [
@@ -373,7 +374,6 @@ $accordions = [
                         'Месяц и год трудоустройства',
                     ]
                 ],
-
             ]
         ]
     ],
@@ -442,3 +442,45 @@ $accordions = [
         ],
     ],
 ];
+$borrower = [];
+
+foreach ($accordions as $accordion) {
+    $accordion['key'] = \Illuminate\Support\Str::uuid()->toString();
+
+    foreach ($accordion['fields'] as &$fieldGroup) {
+        foreach ($fieldGroup as &$field) {
+            if (isset($field['inputId']) && isset($field['inputName'])) {
+                $field['inputId'] = 'borrower_' . $field['inputId'];
+                $field['inputName'] = 'borrower_' . $field['inputName'];
+            }
+        }
+    }
+
+    if (isset($accordion['dropdown'])) {
+        $accordion['dropdown']['key'] = \Illuminate\Support\Str::uuid()->toString();
+
+        foreach ($accordion['dropdown']['fields'] as &$fieldGroup) {
+            if (is_array($fieldGroup)) {
+                foreach ($fieldGroup as &$field) {
+                    if (isset($field['inputId']) && isset($field['inputName'])) {
+                        $field['inputId'] = 'borrower_' . $field['inputId'];
+                        $field['inputName'] = 'borrower_' . $field['inputName'];
+                    }
+                }
+            }
+        }
+    }
+    if ($accordion['title'] != 'Паспортные данные') {
+        if ($accordion['title'] === 'Документы') {
+            $accordion['passport'] = true;
+            $borrower[] = $accordion;
+        } else {
+            $borrower[] = $accordion;
+        }
+
+    }
+//    if ($accordion['title'] === 'Документы') {
+//        $accordion['passport'] = true;
+//        $borrower[] = $accordion;
+//    }
+}

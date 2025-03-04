@@ -9,9 +9,9 @@
 @section('content')
     <div class="base-container">
         <div class="title first">{{ $contentTitle }}</div>
-        @include('reservation.components._menuApartmentTitle', ['menuApartmentTitle' => $menuApartmentTitle])
         <div class="full-row">
             @include('reservation.components._apartmentCard', [
+                'menuApartmentTitle' => $menuApartmentTitle,
                 'countApartments' => $countApartments,
                 'apartmentsList' => $apartmentsList
             ])
@@ -27,15 +27,17 @@
                 @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])
                 @include('reservation.components._formActions', [
                     'bookings' => $bookings,
-                    'accordions' => $accordions,
+                    'accordions' => $accordions
                 ])
-                @include('reservation.components._add_co-borrower')
+                @include('reservation.components._add_co-borrower', [
+                    'borrower' => $borrower
+                ])
             </section>
         </section>
     </div>
 
     @vite([
-    'resources/js/reservation/panelControlReservation.js',
-    'resources/js/reservation/index.js'
+        'resources/js/reservation/panelControlReservation.js',
+        'resources/js/reservation/index.js'
     ])
 @endsection

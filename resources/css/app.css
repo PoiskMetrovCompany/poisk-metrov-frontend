@@ -11,8 +11,41 @@ apartment-card__text {
 .apartment-container__label {
     color: #818181;
 }
+
+.apartment-grid {
+    padding: 1.2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav .apartment-col {
+    color: #818181;
+}
+.apartment-col{
+    font-weight: 400;
+}
+.apartment-grid__wrap{
+    flex-wrap: wrap;
+}
+
+.apartment-col {
+    width: 10%;
+}
+
+.apartment-col__10 {
+    width: 10%;
+}
+
+.apartment-col__15 {
+    width: 15%;
+}
+
 .apartment-card__href {
     color: #EC7D3F;
+}
+.apartment-card__href:hover {
+    transition: .7s;
+    color: #181817;
     text-decoration: underline;
 }
 /**/
@@ -35,6 +68,10 @@ apartment-card__text {
     flex-wrap: nowrap;
     position: relative;
     top: -1em;
+}
+
+.full-row table {
+    width: 100%;
 }
 
 
@@ -71,8 +108,11 @@ apartment-card__text {
 .revervation_user__card-title,
 .revervation_user__card-description,
 .apartment-card__text {
-    font-weight: 450;
+    font-weight: 400;
     color: #000;
+}
+.apartment-card__text-18w{
+    width: 18%;
 }
 .revervation_user__card-label {
     color: #9E9E9E;
@@ -208,7 +248,7 @@ apartment-card__text {
 
 .actions-bottom {
     margin-top: 2em;
-    width: 50%;
+    width: 57%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -216,6 +256,7 @@ apartment-card__text {
 
 a.action-button,
 button.action-button {
+    width: 45%;
     font-size: 0.9em;
     border-radius: 0.8em;
     padding: 0.8em;
@@ -225,8 +266,26 @@ button.action-button {
     cursor: pointer;
 }
 
+.action-button #right-arrow,
+.action-button-outline #close{
+    display: none;
+}
+
+.action-button:hover #right-arrow {
+    display: inline-flex;
+    position: relative;
+    left: 5%;
+    transition: .7s;
+}
+
+.action-button-outline:hover #close {
+    display: inline-flex;
+    transition: .7s;
+}
+
 a.action-button-outline,
 button.action-button-outline {
+    width: 52%;
     background-color: #fff!important;
     color: #EC7D3F!important;
 }
@@ -362,6 +421,9 @@ button.action-button-outline {
 .action-accordion-user-info__dropdown-large {
     color: #000!important;
 }
+.action-accordion-user-info__dropdown-large small {
+    color: #9E9E9E;
+}
 
 .action-accordion-user-info__dropdown-large span {
     position: relative;
@@ -389,6 +451,7 @@ button.action-button-outline {
     display: flex;
     justify-content: start;
     align-items: center;
+    border-radius: 1em;
 }
 
 .card-file .card-file__upload {
@@ -399,6 +462,7 @@ button.action-button-outline {
     display: flex;
     justify-content: space-between;
     height: 9em;
+    border: dashed 0.15em #9E9E9E;
 }
 
 .card-file .card-file__upload .card-file__upload-70 {
@@ -453,6 +517,15 @@ button.action-button-outline {
 
 .co-borrower__card-head {
     border-bottom: solid #D2D2D2 0.13em;
+    display: flex;
+    justify-content: space-around;
+}
+.co-borrower__card-head-text {
+
+}
+
+.co-borrower__card-head-icon {
+
 }
 
 .co-borrower__card-head,
@@ -487,11 +560,15 @@ button.action-button-outline {
 
 .co-borrower__card-body {
     display: none;
-    padding: 1em;
+    /*padding: 1em;*/
 }
 
 .action-button__ficon {
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+
+.co-borrower .input-wrapper span.ico-2 {
+    width: 7%;
 }
