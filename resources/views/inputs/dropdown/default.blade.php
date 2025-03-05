@@ -9,7 +9,7 @@
     }
 @endphp
 
-<div class="input-container {{ $classList ?? '' }}">
+<div class="input-container ">
     <fieldset id="fieldset-{{ $selectIdentifier }}" class="input-fieldset">
         <legend id="legend-{{ $selectIdentifier }}" class="input-legend">{{ $nameInputTitle ?? '' }}<span
                 class="red-highlight">{{ $required ?? '' }}</span></legend>
