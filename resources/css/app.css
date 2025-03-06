@@ -1108,6 +1108,7 @@ button.action-button-outline {
     }
     .reservation__layout {
         width: 100%;
+        margin-top: 2em;
     }
     .actions-bottom {
         width: 75%;
@@ -1177,6 +1178,7 @@ button.action-button-outline {
     .revervation__title {
         width: 100%;
         display: block;
+        margin-bottom: 2em;
     }
 
     .apartment-grid-container {
@@ -1271,31 +1273,58 @@ button.action-button-outline {
         width: 27%;
     }
     .apartment-grid-phone {
-        display: flex;
+        display: block;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        width: 100%;
+        width: 82vw;
     }
+
     .apartment-grid-phone::-webkit-scrollbar {
         display: none;
     }
+
+    .apartment-grid-row {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: auto;
+    }
+
+    .apartment-grid-row::-webkit-scrollbar {
+        display: none;
+    }
+
     .apartment-grid-phone__container {
         display: flex;
+        flex-direction: column;
         background-color: #fff;
         border-radius: 0.8em;
         padding: 0.7em;
-        width: 60%;
+        width: 85%;
         justify-content: space-between;
         flex-shrink: 0;
         margin-right: 1em;
     }
-    .apartment-grid-phone__container-row p#price{
+
+    .apartment-grid-phone__container section {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .apartment-grid-phone__container-row-price {
         display: flex;
         justify-content: end;
         align-items: end;
     }
+
     .apartment-grid-phone__container-row p {
         font-weight: 400;
+    }
+    .input-wrapper span.ico-2 {
+        width: 14%;
+    }
+    .co-borrower .action-accordion-user-info__dropdown-large span {
+        left: 25%;
     }
 }
