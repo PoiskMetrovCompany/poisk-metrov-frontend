@@ -49,7 +49,9 @@ class FeedService extends AbstractService
         'https://domoplaner.ru/dc-api/feeds/340-6fIy1dQMPrBZWKvrnfwJIRs5UM7aILIRVMfQ6hgSBpyr0N4hqi0FHWFkGe15K1Tm',
         'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q5zaTXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dNxUSIDZkZnW3azJXh8MTcxNzA2Mjk1OHwxMWJmZQ/211-yandex.xml?feed_id=4949',
         'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q10bjXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dNwUSIDZkZnW3GzJXh8MTY4NTUxNDk3Mnw4ZWUzMA/166-yandex.xml?feed_id=3135',
-        'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q10bjXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dByUSMHZkZnW3GzJXh8MTY5ODk4OTUwMXxlZTZkOA/166-yandex.xml?feed_id=3911'
+        'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q10bjXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dByUSMHZkZnW3GzJXh8MTY5ODk4OTUwMXxlZTZkOA/166-yandex.xml?feed_id=3911',
+
+        'https://ecatalog-service.nmarket.pro/BasePro/?login=dmitry999888_mail_ru&password=f3BaN82Bhs6&regionGroupId=54'
     ];
     public array $avitoFeedLinks = [
         'https://p16.realty.cat/export/feed/4b54bf794c930617436e9e8697e3a606',
@@ -97,9 +99,9 @@ class FeedService extends AbstractService
         $feedTypes = FeedFormat::cases();
         $linksForTypes = [
             FeedFormat::RealtyFeed->value => $this->realtyFeedLinks,
-            FeedFormat::Avito->value => $this->avitoFeedLinks,
-            FeedFormat::Version2->value => $this->version2FeedLinks,
-            FeedFormat::Complexes->value => $this->complexesFeedLinks,
+//            FeedFormat::Avito->value => $this->avitoFeedLinks,
+//            FeedFormat::Version2->value => $this->version2FeedLinks,
+//            FeedFormat::Complexes->value => $this->complexesFeedLinks,
         ];
 
         foreach ($feedTypes as $feedType) {
@@ -237,9 +239,11 @@ class FeedService extends AbstractService
         }
 
         $this->realtyFeedParser->parseFeeds();
-        $this->avitoFeedParser->parseFeeds();
-        $this->complexParser->parseFeeds();
-        $this->version2Parser->parseFeeds();
+
+//        $this->avitoFeedParser->parseFeeds();
+//        $this->complexParser->parseFeeds();
+//        $this->version2Parser->parseFeeds();
+//        $this->privateRealtyFeedParser->parseFeeds();
     }
 
     public function mergeFeeds()
