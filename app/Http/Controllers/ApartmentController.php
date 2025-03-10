@@ -49,8 +49,8 @@ class ApartmentController extends Controller
 
         if (!Auth::user()) {
             $apartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
-        } else {
-            $apartment->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
+//        } else {
+//            $apartment->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
 
         $apartments->limit(10);

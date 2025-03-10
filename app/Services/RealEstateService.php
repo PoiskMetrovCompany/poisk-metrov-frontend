@@ -93,8 +93,8 @@ class RealEstateService
 
         if (!Auth::user()) {
             $buildingsQuery->whereNotIn('builder', ResidentialComplex::$privateBuilders);
-        } else {
-            $buildingsQuery->whereIn('builder', ResidentialComplex::$privateBuilders);
+//        } else {
+//            $buildingsQuery->whereIn('builder', ResidentialComplex::$privateBuilders);
         }
 
         $buildingsQuery->with('apartments')
