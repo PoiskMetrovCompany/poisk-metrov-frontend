@@ -8,6 +8,7 @@ use App\Services\CityService;
 use Illuminate\Support\Collection as BasicCollection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ResidentialComplexRepository
 {
@@ -26,9 +27,15 @@ class ResidentialComplexRepository
     {
         $code = $this->cityService->getUserCity();
 
-        $residentialComplexes = ResidentialComplex::
-            where('on_main_page', true)
-            ->whereHas('location', function ($query) use ($code) {
+        $residentialComplexes = ResidentialComplex::where('on_main_page', true);
+
+        if (!Auth::user()) {
+            $residentialComplexes->whereNotIn('builder', ResidentialComplex::$privateBuilders);
+        } else {
+            $residentialComplexes->whereIn('builder', ResidentialComplex::$privateBuilders);
+        }
+
+        $residentialComplexes->whereHas('location', function ($query) use ($code) {
                 return $query->where('code', $code);
             })
             ->with('apartments')
