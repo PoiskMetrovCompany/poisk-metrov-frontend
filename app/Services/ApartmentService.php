@@ -38,8 +38,8 @@ class ApartmentService extends AbstractService
 
         if (!Auth::user()) {
             $visitedApartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
-        } else {
-            $visitedApartments->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
+//        } else {
+//            $visitedApartments->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
 
         $visitedApartments->get();
