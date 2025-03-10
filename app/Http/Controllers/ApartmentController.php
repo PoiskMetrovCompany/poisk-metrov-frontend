@@ -15,6 +15,7 @@ use App\Services\PriceFormattingService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use App\Http\Requests\ApartmentListRequest;
 use Log;
@@ -42,8 +43,13 @@ class ApartmentController extends Controller
             'apartment_type' => $apartment->apartment_type,
             'room_count' => $apartment->room_count,
             'complex_id' => $apartment->complex_id,
-            ['offer_id', '!=', $apartment->offer_id]])
-            ->limit(10);
+            ['offer_id', '!=', $apartment->offer_id]]);
+
+        if (!Auth::user()) {
+            $apartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+        }
+
+        $apartments->limit(10);
         $data = ApartmentResource::collection($apartments->get())->toArray($request);
 
         if ($complex->metro_type == 'foot') {

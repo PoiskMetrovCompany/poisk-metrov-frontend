@@ -9,6 +9,7 @@ use App\Models\ResidentialComplexCategory;
 use App\Repositories\ResidentialComplexRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -88,8 +89,13 @@ class RealEstateService
         $buildingsQuery = ResidentialComplex::with('location')
             ->whereHas('location', function ($query) use ($cityCode) {
                 return $query->where('code', $cityCode);
-            })
-            ->with('apartments')
+            });
+
+        if (!Auth::user()) {
+            $buildingsQuery->whereNotIn('builder', ResidentialComplex::$privateBuilders);
+        }
+
+        $buildingsQuery->with('apartments')
             ->withCount('apartments')
             ->has('apartments')
             ->orderBy('apartments_count', 'DESC');

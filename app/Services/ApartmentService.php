@@ -11,6 +11,7 @@ use App\Models\UserFavoritePlan;
 use App\Repositories\ResidentialComplexRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Log;
 
 /**
@@ -31,7 +32,13 @@ class ApartmentService extends AbstractService
         $visitedPages = $this->visitedPagesService->getVisitedApartments();
         $preferredBuildings = $this->visitedPagesService->getVisitedBuildings();
         $recommendations = new Collection();
-        $visitedApartments = Apartment::whereIn('offer_id', $visitedPages)->get();
+        $visitedApartments = Apartment::whereIn('offer_id', $visitedPages);
+
+        if (!Auth::user()) {
+            $visitedApartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+        }
+
+        $visitedApartments->get();
         $mediumPrice = 10000000;
         $priceRange = 4000000;
         $mediumArea = 60;
