@@ -31,6 +31,8 @@ class ResidentialComplexRepository
 
         if (!Auth::user()) {
             $residentialComplexes->whereNotIn('builder', ResidentialComplex::$privateBuilders);
+        } else {
+            $residentialComplexes->whereIn('builder', ResidentialComplex::$privateBuilders);
         }
 
         $residentialComplexes->whereHas('location', function ($query) use ($code) {
