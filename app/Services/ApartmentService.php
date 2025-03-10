@@ -34,8 +34,12 @@ class ApartmentService extends AbstractService
         $recommendations = new Collection();
         $visitedApartments = Apartment::whereIn('offer_id', $visitedPages);
 
+        $visitedApartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+
         if (!Auth::user()) {
-            $visitedApartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+            $visitedApartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
+        } else {
+            $visitedApartments->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
 
         $visitedApartments->get();

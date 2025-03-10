@@ -45,8 +45,12 @@ class ApartmentController extends Controller
             'complex_id' => $apartment->complex_id,
             ['offer_id', '!=', $apartment->offer_id]]);
 
+        $apartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+
         if (!Auth::user()) {
-            $apartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+            $apartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
+        } else {
+            $apartment->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
 
         $apartments->limit(10);
