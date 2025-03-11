@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        /*if (config('app.backups_enabled')) {
+        if (config('app.backups_enabled')) {
             $schedule->command('backup:run --only-db')->daily();
         }
 
@@ -23,19 +23,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:refresh-managers-with-full-update')->hourly();
         // $schedule->command('app:full-create-bank-tariffs')->daily();
         $schedule->command('app:update-telegram-deal-bot')->daily();
-        $schedule->command('app:clean-up-gallery')->daily();*/
-
-        if (config('app.backups_enabled')) {
-            $schedule->command('backup:run --only-db')->hourly();
-        }
-
-        $schedule->command('app:refresh-feed-with-full-update')->hourly();
-        $schedule->command('app:update-users-in-crm')->everyFifteenMinutes();
-        $schedule->command('app:cache-all')->everyFifteenMinutes();
-        $schedule->command('app:clean-old-sessions --diff=5')->everyFiveMinutes();
-        $schedule->command('app:refresh-managers-with-full-update')->hourly();
-        // $schedule->command('app:full-create-bank-tariffs')->daily();
-//        $schedule->command('app:update-telegram-deal-bot')->daily();
         $schedule->command('app:clean-up-gallery')->daily();
     }
 
