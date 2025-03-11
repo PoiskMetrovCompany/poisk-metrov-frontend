@@ -24,6 +24,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('app:full-create-bank-tariffs')->daily();
         $schedule->command('app:update-telegram-deal-bot')->daily();
         $schedule->command('app:clean-up-gallery')->daily();
+
+        $schedule->command('app:backup')
+            ->weeklyOn(1, '7:00')
+            ->timezone('Russia/Novosibirsk');
     }
 
     /**

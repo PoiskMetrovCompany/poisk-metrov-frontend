@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\BackupCommand;
+use App\Core\Services\BackupServiceInterface;
 use App\Services\ApartmentService;
+use App\Services\BackupService;
 use App\Services\BankService;
 use App\Services\CachingService;
 use App\Services\CityService;
@@ -17,17 +20,35 @@ use App\Services\RealEstateService;
 use App\Services\SearchService;
 use App\Services\TextService;
 use App\Services\VisitedPagesService;
+use Arhitector\Yandex\Disk;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use ZipArchive;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public function registerBackupService():void
+    {
+        $this->app->singleton(Disk::class, function () {
+            return new Disk(config('yandexdisk.disk.token'));
+        });
+
+        $this->app->singleton(BackupServiceInterface::class, function (Application $app) {
+            return new BackupService(
+                $app->make(Disk::class)
+            );
+        });
+    }
+
+
+
     /**
      * Register any application services.
      */
     public function register(): void
     {
-        //
+        $this->registerBackupService();
     }
 
     /**
