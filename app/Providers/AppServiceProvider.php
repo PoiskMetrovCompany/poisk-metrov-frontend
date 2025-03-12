@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Core\Services\BackupHistoryServiceInterface;
+use App\Core\Services\BackupServiceInterface;
 use App\Services\ApartmentService;
+use App\Services\Backup\BackupHistoryService;
+use App\Services\Backup\BackupService;
 use App\Services\BankService;
 use App\Services\CachingService;
 use App\Services\CityService;
@@ -17,17 +21,34 @@ use App\Services\RealEstateService;
 use App\Services\SearchService;
 use App\Services\TextService;
 use App\Services\VisitedPagesService;
+use Arhitector\Yandex\Disk;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    final public function registerBackupHistoryService(): void
+    {
+        $this->app->singleton(BackupHistoryServiceInterface::class, BackupHistoryService::class);
+    }
+    final public function registerBackupService(): void
+    {
+        $this->app->singleton(Disk::class, function () {
+            return new Disk(config('yandexdisk.disk.token'));
+        });
+
+        $this->app->singleton(BackupServiceInterface::class, function ($app) {
+            return new BackupService(
+                $app->make(Disk::class),
+                $app->make(BackupHistoryServiceInterface::class)
+            );
+        });
+    }
     public function register(): void
     {
-        //
+        $this->registerBackupService();
+        $this->registerBackupService();
     }
 
     /**
