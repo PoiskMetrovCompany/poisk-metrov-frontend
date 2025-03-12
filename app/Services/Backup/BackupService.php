@@ -100,11 +100,11 @@ final class BackupService implements BackupServiceInterface
 
         $this->backupHistoryService->handler(['name' => $filename, 'created_at' => $toDate, 'yaDisk' => $this->disk]);
 
-//        try {
-//            $this->backupDB();
-//        } catch (\Exception $e) {
-//            throw new \Exception($e->getMessage());
-//        }
+        try {
+            $this->backupDB();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
 
         $this->backupWeb($toDate, $filename, $archiveDir, $archivePath);
 
