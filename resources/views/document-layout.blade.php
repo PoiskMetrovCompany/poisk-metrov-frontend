@@ -26,6 +26,8 @@
         'resources/js/app.js'
     ])
 
+    @yield('head')
+
     @if (App::isProduction())
         @include('scripts.clarity')
     @endif

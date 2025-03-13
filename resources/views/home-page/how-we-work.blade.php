@@ -20,32 +20,58 @@ $galleryList = [
 ];
 @endphp
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    @vite('resources/css/swiper.override.css')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+@endsection
+
 <div class="how-work-gallery work-base-container">
-    @vite('resources/js/homePage/howWeWork.js')
+
     <div class="title-flex">
         <div class="title">{{ $title }}</div>
     </div>
-    <div class="how-work-gallery work-grid">
-        <div class="how-work-gallery gallery-with-buttons">
-            <div id="aboutus-gallery-buttons" class="arrow-buttons-container about-us">
-                @include('buttons.arrow-left')
-                @include('buttons.arrow-right')
-            </div>
-            <div id="aboutus-gallery" class="how-work-gallery images">
-                @foreach($galleryList as $gallery)
-                    <img class="how-work-gallery work-container"
-                         src="{{ $gallery['image'] }}"
-                         alt="{{ $gallery['title'] }}" />
-                @endforeach
-            </div>
-        </div>
-        <div class="how-work-gallery texts">
+    <div class="swiper" style="width: 100%;">
+        <div class="swiper-wrapper">
             @foreach($galleryList as $gallery)
-                <div class="how-work-gallery work-title">
-                    <div>{{ $gallery['title'] }}</div>
-                    {{ $gallery['description'] }}
+                <div class="swiper-slide how-work-gallery work-grid">
+                    <div class=" how-work-gallery gallery-with-buttons">
+                        <div class=" how-work-gallery images">
+                            <img class="how-work-gallery work-container"
+                                 src="{{ $gallery['image'] }}"
+                                 alt="{{ $gallery['title'] }}" />
+                        </div>
+                    </div>
+                    <div class="how-work-gallery texts">
+                        <div class=" how-work-gallery work-title">
+                            <div>{{ $gallery['title'] }}</div>
+                            {{ $gallery['description'] }}
+                        </div>
+                    </div>
                 </div>
             @endforeach
         </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
     </div>
 </div>
+
+<script type="text/javascript">
+    const swiper = new Swiper('.swiper', {
+        direction: 'horizontal',
+        loop: true,
+
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+    });
+</script>
