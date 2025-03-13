@@ -1,0 +1,10 @@
+.swiper-button-prev,
+.swiper-button-next {
+    color: #ec7d3f;
+}
+@media (max-width: 700px) {
+    .swiper-button-prev,
+    .swiper-button-next {
+        display: none;
+    }
+}
