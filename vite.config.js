@@ -10,6 +10,8 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/swiper.override.css',
+
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
                 'resources/js/app.js',
