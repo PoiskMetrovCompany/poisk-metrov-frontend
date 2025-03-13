@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
-use App\Core\Services\BackupHistoryServiceInterface;
-use App\Core\Services\BackupServiceInterface;
+use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
+use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
+use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
+use App\Core\Interfaces\Services\BackupServiceInterface;
+use App\Core\Interfaces\Services\ReservationServiceInterface;
+use App\Http\Controllers\Pages\ReservationController;
+use App\Repositories\InteractionRepository;
+use App\Repositories\ReservationRepository;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
@@ -18,6 +24,7 @@ use App\Services\NewsService;
 use App\Services\PreloadService;
 use App\Services\PriceFormattingService;
 use App\Services\RealEstateService;
+use App\Services\ReservationService;
 use App\Services\SearchService;
 use App\Services\TextService;
 use App\Services\VisitedPagesService;
@@ -28,6 +35,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /// SERVICES
     final public function registerBackupHistoryService(): void
     {
         $this->app->singleton(BackupHistoryServiceInterface::class, BackupHistoryService::class);
@@ -39,16 +47,38 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(BackupServiceInterface::class, function ($app) {
-            return new BackupService(
-                $app->make(Disk::class),
-                $app->make(BackupHistoryServiceInterface::class)
-            );
+            return new BackupService($app->make(Disk::class), $app->make(BackupHistoryServiceInterface::class));
         });
     }
+
+    final public function registerReservationService(): void
+    {
+        $this->app->singleton(ReservationServiceInterface::class, ReservationService::class);
+    }
+    final public function registerInteractionService(): void
+    {
+        $this->app->singleton(InteractionRepositoryInterface::class, InteractionRepository::class);
+    }
+
+    /// REPOSITORIES
+    final public function registerReservationRepository(): void
+    {
+        $this->app->singleton(ReservationRepositoryInterface::class, ReservationRepository::class);
+    }
+
+    final public function registerInteractionRepository(): void
+    {
+        $this->app->singleton(InteractionRepositoryInterface::class, InteractionRepository::class);
+    }
+
+
     public function register(): void
     {
         $this->registerBackupService();
         $this->registerBackupService();
+        $this->registerReservationService();
+        $this->registerInteractionService();
+        $this->registerInteractionRepository();
     }
 
     /**
