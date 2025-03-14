@@ -2,51 +2,53 @@
 
 namespace Database\Seeders;
 
+use App\Core\Common\SeederCounterEnum;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
+use App\Models\Apartment;
+use App\Models\Interaction;
+use App\Models\Manager;
+use App\Models\Reservation;
+use App\Models\User;
 use App\Repositories\ReservationRepository;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use SeederCounterEnum;
+use Throwable;
 
 class ReservationSeeder extends Seeder
 {
-    protected ReservationRepositoryInterface $reservationRepository;
-    protected InteractionRepositoryInterface $interactionRepository;
-    public function __construct(
-        ReservationRepositoryInterface $reservationRepository,
-        InteractionRepositoryInterface $interactionRepository
-    )
-    {
-        $this->reservationRepository = $reservationRepository;
-        $this->interactionRepository = $interactionRepository;
-    }
-
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
         $reservationCollection = new Collection();
+        $interactionCollection = new Collection();
+
         for ($i = 0; $i < SeederCounterEnum::ReservationCountSeed->value; $i++) {
-            $reservationCollection->add(
-                $this->reservationRepository->store(['key' => Str::uuid()->toString()])
-            );
+            $modelReservation = new Reservation();
+            $modelReservation->key = Str::uuid()->toString();
+            $modelReservation->save();
+            $reservationCollection->push($modelReservation);
         }
 
-        $interactionCollection = new Collection();
         for ($i = 0; $i < SeederCounterEnum::InteractionCountSeed->value; $i++) {
-            $reservationCollection->add(
-                $this->reservationRepository->store([
-                    'manager_id' => 1,
-                    'user_id' => 2,
-                    'apartment_id' => 1,
-                    'key' => Str::uuid()->toString(),
-                    'reservation_key' => $reservationCollection->random()->reservation_key,
-                ])
-            );
+            if ($reservationCollection->isNotEmpty()) {
+                $modelInteraction = new Interaction();
+                $modelInteraction->manager_id = Manager::inRandomOrder()->first()->id;
+                $modelInteraction->user_id = User::inRandomOrder()->limit(1)->first()->id;
+                $modelInteraction->apartment_id = Apartment::inRandomOrder()->first()->id;
+                $modelInteraction->key = Str::uuid()->toString();
+                $modelInteraction->reservation_key = $reservationCollection->random()->key;
+                $modelInteraction->save();
+                $interactionCollection->push($modelInteraction);
+            } else {
+                Log::error("Коллекция Reservation пустая!");
+            }
         }
     }
 }
