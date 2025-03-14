@@ -1,4 +1,5 @@
 <?php
+namespace App\Core\Common;
 
 enum SeederCounterEnum: int
 {
