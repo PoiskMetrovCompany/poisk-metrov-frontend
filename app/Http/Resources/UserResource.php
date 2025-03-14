@@ -15,8 +15,8 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $name = $this->getFullName();
-
+//        $name = $this->getFullName();
+        // TODO: Сделать автоматизацию ресурса User типа пусть будет этот ресурс, но он будет возвращать подресурсы))
         return [
             'id' => $this->id,
             // TODO: быть может стоит сделать отдельный ресурс и вложить этот
