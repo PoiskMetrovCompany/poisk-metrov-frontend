@@ -31,7 +31,9 @@ use Illuminate\Support\Facades\Log;
 */
 
 /// Reservations
-Route::get('/my-reservation', [ReservationController::class, 'indexPage']);
+Route::prefix('reservations')->group(function () {
+    Route::get('/{id}', [ReservationController::class, 'indexPage']);
+});
 /// END
 
 Route::get('/catalogue-items', [CatalogueViewController::class, 'getFilteredCatalogueViews']);

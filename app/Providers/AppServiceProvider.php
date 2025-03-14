@@ -2,14 +2,20 @@
 
 namespace App\Providers;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
+use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
 use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
 use App\Http\Controllers\Pages\ReservationController;
+use App\Repositories\ApartmentRepository;
 use App\Repositories\InteractionRepository;
+use App\Repositories\ManagerRepository;
 use App\Repositories\ReservationRepository;
+use App\Repositories\UserRepository;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
@@ -71,6 +77,21 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(InteractionRepositoryInterface::class, InteractionRepository::class);
     }
 
+    final public function registerUserRepository(): void
+    {
+        $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
+    }
+
+    final public function registerApartmentRepository(): void
+    {
+        $this->app->singleton(ApartmentRepositoryInterface::class, ApartmentRepository::class);
+    }
+
+    final public function registerManagerRepository(): void
+    {
+        $this->app->singleton(ManagerRepositoryInterface::class, ManagerRepository::class);
+    }
+
 
     public function register(): void
     {
@@ -79,6 +100,9 @@ class AppServiceProvider extends ServiceProvider
         $this->registerReservationService();
         $this->registerInteractionService();
         $this->registerInteractionRepository();
+        $this->registerUserRepository();
+        $this->registerApartmentRepository();
+        $this->registerManagerRepository();
     }
 
     /**

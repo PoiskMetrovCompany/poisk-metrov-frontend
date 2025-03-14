@@ -1,14 +1,16 @@
 @php
     require_once resource_path('views/reservation/meta.php');
+    $title = 'Мои брони';
+    $users = ['client' => $client, 'manager' => $managerList[0] /* TODO: надо узнать сколько менеджеров может быть */];
 @endphp
 
 @extends('document-layout', [
-    'title' => 'Мои&nbsp;брони',
+    'title' => 'Мои брони',
 ])
 
 @section('content')
     <div class="base-container">
-        <div class="title first">{{ $contentTitle }}</div>
+        <div class="title first">{{ $title }}</div>
         <div class="full-row">
             @include('reservation.components._apartmentCard', [
                 'menuApartmentTitle' => $menuApartmentTitle,
