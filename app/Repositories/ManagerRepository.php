@@ -8,7 +8,7 @@ use App\Repositories\Queries\FindByIdQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class ManagerRepository implements ManagerRepositoryInterface
+final class ManagerRepository implements ManagerRepositoryInterface
 {
     use ListQueryTrait;
     use FindByIdQueryTrait;

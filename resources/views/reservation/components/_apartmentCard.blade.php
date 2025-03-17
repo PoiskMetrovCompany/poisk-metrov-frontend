@@ -1,11 +1,12 @@
+@php use Carbon\Carbon; @endphp
 <nav class="apartment-grid">
     @foreach($menuApartmentTitle as $item)
         <div class="apartment-col @if($item === 'Жилой комплекс') apartment-col__15 @else apartment-col__10 @endif">
             {{ $item }}
         </div>
     @endforeach
-
 </nav>
+
 @for($i=0; $countApartments > $i; $i++)
     @if ($i == 0)
         <section class="apartment-grid apartment-grid__wrap apartment-card apartment-top__round">
@@ -14,21 +15,34 @@
     @else
         <section class="apartment-grid apartment-grid__wrap apartment-card">
     @endif
-        <div class="apartment-col apartment-col__15">{{ $apartmentsList[$i]['name'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['developer'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['order_id'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['data_tz'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['count_rooms'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['price'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['per_m2'] }}</div>
-        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['uniqueness'] }}</div>
+        <div class="apartment-col apartment-col__15">{{ $apartmentsList[$i]['complexes']['name'] }}</div>
+        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['complexes']['builder'] }}</div>
+        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['apartment']['offer_id'] }}</div>
+            @php
+                $format = Carbon::parse($apartmentsList[$i]['apartment']['created_at']);
+                $formattedDate = $format->format('d.m.Y');
+            @endphp
+        <div class="apartment-col apartment-col__10">{{ $formattedDate }}</div>
         <div class="apartment-col apartment-col__10">
-            <a href="{{ $apartmentsList[$i]['details']['href'] }}" class="apartment-card__href">
-                Подробнее
-            </a>
+            @if($apartmentsList[$i]['apartment']['apartment_type'] === 'Студия')
+                {{ $apartmentsList[$i]['apartment']['apartment_type'] }}
+            @else
+                {{ $apartmentsList[$i]['apartment']['room_count'] }}
+            @endif
+        </div>
+        <div class="apartment-col apartment-col__10">{{ number_format($apartmentsList[$i]['apartment']['price'], 0, '.', ' ') }} ₽</div>
+        <div class="apartment-col apartment-col__10">{{ $apartmentsList[$i]['apartment']['area'] }} ₽/м2</div>
+            @php
+                $format = Carbon::parse($apartmentsList[$i]['created_at']);
+                $formattedDate = $format->format('d.m.Y');
+            @endphp
+        <div class="apartment-col apartment-col__10">{{ $formattedDate }}</div>
+        <div class="apartment-col apartment-col__10">
+            <a href="#" class="apartment-card__href">Подробнее</a>
         </div>
     </section>
 @endfor
+
 <section class="apartment-grid-min">
     <div class="apartment-grid-container">
         <table>

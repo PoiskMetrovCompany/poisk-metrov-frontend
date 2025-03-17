@@ -8,6 +8,7 @@ trait ListQueryTrait
 {
     public function list(?array $attributes): ?Collection
     {
-        return $this->model::where($attributes)->get();
+        $data = $this->model::where($attributes)->get()->toArray();
+        return collect($data);
     }
 }
