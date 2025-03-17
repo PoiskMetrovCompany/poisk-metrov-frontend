@@ -29,7 +29,7 @@ final class BackupHistoryService implements BackupHistoryServiceInterface
 
         if (count($content) > 5) {
             $oldestFile = $content[0]['name'];
-            $attributes['yaDisk']->getResource('home/simon/poisk-metrov-frontend/'.$oldestFile)->delete();
+            $attributes['yaDisk']->getResource(config('yandexdisk.disk.path').$oldestFile)->delete();
             array_shift($content);
         }
 
