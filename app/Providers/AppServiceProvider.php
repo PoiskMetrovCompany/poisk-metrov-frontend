@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
@@ -12,6 +13,7 @@ use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
 use App\Http\Controllers\Pages\ReservationController;
 use App\Repositories\ApartmentRepository;
+use App\Repositories\ComplexRepository;
 use App\Repositories\InteractionRepository;
 use App\Repositories\ManagerRepository;
 use App\Repositories\ReservationRepository;
@@ -92,6 +94,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ManagerRepositoryInterface::class, ManagerRepository::class);
     }
 
+    final public function registerComplexRepository(): void
+    {
+        $this->app->singleton(ComplexRepositoryInterface::class, ComplexRepository::class);
+    }
+
 
     public function register(): void
     {
@@ -103,6 +110,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerUserRepository();
         $this->registerApartmentRepository();
         $this->registerManagerRepository();
+        $this->registerComplexRepository();
     }
 
     /**

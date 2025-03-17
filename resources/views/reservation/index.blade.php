@@ -1,11 +1,9 @@
 @php
-    require_once resource_path('views/reservation/meta.php');
-    $title = 'Мои брони';
-    $users = ['client' => $client, 'manager' => $managerList[0] /* TODO: надо узнать сколько менеджеров может быть */];
+    require_once resource_path('views/reservation/meta/i18n.ru.php');
 @endphp
 
 @extends('document-layout', [
-    'title' => 'Мои брони',
+    'title' => $title,
 ])
 
 @section('content')
@@ -14,26 +12,26 @@
         <div class="full-row">
             @include('reservation.components._apartmentCard', [
                 'menuApartmentTitle' => $menuApartmentTitle,
-                'countApartments' => $countApartments,
-                'apartmentsList' => $apartmentsList
+                'countApartments' => count($apartmentList),
+                'apartmentsList' => $apartmentList
             ])
         </div>
         <section class="revervation__grid">
             @include('reservation.components.cardUser', ['users' => $users])
             <section class="reservation__layout">
-                @include('reservation.components._apartmentPrice', [
-                    'name' => 'Квартира-студия в ЖК Брусника, 30.2 м², этаж 9',
-                    'price' => '9 615 862'
-                ])
+{{--                @include('reservation.components._apartmentPrice', [--}}
+{{--                    'name' => $interaction['apartment']->h1,--}}
+{{--                    'price' => $interaction['apartment']->price--}}
+{{--                ])--}}
 
-                @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])
-                @include('reservation.components._formActions', [
-                    'bookings' => $bookings,
-                    'accordions' => $accordions
-                ])
-                @include('reservation.components._add_co-borrower', [
-                    'borrower' => $borrower
-                ])
+{{--                @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])--}}
+{{--                @include('reservation.components._formActions', [--}}
+{{--                    'bookings' => $bookings,--}}
+{{--                    'accordions' => $accordions--}}
+{{--                ])--}}
+{{--                @include('reservation.components._add_co-borrower', [--}}
+{{--                    'borrower' => $borrower--}}
+{{--                ])--}}
             </section>
         </section>
     </div>
