@@ -19,19 +19,20 @@
         <section class="revervation__grid">
             @include('reservation.components.cardUser', ['users' => $users])
             <section class="reservation__layout">
-{{--                @include('reservation.components._apartmentPrice', [--}}
-{{--                    'name' => $interaction['apartment']->h1,--}}
-{{--                    'price' => $interaction['apartment']->price--}}
-{{--                ])--}}
+                @include('reservation.components._apartmentPrice', [
+                    'name' => $interaction['apartment']->h1,
+                    'price' => $interaction['apartment']->price
+                ])
 
-{{--                @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])--}}
-{{--                @include('reservation.components._formActions', [--}}
-{{--                    'bookings' => $bookings,--}}
-{{--                    'accordions' => $accordions--}}
-{{--                ])--}}
-{{--                @include('reservation.components._add_co-borrower', [--}}
-{{--                    'borrower' => $borrower--}}
-{{--                ])--}}
+                @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])
+                {{-- TODO: реализовать вывод в певое окно + форму --}}
+                @include('reservation.components._formActions', [
+                    'bookings' => $bookings,
+                    'accordions' => $accordions
+                ])
+                @include('reservation.components._add_co-borrower', [
+                    'borrower' => $borrower
+                ])
             </section>
         </section>
     </div>

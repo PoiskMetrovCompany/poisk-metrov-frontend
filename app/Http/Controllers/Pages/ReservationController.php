@@ -75,15 +75,15 @@ class ReservationController extends Controller
 
     public function indexPage(int $id)
     {
-        $reservation = new ReservationResource($this->reservationRepository->findById($id));
-        $interaction = new InteractionResource($this->interactionRepository->findByKey(['reservation_key' => $reservation->key]));
-        $client = new UserResource($this->userRepository->findById($interaction->user_id));
-        $apartment = new ApartmentResource($this->apartmentRepository->findById($interaction->apartment_id));
-        $managerList = new ManagerCollection($this->managerRepository->list(['id' => $interaction->manager_id]));
-        $managerList = $managerList->resource;
+        $reservation = (new ReservationResource($this->reservationRepository->findById($id)))->resolve();
+        $interaction = (new InteractionResource($this->interactionRepository->findByKey(['reservation_key' => $reservation['key']])))->resolve();
+        $client = (new UserResource($this->userRepository->findById($interaction['client']['id'])))->resolve();
+        $apartment = (new ApartmentResource($this->apartmentRepository->findById($interaction['apartment']->id)))->resolve();
+        $managerList = (new ManagerResource($this->managerRepository->findById($interaction['manager']->id)))->resolve();
         // TODO: Тут какая то хрень с ресурсом ИСПРАВИТЬ! $apartmentList = $this->interactionRepository->list(['user_id' => $interaction['client']['id']]);
         $apartmentList = [];
-        foreach ($this->interactionRepository->list(['user_id' => $client->id]) as $apartmentItem) {
+
+        foreach ($this->interactionRepository->list(['user_id' => $client['id']]) as $apartmentItem) {
             $apartmentValue = new ApartmentResource(Apartment::find($apartmentItem['apartment_id']));
             $apartmentList[] = [
                 'id' => $apartmentItem['id'],

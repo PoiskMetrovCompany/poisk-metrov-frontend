@@ -1,9 +1,6 @@
 <?php
 
 $title = 'Мои брони';
-$apartment = 'Квартира-студия в ЖК Брусника, 30.2 м², этаж 9';
-$apartmentPrice = '9 615 862 ₽';
-
 $menuApartmentTitle = [
     'Жилой комплекс',
     'Девелопер',
@@ -39,26 +36,7 @@ $menuLists = [
     ],
 ];
 
-//$apartmentsList = [
-//    [
-//        'name' => 'Пшеница',
-//        'developer' => 'Брусника',
-//        'order_id' => '39781369',
-//        'data_tz' => '10.07.2024',
-//        'count_rooms' => 'Студия',
-//        'price' => '9 615 862 ₽',
-//        'per_m2' => '136 756  ₽/м2',
-//        'uniqueness' => '10.07.2024',
-//        'details' => [
-//            'href' => '#',
-//            'description' => 'Подробнее'
-//        ]
-//    ],
-//];
-
-//$countApartments = count($apartmentList);
-
-$users = ['client' => $client, 'manager' => $managerList[0] /* TODO: надо узнать сколько менеджеров может быть. Пока беру первого из списка. */];
+$users = ['client' => $client, 'manager' => $managerList /* TODO: надо узнать сколько менеджеров может быть. Пока беру первого из списка. */];
 
 $bookings = [
     [
@@ -427,8 +405,4 @@ foreach ($accordions as $accordion) {
         }
 
     }
-//    if ($accordion['title'] === 'Документы') {
-//        $accordion['passport'] = true;
-//        $borrower[] = $accordion;
-//    }
 }
