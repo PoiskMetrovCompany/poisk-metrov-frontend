@@ -27,6 +27,7 @@ use App\Repositories\ReservationRepository;
 use App\Repositories\UserRepository;
 use App\Services\ReservationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -72,6 +73,26 @@ class ReservationController extends Controller
         $this->complexRepository = $complexRepository;
     }
 
+    private function apartmentListSerialized(int $client_id, mixed $apartmentItem): array
+    {
+        // TODO: Тут какая то хрень с ресурсом ИСПРАВИТЬ! $apartmentList = $this->interactionRepository->list(['user_id' => $interaction['client']['id']]);
+        return collect($this->interactionRepository->list(['user_id' => $client_id]))
+            ->map(function ($apartmentItem) {
+                $apartment = Apartment::find($apartmentItem['apartment_id']);
+                return [
+                    'id' => $apartmentItem['id'],
+                    'key' => $apartmentItem['key'],
+                    'apartment' => new ApartmentResource($apartment),
+                    'manager' => new ManagerResource($this->managerRepository->findById($apartmentItem['manager_id'])),
+                    'client' => new UserResource($this->userRepository->findById($apartmentItem['user_id'])),
+                    'reservation' => new ReservationResource($this->reservationRepository->findByKey(['key' => $apartmentItem['reservation_key']])->first()),
+                    'complexes' => new ComplexResource($this->complexRepository->findById($apartment->complex_id)),
+                    'created_at' => $apartmentItem['created_at'],
+                    'updated_at' => $apartmentItem['updated_at'],
+                ];
+            })
+            ->all();
+    }
 
     public function indexPage(int $id)
     {
@@ -79,30 +100,16 @@ class ReservationController extends Controller
         $interaction = (new InteractionResource($this->interactionRepository->findByKey(['reservation_key' => $reservation['key']])))->resolve();
         $client = (new UserResource($this->userRepository->findById($interaction['client']['id'])))->resolve();
         $apartment = (new ApartmentResource($this->apartmentRepository->findById($interaction['apartment']->id)))->resolve();
+        $complex = key_exists('complex_id', $apartment) ? (new ComplexResource($this->complexRepository->findById($apartment['complex_id'])))->resolve() : null;
         $managerList = (new ManagerResource($this->managerRepository->findById($interaction['manager']->id)))->resolve();
-        // TODO: Тут какая то хрень с ресурсом ИСПРАВИТЬ! $apartmentList = $this->interactionRepository->list(['user_id' => $interaction['client']['id']]);
-        $apartmentList = [];
-
-        foreach ($this->interactionRepository->list(['user_id' => $client['id']]) as $apartmentItem) {
-            $apartmentValue = new ApartmentResource(Apartment::find($apartmentItem['apartment_id']));
-            $apartmentList[] = [
-                'id' => $apartmentItem['id'],
-                'key' => $apartmentItem['key'],
-                'apartment' => Apartment::find($apartmentItem['apartment_id']),
-                'manager' => new ManagerResource(Manager::find($apartmentItem['manager_id'])),
-                'client' => new UserResource(User::find($apartmentItem['user_id'])),
-                'reservation' => new ReservationResource(Reservation::where('key', $apartmentItem['reservation_key'])->first()),
-                'complexes' => new ComplexResource($this->complexRepository->findById($apartmentValue->complex_id)),
-                'created_at' => $apartmentItem['created_at'],
-                'updated_at' => $apartmentItem['updated_at'],
-            ];
-        }
+        $apartmentList = $this->apartmentListSerialized($client['id'], $apartment);
 
         return View('reservation.index', compact(
             'reservation',
             'interaction',
             'client',
             'apartment',
+            'complex',
             'managerList',
             'apartmentList'
         ));
