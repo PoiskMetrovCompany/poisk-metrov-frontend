@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Pages;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
+use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
+use App\Core\Interfaces\Services\ReservationServiceInterface;
+use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApartmentResource;
 use App\Http\Resources\Apartments\ApartmentCollection;
@@ -46,7 +50,8 @@ use Illuminate\View\View;
  */
 class ReservationController extends Controller
 {
-    protected ReservationService $reservationService;
+    protected ReservationServiceInterface $reservationService;
+    protected SerializedCollectionServiceInterface $collectionService;
     protected ReservationRepository $reservationRepository;
     protected InteractionRepository $interactionRepository;
     protected UserRepositoryInterface $userRepository;
@@ -55,9 +60,10 @@ class ReservationController extends Controller
     protected ComplexRepositoryInterface $complexRepository;
 
     public function __construct(
-        ReservationService $reservationService,
-        ReservationRepository $reservationRepository,
-        InteractionRepository $interactionRepository,
+        ReservationServiceInterface $reservationService,
+        SerializedCollectionServiceInterface $collectionService,
+        ReservationRepositoryInterface $reservationRepository,
+        InteractionRepositoryInterface $interactionRepository,
         UserRepositoryInterface $userRepository,
         ApartmentRepositoryInterface $apartmentRepository,
         ManagerRepositoryInterface $managerRepository,
@@ -65,33 +71,13 @@ class ReservationController extends Controller
     )
     {
         $this->reservationService = $reservationService;
+        $this->collectionService = $collectionService;
         $this->reservationRepository = $reservationRepository;
         $this->interactionRepository = $interactionRepository;
         $this->userRepository = $userRepository;
         $this->apartmentRepository = $apartmentRepository;
         $this->managerRepository = $managerRepository;
         $this->complexRepository = $complexRepository;
-    }
-
-    private function apartmentListSerialized(int $client_id, mixed $apartmentItem): array
-    {
-        // TODO: Тут какая то хрень с ресурсом ИСПРАВИТЬ! $apartmentList = $this->interactionRepository->list(['user_id' => $interaction['client']['id']]);
-        return collect($this->interactionRepository->list(['user_id' => $client_id]))
-            ->map(function ($apartmentItem) {
-                $apartment = Apartment::find($apartmentItem['apartment_id']);
-                return [
-                    'id' => $apartmentItem['id'],
-                    'key' => $apartmentItem['key'],
-                    'apartment' => new ApartmentResource($apartment),
-                    'manager' => new ManagerResource($this->managerRepository->findById($apartmentItem['manager_id'])),
-                    'client' => new UserResource($this->userRepository->findById($apartmentItem['user_id'])),
-                    'reservation' => new ReservationResource($this->reservationRepository->findByKey(['key' => $apartmentItem['reservation_key']])->first()),
-                    'complexes' => new ComplexResource($this->complexRepository->findById($apartment->complex_id)),
-                    'created_at' => $apartmentItem['created_at'],
-                    'updated_at' => $apartmentItem['updated_at'],
-                ];
-            })
-            ->all();
     }
 
     public function indexPage(int $id)
@@ -102,7 +88,7 @@ class ReservationController extends Controller
         $apartment = (new ApartmentResource($this->apartmentRepository->findById($interaction['apartment']->id)))->resolve();
         $complex = key_exists('complex_id', $apartment) ? (new ComplexResource($this->complexRepository->findById($apartment['complex_id'])))->resolve() : null;
         $managerList = (new ManagerResource($this->managerRepository->findById($interaction['manager']->id)))->resolve();
-        $apartmentList = $this->apartmentListSerialized($client['id'], $apartment);
+        $apartmentList = $this->collectionService->apartmentListSerialized($client['id'], $apartment);
 
         return View('reservation.index', compact(
             'reservation',
