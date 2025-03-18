@@ -11,6 +11,7 @@ use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
 use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
+use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
 use App\Http\Controllers\Pages\ReservationController;
 use App\Repositories\ApartmentRepository;
 use App\Repositories\ComplexRepository;
@@ -34,6 +35,7 @@ use App\Services\PriceFormattingService;
 use App\Services\RealEstateService;
 use App\Services\ReservationService;
 use App\Services\SearchService;
+use App\Services\SerializedCollection\SerializedCollectionService;
 use App\Services\TextService;
 use App\Services\VisitedPagesService;
 use Arhitector\Yandex\Disk;
@@ -66,6 +68,11 @@ class AppServiceProvider extends ServiceProvider
     final public function registerInteractionService(): void
     {
         $this->app->singleton(InteractionRepositoryInterface::class, InteractionRepository::class);
+    }
+
+    final public function registerSerializedCollectionService(): void
+    {
+        $this->app->singleton(SerializedCollectionServiceInterface::class, SerializedCollectionService::class);
     }
 
     /// REPOSITORIES
@@ -102,10 +109,15 @@ class AppServiceProvider extends ServiceProvider
 
     public function register(): void
     {
+        /// Services
         $this->registerBackupService();
         $this->registerBackupService();
         $this->registerReservationService();
         $this->registerInteractionService();
+        $this->registerSerializedCollectionService();
+
+        /// Repositories
+        $this->registerReservationRepository();
         $this->registerInteractionRepository();
         $this->registerUserRepository();
         $this->registerApartmentRepository();
