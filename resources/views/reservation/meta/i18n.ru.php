@@ -41,41 +41,46 @@ $users = ['client' => $client, 'manager' => $managerList /* TODO: надо уз�
 $bookings = [
     [
         'title' => 'Проект',
-        'description' => 'ЖК Пшеница',
-    ],
-    [
-        'title' => 'Девелопер',
-        'description' => 'Брусника',
+        'description' => "ЖК {$apartment['name']}",
     ],
     [
         'title' => 'Срок сдачи',
-        'description' => '4 кв. 2025',
+        'description' => "{$apartment['ready_quarter']} кв. {$apartment['built_year']}",
     ],
     [
         'title' => 'Корпус',
-        'description' => 'Корпус 25',
+        'description' => $apartment['building_section'],
     ],
     [
         'title' => 'Отделка',
-        'description' => 'Черновая отделка',
+        'description' => $apartment['renovation'],
     ],
     [
         'title' => 'Этаж',
-        'description' => '9 из 17',
+        'description' => "{$apartment['floor']} из {$apartment['floors_total']}",
     ],
     [
         'title' => 'Номер квартиры',
-        'description' => '578',
+        'description' => $apartment['apartment_number'],
     ],
     [
         'title' => 'Общая площадь',
-        'description' => '30.2 м²',
+        'description' => "{$apartment['area']} м²",
     ],
     [
         'title' => 'Жилая площадь',
-        'description' => '15.2 м²',
+        'description' => "{$apartment['living_space']} м²",
     ],
 ];
+
+if (!empty($complex)) {
+    $newElement = [
+        'title' => 'Девелопер',
+        'description' => $complex['name'],
+    ];
+
+    array_splice($bookings,  1, 0, [$newElement]);
+}
 
 $accordions = [
     [
