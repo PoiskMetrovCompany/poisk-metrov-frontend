@@ -286,7 +286,7 @@ $accordions = [
                     'name' => 'Документ о доходах',
                     'inputType' => 'selection',
                     'inputId'   => 'document_type',
-                    'inputName' => 'work_sub_employment_contract',
+                    'inputName' => 'document_type',
                     'placeholder' => 'Справка о доходах',
                     'values' => [
                         'Документ о доходах',
@@ -298,8 +298,8 @@ $accordions = [
                     'field' => 'inputs.dropdown.default',
                     'name' => 'Вид трудового договора',
                     'inputType' => 'selection',
-                    'inputId'   => 'work_sub_employment_contract',
-                    'inputName' => 'work_sub_employment_contract',
+                    'inputId'   => 'type_of_employment_contract',
+                    'inputName' => 'type_of_employment_contract',
                     'placeholder' => '_ _ . _ _ _ _',
                     'values' => [
                         'Месяц и год трудоустройства',

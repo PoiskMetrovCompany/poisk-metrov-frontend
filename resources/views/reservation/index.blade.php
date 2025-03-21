@@ -33,12 +33,15 @@
                 @include('reservation.components._add_co-borrower', [
                     'borrower' => $borrower
                 ])
+                <section class="control-action-button">
+                    <button id="reservation-store" class="action-button">Отправить заявку менеджеру</button>
+                </section>
             </section>
         </section>
     </div>
 
     @vite([
-        'resources/js/reservation/panelControlReservation.js',
-        'resources/js/reservation/index.js'
+        'resources/js/reservation/index.js',
+        'resources/js/reservation/request.js'
     ])
 @endsection

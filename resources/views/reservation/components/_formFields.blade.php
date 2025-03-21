@@ -52,17 +52,17 @@
                     && key_exists('inputType', $items[0])
                     && key_exists('inputId', $items[0])
                 ) {
-                    $attributes['inputName'] = $items[0]['inputName'];
                     $attributes['inputType'] = $items[0]['inputType'];
-                    $attributes['inputId'] = $items[0]['inputId'];
                     $attributes['inputIcon'] = key_exists('inputIcon', $items[0]) ? $items[0]['inputIcon'] : '';
                     $attributes['name'] = $items[0]['name'];
 
 //                    $attributes['classList'] = $attributes['inputName'] === 'work_sub_employment_contract' ? 'row-70' : '';
 //                    $attributes['classList'] = $attributes['inputName'] === 'work_sub_employment_contract' ? 'row-70' : '';
                 }
+                $attributes['inputName'] = $items[0]['inputName'];
+                $attributes['inputId'] = $items[0]['inputId'];
             @endphp
-                @include($items[0]['field'], $attributes)
+            @include($items[0]['field'], $attributes)
         @endif
     </div>
 @endforeach
