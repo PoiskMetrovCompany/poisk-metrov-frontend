@@ -2,6 +2,7 @@
      value="{{ $item }}"
      field="apartment_type"
      displayname="{{ $item }}"
-     condition="=">
+     condition="="
+     data-select-id="{{ $selectIdentifier }}">
     <span>{{ $item }}</span>
 </div>

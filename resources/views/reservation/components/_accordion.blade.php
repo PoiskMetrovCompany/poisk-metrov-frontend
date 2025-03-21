@@ -33,7 +33,6 @@
                     </section>
                 @endif
                 <section class="action-accordion-user-info__sub-dropdown">
-
                     @if (key_exists('leftTitleIcon', $accordions[$i]))
                         <p id="info__sub-dropdown"
                            class="action-accordion-user-info__dropdown-large"

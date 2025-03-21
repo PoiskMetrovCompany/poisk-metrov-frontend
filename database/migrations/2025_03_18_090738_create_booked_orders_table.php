@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id');
             $table->uuid('key');
             // Fk
-            $table->foreignUuid('reservation_id')->references('id')->on('reservations')->onDelete('cascade');
+            $table->foreignId('reservation_id')->references('id')->on('reservations')->onDelete('cascade');
 
             $table->timestamp('created_at');
             $table->timestamp('updated_at');

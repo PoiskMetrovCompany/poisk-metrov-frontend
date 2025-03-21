@@ -55,7 +55,7 @@ export default defineConfig({
                 'resources/js/plan/plan.js',
                 'resources/js/aboutUs/aboutUs.js',
                 'resources/js/reservation/index.js',
-                'resources/js/reservation/panelControlReservation.js',
+                'resources/js/reservation/request.js',
             ],
             refresh: true,
         }),

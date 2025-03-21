@@ -505,7 +505,7 @@ button.action-button-outline {
     top: 0.1em;
 }
 .input-wrapper span.ico-2 {
-    width: 15%;
+    width: 5%;
 }
 
 .co-borrower {
@@ -574,6 +574,15 @@ button.action-button-outline {
 
 .co-borrower .input-wrapper span.ico-2 {
     width: 7%;
+}
+
+.control-action-button {
+    display: none;
+    margin-top: 1em;
+}
+
+.control-action-button button {
+    width: 30%;
 }
 
 @media (min-width: 1024px) and (max-width: 1240px) {

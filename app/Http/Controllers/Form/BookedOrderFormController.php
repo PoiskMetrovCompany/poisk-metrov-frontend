@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class BookedOrderFormController extends Controller
 {
-    final public function store()
+    final public function store(Request $request)
     {
-        return;
+        return response()->json($request);
     }
 
     final public function destroy()

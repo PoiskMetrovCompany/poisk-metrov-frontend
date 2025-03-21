@@ -5,6 +5,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\CatalogueViewController;
 use App\Http\Controllers\CurrentCityController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\Form\BookedOrderFormController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Pages\ReservationController;
@@ -33,6 +34,12 @@ use Illuminate\Support\Facades\Log;
 /// Reservations
 Route::prefix('reservations')->group(function () {
     Route::get('/{id}', [ReservationController::class, 'indexPage']);
+
+    /// Form Reservations
+    Route::prefix('form')->group(function() {
+       Route::post('/store', [BookedOrderFormController::class, 'store'])->name('reservation.form.store');
+    });
+    /// END
 });
 /// END
 
