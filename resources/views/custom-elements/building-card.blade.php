@@ -2,7 +2,7 @@
     $spritePositionsStr = json_encode($spritePositions);
     $metroMoveIcon = $metro_type == 'transport' ? 'car' : 'people';
 @endphp
-
+@vite('resources/js/coordinateStorage.js')
 <building-card id="{{ $code }}" city="{{ $location['code'] }}" long="{{ $longitude }}" lat="{{ $latitude }}"
     buildingname="{{ $name }}" metro="{{ $metro_station }}" metrominutes="{{ $metroMinutes }}"
     metromoveicon="{{ $metroMoveIcon }}">
@@ -15,9 +15,8 @@
         <div type="map"></div>
         <div type="top-buttons">
             @include('custom-elements.button.like')
-            <button type="button">
-                @include('icons.icon', ['iconClass' => 'map', 'iconColor' => 'black'])
-                @include('common.hint', ['text' => 'Показать на карте'])
+            <button type="button" class="save-coordinates-btn" data-longitude="{{ $longitude }}" data-latitude="{{ $latitude }}" mapactive="true">
+                <div class="icon map black"></div>
             </button>
             @include('custom-elements.button.share')
         </div>
