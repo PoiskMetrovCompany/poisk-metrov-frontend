@@ -1,5 +1,5 @@
 <h1 style="color: #2c2c2c;">
-    <img src="https://avatars.githubusercontent.com/u/180920011?s=200&v=4" style="width: 2%"> 
+    <img src="https://avatars.githubusercontent.com/u/180920011?s=200&v=4" style="width: 0.8em"> 
     ПОИСК МЕТРОВ
 </h1>
 <br>
