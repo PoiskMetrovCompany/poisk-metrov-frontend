@@ -29,9 +29,9 @@ class Kernel extends ConsoleKernel
             ->weeklyOn(1, '11:00')
             ->timezone('Russia/Novosibirsk');
 
-        $schedule->command('app:parser-cbr')
-            ->quarterly()
-            ->timezone('Russia/Novosibirsk');
+//        $schedule->command('app:parser-cbr')
+//            ->quarterly()
+//            ->timezone('Russia/Novosibirsk');
     }
 
     /**
