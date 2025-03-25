@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const fileName = document.querySelector("h1").textContent;
 
-        await fileDownloader.downloadFile(url, `${fileName}.pdf`);
+        // await fileDownloader.downloadFile(url, `${fileName}.pdf`);
+        console.log([url, `${fileName}.pdf`])
     });
 });
