@@ -15,7 +15,7 @@
         <div type="map"></div>
         <div type="top-buttons">
             @include('custom-elements.button.like')
-            <button type="button" class="save-coordinates-btn" data-longitude="{{ $longitude }}" data-latitude="{{ $latitude }}" mapactive="true">
+            <button type="button" class="save-coordinates-btn" data-longitude="{{ $longitude }}" data-latitude="{{ $latitude }}" mapactive="false">
                 <div class="icon map black"></div>
             </button>
             @include('custom-elements.button.share')
