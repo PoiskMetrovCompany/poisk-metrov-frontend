@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\Api\V1\CbrController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FavoritesController;
@@ -97,4 +98,12 @@ Route::group(['middleware' => ['web']], function () {
     });
 });
 
-
+/// V1
+Route::namespace('V1')->prefix('v1')->group(function () {
+    /// Cbr
+   Route::prefix('cbr')->group(function () {
+       Route::get('actual-date', [CbrController::class, 'actualDate']);
+   });
+   /// END
+});
+/// END
