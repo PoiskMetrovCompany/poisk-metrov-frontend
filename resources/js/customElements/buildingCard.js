@@ -183,10 +183,12 @@ export class BuildingCard extends HTMLElement {
 
     addBuildingMarker(map, coordinates) {
         const markerElement = document.createElement("div");
-        markerElement.className = "building-marker";
-        const markerIcon = document.createElement("img");
-        markerIcon.src = this.imageGallery.style.backgroundImage.substring(5, this.imageGallery.style.backgroundImage.length - 2);
-        markerElement.appendChild(markerIcon);
+        markerElement.className = "full-screen-map icon-container";
+        markerElement.style.width = '2.8em';
+        markerElement.style.height = '2.8em';
+        const iconElement = document.createElement("div");
+        iconElement.className = "icon place d44x44 white";
+        markerElement.appendChild(iconElement);
         const { YMapMarker } = ymaps3;
         const marker = new YMapMarker({ coordinates: coordinates, }, markerElement);
         map.addChild(marker);
