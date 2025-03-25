@@ -28,6 +28,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:backup')
             ->weeklyOn(1, '11:00')
             ->timezone('Russia/Novosibirsk');
+
+        $schedule->command('app:parser-cbr')
+            ->quarterly()
+            ->timezone('Russia/Novosibirsk');
     }
 
     /**
