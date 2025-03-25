@@ -17,9 +17,11 @@ export class FileDownloader {
         this.onStartDownload();
         this.isLoading = true;
         const response = await axios.get(url, { responseType: 'blob' });
+        console.log(url)
         this.isLoading = false;
         this.onFinishDownload();
         clearInterval(interval);
+        console.log(interval)
         downloadFile(URL.createObjectURL(new Blob([response.data])), fileName);
     }
 
