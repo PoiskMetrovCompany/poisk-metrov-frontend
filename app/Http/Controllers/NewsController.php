@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\NewsServiceInterface;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Http\Requests\NewsListRequest;
 use App\Http\Requests\RequestById;
@@ -11,13 +12,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
+/**
+ * @see AppServiceProvider::registerNewsService()
+ */
 class NewsController extends Controller
 {
-    public function __construct(protected NewsService $newsService)
+    public function __construct(protected NewsServiceInterface $newsService)
     {
 
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function deleteArticle(Request $request)
     {
         $id = $request->id;
@@ -25,6 +33,10 @@ class NewsController extends Controller
         $this->newsService->deleteArticle($id);
     }
 
+    /**
+     * @param ArticleUpdateRequest $articleUpdateRequest
+     * @return \App\Models\News
+     */
     public function createOrUpdateArticle(ArticleUpdateRequest $articleUpdateRequest)
     {
         $validated = $articleUpdateRequest->validated();
@@ -34,6 +46,10 @@ class NewsController extends Controller
         return $this->newsService->createOrUpdateArticle($validated, $file);
     }
 
+    /**
+     * @param RequestById $request
+     * @return NewsResource
+     */
     public function getArticle(RequestById $request)
     {
         $id = $request->validated('id');
@@ -41,6 +57,10 @@ class NewsController extends Controller
         return NewsResource::make($this->newsService->getArticle($id));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function getNews(Request $request)
     {
         $news = $this->newsService->getNews();
@@ -48,6 +68,11 @@ class NewsController extends Controller
         return NewsResource::collection($news);
     }
 
+    /**
+     * @param NewsListRequest $request
+     * @return array
+     * @throws \Throwable
+     */
     public function getNewsPage(NewsListRequest $request)
     {
         $validated = $request->validated();
@@ -73,10 +98,14 @@ class NewsController extends Controller
             'views' => $views,
             'paginator' => $paginator
         ];
-        
+
         return $components;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function articlePage(Request $request)
     {
         $id = $request['id'];

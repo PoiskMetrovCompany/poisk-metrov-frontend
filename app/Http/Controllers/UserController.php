@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\FavoritesServiceInterface;
+use App\Core\Services\UserServiceInterface;
 use App\CRM\Commands\CreateLead;
 use App\CRM\Commands\GetLead;
 use App\CRM\Commands\UpdateLead;
@@ -25,15 +28,25 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Validation\UnauthorizedException;
 
+/**
+ * @see AppServiceProvider::registerUserService()
+ * @see FavoritesServiceInterface
+ * @see CityServiceInterface
+ * @see UserServiceInterface
+ */
 class UserController extends Controller
 {
     public function __construct(
-        protected FavoritesService $favoritesService,
-        protected CityService $cityService,
-        protected UserService $userService
+        protected FavoritesServiceInterface $favoritesService,
+        protected CityServiceInterface $cityService,
+        protected UserServiceInterface $userService
     ) {
     }
 
+    /**
+     * @param UpdateUserRequest $updateUserRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateUser(UpdateUserRequest $updateUserRequest)
     {
         $name = $updateUserRequest->validated('name');
@@ -59,6 +72,10 @@ class UserController extends Controller
         return response()->json(['status' => 'User updated'], 200);
     }
 
+    /**
+     * @param AuthorizeUserRequest $authorizeUserRequest
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public function authorizeUser(AuthorizeUserRequest $authorizeUserRequest)
     {
         $user = Auth::user();
@@ -147,6 +164,11 @@ class UserController extends Controller
         return response()->json($returnData, 200)->withoutCookie(Cookie::forget('chat_token'));
     }
 
+    /**
+     * @param User $user
+     * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createLeadForUser(User $user)
     {
         $city = $this->cityService->getUserCity();
@@ -210,6 +232,10 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logOut(Request $request)
     {
         $user = Auth::user();
@@ -223,6 +249,10 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @param UpdateProfileRequest $updateProfileRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateProfile(UpdateProfileRequest $updateProfileRequest)
     {
         $name = $updateProfileRequest->validated('name');
@@ -246,6 +276,9 @@ class UserController extends Controller
         return response()->json(['status' => 'User updated'], 200);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public function getCurrentUserData()
     {
         $user = Auth::user();
@@ -264,12 +297,19 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function getUsers()
     {
         $users = $this->userService->getUsers();
         return UserResource::collection($users);
     }
 
+    /**
+     * @param UpdateRoleRequest $request
+     * @return void
+     */
     public function updateRole(UpdateRoleRequest $request)
     {
         $id = $request->validated('id');

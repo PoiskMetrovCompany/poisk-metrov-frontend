@@ -2,8 +2,18 @@
 
 namespace App\Providers;
 
+use App\Core\Services\ApartmentServiceInterface;
 use App\Core\Services\BackupHistoryServiceInterface;
 use App\Core\Services\BackupServiceInterface;
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\FavoritesServiceInterface;
+use App\Core\Services\ManagersServiceInterface;
+use App\Core\Services\NewsServiceInterface;
+use App\Core\Services\PriceFormattingServiceInterface;
+use App\Core\Services\RealEstateServiceInterface;
+use App\Core\Services\UserServiceInterface;
+use App\Core\Services\VisitedPagesServiceInterface;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
@@ -20,6 +30,7 @@ use App\Services\PriceFormattingService;
 use App\Services\RealEstateService;
 use App\Services\SearchService;
 use App\Services\TextService;
+use App\Services\UserService;
 use App\Services\VisitedPagesService;
 use Arhitector\Yandex\Disk;
 use Illuminate\Support\Facades\View;
@@ -45,10 +56,71 @@ class AppServiceProvider extends ServiceProvider
             );
         });
     }
+
+    final public function registerFavoritesService(): void
+    {
+        $this->app->singleton(FavoritesServiceInterface::class, FavoritesService::class);
+    }
+
+    final public function registerCityService(): void
+    {
+        $this->app->singleton(CityServiceInterface::class, CityService::class);
+    }
+
+    final public function registerUserService(): void
+    {
+        $this->app->singleton(UserServiceInterface::class, UserService::class);
+    }
+
+    final public function registerApartmentService(): void
+    {
+        $this->app->singleton(ApartmentServiceInterface::class, ApartmentService::class);
+    }
+
+    final public function registerVisitedPagesService(): void
+    {
+        $this->app->singleton(VisitedPagesServiceInterface::class, VisitedPagesService::class);
+    }
+
+    final public function registerRealEstateService(): void
+    {
+        $this->app->singleton(RealEstateServiceInterface::class, RealEstateService::class);
+    }
+
+    final public function registerCachingService(): void
+    {
+        $this->app->singleton(CachingServiceInterface::class, CachingService::class);
+    }
+
+    final public function registerPriceFormattingService(): void
+    {
+        $this->app->singleton(PriceFormattingServiceInterface::class, PriceFormattingService::class);
+    }
+
+    final public function registerNewsService(): void
+    {
+        $this->app->singleton(NewsServiceInterface::class, NewsService::class);
+    }
+
+    final public function registerManagersService(): void
+    {
+        $this->app->singleton(ManagersServiceInterface::class, ManagersService::class);
+    }
+
     public function register(): void
     {
         $this->registerBackupService();
         $this->registerBackupService();
+        $this->registerFavoritesService();
+        $this->registerCityService();
+        $this->registerUserService();
+        $this->registerApartmentService();
+        $this->registerVisitedPagesService();
+        $this->registerRealEstateService();
+        $this->registerCachingService();
+        $this->registerPriceFormattingService();
+        $this->registerNewsService();
+        $this->registerManagersService();
     }
 
     /**
