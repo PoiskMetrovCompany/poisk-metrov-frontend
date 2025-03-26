@@ -3,7 +3,7 @@ import { CRMForm } from "./CRMForm";
 document.addEventListener("DOMContentLoaded", () => {
     const url = "/api/revert-ads-agreement";
     const formPopup = document.getElementById('revert-ads-form');
-    
+
     const onSuccess = () => {
         const phoneInput = formPopup.querySelector('input[type="tel"]');
         const phone = phoneInput.value;
@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const popupTitle = popup.querySelector(".sub-menus.title");
         popupTitle.textContent = 'Номер ' + phone + ' исключен из списка рассылок рекламной информации.';
         const revertRequest = document.getElementById("revert-ads-agreement");
+
+        if (popup.style.visibility === 'hidden') {
+            popup.style.visibility = 'visible';
+        }
+
         if (revertRequest) {
             revertRequest.style.display = "none";
         }
