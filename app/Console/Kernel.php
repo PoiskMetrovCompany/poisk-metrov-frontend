@@ -26,12 +26,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:clean-up-gallery')->daily();
 
         $schedule->command('app:backup')
-            ->weeklyOn(1, '11:00')
-            ->timezone('Russia/Novosibirsk');
+            ->weeklyOn(1, '11:00');
 
 //        $schedule->command('app:parser-cbr')
-//            ->quarterly()
-//            ->timezone('Russia/Novosibirsk');
+//            ->quarterly();
     }
 
     /**
