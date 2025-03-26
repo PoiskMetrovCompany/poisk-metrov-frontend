@@ -9,11 +9,18 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class FileController extends Controller
 {
+    /**
+     * @return array
+     */
     function getPublicFiles()
     {
         return $this->getFilesFromFolder(public_path());
     }
 
+    /**
+     * @param FileRequest $fileRequest
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     function getFile(FileRequest $fileRequest)
     {
         $fileUrl = $fileRequest->validated('fileUrl');
@@ -21,6 +28,10 @@ class FileController extends Controller
         return response()->download(public_path($fileUrl))->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }
 
+    /**
+     * @param FileUploadRequest $fileUploadRequest
+     * @return void
+     */
     function uploadFiles(FileUploadRequest $fileUploadRequest)
     {
         $files = $fileUploadRequest->allFiles();
@@ -36,6 +47,10 @@ class FileController extends Controller
         }
     }
 
+    /**
+     * @param FileRequest $fileRequest
+     * @return void
+     */
     function deleteFile(FileRequest $fileRequest)
     {
         $fileUrl = $fileRequest->validated('fileUrl');
@@ -43,6 +58,10 @@ class FileController extends Controller
         Storage::disk('public_classic')->delete($fileUrl);
     }
 
+    /**
+     * @param FileRequest $folderRequest
+     * @return void
+     */
     function createFolder(FileRequest $folderRequest)
     {
         $folderUrl = $folderRequest->validated('fileUrl');
@@ -54,6 +73,10 @@ class FileController extends Controller
         Storage::disk('public_classic')->makeDirectory($folderUrl);
     }
 
+    /**
+     * @param FileRequest $folderRequest
+     * @return void
+     */
     function deleteFolder(FileRequest $folderRequest)
     {
         $folderUrl = $folderRequest->validated('fileUrl');
@@ -65,6 +88,10 @@ class FileController extends Controller
         Storage::disk('public_classic')->deleteDirectory($folderUrl);
     }
 
+    /**
+     * @param string $folderName
+     * @return array
+     */
     function getFilesFromFolder(string $folderName): array
     {
         $folderContent = glob("{$folderName}" . DIRECTORY_SEPARATOR . '*');

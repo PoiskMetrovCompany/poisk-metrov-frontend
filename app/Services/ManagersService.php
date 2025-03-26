@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use App\Core\Services\ManagersServiceInterface;
 use App\Models\Manager;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ManagersService
  */
-class ManagersService extends AbstractService
+class ManagersService extends AbstractService implements ManagersServiceInterface
 {
     private $chatConfig;
 
@@ -17,7 +19,7 @@ class ManagersService extends AbstractService
         $this->chatConfig = Storage::json('chat-config.json');
     }
 
-    public function deleteManager(Manager $manager)
+    public function deleteManager(Manager $manager): void
     {
         if ($manager->autokick_immune == 1) {
             echo "Will not kick {$manager->document_name}" . PHP_EOL;
@@ -42,7 +44,7 @@ class ManagersService extends AbstractService
         return $this->getManagersList()->pluck('document_name')->sort()->toArray();
     }
 
-    public function getManagersList()
+    public function getManagersList(): Collection
     {
         return Manager::all();
     }

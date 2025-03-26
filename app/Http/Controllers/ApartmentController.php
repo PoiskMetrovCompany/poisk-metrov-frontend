@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\ApartmentServiceInterface;
+use App\Core\Services\PriceFormattingServiceInterface;
 use App\Http\Requests\UpdateApartmentRequest;
 use App\Http\Resources\ApartmentHistoryResource;
 use App\Http\Resources\ApartmentResource;
@@ -21,14 +23,23 @@ use App\Http\Requests\ApartmentListRequest;
 use Log;
 use Throwable;
 
+/**
+ * @see AppServiceProvider::registerApartmentService()
+ * @see AppServiceProvider::registerPriceFormattingService()
+ */
 class ApartmentController extends Controller
 {
     public function __construct(
-        protected ApartmentService $apartmentService,
-        protected PriceFormattingService $priceFormattingService)
+        protected ApartmentServiceInterface $apartmentService,
+        protected PriceFormattingServiceInterface $priceFormattingService)
     {
     }
 
+    /**
+     * @param Request $request
+     * @param string $offer_id
+     * @return \Illuminate\Contracts\View\View|never
+     */
     public function view(Request $request, string $offer_id)
     {
         $apartment = Apartment::where('offer_id', $offer_id)->first();
@@ -91,6 +102,9 @@ class ApartmentController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function getAllApartments()
     {
         $allBuildings = ResidentialComplex::all();
@@ -109,6 +123,10 @@ class ApartmentController extends Controller
         return EditableApartmentResource::collection($apartments);
     }
 
+    /**
+     * @param UpdateApartmentRequest $updateApartmentRequest
+     * @return void
+     */
     public function updateApartment(UpdateApartmentRequest $updateApartmentRequest)
     {
         $validated = $updateApartmentRequest->validated();
@@ -117,6 +135,13 @@ class ApartmentController extends Controller
         $apartment->update($validated);
     }
 
+    /**
+     * @param $filteredApartments
+     * @param string $buildingName
+     * @param $priceSortOrder
+     * @param $areaSortOrder
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getDropdownContent($filteredApartments, string $buildingName, $priceSortOrder, $areaSortOrder)
     {
         $apartmentSpecifics = [];
@@ -198,6 +223,10 @@ class ApartmentController extends Controller
         }
     }
 
+    /**
+     * @param string $complexCode
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getApartmentViews(string $complexCode)
     {
         $building = ResidentialComplex::where('code', $complexCode)->first();
@@ -208,6 +237,11 @@ class ApartmentController extends Controller
         return $this->getDropdownContent($filteredApartments, $building->name, $priceSortOrder, $areaSortOrder);
     }
 
+    /**
+     * @param ApartmentListRequest $request
+     * @param string $complexCode
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getApartmentViewsWithFilters(ApartmentListRequest $request, string $complexCode)
     {
         $filteredApartments = $this->apartmentService->getFilteredApartmentQuery($request->validated(), $complexCode);

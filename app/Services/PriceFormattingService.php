@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Core\Services\PriceFormattingServiceInterface;
+
 /**
  * Class PriceFormattingService.
  */
-class PriceFormattingService
+class PriceFormattingService implements PriceFormattingServiceInterface
 {
     public function fullPrice(int|null $priceAsNumber, string $delimiter = ' ')
     {
