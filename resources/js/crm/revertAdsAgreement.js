@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const popupTitle = popup.querySelector(".sub-menus.title");
         popupTitle.textContent = 'Номер ' + phone + ' исключен из списка рассылок рекламной информации.';
         const revertRequest = document.getElementById("revert-ads-agreement");
-        console.log(popup.style.visibility);
+
         if (popup.style.visibility === 'hidden') {
             popup.style.visibility = 'visible';
         }
