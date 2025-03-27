@@ -2,17 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\BankServiceInterface;
 use App\Http\Requests\FilteredMortgagesRequest;
+use App\Providers\AppServiceProvider;
 use App\Services\BankService;
 use Illuminate\Http\Request;
 
+/**
+ * @see AppServiceProvider::registerBankService()
+ * @see BankServiceInterface
+ */
 class BankController extends Controller
 {
-    public function __construct(protected BankService $bankService)
+    /**
+     * @param BankServiceInterface $bankService
+     */
+    public function __construct(protected BankServiceInterface $bankService)
     {
 
     }
 
+    /**
+     * @param FilteredMortgagesRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
     public function getFilteredMortgages(FilteredMortgagesRequest $request)
     {
         $categories = $request->validated('categories');

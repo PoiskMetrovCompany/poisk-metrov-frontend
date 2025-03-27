@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CbrController extends Controller
 {
-    public function actualDate(){
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function actualDate(): JsonResponse
+    {
         $cbr = Storage::disk('local')->get('cbr.json');
         $cbrObjectStorage = json_decode($cbr, true);
         $toDate = Carbon::now();

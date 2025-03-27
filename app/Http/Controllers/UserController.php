@@ -36,6 +36,11 @@ use Illuminate\Validation\UnauthorizedException;
  */
 class UserController extends Controller
 {
+    /**
+     * @param FavoritesServiceInterface $favoritesService
+     * @param CityServiceInterface $cityService
+     * @param UserServiceInterface $userService
+     */
     public function __construct(
         protected FavoritesServiceInterface $favoritesService,
         protected CityServiceInterface $cityService,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Services\CityServiceInterface;
+use App\Core\Services\FeedServiceInterface;
 use App\FeedParsers\FeedFormat;
 use App\Http\Requests\FeedNameRequest;
 use App\Http\Requests\FeedRequest;
@@ -16,11 +17,17 @@ use Illuminate\Http\Request;
 
 /**
  * @see AppServiceProvider::registerCityService()
+ * @see FeedServiceInterface
+ * @see CityServiceInterface
  */
 class FeedController extends Controller
 {
+    /**
+     * @param FeedServiceInterface $feedService
+     * @param CityServiceInterface $cityService
+     */
     public function __construct(
-        private FeedService $feedService,
+        private FeedServiceInterface $feedService,
         private CityServiceInterface $cityService
     ) {
     }

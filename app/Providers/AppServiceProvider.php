@@ -2,29 +2,41 @@
 
 namespace App\Providers;
 
+use App\Core\Services\AdsAgreementServiceInterface;
 use App\Core\Services\ApartmentServiceInterface;
 use App\Core\Services\BackupHistoryServiceInterface;
 use App\Core\Services\BackupServiceInterface;
+use App\Core\Services\BankServiceInterface;
 use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\ChatServiceInterface;
 use App\Core\Services\CityServiceInterface;
+use App\Core\Services\CRMServiceInterface;
 use App\Core\Services\FavoritesServiceInterface;
+use App\Core\Services\FeedServiceInterface;
 use App\Core\Services\ManagersServiceInterface;
 use App\Core\Services\NewsServiceInterface;
+use App\Core\Services\PDFServiceInterface;
 use App\Core\Services\PriceFormattingServiceInterface;
 use App\Core\Services\RealEstateServiceInterface;
+use App\Core\Services\SearchServiceInterface;
+use App\Core\Services\TextServiceInterface;
 use App\Core\Services\UserServiceInterface;
 use App\Core\Services\VisitedPagesServiceInterface;
+use App\Services\AdsAgreementService;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
 use App\Services\BankService;
 use App\Services\CachingService;
+use App\Services\ChatService;
 use App\Services\CityService;
+use App\Services\CRMService;
 use App\Services\FavoritesService;
 use App\Services\FeedService;
 use App\Services\FileService;
 use App\Services\ManagersService;
 use App\Services\NewsService;
+use App\Services\PDFService;
 use App\Services\PreloadService;
 use App\Services\PriceFormattingService;
 use App\Services\RealEstateService;
@@ -107,6 +119,46 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ManagersServiceInterface::class, ManagersService::class);
     }
 
+    final public function registerFeedService(): void
+    {
+        $this->app->singleton(FeedServiceInterface::class, FeedService::class);
+    }
+
+    final public function registerChatService(): void
+    {
+        $this->app->singleton(ChatServiceInterface::class, ChatService::class);
+    }
+
+    final public function registerCRMService(): void
+    {
+        $this->app->singleton(CRMServiceInterface::class, CRMService::class);
+    }
+
+    final public function registerAdsAgreementService(): void
+    {
+        $this->app->singleton(AdsAgreementServiceInterface::class, AdsAgreementService::class);
+    }
+
+    final public function registerTextService(): void
+    {
+        $this->app->singleton(TextServiceInterface::class, TextService::class);
+    }
+
+    final public function registerSearchService(): void
+    {
+        $this->app->singleton(SearchServiceInterface::class, SearchService::class);
+    }
+
+    final public function registerBankService(): void
+    {
+        $this->app->singleton(BankServiceInterface::class, BankService::class);
+    }
+
+    final public function registerPDFService(): void
+    {
+        $this->app->singleton(PDFServiceInterface::class, PDFService::class);
+    }
+
     public function register(): void
     {
         $this->registerBackupService();
@@ -121,6 +173,14 @@ class AppServiceProvider extends ServiceProvider
         $this->registerPriceFormattingService();
         $this->registerNewsService();
         $this->registerManagersService();
+        $this->registerFeedService();
+        $this->registerChatService();
+        $this->registerCRMService();
+        $this->registerAdsAgreementService();
+        $this->registerTextService();
+        $this->registerSearchService();
+        $this->registerBankService();
+        $this->registerPDFService();
     }
 
     /**

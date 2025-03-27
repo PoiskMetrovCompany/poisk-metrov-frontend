@@ -12,7 +12,10 @@ class ReservationController extends Controller
 
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function indexPage(Request $request)
     {
         return view('reservation.index');

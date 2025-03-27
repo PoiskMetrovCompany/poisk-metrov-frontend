@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * @see AppServiceProvider::registerManagersService()
+ * @see ManagersServiceInterface
  */
 class ManagersController extends Controller
 {
+    /**
+     * @param ManagersServiceInterface $managersService
+     */
     public function __construct(protected ManagersServiceInterface $managersService)
     {
     }
