@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use App\Core\Services\ApartmentServiceInterface;
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\RealEstateServiceInterface;
+use App\Core\Services\VisitedPagesServiceInterface;
 use App\Models\Apartment;
 use App\Models\ApartmentHistory;
 use App\Models\MortgageType;
@@ -17,12 +21,12 @@ use Log;
 /**
  * Class ApartmentService.
  */
-class ApartmentService extends AbstractService
+class ApartmentService extends AbstractService implements ApartmentServiceInterface
 {
     public function __construct(
-        protected VisitedPagesService $visitedPagesService,
-        protected RealEstateService $realEstateService,
-        protected CityService $cityService,
+        protected VisitedPagesServiceInterface $visitedPagesService,
+        protected RealEstateServiceInterface $realEstateService,
+        protected CityServiceInterface $cityService,
         protected ResidentialComplexRepository $residentialComplexRepository
     ) {
     }
@@ -169,7 +173,7 @@ class ApartmentService extends AbstractService
         return $apartmentsQuery;
     }
 
-    public function createApartment(array $fields)
+    public function createApartment(array $fields): void
     {
         if (! isset($fields['offer_id'])) {
             Log::info('Could not create apartment with no offer id');
@@ -197,14 +201,14 @@ class ApartmentService extends AbstractService
         }
     }
 
-    public function updateApartment(Apartment $apartment, array $fields)
+    public function updateApartment(Apartment $apartment, array $fields): void
     {
         if (isset($fields['price'])) {
             $this->updatePrice($apartment, $fields['price']);
         }
     }
 
-    public function cleanUpApartmentProperties()
+    public function cleanUpApartmentProperties(): void
     {
         Apartment::whereNull('apartment_type')->update(['apartment_type' => 'Квартира']);
         Apartment::where(['renovation' => 'предчистовая отделка'])->update(['renovation' => 'Подготовка под чистовую отделку']);
@@ -221,7 +225,7 @@ class ApartmentService extends AbstractService
         Apartment::where(['room_count' => 0, 'apartment_type' => 'Студия'])->update(['room_count' => 1]);
     }
 
-    public function deleteApartment(Apartment $apartment)
+    public function deleteApartment(Apartment $apartment): void
     {
         Log::info("Will delete apartment with offer id {$apartment->offer_id}");
         ApartmentHistory::where('apartment_id', $apartment->id)->delete();
@@ -232,7 +236,7 @@ class ApartmentService extends AbstractService
         $apartment->delete();
     }
 
-    public function updatePrice(Apartment $apartment, $price)
+    public function updatePrice(Apartment $apartment, $price): void
     {
         if ($apartment->price == $price) {
             return;

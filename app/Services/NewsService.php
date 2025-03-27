@@ -2,14 +2,16 @@
 
 namespace App\Services;
 
+use App\Core\Services\NewsServiceInterface;
 use App\Models\News;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
  * Class NewsService.
  */
-class NewsService extends AbstractService
+class NewsService extends AbstractService implements NewsServiceInterface
 {
     public function createOrUpdateArticle(array $data, $file = null): News
     {
@@ -55,7 +57,7 @@ class NewsService extends AbstractService
         return News::where("id", $id)->first();
     }
 
-    public function getNews()
+    public function getNews(): Collection
     {
         return News::all()->sortBy('created_at')->reverse();
     }
@@ -65,7 +67,7 @@ class NewsService extends AbstractService
         return parent::getFromApp();
     }
 
-    public function getArticleForSite(int $id)
+    public function getArticleForSite(int $id): array
     {
         $article = News::where("id", $id)->first();
 
@@ -80,7 +82,7 @@ class NewsService extends AbstractService
         return $articleData;
     }
 
-    public function getNewsBatch(int $offset)
+    public function getNewsBatch(int $offset): array
     {
         $news = News::offset($offset)->limit(9)->get()->sortBy('created_at');
         $res = [];
@@ -93,7 +95,7 @@ class NewsService extends AbstractService
         return $res;
     }
 
-    public function getNewsForSite()
+    public function getNewsForSite(): array
     {
         $news = $this->getNews();
         $res = [];

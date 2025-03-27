@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Services\VisitedPagesServiceInterface;
 use App\Models\VisitedPage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Cookie;
 /**
  * Class VisitedPagesService.
  */
-class VisitedPagesService extends AbstractService
+class VisitedPagesService extends AbstractService implements VisitedPagesServiceInterface
 {
     public function getVisitedApartments(): Collection
     {

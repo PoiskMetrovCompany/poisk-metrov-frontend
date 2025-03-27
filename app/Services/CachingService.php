@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\CityServiceInterface;
 use App\Services\CityService;
 use App\Http\Resources\ResidentialComplexCardResource;
 use App\Http\Resources\ResidentialComplexResource;
@@ -12,18 +14,18 @@ use Log;
 /**
  * Class CachingService.
  */
-class CachingService extends AbstractService
+class CachingService extends AbstractService implements CachingServiceInterface
 {
     private string $cacheFileName = 'cached-cards.json';
     private string $searchDataCacheFileName = 'search-data.json';
     private string $residentialComplexCacheFolder = 'residential-complex-cached-data';
 
-    public function __construct(protected CityService $cityService)
+    public function __construct(protected CityServiceInterface $cityService)
     {
 
     }
 
-    public function cacheAllCards()
+    public function cacheAllCards(): void
     {
         $complexes = ResidentialComplex::with('apartments')
             ->withCount('apartments')
@@ -76,7 +78,7 @@ class CachingService extends AbstractService
         }
     }
 
-    public function cacheSearchFilterData(SearchService $searchService)
+    public function cacheSearchFilterData(SearchService $searchService): void
     {
         $cities = $this->cityService->possibleCityCodes;
         $searchDataJson = [];
@@ -89,7 +91,7 @@ class CachingService extends AbstractService
         Storage::put($this->searchDataCacheFileName, json_encode($searchDataJson));
     }
 
-    public function cacheResidentialComplexSearchData()
+    public function cacheResidentialComplexSearchData(): void
     {
         $relevantBuildings = ResidentialComplex::whereHas('apartments')->get();
 
@@ -98,7 +100,7 @@ class CachingService extends AbstractService
         }
     }
 
-    public function cacheResidentialComplex(ResidentialComplex $residentialComplex)
+    public function cacheResidentialComplex(ResidentialComplex $residentialComplex): void
     {
         if (! Storage::directoryExists($this->residentialComplexCacheFolder)) {
             Storage::makeDirectory($this->residentialComplexCacheFolder);
@@ -108,7 +110,7 @@ class CachingService extends AbstractService
         Storage::put("{$this->residentialComplexCacheFolder}/{$residentialComplex->code}.json", $json);
     }
 
-    public function getResidentialComplex(string $code)
+    public function getResidentialComplex(string $code): mixed
     {
         if (Storage::exists("{$this->residentialComplexCacheFolder}/{$code}.json")) {
             $this->cacheResidentialComplex(ResidentialComplex::where('code', $code)->first());
@@ -117,7 +119,7 @@ class CachingService extends AbstractService
         return json_decode(json_encode(Storage::json("{$this->residentialComplexCacheFolder}/{$code}.json")), true);
     }
 
-    public function getSearchFilterData(SearchService $searchService, string $city)
+    public function getSearchFilterData(SearchService $searchService, string $city): mixed
     {
         if (! Storage::exists($this->searchDataCacheFileName)) {
             $this->cacheSearchFilterData($searchService);
@@ -133,7 +135,7 @@ class CachingService extends AbstractService
         return $searchData[$city];
     }
 
-    public function getCachedSingleCard(string $code)
+    public function getCachedSingleCard(string $code): mixed
     {
         $path = "cards/$code.json";
         $card = Storage::json($path);
@@ -145,7 +147,7 @@ class CachingService extends AbstractService
         return $card;
     }
 
-    public function cacheSingleCard(string|ResidentialComplex $complex)
+    public function cacheSingleCard(string|ResidentialComplex $complex): string
     {
         if (is_string($complex)) {
             $complex = ResidentialComplex::where('code', $complex)->first();

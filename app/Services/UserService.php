@@ -2,18 +2,20 @@
 
 namespace App\Services;
 
+use App\Core\Services\UserServiceInterface;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 /**
  * Class UserService
  */
 
-class UserService extends AbstractService
+class UserService extends AbstractService implements UserServiceInterface
 {
-    public function getUsers()
+    public function getUsers(): Collection
     {
         $users = User::all();
 

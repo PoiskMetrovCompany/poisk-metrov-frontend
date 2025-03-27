@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Core\Services\ChatServiceInterface;
+use App\Core\Services\CRMServiceInterface;
 use App\Events\ChatUpdated;
 use App\Events\UserMessage;
 use App\Models\ChatSession;
@@ -19,17 +21,17 @@ use Illuminate\Support\Carbon;
 /**
  * Class ChatService.
  */
-class ChatService
+class ChatService implements ChatServiceInterface
 {
     private int $maxMessageLength = 4096;
 
     public function __construct(
         protected TelegramService $telegramService,
-        protected CRMService $crmService
+        protected CRMServiceInterface $crmService
     ) {
     }
 
-    public function sendSessionToCRM(ChatSession $session)
+    public function sendSessionToCRM(ChatSession $session): void
     {
         $user = $session->getUser();
         $sessionHistory = $this->getMessagesFromSession($session, $user);
@@ -183,7 +185,7 @@ class ChatService
         return $history;
     }
 
-    public function sendChatMessage(string $userName, string $message, string $chatToken, ChatSession $session, int $userId = null)
+    public function sendChatMessage(string $userName, string $message, string $chatToken, ChatSession $session, int $userId = null): void
     {
         // $sentMessage = "$userName\r\n\r\n$message";
         // $this->telegramService->sendMessage($sentMessage, $session->manager_telegram_id);
@@ -206,7 +208,7 @@ class ChatService
         broadcast($chatUpdatedEvent);
     }
 
-    public function sendGroupMessage(string $userName, string $message, string $chatToken, string|null $group)
+    public function sendGroupMessage(string $userName, string $message, string $chatToken, string|null $group): void
     {
         if ($group != null) {
             $sentMessage = "$userName\r\n\r\n$message";
@@ -233,7 +235,7 @@ class ChatService
         broadcast($chatUpdatedEvent);
     }
 
-    public function getManagerChatHistory($chatToken)
+    public function getManagerChatHistory($chatToken): array
     {
         $user = User::where('chat_token', $chatToken)->first();
         $messages = $this->getChatHistory($chatToken, $user);
@@ -251,7 +253,7 @@ class ChatService
         return $result;
     }
 
-    private function getChatData(string $chatToken, string $userName, string $message, string $date, string $status)
+    private function getChatData(string $chatToken, string $userName, string $message, string $date, string $status): array
     {
         $user = User::where('chat_token', $chatToken)->first();
         $history = $this->getChatHistory($chatToken, $user);
@@ -268,7 +270,7 @@ class ChatService
         return $result;
     }
 
-    public function getNewChatData(string $chatToken, string $userName, string $message, string $date)
+    public function getNewChatData(string $chatToken, string $userName, string $message, string $date): array
     {
         $userMessages = GroupChatBotMessage::where('sender_chat_token', $chatToken)->get();
         $countMessages = count($userMessages);
@@ -324,7 +326,7 @@ class ChatService
         return User::where('chat_token', $chatToken)->first();
     }
 
-    public function sendMessageToSession(string $message, string $apiToken, string $chatToken)
+    public function sendMessageToSession(string $message, string $apiToken, string $chatToken): void
     {
         $manager = User::where('api_token', $apiToken)->first();
 
@@ -369,7 +371,7 @@ class ChatService
         broadcast($newMessageEvent);
     }
 
-    public function getChats($managerId)
+    public function getChats($managerId): array
     {
         // $sessions = ChatSession::where('manager_id', $managerId)->orderBy('created_at')->get()->unique('chat_token');
         $sessions = ChatSession::withTrashed()->where('manager_id', $managerId)->orderBy('created_at', 'desc')->get()->unique('chat_token');
@@ -399,7 +401,7 @@ class ChatService
         return $result;
     }
 
-    public function getChatsWithoutManager()
+    public function getChatsWithoutManager(): array
     {
         $chatsWithoutManager = GroupChatBotMessage::orderBy('created_at')->get()->unique('sender_chat_token');
         $result = [];
