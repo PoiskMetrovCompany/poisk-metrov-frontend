@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\ApartmentServiceInterface;
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\NewsServiceInterface;
+use App\Core\Services\SearchServiceInterface;
 use App\Http\Resources\ApartmentResource;
+use App\Providers\AppServiceProvider;
 use App\Repositories\ResidentialComplexRepository;
 use App\Services\ApartmentService;
 use App\Services\CachingService;
@@ -10,18 +16,41 @@ use App\Services\CityService;
 use App\Services\NewsService;
 use App\Services\SearchService;
 
+/**
+ * @see AppServiceProvider::registerSearchService()
+ * @see AppServiceProvider::registerCachingService()
+ * @see AppServiceProvider::registerCityService()
+ * @see AppServiceProvider::registerApartmentService()
+ * @see AppServiceProvider::registerNewsService()
+ * @see SearchServiceInterface
+ * @see CachingServiceInterface
+ * @see CityServiceInterface
+ * @see ApartmentServiceInterface
+ * @see NewsServiceInterface
+ */
 class HomePageController extends Controller
 {
+    /**
+     * @param SearchServiceInterface $searchService
+     * @param CachingServiceInterface $cachingService
+     * @param CityServiceInterface $cityService
+     * @param ApartmentServiceInterface $apartmentService
+     * @param NewsServiceInterface $newsService
+     * @param ResidentialComplexRepository $residentialComplexRepository
+     */
     public function __construct(
-        protected SearchService $searchService,
-        protected CachingService $cachingService,
-        protected CityService $cityService,
-        protected ApartmentService $apartmentService,
-        protected NewsService $newsService,
+        protected SearchServiceInterface $searchService,
+        protected CachingServiceInterface $cachingService,
+        protected CityServiceInterface $cityService,
+        protected ApartmentServiceInterface $apartmentService,
+        protected NewsServiceInterface $newsService,
         protected ResidentialComplexRepository $residentialComplexRepository
     ) {
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function getHomePage()
     {
         $bestOfferData = $this->residentialComplexRepository->getBestOffers();

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Core\Services\FavoritesServiceInterface;
+use App\Core\Services\PDFServiceInterface;
 use App\Http\Resources\ApartmentResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\ResidentialComplexResource;
@@ -16,18 +18,18 @@ use Spatie\Browsershot\Browsershot;
 /**
  * Class PDFService.
  */
-class PDFService
+class PDFService implements PDFServiceInterface
 {
-    public function __construct(protected FavoritesService $favoritesService)
+    public function __construct(protected FavoritesServiceInterface $favoritesService)
     {
     }
 
-    public function getFavoriteBuildingsPresentation()
+    public function getFavoriteBuildingsPresentation(): mixed
     {
         return $this->downloadBuildingPdf($this->favoritesService->getFavoriteBuildingCodes());
     }
 
-    public function getFavoriteApartmentsPresentation()
+    public function getFavoriteApartmentsPresentation(): mixed
     {
         return $this->downloadApartmentPdf($this->favoritesService->getFavoritePlanOfferIds());
     }
@@ -58,12 +60,12 @@ class PDFService
         return [$filePath, $fileName];
     }
 
-    public function getFavoriteApartments()
+    public function getFavoriteApartments(): array
     {
         return $this->getApartmentsData($this->favoritesService->getFavoritePlanOfferIds());
     }
 
-    public function getFavoriteBuildings()
+    public function getFavoriteBuildings(): array
     {
         return $this->getComplexesData($this->favoritesService->getFavoriteBuildingCodes());
     }
@@ -147,7 +149,7 @@ class PDFService
         return $complexesData;
     }
 
-    private function shortenDescription(string $description)
+    private function shortenDescription(string $description): string
     {
         $maxSymbols = 1300;
         $descriptionSplit = explode('. ', $description);

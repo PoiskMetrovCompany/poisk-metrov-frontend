@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Services\BankServiceInterface;
 use App\Http\Resources\BankResource;
 use App\Http\Resources\MortgageProgramResource;
 use App\Http\Resources\MortgageResource;
@@ -21,7 +22,7 @@ use Illuminate\Support\Str;
 /**
  * Class BankService.
  */
-class BankService extends AbstractService
+class BankService extends AbstractService implements BankServiceInterface
 {
     public array $preferredBanks = [
         'Альфа-Банк',
@@ -100,7 +101,7 @@ class BankService extends AbstractService
         }
     }
 
-    public function downloadBanks(string $cityCode)
+    public function downloadBanks(string $cityCode): void
     {
         $url = "https://www.banki.ru/products/hypothec/calculator/data/";
         $parameters = [
@@ -144,7 +145,7 @@ class BankService extends AbstractService
         $this->loadData();
     }
 
-    public function parseBankPages(string $cityCode)
+    public function parseBankPages(string $cityCode): void
     {
         $fullJson = $this->rawTariffs;
         $allTariffs = new Collection();
@@ -190,7 +191,7 @@ class BankService extends AbstractService
         $this->loadData();
     }
 
-    public function parseTariffs(string $cityCode)
+    public function parseTariffs(string $cityCode): void
     {
         $fullJson = $this->tariffs;
         $important = [];
@@ -219,7 +220,7 @@ class BankService extends AbstractService
         $this->loadData();
     }
 
-    public function makeBankTariffLists(string $cityCode)
+    public function makeBankTariffLists(string $cityCode): void
     {
         $fullJson = $this->banks;
         $bankOptions = new Collection($this->rawBanks[$cityCode][0]['filters']['fieldsConfig']['bankIds']['options']);
@@ -251,7 +252,7 @@ class BankService extends AbstractService
         $this->loadData();
     }
 
-    public function createBankLogos(string $cityCode)
+    public function createBankLogos(string $cityCode): void
     {
         foreach ($this->banks[$cityCode] as $bank) {
             $name = $bank['transliteratedName'];
@@ -276,7 +277,7 @@ class BankService extends AbstractService
         }
     }
 
-    public function syncBanksAndTariffs(string $cityCode)
+    public function syncBanksAndTariffs(string $cityCode): void
     {
         $allTariffIds = new Collection();
         $tariffsInCity = new Collection($this->tariffs[$cityCode]);
@@ -386,7 +387,7 @@ class BankService extends AbstractService
         }
     }
 
-    public function getMortgageProgramDropdownData()
+    public function getMortgageProgramDropdownData(): mixed
     {
         $mortgage = [];
         $mortgage['allowMultiple'] = false;
@@ -426,14 +427,14 @@ class BankService extends AbstractService
             });
     }
 
-    public function getMinimumAllowedMortgageAmount()
+    public function getMinimumAllowedMortgageAmount(): mixed
     {
         // return 100000;
         // Отсекает 80% возможных ипотек
         return $this->apartmentRepository->getCheapestApartmentPrice();
     }
 
-    public function countPossibleMortgages(string|null $cityCode = null)
+    public function countPossibleMortgages(string|null $cityCode = null): mixed
     {
         if ($cityCode == null) {
             $cityCode = $this->cityService->getUserCity();
@@ -453,7 +454,8 @@ class BankService extends AbstractService
         float|int|null $preferredPrice = null,
         float|int|null $preferredYear = null,
         float|int|null $preferredInitialFee = null
-    ) {
+    ): \Illuminate\Database\Eloquent\Builder
+    {
         $cityCode = $this->cityService->getUserCity();
         $minRate = Mortgage::min('min_rate');
         $maxRate = Mortgage::max('min_rate');
@@ -575,7 +577,7 @@ class BankService extends AbstractService
         return $mortgagesGroupedByParameterThenByBanks;
     }
 
-    public function getBankDropdownData(string|null $cityCode = null)
+    public function getBankDropdownData(string|null $cityCode = null): mixed
     {
         if ($cityCode == null) {
             $cityCode = $this->cityService->getUserCity();
@@ -616,7 +618,7 @@ class BankService extends AbstractService
         return BankResource::collection($banks);
     }
 
-    public function getMaxMortgageParameters()
+    public function getMaxMortgageParameters(): array
     {
         $typeExceptions = $this->mortgageTypesExceptions;
         $preferredBanks = $this->preferredBanks;

@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\AdsAgreementServiceInterface;
 use App\Http\Requests\CallStatusIDRequest;
 use App\Http\Requests\ConfirmUserRequest;
 use App\Models\AuthorizationCall;
 use App\Models\User;
 use App\Models\UserAdsAgreement;
+use App\Providers\AppServiceProvider;
 use App\Services\AdsAgreementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @see AppServiceProvider::registerAdsAgreementService()
+ * @see AdsAgreementServiceInterface
+ */
 class PhoneController extends Controller
 {
     private string $campaignId;
@@ -18,7 +24,10 @@ class PhoneController extends Controller
     private string $flashCallURL;
     private string $callPhoneURL;
 
-    public function __construct(protected AdsAgreementService $adsService)
+    /**
+     * @param AdsAgreementServiceInterface $adsService
+     */
+    public function __construct(protected AdsAgreementServiceInterface $adsService)
     {
         $phoneConfig = json_decode(file_get_contents(storage_path("app/call-data.json")));
 
@@ -28,6 +37,12 @@ class PhoneController extends Controller
         $this->callPhoneURL = $phoneConfig->callPhoneURL;
     }
 
+    /**
+     * @param string $URL
+     * @param array $fields
+     * @param string $requestType
+     * @return false|mixed
+     */
     function sendRequest(string $URL, array $fields, string $requestType = 'POST')
     {
         $fields['public_key'] = $this->apiKey;
@@ -65,6 +80,10 @@ class PhoneController extends Controller
         }
     }
 
+    /**
+     * @param ConfirmUserRequest $confirmUserRequest
+     * @return false|string
+     */
     function sendUserConfirmationMessage(ConfirmUserRequest $confirmUserRequest)
     {
         $phone = $confirmUserRequest->validated('phone');
@@ -124,6 +143,10 @@ class PhoneController extends Controller
         return json_encode(['status' => $response->status]);
     }
 
+    /**
+     * @param CallStatusIDRequest $callStatusIDRequest
+     * @return false|string
+     */
     function getCallStatusByPhone(CallStatusIDRequest $callStatusIDRequest)
     {
         $phone = $callStatusIDRequest->validated('phone');
@@ -152,6 +175,9 @@ class PhoneController extends Controller
 
     }
 
+    /**
+     * @return string
+     */
     private function generateRandomVerificationCode(): string
     {
         $code = "";

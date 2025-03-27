@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\SearchServiceInterface;
 use App\DropdownData\ApartmentTypeDropdownData;
 use App\DropdownData\AreaDropdownData;
 use App\DropdownData\FinishingDropdownData;
@@ -24,15 +27,15 @@ use Str;
 /**
  * Class SearchService.
  */
-class SearchService extends AbstractService
+class SearchService extends AbstractService implements SearchServiceInterface
 {
     public function __construct(
-        protected CachingService $cachingService,
-        protected CityService $cityService
+        protected CachingServiceInterface $cachingService,
+        protected CityServiceInterface $cityService
     ) {
     }
 
-    public function getSearchDataForCity(string $cityCode)
+    public function getSearchDataForCity(string $cityCode): array
     {
         $locationData = Location::select(['district', 'region', 'locality', 'id', 'capital'])->where('code', $cityCode)->get();
         $capitals = $locationData->pluck('capital')->unique();
@@ -117,7 +120,7 @@ class SearchService extends AbstractService
         return $data;
     }
 
-    public function generateValues($for)
+    public function generateValues($for): array
     {
         $values = [];
 
@@ -128,7 +131,7 @@ class SearchService extends AbstractService
         return $values;
     }
 
-    public function getSearchData()
+    public function getSearchData(): mixed
     {
         $data = $this->cachingService->getSearchFilterData($this, $this->cityService->getUserCity());
 

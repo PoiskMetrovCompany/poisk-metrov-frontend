@@ -2,22 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\AdsAgreementServiceInterface;
+use App\Core\Services\CRMServiceInterface;
 use App\CRM\Commands\CreateLead;
 use App\Models\UserAdsAgreement;
+use App\Providers\AppServiceProvider;
 use App\Services\CRMService;
 use App\Traits\KeyValueHelper;
 use Illuminate\Http\Request;
 use App\Services\AdsAgreementService;
 use stdClass;
 
+/**
+ * @see AppServiceProvider::registerCRMService()
+ * @see AppServiceProvider::registerAdsAgreementService()
+ * @see CRMServiceInterface
+ * @see AdsAgreementServiceInterface
+ */
 class CRMController extends Controller
 {
     use KeyValueHelper;
 
-    public function __construct(protected CRMService $crmService, protected AdsAgreementService $adsService)
+    /**
+     * @param CRMServiceInterface $crmService
+     * @param AdsAgreementServiceInterface $adsService
+     */
+    public function __construct(
+        protected CRMServiceInterface $crmService,
+        protected AdsAgreementServiceInterface $adsService
+    )
     {
     }
 
+    /**
+     * @param Request $request
+     * @return stdClass
+     */
     public function storeWithoutName(Request $request)
     {
         $validated = $request->validate([
@@ -41,6 +61,10 @@ class CRMController extends Controller
         return $returned;
     }
 
+    /**
+     * @param Request $request
+     * @return stdClass
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -65,6 +89,10 @@ class CRMController extends Controller
         return $returned;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function resetAdsAgreement(Request $request)
     {
         $validated = $request->validate([

@@ -2,20 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\TextServiceInterface;
 use App\Models\SpriteImagePosition;
 use App\Models\ResidentialComplex;
+use App\Providers\AppServiceProvider;
 use App\Services\TextService;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+/**
+ * @see AppServiceProvider::registerTextService()
+ * @see TextServiceInterface
+ */
 class SpriteCreationController extends Controller
 {
-    public function __construct(protected TextService $textService)
+    /**
+     * @param TextService $textService
+     */
+    public function __construct(protected TextServiceInterface $textService)
     {
     }
 
-
+    /**
+     * @param string $firstImagePath
+     * @param string $secondImagePath
+     * @param string $outputPath
+     * @param int $buildingId
+     * @return void
+     */
     public function combineImages(string $firstImagePath, string $secondImagePath, string $outputPath, int $buildingId)
     {
         /* Get images dimensions */
@@ -90,6 +105,9 @@ class SpriteCreationController extends Controller
         imagedestroy($newImage);
     }
 
+    /**
+     * @return array
+     */
     public function downloadTempPictures(): array
     {
         $publicPath = public_path();
@@ -147,6 +165,9 @@ class SpriteCreationController extends Controller
         return $buildingUrls;
     }
 
+    /**
+     * @return void
+     */
     public function createBuildingSprites()
     {
         $imagesForBuildings = $this->downloadTempPictures();
