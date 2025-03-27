@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\ChatServiceInterface;
+use App\Core\Services\CityServiceInterface;
 use App\Http\Requests\ClientMessageRequest;
 use App\Models\GroupChatBotMessage;
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 use App\Services\ChatService;
 use App\Services\CityService;
 use App\Services\TelegramService;
@@ -15,18 +18,33 @@ use Illuminate\Support\Str;
 use App\Models\ChatSession;
 use Storage;
 
+/**
+ * @see AppServiceProvider::registerChatService()
+ * @see AppServiceProvider::registerCityService()
+ * @see ChatServiceInterface
+ * @see CityServiceInterface
+ */
 class ChatController extends Controller
 {
     private $chatConfig;
 
+    /**
+     * @param TelegramService $telegramService
+     * @param ChatServiceInterface $chatService
+     * @param CityServiceInterface $cityService
+     */
     public function __construct(
         protected TelegramService $telegramService,
-        protected ChatService $chatService,
-        protected CityService $cityService
+        protected ChatServiceInterface $chatService,
+        protected CityServiceInterface $cityService
     ) {
         $this->chatConfig = Storage::json('chat-config.json');
     }
 
+    /**
+     * @param ClientMessageRequest $request
+     * @return void
+     */
     public function sendChatMessage(ClientMessageRequest $request)
     {
         $validated = $request->validated();
@@ -69,6 +87,10 @@ class ChatController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getChatHistory(Request $request)
     {
         $user = $request->user();
@@ -107,6 +129,10 @@ class ChatController extends Controller
         return response()->json(['history' => $history]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getUserChatToken(Request $request)
     {
         $user = $request->user();

@@ -26,9 +26,15 @@ use Throwable;
 /**
  * @see AppServiceProvider::registerApartmentService()
  * @see AppServiceProvider::registerPriceFormattingService()
+ * @see ApartmentServiceInterface
+ * @see PriceFormattingServiceInterface
  */
 class ApartmentController extends Controller
 {
+    /**
+     * @param ApartmentServiceInterface $apartmentService
+     * @param PriceFormattingServiceInterface $priceFormattingService
+     */
     public function __construct(
         protected ApartmentServiceInterface $apartmentService,
         protected PriceFormattingServiceInterface $priceFormattingService)

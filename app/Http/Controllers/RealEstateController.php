@@ -19,9 +19,13 @@ use Throwable;
 
 /**
  * @see AppServiceProvider::registerApartmentService()
+ * @see ApartmentServiceInterface
  */
 class RealEstateController extends Controller
 {
+    /**
+     * @param ApartmentServiceInterface $apartmentService
+     */
     public function __construct(protected ApartmentServiceInterface $apartmentService)
     {
     }

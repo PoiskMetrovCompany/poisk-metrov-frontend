@@ -14,9 +14,13 @@ use Illuminate\Support\Facades\View;
 
 /**
  * @see AppServiceProvider::registerNewsService()
+ * @see NewsServiceInterface
  */
 class NewsController extends Controller
 {
+    /**
+     * @param NewsServiceInterface $newsService
+     */
     public function __construct(protected NewsServiceInterface $newsService)
     {
 
