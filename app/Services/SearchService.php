@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Core\Services\CachingServiceInterface;
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\SearchServiceInterface;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\SearchServiceInterface;
 use App\DropdownData\ApartmentTypeDropdownData;
 use App\DropdownData\AreaDropdownData;
 use App\DropdownData\FinishingDropdownData;

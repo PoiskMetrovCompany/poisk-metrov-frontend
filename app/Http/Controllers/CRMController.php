@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\AdsAgreementServiceInterface;
-use App\Core\Services\CRMServiceInterface;
+use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
+use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\CRM\Commands\CreateLead;
 use App\Models\UserAdsAgreement;
 use App\Providers\AppServiceProvider;
-use App\Services\CRMService;
 use App\Traits\KeyValueHelper;
 use Illuminate\Http\Request;
-use App\Services\AdsAgreementService;
 use stdClass;
 
 /**

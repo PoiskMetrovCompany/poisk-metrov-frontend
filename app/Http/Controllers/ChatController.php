@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ChatServiceInterface;
-use App\Core\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\ChatServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Http\Requests\ClientMessageRequest;
+use App\Models\ChatSession;
 use App\Models\GroupChatBotMessage;
 use App\Models\User;
 use App\Providers\AppServiceProvider;
-use App\Services\ChatService;
-use App\Services\CityService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
-use App\Models\ChatSession;
 use Storage;
 
 /**

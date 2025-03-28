@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Core\Services\CachingServiceInterface;
-use App\Core\Services\CityServiceInterface;
-use App\Services\CityService;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Http\Resources\ResidentialComplexCardResource;
 use App\Http\Resources\ResidentialComplexResource;
 use App\Models\ResidentialComplex;

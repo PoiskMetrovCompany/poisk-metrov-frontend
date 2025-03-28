@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\FeedServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\FeedServiceInterface;
 use App\FeedParsers\FeedFormat;
 use App\Http\Requests\FeedNameRequest;
 use App\Http\Requests\FeedRequest;
 use App\Http\Resources\FeedNameResource;
-use App\Models\ResidentialComplexFeedSiteName;
-use App\Providers\AppServiceProvider;
-use App\Services\CityService;
-use App\Services\FeedService;
 use App\Http\Resources\FeedResource;
+use App\Providers\AppServiceProvider;
 use Illuminate\Http\Request;
 
 /**

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\PDFServiceInterface;
+use App\Core\Interfaces\Services\PDFServiceInterface;
 use App\Models\Apartment;
 use App\Models\ResidentialComplex;
 use App\Providers\AppServiceProvider;
-use App\Services\PDFService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Throwable;
 

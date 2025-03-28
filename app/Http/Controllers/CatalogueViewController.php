@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\CachingServiceInterface;
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\RealEstateServiceInterface;
-use App\Core\Services\SearchServiceInterface;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\RealEstateServiceInterface;
+use App\Core\Interfaces\Services\SearchServiceInterface;
 use App\Http\Requests\GetFilteredCatalogueRequest;
 use App\Providers\AppServiceProvider;
 use App\Repositories\ResidentialComplexRepository;
-use App\Services\CachingService;
-use App\Services\CityService;
-use App\Services\RealEstateService;
-use App\Services\SearchService;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Throwable;
 
 /**

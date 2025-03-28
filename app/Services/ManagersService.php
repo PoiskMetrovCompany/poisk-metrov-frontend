@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Core\Services\ManagersServiceInterface;
+use App\Core\Interfaces\Services\ManagersServiceInterface;
 use App\Models\Manager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;

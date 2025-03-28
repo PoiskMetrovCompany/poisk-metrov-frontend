@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ApartmentServiceInterface;
-use App\Core\Services\CachingServiceInterface;
-use App\Core\Services\FavoritesServiceInterface;
-use App\Core\Services\PriceFormattingServiceInterface;
-use App\Core\Services\RealEstateServiceInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\FavoritesServiceInterface;
+use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
+use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Http\Requests\FavoritesViewsRequest;
 use App\Http\Requests\LikeSwitchRequest;
 use App\Http\Resources\ApartmentResource;
 use App\Models\Apartment;
 use App\Providers\AppServiceProvider;
-use App\Services\ApartmentService;
-use App\Services\CachingService;
-use App\Services\FavoritesService;
-use App\Services\PriceFormattingService;
-use App\Services\RealEstateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @see AppServiceProvider::registerPriceFormattingService()

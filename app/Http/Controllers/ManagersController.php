@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ManagersServiceInterface;
+use App\Core\Interfaces\Services\ManagersServiceInterface;
 use App\Providers\AppServiceProvider;
-use App\Services\ManagersService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @see AppServiceProvider::registerManagersService()

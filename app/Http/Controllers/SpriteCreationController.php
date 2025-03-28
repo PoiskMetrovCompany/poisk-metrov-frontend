@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\TextServiceInterface;
-use App\Models\SpriteImagePosition;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Models\ResidentialComplex;
+use App\Models\SpriteImagePosition;
 use App\Providers\AppServiceProvider;
 use App\Services\TextService;
 use Exception;

@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\NewsServiceInterface;
+use App\Core\Interfaces\Services\NewsServiceInterface;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Http\Requests\NewsListRequest;
 use App\Http\Requests\RequestById;
 use App\Http\Resources\NewsResource;
-use App\Services\NewsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 
 /**
  * @see AppServiceProvider::registerNewsService()

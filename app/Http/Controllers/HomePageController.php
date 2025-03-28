@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ApartmentServiceInterface;
-use App\Core\Services\CachingServiceInterface;
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\NewsServiceInterface;
-use App\Core\Services\SearchServiceInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\NewsServiceInterface;
+use App\Core\Interfaces\Services\SearchServiceInterface;
 use App\Http\Resources\ApartmentResource;
 use App\Providers\AppServiceProvider;
 use App\Repositories\ResidentialComplexRepository;
-use App\Services\ApartmentService;
-use App\Services\CachingService;
-use App\Services\CityService;
-use App\Services\NewsService;
-use App\Services\SearchService;
 
 /**
  * @see AppServiceProvider::registerSearchService()

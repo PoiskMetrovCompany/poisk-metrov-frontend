@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\Core\Services\NewsServiceInterface;
+use App\Core\Interfaces\Services\NewsServiceInterface;
 use App\Models\News;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /**
  * Class NewsService.
