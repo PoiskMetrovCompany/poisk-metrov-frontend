@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\ApartmentServiceInterface;
 use App\Http\Requests\ApartmentListRequest;
 use App\Models\ResidentialComplex;
 use App\Services\ApartmentService;
@@ -16,17 +17,31 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Throwable;
 
+/**
+ * @see AppServiceProvider::registerApartmentService()
+ * @see ApartmentServiceInterface
+ */
 class RealEstateController extends Controller
 {
-    public function __construct(protected ApartmentService $apartmentService)
+    /**
+     * @param ApartmentServiceInterface $apartmentService
+     */
+    public function __construct(protected ApartmentServiceInterface $apartmentService)
     {
     }
 
+    /**
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function getAllRealEstate()
     {
         return EditableResidentialComplexResource::collection(ResidentialComplex::all());
     }
 
+    /**
+     * @param UpdateRealEstateRequest $updateRealEstateRequest
+     * @return void
+     */
     public function updateRealEstate(UpdateRealEstateRequest $updateRealEstateRequest)
     {
         $validated = $updateRealEstateRequest->validated();
@@ -35,6 +50,12 @@ class RealEstateController extends Controller
         $realEstate->update($validated);
     }
 
+    /**
+     * @param BuildingRequest $buildingRequest
+     * @param string $code
+     * @return \Illuminate\Contracts\View\View
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function view(BuildingRequest $buildingRequest, string $code)
     {
         $building = ResidentialComplex::where('code', $code)->first();
@@ -60,6 +81,10 @@ class RealEstateController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function redirectWithOldCode(Request $request)
     {
         $oldCode = $request->query('building');

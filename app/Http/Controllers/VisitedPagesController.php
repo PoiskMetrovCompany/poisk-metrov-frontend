@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Log;
 
 class VisitedPagesController extends Controller
 {
+    /**
+     * @return void
+     */
     public static function syncVisitedPagesWithCookies()
     {
         $userId = Auth::id();
@@ -40,6 +43,10 @@ class VisitedPagesController extends Controller
         }
     }
 
+    /**
+     * @param AddVisitedPageRequest $addVisitedPageRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
     public static function updatePagesVisited(AddVisitedPageRequest $addVisitedPageRequest)
     {
         $page = $addVisitedPageRequest->validated('page');

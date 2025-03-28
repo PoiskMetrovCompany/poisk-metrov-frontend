@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\TextServiceInterface;
 use App\Http\Requests\TelegramCallbackRequest;
 use App\Models\Manager;
+use App\Providers\AppServiceProvider;
 use App\Services\TelegramSurveyMessageService;
 use App\Services\TelegramSurveyService;
 use App\Services\TextService;
@@ -12,25 +14,47 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Storage;
 
+/**
+ * @see AppServiceProvider::registerTextService()
+ * @see TextServiceInterface
+ */
 class TelegramSurveyController extends Controller
 {
+    /**
+     * @param TelegramSurveyService $telegramSurveyService
+     * @param TextServiceInterface $textService
+     * @param TelegramSurveyMessageService $surveyMessageService
+     */
     public function __construct(
         protected TelegramSurveyService $telegramSurveyService,
-        protected TextService $textService,
+        protected TextServiceInterface $textService,
         protected TelegramSurveyMessageService $surveyMessageService
     ) {
     }
 
+    /**
+     * @param TelegramCallbackRequest $callback
+     * @return void
+     */
     public function callbackStPetersburg(TelegramCallbackRequest $callback)
     {
         $this->callback($callback, 'st-petersburg');
     }
 
+    /**
+     * @param TelegramCallbackRequest $callback
+     * @return void
+     */
     public function callbackNovosibirsk(TelegramCallbackRequest $callback)
     {
         $this->callback($callback, 'novosibirsk');
     }
 
+    /**
+     * @param TelegramCallbackRequest $callback
+     * @param string $city
+     * @return void
+     */
     public function callback(TelegramCallbackRequest $callback, string $city = 'novosibirsk')
     {
         if (! Storage::directoryExists('deal-bot')) {

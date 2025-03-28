@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Services\FeedServiceInterface;
 use App\FeedParsers\AvitoParser;
 use App\FeedParsers\ComplexParser;
 use App\FeedParsers\RealtyFeedParser;
@@ -25,7 +26,7 @@ use Storage;
 /**
  * Class FeedService.
  */
-class FeedService extends AbstractService
+class FeedService extends AbstractService implements FeedServiceInterface
 {
     public array $realtyFeedLinks = [
         'https://ekaterinburg.brusnika.ru/feed/etagi-nsk',
@@ -92,7 +93,7 @@ class FeedService extends AbstractService
         $this->version2Parser = new Version2Parser();
     }
 
-    public function createFeedEntries()
+    public function createFeedEntries(): void
     {
         $feedTypes = FeedFormat::cases();
         $linksForTypes = [
@@ -120,7 +121,7 @@ class FeedService extends AbstractService
         }
     }
 
-    public function createFeedEntry(array $feedData)
+    public function createFeedEntry(array $feedData): void
     {
         if (! isset($feedData['name'])) {
             $feedData['name'] = Str::random(32);
@@ -129,7 +130,7 @@ class FeedService extends AbstractService
         RealtyFeedEntry::create($feedData);
     }
 
-    public function updateFeedEntry(array $feedData)
+    public function updateFeedEntry(array $feedData): void
     {
         $realtyFeedEntry = RealtyFeedEntry::where(['id' => $feedData['id']])->first();
 
@@ -142,7 +143,7 @@ class FeedService extends AbstractService
         }
     }
 
-    public function deleteFeedEntry(array $feedData)
+    public function deleteFeedEntry(array $feedData): void
     {
         $realtyFeedEntry = RealtyFeedEntry::where(['id' => $feedData['id']])->first();
 
@@ -151,7 +152,7 @@ class FeedService extends AbstractService
         }
     }
 
-    public function updateFeedName(array $feedNameData)
+    public function updateFeedName(array $feedNameData): void
     {
         $feedName = ResidentialComplexFeedSiteName::where(['id' => $feedNameData['id']])->first();
 
@@ -164,12 +165,12 @@ class FeedService extends AbstractService
         }
     }
 
-    public function getFeeds()
+    public function getFeeds(): Collection
     {
         return RealtyFeedEntry::all();
     }
 
-    public function getFeedNames()
+    public function getFeedNames(): Collection
     {
         return ResidentialComplexFeedSiteName::all();
     }
@@ -223,14 +224,14 @@ class FeedService extends AbstractService
         return true;
     }
 
-    public function downloadAllFeeds(bool $log = false, bool $ignoreIfExists = false)
+    public function downloadAllFeeds(bool $log = false, bool $ignoreIfExists = false): void
     {
         RealtyFeedEntry::all()->each(function (RealtyFeedEntry $entry) use ($log, $ignoreIfExists) {
             $this->downloadFeed($entry, $log, $ignoreIfExists);
         });
     }
 
-    public function parseAllFeeds()
+    public function parseAllFeeds(): void
     {
         if (! Storage::directoryExists('feeds')) {
             return;
@@ -244,7 +245,7 @@ class FeedService extends AbstractService
 //        $this->privateRealtyFeedParser->parseFeeds();
     }
 
-    public function mergeFeeds()
+    public function mergeFeeds(): void
     {
         $this->realtyFeedParser->mergeFeed();
         $this->avitoFeedParser->mergeFeed();

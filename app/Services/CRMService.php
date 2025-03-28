@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
+use App\Core\Services\CRMServiceInterface;
 use App\CRM\Commands\CreateLead;
 
 /**
  * Class CRMService.
  */
-class CRMService
+class CRMService implements CRMServiceInterface
 {
     public function createLead(string $phone, string $comment, string $city, string|null $name = null)
     {
