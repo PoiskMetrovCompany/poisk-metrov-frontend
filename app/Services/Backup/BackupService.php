@@ -40,7 +40,7 @@ final class BackupService implements BackupServiceInterface
                     throw new Exception('Не удалось создать архив.');
                 }
 
-                $baseDir = realpath(dirname(__DIR__, 1));
+                $baseDir = realpath(dirname(__DIR__, 3));
 
                 $iterator = new RecursiveIteratorIterator(
                     new RecursiveDirectoryIterator($baseDir, RecursiveDirectoryIterator::SKIP_DOTS)
@@ -111,7 +111,6 @@ final class BackupService implements BackupServiceInterface
         $resource = $this->disk->getResource($archivePath);
 
         $resource->upload($archivePath);
-        var_dump(dirname(__DIR__, 2) . $filename);
         array_map('unlink', glob(dirname(__DIR__, 3) .'/' . $filename));
     }
 }
