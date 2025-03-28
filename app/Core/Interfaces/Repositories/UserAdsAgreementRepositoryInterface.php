@@ -2,7 +2,12 @@
 
 namespace App\Core\Interfaces\Repositories;
 
-interface UserAdsAgreementRepositoryInterface
+use App\Core\Interfaces\Repositories\Queries\StoreQueryInterface;
+
+/**
+ * @template TRepository
+ */
+interface UserAdsAgreementRepositoryInterface extends StoreQueryInterface
 {
 
 }

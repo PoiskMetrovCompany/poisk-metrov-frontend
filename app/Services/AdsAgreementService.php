@@ -1,14 +1,18 @@
 <?php
 
 namespace App\Services;
+use AllowDynamicProperties;
+use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Models\UserAdsAgreement;
 
-/**
- * Class AdsAgreementService.
- */
+#[AllowDynamicProperties]
 class AdsAgreementService extends AbstractService implements AdsAgreementServiceInterface
 {
+    public function __construct(protected UserAdsAgreementRepositoryInterface $userAdsAgreementRepository)
+    {
+
+    }
     public function setAdsAgreement(string $phone, $name): void
     {
         $data = [
@@ -20,6 +24,6 @@ class AdsAgreementService extends AbstractService implements AdsAgreementService
             $data['name'] = $name;
         }
 
-        UserAdsAgreement::create($data);
+        $this->userAdsAgreementRepository->store($data);
     }
 }
