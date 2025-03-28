@@ -576,6 +576,7 @@ button.action-button-outline {
     width: 7%;
 }
 
+
 .control-action-button {
     display: none;
     margin-top: 1em;
@@ -583,6 +584,9 @@ button.action-button-outline {
 
 .control-action-button button {
     width: 30%;
+
+ymaps .infrastructure.menu.icon-container {
+    background-color: #e9e9e900;
 }
 
 @media (min-width: 1024px) and (max-width: 1240px) {
@@ -1337,3 +1341,4 @@ button.action-button-outline {
         left: 25%;
     }
 }
+

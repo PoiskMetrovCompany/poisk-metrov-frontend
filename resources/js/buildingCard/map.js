@@ -1,5 +1,7 @@
+let globalMap = null;
+
 export async function loadMap(mapContainerId = "temp-map-container") {
-    const coordinates = [0, 0];
+    const coordinates = [localStorage.getItem('longitude'), localStorage.getItem('latitude')];
     const zoom = 17;
 
     const mapContainer = document.getElementById(mapContainerId);
@@ -13,26 +15,72 @@ export async function loadMap(mapContainerId = "temp-map-container") {
     const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapListener } = ymaps3;
     const listener = new YMapListener({});
 
-    const map = new YMap(
+    if (globalMap) {
+        globalMap.destroy();
+        globalMap = null;
+    }
+
+    globalMap = new YMap(
         mapContainer,
         {
-            location:
-            {
+            location: {
                 center: coordinates,
                 zoom: zoom
             }
         }
     );
 
-    map.addChild(new YMapDefaultSchemeLayer());
-    map.addChild(new YMapDefaultFeaturesLayer());
-    map.addChild(listener);
+    globalMap.addChild(new YMapDefaultSchemeLayer());
+    globalMap.addChild(new YMapDefaultFeaturesLayer());
+    globalMap.addChild(listener);
 
     document.getElementsByClassName("ymaps3x0--map-copyrights_right")[0].style.right = "50px";
 
     const mapElement = mapContainer.getElementsByTagName("ymaps")[0];
 
-    return [map, ymaps3, mapElement];
+    return [globalMap, ymaps3, mapElement];
+}
+
+export async function updateMap() {
+    try {
+        const longitude = localStorage.getItem('longitude');
+        const latitude = localStorage.getItem('latitude');
+
+        const coordinates = [longitude, latitude];
+        const zoom = 17;
+
+        if (!globalMap) {
+            await loadMap();
+            return;
+        }
+
+        const mapContainer = document.getElementById("temp-map-container");
+        if (mapContainer) {
+            const existingMarkers = mapContainer.querySelectorAll('.infrastructure.menu.icon-container');
+            existingMarkers.forEach(marker => marker.remove());
+        }
+
+        await globalMap.update({
+            location: {
+                center: coordinates,
+                zoom: zoom
+            }
+        });
+
+        const { YMapMarker } = ymaps3;
+        const markerElement = document.createElement('div');
+        markerElement.className = "infrastructure menu icon-container icon d44x44";
+
+        const marker = new YMapMarker({ coordinates: coordinates }, markerElement);
+        globalMap.addChild(marker);
+
+    } catch (error) {
+        try {
+            await loadMap();
+        } catch (e) {
+            console.error('Error recreating map:', e);
+        }
+    }
 }
 
 export async function setMap(cardElement, map, ymaps3, yMapElement, deselectAll) {
@@ -44,24 +92,21 @@ export async function setMap(cardElement, map, ymaps3, yMapElement, deselectAll)
     const longitude = Number.parseFloat(cardElement.getAttribute("long"));
     const latitude = Number.parseFloat(cardElement.getAttribute("lat"));
     const coordinates = [longitude, latitude];
-    const zoom = 17;
-    const { YMapMarker } = ymaps3;
 
     let marker;
+    let currentMap = map;
 
     mapElement.style.display = "none";
-    mapButton.onclick = () => {
+    mapButton.onclick = async () => {
         if (mapElement.style.display == "none") {
             deselectAll();
-            select();
+            await select();
         } else {
             deselect();
         }
     }
 
-    //Очень важно! Ресайз карты происходит при изменении размеров не карты, не родителя, а стартового элемента где создалась карта
     function adjustMapSize() {
-        //Чтобы анимация уменьшения не ломала высоту
         if (mapContainer.getElementsByTagName("ymaps").length > 0) {
             mapContainer.style.width = mapElement.parentElement.clientWidth + 4 + "px";
             mapContainer.style.height = mapElement.parentElement.clientHeight + 4 + "px";
@@ -74,50 +119,34 @@ export async function setMap(cardElement, map, ymaps3, yMapElement, deselectAll)
     resizer.observe(mapElement.parentElement);
     resizer.observe(document.body);
 
-    function select() {
-        mapElement.style.display = "block";
-        mapButton.className = mapButton.className.replace("card-button", "card-button orange");
+    async function select() {
+        try {
+            mapElement.style.display = "block";
+            mapButton.className = mapButton.className.replace("card-button", "card-button orange");
 
-        map.update({
-            location:
-            {
-                center: coordinates,
-                zoom: zoom
+            localStorage.setItem('longitude', longitude);
+            localStorage.setItem('latitude', latitude);
+
+            await updateMap();
+
+            if (globalMap) {
+                currentMap = globalMap;
+                mapContainer.appendChild(tempMapContainer.getElementsByTagName("ymaps")[0]);
+                adjustMapSize();
             }
-        })
-        marker = addBuildingMarker(map, coordinates);
-
-        mapContainer.appendChild(yMapElement);
-        adjustMapSize();
+        } catch (error) {
+            console.error('Error in select:', error);
+        }
     }
 
     function deselect() {
         mapElement.style.display = "none";
         mapButton.className = mapButton.className.replace("card-button orange", "card-button");
-        if (marker) {
-            map.removeChild(marker);
+
+        if (yMapElement && tempMapContainer) {
+            tempMapContainer.appendChild(yMapElement);
         }
-        tempMapContainer.appendChild(yMapElement);
     }
 
-    const deselector = () => deselect();
-
-    function addBuildingMarker(map, coordinates) {
-        const markerElement = document.createElement('div');
-        markerElement.className = "infrastructure menu icon-container icon d44x44";
-        const markerIcon = document.createElement('img');
-        markerIcon.src = previewImage.style.backgroundImage.substring(5, previewImage.style.backgroundImage.length - 2);
-        markerIcon.className = "icon orange d32x32";
-        markerIcon.style.borderRadius = "50%";
-        markerElement.appendChild(markerIcon);
-        markerElement.style.borderColor = "#EC7D3F";
-        markerElement.style.borderStyle = "solid";
-        markerElement.style.borderWidth = "2px";
-
-        const marker = new YMapMarker({ coordinates: coordinates, }, markerElement);
-        map.addChild(marker);
-        return marker;
-    }
-
-    return deselector;
+    return deselect;
 }

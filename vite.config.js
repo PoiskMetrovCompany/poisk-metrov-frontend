@@ -56,6 +56,8 @@ export default defineConfig({
                 'resources/js/aboutUs/aboutUs.js',
                 'resources/js/reservation/index.js',
                 'resources/js/reservation/request.js',
+                'resources/js/coordinateStorage.js',
+
             ],
             refresh: true,
         }),
