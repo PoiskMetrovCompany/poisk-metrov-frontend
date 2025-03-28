@@ -2,14 +2,16 @@
 
 namespace App\Services;
 
+use App\Core\Services\TextServiceInterface;
 use DateTime;
 use Illuminate\Support\Collection;
 use Str;
+use Transliterator;
 
 /**
  * Class TextService.
  */
-class TextService extends AbstractService
+class TextService extends AbstractService implements TextServiceInterface
 {
     public function cleanupNmarketImageURL(string $url): string
     {

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Services\CityServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 /**
  * Class CityService.
  */
-class CityService extends AbstractService
+class CityService extends AbstractService implements CityServiceInterface
 {
     private array $invalidCodes = [null, 'null', 'not-found', 'not found'];
     public array $possibleCityCodes = [
@@ -95,25 +96,21 @@ class CityService extends AbstractService
 
     public const DEFAULT_CITY = 'st-petersburg';
 
-    public function getUserCityName()
+    public function getUserCityName(): string
     {
         return $this->cityCodes[$this->getUserCity()];
     }
 
-    /**
-     * Get city codes sorted by their city name
-     * @return Collection
-     */
     public function getSortedCityNamesAndCodes(): Collection
     {
         return (new Collection($this->cityCodes))->sort()->flip();
     }
 
-    public function getUserCity()
+    public function getUserCity(): array|string
     {
         $selectedCity = CityService::DEFAULT_CITY;
 
-        //Если есть город, то проверяем не битые ли куки и если нет, 
+        //Если есть город, то проверяем не битые ли куки и если нет,
         if (key_exists('selectedCity', $_COOKIE)) {
             $selectedCity = strtolower($_COOKIE['selectedCity']);
 
@@ -158,7 +155,7 @@ class CityService extends AbstractService
         return $selectedCity;
     }
 
-    public function setCityCookie($newCity)
+    public function setCityCookie(mixed $newCity): bool
     {
         if (in_array($newCity, $this->possibleCityCodes)) {
             setrawcookie('selectedCity', $newCity, time() + 31536000, '/');

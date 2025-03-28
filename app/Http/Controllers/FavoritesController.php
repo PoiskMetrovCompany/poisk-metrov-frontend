@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\ApartmentServiceInterface;
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\FavoritesServiceInterface;
+use App\Core\Services\PriceFormattingServiceInterface;
+use App\Core\Services\RealEstateServiceInterface;
 use App\Http\Requests\FavoritesViewsRequest;
 use App\Http\Requests\LikeSwitchRequest;
 use App\Http\Resources\ApartmentResource;
 use App\Models\Apartment;
+use App\Providers\AppServiceProvider;
 use App\Services\ApartmentService;
 use App\Services\CachingService;
 use App\Services\FavoritesService;
@@ -16,17 +22,39 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @see AppServiceProvider::registerPriceFormattingService()
+ * @see AppServiceProvider::registerRealEstateService()
+ * @see AppServiceProvider::registerFavoritesService()
+ * @see AppServiceProvider::registerCachingService()
+ * @see AppServiceProvider::registerApartmentService()
+ * @see PriceFormattingServiceInterface
+ * @see RealEstateServiceInterface
+ * @see FavoritesServiceInterface
+ * @see CachingServiceInterface
+ * @see ApartmentServiceInterface
+ */
 class FavoritesController extends Controller
 {
+    /**
+     * @param PriceFormattingServiceInterface $priceFormattingService
+     * @param RealEstateServiceInterface $realEstateService
+     * @param FavoritesServiceInterface $favoritesService
+     * @param CachingServiceInterface $cachingService
+     * @param ApartmentServiceInterface $apartmentService
+     */
     public function __construct(
-        protected PriceFormattingService $priceFormattingService,
-        protected RealEstateService $realEstateService,
-        protected FavoritesService $favoritesService,
-        protected CachingService $cachingService,
-        protected ApartmentService $apartmentService,
+        protected PriceFormattingServiceInterface $priceFormattingService,
+        protected RealEstateServiceInterface $realEstateService,
+        protected FavoritesServiceInterface $favoritesService,
+        protected CachingServiceInterface $cachingService,
+        protected ApartmentServiceInterface $apartmentService,
     ) {
     }
 
+    /**
+     * @return array
+     */
     public function getBuildingCardsForFavoritePlans(): array
     {
         $buildingCodes = $this->favoritesService->getBuildingsForFavoritePlans();
@@ -36,6 +64,9 @@ class FavoritesController extends Controller
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public function getFavoriteBuildingCards(): array
     {
         $buildingCodes = $this->favoritesService->getFavoriteBuildingCodes();
@@ -47,6 +78,11 @@ class FavoritesController extends Controller
         return $data;
     }
 
+    /**
+     * @param FavoritesViewsRequest $favoritesViewsRequest
+     * @return array[]
+     * @throws \Throwable
+     */
     public function getFavoritePlanViews(FavoritesViewsRequest $favoritesViewsRequest)
     {
         $order = $favoritesViewsRequest->validated('order');
@@ -85,6 +121,11 @@ class FavoritesController extends Controller
         return ['views' => $views];
     }
 
+    /**
+     * @param FavoritesViewsRequest $favoritesViewsRequest
+     * @return array[]
+     * @throws \Throwable
+     */
     public function getFavoriteBuildingViews(FavoritesViewsRequest $favoritesViewsRequest)
     {
         $order = $favoritesViewsRequest->validated('order');
@@ -109,11 +150,18 @@ class FavoritesController extends Controller
         return ['views' => $views];
     }
 
+    /**
+     * @return int
+     */
     public function countFavorites()
     {
         return $this->favoritesService->countFavorites();
     }
 
+    /**
+     * @param LikeSwitchRequest $likeSwitchRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function switchLike(LikeSwitchRequest $likeSwitchRequest)
     {
         $user = Auth::user();
@@ -128,6 +176,10 @@ class FavoritesController extends Controller
         return $this->favoritesService->countFavoritesDetailed();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function view(Request $request)
     {
         return view('favorites', [

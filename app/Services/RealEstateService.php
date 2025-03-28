@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\RealEstateServiceInterface;
+use App\Core\Services\VisitedPagesServiceInterface;
 use App\Models\ResidentialComplex;
 use App\Models\Apartment;
 use App\Models\Location;
@@ -15,12 +19,12 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class RealEstateService.
  */
-class RealEstateService
+class RealEstateService implements RealEstateServiceInterface
 {
     public function __construct(
-        protected CachingService $cachingService,
-        protected VisitedPagesService $visitedPagesService,
-        protected CityService $cityService,
+        protected CachingServiceInterface $cachingService,
+        protected VisitedPagesServiceInterface $visitedPagesService,
+        protected CityServiceInterface $cityService,
         protected ResidentialComplexRepository $residentialComplexRepository,
     ) {
     }
@@ -255,7 +259,7 @@ class RealEstateService
         return $apartmentsQuery->count();
     }
 
-    public function getFilteredCatalogueData(array $validated, string $cityCode)
+    public function getFilteredCatalogueData(array $validated, string $cityCode): array
     {
         $buildingCount = $this->residentialComplexRepository->cityResidentialComplexCount($cityCode);
         $filteredBuildings = $this->getCatalogueWithfilters($validated, $cityCode);

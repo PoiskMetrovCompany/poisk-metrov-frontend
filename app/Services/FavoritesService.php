@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Services\FavoritesServiceInterface;
 use App\Models\Apartment;
 use App\Models\ResidentialComplex;
 use App\Http\Resources\ApartmentResource;
@@ -12,6 +13,7 @@ use App\Models\UserFavoritePlan;
 use App\Services\ApartmentService;
 use App\Services\PriceFormattingService;
 use App\Services\RealEstateService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -20,7 +22,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class FavoritesService.
  */
-class FavoritesService
+class FavoritesService implements FavoritesServiceInterface
 {
     public function __construct(
         protected PriceFormattingService $priceFormattingService,
@@ -70,7 +72,7 @@ class FavoritesService
         return ResidentialComplex::whereIn('id', $buildingIds)->get()->pluck('code')->toArray();
     }
 
-    public function getBuildingDataSorted(array $codes, string $parameter, string $order)
+    public function getBuildingDataSorted(array $codes, string $parameter, string $order): mixed
     {
         $buildings = ResidentialComplex::whereIn('code', $codes)
             ->with('apartments')
@@ -113,7 +115,7 @@ class FavoritesService
         return $buildingCodes;
     }
 
-    public function syncCookiesWithFavorites()
+    public function syncCookiesWithFavorites(): array
     {
         $user = Auth::user();
 
@@ -142,13 +144,13 @@ class FavoritesService
         return [$favoritePlansCookie, $favoriteBuildingsCookie];
     }
 
-    public function syncFavoritesWithCookies()
+    public function syncFavoritesWithCookies(): void
     {
         $this->syncFavoriteApartmentsWithCookies();
         $this->syncFavoriteBuildingsWithCookies();
     }
 
-    public function syncDeletedFavoritesWithCookies()
+    public function syncDeletedFavoritesWithCookies(): void
     {
         $userId = Auth::id();
 
@@ -168,6 +170,7 @@ class FavoritesService
     }
 
     public function syncFavoriteApartmentsWithCookies()
+
     {
         $user = Auth::user();
 
@@ -222,7 +225,7 @@ class FavoritesService
         setrawcookie('cachedFavoriteBuildingsCount', '-1', time() - 100000, '/');
     }
 
-    public function switchLike(string $type, string $code, string $action)
+    public function switchLike(string $type, string $code, string $action): JsonResponse
     {
         $user = Auth::user();
 
@@ -275,7 +278,7 @@ class FavoritesService
         return $this->countFavoritesDetailed();
     }
 
-    public function countFavoritesDetailed()
+    public function countFavoritesDetailed(): JsonResponse
     {
         $favoritePlans = $this->countFavoritePlans();
         $favoriteBuildings = $this->countFavoriteBuildings();
@@ -287,7 +290,7 @@ class FavoritesService
         ]);
     }
 
-    public function countFavorites()
+    public function countFavorites(): int
     {
         $favPlans = $this->countFavoritePlans();
         $favBuildings = $this->countFavoriteBuildings();

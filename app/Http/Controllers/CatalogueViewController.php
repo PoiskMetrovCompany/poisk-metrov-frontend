@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Services\CachingServiceInterface;
+use App\Core\Services\CityServiceInterface;
+use App\Core\Services\RealEstateServiceInterface;
+use App\Core\Services\SearchServiceInterface;
 use App\Http\Requests\GetFilteredCatalogueRequest;
+use App\Providers\AppServiceProvider;
 use App\Repositories\ResidentialComplexRepository;
 use App\Services\CachingService;
 use App\Services\CityService;
@@ -12,17 +17,38 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
+/**
+ * @see AppServiceProvider::registerCachingService()
+ * @see AppServiceProvider::registerRealEstateService()
+ * @see AppServiceProvider::registerSearchService()
+ * @see AppServiceProvider::registerCityService()
+ * @see CachingServiceInterface
+ * @see RealEstateServiceInterface
+ * @see SearchServiceInterface
+ * @see CityServiceInterface
+ */
 class CatalogueViewController extends Controller
 {
+    /**
+     * @param CachingServiceInterface $cachingService
+     * @param RealEstateServiceInterface $realEstateService
+     * @param SearchServiceInterface $searchService
+     * @param CityServiceInterface $cityService
+     * @param ResidentialComplexRepository $residentialComplexRepository
+     */
     public function __construct(
-        protected CachingService $cachingService,
-        protected RealEstateService $realEstateService,
-        protected SearchService $searchService,
-        protected CityService $cityService,
+        protected CachingServiceInterface $cachingService,
+        protected RealEstateServiceInterface $realEstateService,
+        protected SearchServiceInterface $searchService,
+        protected CityServiceInterface $cityService,
         protected ResidentialComplexRepository $residentialComplexRepository
     ) {
     }
 
+    /**
+     * @param GetFilteredCatalogueRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function getFilteredCatalogueWithSearchData(GetFilteredCatalogueRequest $request)
     {
         $request->cityCode = $this->cityService->getUserCity();
@@ -40,6 +66,11 @@ class CatalogueViewController extends Controller
         }
     }
 
+    /**
+     * @param GetFilteredCatalogueRequest $request
+     * @return array
+     * @throws Throwable
+     */
     public function getFilteredCatalogueViews(GetFilteredCatalogueRequest $request)
     {
         $request->cityCode = $this->cityService->getUserCity();
