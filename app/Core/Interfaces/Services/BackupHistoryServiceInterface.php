@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Core\Services;
-
-use Illuminate\Support\Str;
+namespace App\Core\Interfaces\Services;
 
 interface BackupHistoryServiceInterface
 {

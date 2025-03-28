@@ -1,5 +1,5 @@
 <?php
-namespace App\Core\Services;
+namespace App\Core\Interfaces\Services;
 
 use App\Services\Backup\BackupService;
 

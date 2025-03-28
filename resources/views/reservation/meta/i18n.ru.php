@@ -1,8 +1,6 @@
 <?php
-$contentTitle = 'Мои брони';
-$apartment = 'Квартира-студия в ЖК Брусника, 30.2 м², этаж 9';
-$apartmentPrice = '9 615 862 ₽';
 
+$title = 'Мои брони';
 $menuApartmentTitle = [
     'Жилой комплекс',
     'Девелопер',
@@ -37,119 +35,52 @@ $menuLists = [
         'name' => $chatName,
     ],
 ];
-$apartmentsList = [
-    [
-        'name' => 'Пшеница',
-        'developer' => 'Брусника',
-        'order_id' => '39781369',
-        'data_tz' => '10.07.2024',
-        'count_rooms' => 'Студия',
-        'price' => '9 615 862 ₽',
-        'per_m2' => '136 756  ₽/м2',
-        'uniqueness' => '10.07.2024',
-        'details' => [
-            'href' => '#',
-            'description' => 'Подробнее'
-        ]
-    ],
-    [
-        'name' => 'Пшеница',
-        'developer' => 'Брусника',
-        'order_id' => '39781369',
-        'data_tz' => '10.07.2024',
-        'count_rooms' => 'Студия',
-        'price' => '9 615 862 ₽',
-        'per_m2' => '136 756  ₽/м2',
-        'uniqueness' => '10.07.2024',
-        'details' => [
-            'href' => '#',
-            'description' => 'Подробнее'
-        ]
-    ],
-    [
-        'name' => 'Пшеница',
-        'developer' => 'Брусника',
-        'order_id' => '39781369',
-        'data_tz' => '10.07.2024',
-        'count_rooms' => 'Студия',
-        'price' => '9 615 862 ₽',
-        'per_m2' => '136 756  ₽/м2',
-        'uniqueness' => '10.07.2024',
-        'details' => [
-            'href' => '#',
-            'description' => 'Подробнее'
-        ]
-    ],
-    [
-        'name' => 'Пшеница',
-        'developer' => 'Брусника',
-        'order_id' => '39781369',
-        'data_tz' => '10.07.2024',
-        'count_rooms' => 'Студия',
-        'price' => '9 615 862 ₽',
-        'per_m2' => '136 756  ₽/м2',
-        'uniqueness' => '10.07.2024',
-        'details' => [
-            'href' => '#',
-            'description' => 'Подробнее'
-        ]
-    ],
-];
-$countApartments = count($apartmentsList);
 
-$users = [
-    'client' => [
-        'title' => 'Клиент',
-        'fio' => 'Ласковиченко Артем Эдуардович',
-        'phone' => '+7 (913) 586-58-60',
-        'email' => '26598@mail.ru',
-    ],
-    'manager' => [
-        'title' => 'Менеджер',
-        'fio' => 'Добрынина Евгения Александровна',
-        'phone' => '+7 (913) 586-58-60',
-        'email' => '26598@mail.ru',
-    ],
-];
+$users = ['client' => $client, 'manager' => $managerList /* TODO: надо узнать сколько менеджеров может быть. Пока беру первого из списка. */];
 
 $bookings = [
     [
         'title' => 'Проект',
-        'description' => 'ЖК Пшеница',
-    ],
-    [
-        'title' => 'Девелопер',
-        'description' => 'Брусника',
+        'description' => "ЖК {$apartment['name']}",
     ],
     [
         'title' => 'Срок сдачи',
-        'description' => '4 кв. 2025',
+        'description' => "{$apartment['ready_quarter']} кв. {$apartment['built_year']}",
     ],
     [
         'title' => 'Корпус',
-        'description' => 'Корпус 25',
+        'description' => $apartment['building_section'],
     ],
     [
         'title' => 'Отделка',
-        'description' => 'Черновая отделка',
+        'description' => $apartment['renovation'],
     ],
     [
         'title' => 'Этаж',
-        'description' => '9 из 17',
+        'description' => "{$apartment['floor']} из {$apartment['floors_total']}",
     ],
     [
         'title' => 'Номер квартиры',
-        'description' => '578',
+        'description' => $apartment['apartment_number'],
     ],
     [
         'title' => 'Общая площадь',
-        'description' => '30.2 м²',
+        'description' => "{$apartment['area']} м²",
     ],
     [
         'title' => 'Жилая площадь',
-        'description' => '15.2 м²',
+        'description' => "{$apartment['living_space']} м²",
     ],
 ];
+
+if (!empty($complex)) {
+    $newElement = [
+        'title' => 'Девелопер',
+        'description' => $complex['name'],
+    ];
+
+    array_splice($bookings,  1, 0, [$newElement]);
+}
 
 $accordions = [
     [
@@ -355,7 +286,7 @@ $accordions = [
                     'name' => 'Документ о доходах',
                     'inputType' => 'selection',
                     'inputId'   => 'document_type',
-                    'inputName' => 'work_sub_employment_contract',
+                    'inputName' => 'document_type',
                     'placeholder' => 'Справка о доходах',
                     'values' => [
                         'Документ о доходах',
@@ -367,8 +298,8 @@ $accordions = [
                     'field' => 'inputs.dropdown.default',
                     'name' => 'Вид трудового договора',
                     'inputType' => 'selection',
-                    'inputId'   => 'work_sub_employment_contract',
-                    'inputName' => 'work_sub_employment_contract',
+                    'inputId'   => 'type_of_employment_contract',
+                    'inputName' => 'type_of_employment_contract',
                     'placeholder' => '_ _ . _ _ _ _',
                     'values' => [
                         'Месяц и год трудоустройства',
@@ -479,8 +410,4 @@ foreach ($accordions as $accordion) {
         }
 
     }
-//    if ($accordion['title'] === 'Документы') {
-//        $accordion['passport'] = true;
-//        $borrower[] = $accordion;
-//    }
 }

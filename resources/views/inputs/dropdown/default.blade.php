@@ -9,13 +9,13 @@
     }
 @endphp
 
-<div class="input-container ">
+<div class="input-container">
     <fieldset id="fieldset-{{ $selectIdentifier }}" class="input-fieldset">
         <legend id="legend-{{ $selectIdentifier }}" class="input-legend">{{ $nameInputTitle ?? '' }}<span
                 class="red-highlight">{{ $required ?? '' }}</span></legend>
         <div class="input-wrapper">
             <div id="{{ $selectIdentifier }}" class="filter base-container dropdown" tabindex="-1">
-                <span> {{ $placeholder ?? 'Выбрать' }}</span>
+                <span id="{{ $inputId ?? '' }}" class="selected-text"> {{ $placeholder ?? 'Выбрать' }}</span>
                 <div class="icon arrow-tailless grey5" style="rotate: 0deg;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
@@ -26,18 +26,19 @@
                 </div>
                 <div class="custom-dropdown base-container" allowmultiple="1">
                     @foreach($values as $item)
-                        @include('inputs.dropdown.fields.text-item', ['item' => $item])
+                        @include('inputs.dropdown.fields.text-item', ['item' => $item, 'selectIdentifier' => $selectIdentifier])
                     @endforeach
                 </div>
             </div>
-
         </div>
     </fieldset>
 </div>
 
-<script>
-    document.getElementById('{{ $selectIdentifier }}').addEventListener('click', function () {
-        const selectIdentifier = '{{ $selectIdentifier }}'; // Локальная переменная
+<script type="text/javascript">
+    document.getElementById('{{ $selectIdentifier }}').addEventListener('click', function (event) {
+        event.stopPropagation();
+
+        const selectIdentifier = '{{ $selectIdentifier }}';
         const colorActive = '#0436B6';
         const rotateActive = '180deg';
         const colorDefault = '#D2D2D2';
@@ -62,5 +63,49 @@
             customDropdown.classList.remove(className);
             arrowTailless.style.transform = `rotate(${rotateActive})`;
         }
+    });
+
+    document.querySelectorAll('.custom-dropdown.text-item').forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.stopPropagation();
+
+            const selectId = this.getAttribute('data-select-id');
+            const selectedText = this.querySelector('span').textContent;
+            const dropdownContainer = document.getElementById(selectId);
+            const selectedTextElement = dropdownContainer.querySelector('.selected-text');
+            selectedTextElement.textContent = selectedText;
+
+            const customDropdown = dropdownContainer.querySelector('.custom-dropdown');
+            customDropdown.classList.remove('open');
+
+            const arrowTailless = dropdownContainer.querySelector('.arrow-tailless');
+            arrowTailless.style.transform = 'rotate(180deg)';
+
+            const fieldsetDropdown = document.getElementById(`fieldset-${selectId}`);
+            const legendDropdown = document.getElementById(`legend-${selectId}`);
+            fieldsetDropdown.style.borderColor = '#D2D2D2';
+            legendDropdown.style.color = '';
+        });
+    });
+
+    document.addEventListener('click', function (event) {
+        const dropdownContainers = document.querySelectorAll('.dropdown');
+        dropdownContainers.forEach(container => {
+            if (!container.contains(event.target)) {
+                const customDropdown = container.querySelector('.custom-dropdown');
+                if (customDropdown.classList.contains('open')) {
+                    customDropdown.classList.remove('open');
+
+                    const arrowTailless = container.querySelector('.arrow-tailless');
+                    arrowTailless.style.transform = 'rotate(180deg)';
+
+                    const selectId = container.id;
+                    const fieldsetDropdown = document.getElementById(`fieldset-${selectId}`);
+                    const legendDropdown = document.getElementById(`legend-${selectId}`);
+                    fieldsetDropdown.style.borderColor = '#D2D2D2';
+                    legendDropdown.style.color = '';
+                }
+            }
+        });
     });
 </script>

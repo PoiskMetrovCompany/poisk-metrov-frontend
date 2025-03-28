@@ -2,17 +2,32 @@
 
 namespace App\Repositories;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Models\Apartment;
 use App\Models\ResidentialComplex;
+use App\Models\User;
+use App\Repositories\Queries\FindByKeyQueryTrait;
+use App\Repositories\Queries\ListQueryTrait;
+use App\Repositories\Queries\FindByIdQueryTrait;
 use App\Services\CityService;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
-class ApartmentRepository
+final class ApartmentRepository implements ApartmentRepositoryInterface
 {
+    use ListQueryTrait;
+    use FindByIdQueryTrait;
+    use FindByKeyQueryTrait;
+
+    protected Model $model;
     public function __construct(
         protected CityService $cityService,
         protected ResidentialComplexRepository $residentialComplexRepository,
     ) {
+        $this->model = new Apartment();
     }
+
+    /* TODO: ----------------- потом подумать что с этим сделать ----------------- */
 
     /**
      * Get cheapest apartment price in provided city. If no city is provided current user city is used.
@@ -74,4 +89,5 @@ class ApartmentRepository
 
         return $count;
     }
+    /* ----------------- END ----------------- */
 }

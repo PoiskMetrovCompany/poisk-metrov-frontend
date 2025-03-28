@@ -3,7 +3,7 @@
         @foreach($users as $item => $key)
             <section class="revervation_user__card-item">
                         <span class="revervation_user__card-title">
-                            <strong>{{ $key['title'] }}</strong>
+                            <strong>{{ $key['entity'] }}</strong>
                         </span>
                 <section class="evervation_user__card-data">
                     <p class="revervation_user__card-label"><span>ФИО</span></p>
