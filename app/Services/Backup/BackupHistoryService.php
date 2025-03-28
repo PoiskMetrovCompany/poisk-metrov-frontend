@@ -2,9 +2,8 @@
 
 namespace App\Services\Backup;
 
-use App\Core\Services\BackupHistoryServiceInterface;
+use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /**
  * @see AppServiceProvider::registerBackupHistoryService()

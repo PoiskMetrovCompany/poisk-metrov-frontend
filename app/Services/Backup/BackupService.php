@@ -2,8 +2,8 @@
 
 namespace App\Services\Backup;
 
-use App\Core\Services\BackupHistoryServiceInterface;
-use App\Core\Services\BackupServiceInterface;
+use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
+use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Providers\AppServiceProvider;
 use Arhitector\Yandex\Disk;
 use Exception;

@@ -1,30 +1,31 @@
 @php
-    require_once resource_path('views/reservation/meta.php');
+    require_once resource_path('views/reservation/meta/i18n.ru.php');
 @endphp
 
 @extends('document-layout', [
-    'title' => 'Мои&nbsp;брони',
+    'title' => $title,
 ])
 
 @section('content')
     <div class="base-container">
-        <div class="title first">{{ $contentTitle }}</div>
+        <div class="title first">{{ $title }}</div>
         <div class="full-row">
             @include('reservation.components._apartmentCard', [
                 'menuApartmentTitle' => $menuApartmentTitle,
-                'countApartments' => $countApartments,
-                'apartmentsList' => $apartmentsList
+                'countApartments' => count($apartmentList),
+                'apartmentsList' => $apartmentList
             ])
         </div>
         <section class="revervation__grid">
             @include('reservation.components.cardUser', ['users' => $users])
             <section class="reservation__layout">
                 @include('reservation.components._apartmentPrice', [
-                    'name' => 'Квартира-студия в ЖК Брусника, 30.2 м², этаж 9',
-                    'price' => '9 615 862'
+                    'name' => $interaction['apartment']->h1,
+                    'price' => $interaction['apartment']->price
                 ])
 
                 @include('reservation.components._menuFormBar', ['menuLists' => $menuLists])
+                {{-- TODO: реализовать вывод в певое окно + форму --}}
                 @include('reservation.components._formActions', [
                     'bookings' => $bookings,
                     'accordions' => $accordions
@@ -32,12 +33,15 @@
                 @include('reservation.components._add_co-borrower', [
                     'borrower' => $borrower
                 ])
+                <section class="control-action-button">
+                    <button id="reservation-store" class="action-button">Отправить заявку менеджеру</button>
+                </section>
             </section>
         </section>
     </div>
 
     @vite([
-        'resources/js/reservation/panelControlReservation.js',
-        'resources/js/reservation/index.js'
+        'resources/js/reservation/index.js',
+        'resources/js/reservation/request.js'
     ])
 @endsection
