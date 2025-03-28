@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
@@ -27,7 +28,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
         protected VisitedPagesServiceInterface $visitedPagesService,
         protected RealEstateServiceInterface $realEstateService,
         protected CityServiceInterface $cityService,
-        protected ResidentialComplexRepository $residentialComplexRepository
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository
     ) {
     }
 
@@ -57,11 +58,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
         $cityCode = $this->cityService->getUserCity();
         $bestOffers = $this->residentialComplexRepository->getBestOffers();
 
-        $preferredBuildings = ResidentialComplex::whereIn('code', $preferredBuildings)
-            ->whereHas('location', function (Builder $locationQuery) use ($cityCode) {
-                return $locationQuery->where('code', $cityCode);
-            })
-            ->get();
+        $preferredBuildings = $this->residentialComplexRepository->getCode(['code', $preferredBuildings], $cityCode);
 
         if ($visitedPages->count() < 10 && $preferredBuildings->count() < 5) {
             $preferredBuildings = $bestOffers;
