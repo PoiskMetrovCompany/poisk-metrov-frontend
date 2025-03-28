@@ -40,6 +40,8 @@ use App\Repositories\ReservationRepository;
 use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\UserAdsAgreementRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\VisitedPageRepository;
+use App\Repositories\VisitedPageRepositoryInterface;
 use App\Services\AdsAgreementService;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
@@ -232,6 +234,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ResidentialComplexRepositoryInterface::class, ResidentialComplexRepository::class);
     }
 
+    final public function registerVisitedPageRepository(): void
+    {
+        $this->app->singleton(VisitedPageRepositoryInterface::class, VisitedPageRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -268,6 +275,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerComplexRepository();
         $this->registerUserAdsAgreementRepository();
         $this->registerResidentialComplexRepository();
+        $this->registerVisitedPageRepository();
     }
 
     /**

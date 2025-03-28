@@ -13,11 +13,10 @@ use App\Repositories\Queries\StoreQueryTrait;
 use App\Repositories\Queries\UpdateQueryTrait;
 
 #[AllowDynamicProperties]
-class UserAdsAgreementRepository implements UserAdsAgreementRepositoryInterface
+final class UserAdsAgreementRepository implements UserAdsAgreementRepositoryInterface
 {
     use StoreQueryTrait;
-    public function __construct()
+    public function __construct(protected UserAdsAgreement $model)
     {
-        $this->model = new UserAdsAgreement();
     }
 }

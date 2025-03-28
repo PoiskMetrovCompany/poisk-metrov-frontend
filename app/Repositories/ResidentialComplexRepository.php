@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Auth;
 final class ResidentialComplexRepository implements ResidentialComplexRepositoryInterface
 {
     public function __construct(
-        protected CityServiceInterface $cityService
+        protected CityServiceInterface $cityService,
+        protected ResidentialComplex $model
     ) {
     }
 
@@ -96,9 +97,9 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
             ->pluck('name');
     }
 
-    public function getCode(array $attributes, string $cityCode): Collection
+    public function getCode(Collection $code, string $cityCode): Collection
     {
-        return ResidentialComplex::whereIn($attributes)
+        return $this->model::whereIn('code', $code)
             ->whereHas('location', function (Builder $locationQuery) use ($cityCode) {
                 return $locationQuery->where('code', $cityCode);
             })

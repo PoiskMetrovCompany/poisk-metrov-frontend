@@ -37,9 +37,9 @@ interface ResidentialComplexRepositoryInterface
     public function getSortedNamesForCity(string $cityCode);
 
     /**
-     * @param array $attributes
+     * @param Collection $code
      * @param string $cityCode
      * @return Collection
      */
-    public function getCode(array $attributes, string $cityCode): Collection;
+    public function getCode(Collection $code, string $cityCode): Collection;
 }

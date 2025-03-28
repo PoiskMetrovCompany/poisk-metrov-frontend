@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
@@ -26,6 +27,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
 {
     public function __construct(
         protected VisitedPagesServiceInterface $visitedPagesService,
+        protected ApartmentRepositoryInterface $apartmentRepository,
         protected RealEstateServiceInterface $realEstateService,
         protected CityServiceInterface $cityService,
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository
@@ -37,17 +39,21 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
         $visitedPages = $this->visitedPagesService->getVisitedApartments();
         $preferredBuildings = $this->visitedPagesService->getVisitedBuildings();
         $recommendations = new Collection();
-        $visitedApartments = Apartment::whereIn('offer_id', $visitedPages);
+        $apartments = $this->apartmentRepository->findByOfferIdBuilder($visitedPages);
 
-        $visitedApartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
+        $apartments = $this->apartmentRepository->joinBuilder(
+            entity: $apartments,
+            modelTo: 'residential_complexes',
+            model: 'apartments',
+            field: 'id',
+            fieldToSearch: 'complex_id',
+        );
 
         if (!Auth::user()) {
-            $visitedApartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
-//        } else {
-//            $visitedApartments->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
+            $apartments = $this->apartmentRepository->notInListBuilder($apartments, 'residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
 
-        $visitedApartments->get();
+        $visitedApartments = $apartments->get();
         $mediumPrice = 10000000;
         $priceRange = 4000000;
         $mediumArea = 60;
@@ -58,7 +64,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
         $cityCode = $this->cityService->getUserCity();
         $bestOffers = $this->residentialComplexRepository->getBestOffers();
 
-        $preferredBuildings = $this->residentialComplexRepository->getCode(['code', $preferredBuildings], $cityCode);
+        $preferredBuildings = $this->residentialComplexRepository->getCode($preferredBuildings, $cityCode);
 
         if ($visitedPages->count() < 10 && $preferredBuildings->count() < 5) {
             $preferredBuildings = $bestOffers;

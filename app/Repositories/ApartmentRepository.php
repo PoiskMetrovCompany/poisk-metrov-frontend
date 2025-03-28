@@ -3,12 +3,17 @@
 namespace App\Repositories;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Models\Apartment;
 use App\Models\ResidentialComplex;
 use App\Models\User;
 use App\Repositories\Queries\FindByKeyQueryTrait;
+use App\Repositories\Queries\FindOfferIdQueryTrait;
+use App\Repositories\Queries\JoinQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use App\Repositories\Queries\FindByIdQueryTrait;
+use App\Repositories\Queries\NotInListQueryTrait;
 use App\Services\CityService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -18,11 +23,14 @@ final class ApartmentRepository implements ApartmentRepositoryInterface
     use ListQueryTrait;
     use FindByIdQueryTrait;
     use FindByKeyQueryTrait;
+    use FindOfferIdQueryTrait;
+    use JoinQueryTrait;
+    use NotInListQueryTrait;
 
     protected Model $model;
     public function __construct(
-        protected CityService $cityService,
-        protected ResidentialComplexRepository $residentialComplexRepository,
+        protected CityServiceInterface $cityService,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
     ) {
         $this->model = new Apartment();
     }
