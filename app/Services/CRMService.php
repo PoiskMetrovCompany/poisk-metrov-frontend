@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Core\Services\CRMServiceInterface;
+use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\CRM\Commands\CreateLead;
 
 /**

@@ -2,22 +2,18 @@
 
 namespace App\Services;
 
-use App\Core\Services\FavoritesServiceInterface;
-use App\Models\Apartment;
-use App\Models\ResidentialComplex;
+use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Http\Resources\ApartmentResource;
+use App\Models\Apartment;
 use App\Models\CRMSyncRequiredForUser;
 use App\Models\DeletedFavoriteBuilding;
+use App\Models\ResidentialComplex;
 use App\Models\UserFavoriteBuilding;
 use App\Models\UserFavoritePlan;
-use App\Services\ApartmentService;
-use App\Services\PriceFormattingService;
-use App\Services\RealEstateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class FavoritesService.

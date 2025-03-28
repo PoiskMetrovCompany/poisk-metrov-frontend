@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Http\Requests\SwitchCityRequest;
 use App\Providers\AppServiceProvider;
-use App\Services\CityService;
 
 /**
  * @see AppServiceProvider::registerCityService()

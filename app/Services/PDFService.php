@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Core\Services\FavoritesServiceInterface;
-use App\Core\Services\PDFServiceInterface;
+use App\Core\Interfaces\Services\FavoritesServiceInterface;
+use App\Core\Interfaces\Services\PDFServiceInterface;
 use App\Http\Resources\ApartmentResource;
-use Illuminate\Http\Request;
-use App\Http\Resources\ResidentialComplexResource;
 use App\Http\Resources\ResidentialComplexCardResource;
-use App\Models\ResidentialComplex;
-use App\Models\Renovation;
+use App\Http\Resources\ResidentialComplexResource;
 use App\Models\Apartment;
+use App\Models\Renovation;
+use App\Models\ResidentialComplex;
 use App\TextFormatters\PriceTextFormatter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 

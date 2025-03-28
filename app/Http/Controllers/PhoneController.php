@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\AdsAgreementServiceInterface;
+use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Http\Requests\CallStatusIDRequest;
 use App\Http\Requests\ConfirmUserRequest;
 use App\Models\AuthorizationCall;
 use App\Models\User;
 use App\Models\UserAdsAgreement;
 use App\Providers\AppServiceProvider;
-use App\Services\AdsAgreementService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @see AppServiceProvider::registerAdsAgreementService()

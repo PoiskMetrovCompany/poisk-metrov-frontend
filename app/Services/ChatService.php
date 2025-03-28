@@ -2,20 +2,20 @@
 
 namespace App\Services;
 
-use App\Core\Services\ChatServiceInterface;
-use App\Core\Services\CRMServiceInterface;
+use App\Core\Interfaces\Services\ChatServiceInterface;
+use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\Events\ChatUpdated;
+use App\Events\ManagerMessage;
 use App\Events\UserMessage;
 use App\Models\ChatSession;
 use App\Models\ChatTokenCRMLeadPair;
 use App\Models\GroupChatBotMessage;
+use App\Models\Manager;
+use App\Models\ManagerChatMessage;
 use App\Models\User;
 use App\Models\UserChatMessage;
 use App\Telegram\InlineButtons\ReplyToClientButton;
 use Illuminate\Database\Eloquent\Collection;
-use App\Models\ManagerChatMessage;
-use App\Events\ManagerMessage;
-use App\Models\Manager;
 use Illuminate\Support\Carbon;
 
 /**

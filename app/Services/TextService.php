@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\Core\Services\TextServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use DateTime;
 use Illuminate\Support\Collection;
 use Str;
-use Transliterator;
 
 /**
  * Class TextService.

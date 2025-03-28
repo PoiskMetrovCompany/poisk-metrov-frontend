@@ -2,19 +2,18 @@
 
 namespace App\Services;
 
-use App\Core\Services\CachingServiceInterface;
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\RealEstateServiceInterface;
-use App\Core\Services\VisitedPagesServiceInterface;
-use App\Models\ResidentialComplex;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\RealEstateServiceInterface;
+use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use App\Models\Apartment;
 use App\Models\Location;
+use App\Models\ResidentialComplex;
 use App\Models\ResidentialComplexCategory;
 use App\Repositories\ResidentialComplexRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class RealEstateService.

@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Core\Services\ApartmentServiceInterface;
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\RealEstateServiceInterface;
-use App\Core\Services\VisitedPagesServiceInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\RealEstateServiceInterface;
+use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use App\Models\Apartment;
 use App\Models\ApartmentHistory;
 use App\Models\MortgageType;

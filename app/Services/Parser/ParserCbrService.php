@@ -2,7 +2,7 @@
 
 namespace App\Services\Parser;
 
-use App\Core\Services\ParserCbrServiceInterface;
+use App\Core\Interfaces\Services\ParserCbrServiceInterface;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;

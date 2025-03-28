@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\TextServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Http\Requests\TelegramCallbackRequest;
 use App\Models\Manager;
 use App\Providers\AppServiceProvider;
 use App\Services\TelegramSurveyMessageService;
 use App\Services\TelegramSurveyService;
-use App\Services\TextService;
 use App\Telegram\TelegramResponse;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Storage;
 
 /**

@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use App\Core\Services\UserServiceInterface;
+use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Models\User;
-use App\Http\Resources\UserResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**

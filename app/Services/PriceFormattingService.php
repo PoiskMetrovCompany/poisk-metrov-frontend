@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Core\Services\PriceFormattingServiceInterface;
+use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
 
 /**
  * Class PriceFormattingService.

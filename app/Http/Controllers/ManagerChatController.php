@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ChatServiceInterface;
-use App\Core\Services\TextServiceInterface;
+use App\Core\Interfaces\Services\ChatServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Http\Requests\ManagerMessageRequest;
 use App\Models\Manager;
 use App\Providers\AppServiceProvider;
-use App\Services\ChatService;
 use App\Services\TelegramService;
-use App\Services\TextService;
 use Illuminate\Http\Request;
 
 /**

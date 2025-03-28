@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\BankServiceInterface;
+use App\Core\Interfaces\Services\BankServiceInterface;
 use App\Http\Requests\FilteredMortgagesRequest;
 use App\Providers\AppServiceProvider;
-use App\Services\BankService;
-use Illuminate\Http\Request;
 
 /**
  * @see AppServiceProvider::registerBankService()

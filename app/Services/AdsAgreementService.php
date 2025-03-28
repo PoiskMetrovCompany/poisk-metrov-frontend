@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services;
-use App\Core\Services\AdsAgreementServiceInterface;
+use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Models\UserAdsAgreement;
 
 /**

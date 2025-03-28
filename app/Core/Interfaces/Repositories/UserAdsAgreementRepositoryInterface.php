@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Repositories;
+namespace App\Core\Interfaces\Repositories;
 
 interface UserAdsAgreementRepositoryInterface
 {

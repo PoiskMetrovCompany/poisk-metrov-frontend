@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Core\Services\BankServiceInterface;
+use App\Core\Interfaces\Services\BankServiceInterface;
 use App\Http\Resources\BankResource;
 use App\Http\Resources\MortgageProgramResource;
 use App\Http\Resources\MortgageResource;

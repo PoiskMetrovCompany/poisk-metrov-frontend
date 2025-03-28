@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\CityServiceInterface;
-use App\Core\Services\FavoritesServiceInterface;
-use App\Core\Services\UserServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\FavoritesServiceInterface;
+use App\Core\Interfaces\Services\UserServiceInterface;
 use App\CRM\Commands\CreateLead;
 use App\CRM\Commands\GetLead;
 use App\CRM\Commands\UpdateLead;
 use App\Http\Requests\AuthorizeUserRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
@@ -17,15 +18,10 @@ use App\Models\ChatTokenCRMLeadPair;
 use App\Models\Manager;
 use App\Models\User;
 use App\Models\UserAdsAgreement;
-use App\Services\CityService;
-use App\Services\FavoritesService;
-use App\Services\UserService;
 use Cookie;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Requests\UpdateProfileRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\UnauthorizedException;
 
 /**

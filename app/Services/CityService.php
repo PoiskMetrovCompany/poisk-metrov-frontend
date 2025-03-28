@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Core\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 /**

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ApartmentServiceInterface;
-use App\Core\Services\PriceFormattingServiceInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
+use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
+use App\Http\Requests\ApartmentListRequest;
 use App\Http\Requests\UpdateApartmentRequest;
 use App\Http\Resources\ApartmentHistoryResource;
 use App\Http\Resources\ApartmentResource;
@@ -12,14 +13,11 @@ use App\Http\Resources\ResidentialComplexResource;
 use App\Models\Apartment;
 use App\Models\Location;
 use App\Models\ResidentialComplex;
-use App\Services\ApartmentService;
-use App\Services\PriceFormattingService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use App\Http\Requests\ApartmentListRequest;
 use Log;
 use Throwable;
 

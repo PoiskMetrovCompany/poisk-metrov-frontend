@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Services\ApartmentServiceInterface;
-use App\Http\Requests\ApartmentListRequest;
-use App\Models\ResidentialComplex;
-use App\Services\ApartmentService;
-use App\Services\CachingService;
-use Illuminate\Http\Request;
-use App\Http\Requests\UpdateRealEstateRequest;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Http\Requests\BuildingRequest;
+use App\Http\Requests\UpdateRealEstateRequest;
 use App\Http\Resources\EditableResidentialComplexResource;
 use App\Http\Resources\ResidentialComplexResource;
-use Illuminate\Support\Facades\Response;
+use App\Models\ResidentialComplex;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Throwable;
 
