@@ -7,6 +7,8 @@ use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
@@ -35,6 +37,8 @@ use App\Repositories\ComplexRepository;
 use App\Repositories\InteractionRepository;
 use App\Repositories\ManagerRepository;
 use App\Repositories\ReservationRepository;
+use App\Repositories\ResidentialComplexRepository;
+use App\Repositories\UserAdsAgreementRepository;
 use App\Repositories\UserRepository;
 use App\Services\AdsAgreementService;
 use App\Services\ApartmentService;
@@ -218,6 +222,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ComplexRepositoryInterface::class, ComplexRepository::class);
     }
 
+    final public function registerUserAdsAgreementRepository(): void
+    {
+        $this->app->singleton(UserAdsAgreementRepositoryInterface::class, UserAdsAgreementRepository::class);
+    }
+
+    final public function registerResidentialComplexRepository(): void
+    {
+        $this->app->singleton(ResidentialComplexRepositoryInterface::class, ResidentialComplexRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -252,7 +266,8 @@ class AppServiceProvider extends ServiceProvider
         $this->registerApartmentRepository();
         $this->registerManagerRepository();
         $this->registerComplexRepository();
-
+        $this->registerUserAdsAgreementRepository();
+        $this->registerResidentialComplexRepository();
     }
 
     /**
