@@ -6,9 +6,9 @@ use Illuminate\Support\Collection;
 
 trait ListQueryTrait
 {
-    public function list(?array $attributes): ?Collection
+    public function list(?array $attributes, bool $collect=true): ?Collection
     {
         $data = $this->model::where($attributes)->get()->toArray();
-        return collect($data);
+        return $collect ? collect($data) : $data;
     }
 }

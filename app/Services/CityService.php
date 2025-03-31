@@ -5,95 +5,32 @@ namespace App\Services;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use App\Core\Common\Cities\CityCodesConst;
+use App\Core\Common\Cities\CityNameListConst;
+use App\Core\Common\Cities\CityInvalidCodeConst;
+use App\Core\Common\Cities\CityConst;
 
 /**
- * Class CityService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements CityServiceInterface
+ * @property-read array $invalidCodes
+ * @property-read array $possibleCityCodes
+ * @property-read array $cityNames
+ * @property-read array $cityCodes
+ * @property-read array $where
+ * @property-read array $what
  */
 class CityService extends AbstractService implements CityServiceInterface
 {
-    private array $invalidCodes = [null, 'null', 'not-found', 'not found'];
-    public array $possibleCityCodes = [
-        'st-petersburg',
-        'novosibirsk',
-        'black-sea',
-        'crimea',
-        'moscow',
-        'chelyabinsk',
-        'ekaterinburg',
-        'kaliningrad',
-        'voronezh',
-        'far-east',
-        'krasnodar',
-        'thailand',
-        'ufa',
-        'kazan'
-    ];
-    public array $cityNames = [
-        'Новосибирск',
-        'Санкт-Петербург',
-        'Сочи',
-        'Крым',
-        'Москва',
-        'Челябинск',
-        'Екатеринбург',
-        'Калининград',
-        'Воронеж',
-        'Дальний Восток',
-        'Краснодар',
-        'Тайланд',
-        'Уфа',
-        'Казань'
-    ];
-    public array $cityCodes = [
-        'novosibirsk' => 'Новосибирск',
-        'st-petersburg' => 'Санкт-Петербург',
-        'black-sea' => 'Сочи',
-        'crimea' => 'Крым',
-        'moscow' => 'Москва',
-        'chelyabinsk' => 'Челябинск',
-        'ekaterinburg' => 'Екатеринбург',
-        'kaliningrad' => 'Калининград',
-        'voronezh' => 'Воронеж',
-        'far-east' => 'Дальний Восток',
-        'krasnodar' => 'Краснодар',
-        'thailand' => 'Тайланд',
-        'ufa' => 'Уфа',
-        'kazan' => 'Казань'
-    ];
-    public array $where = [
-        'novosibirsk' => 'Новосибирске',
-        'st-petersburg' => 'Санкт-Петербурге',
-        'black-sea' => 'Сочи',
-        'crimea' => 'Крыму',
-        'moscow' => 'Москве',
-        'chelyabinsk' => 'Челябинске',
-        'ekaterinburg' => 'Екатеринбурге',
-        'kaliningrad' => 'Калининграде',
-        'voronezh' => 'Воронеже',
-        'far-east' => 'Дальнем Востоке',
-        'krasnodar' => 'Краснодаре',
-        'thailand' => 'Тайланде',
-        'ufa' => 'Уфе',
-        'kazan' => 'Казани'
-    ];
-    public array $what = [
-        'novosibirsk' => 'Новосибирска',
-        'st-petersburg' => 'Санкт-Петербурга',
-        'black-sea' => 'Сочи',
-        'crimea' => 'Крыма',
-        'moscow' => 'Москвы',
-        'chelyabinsk' => 'Челябинска',
-        'ekaterinburg' => 'Екатеринбурга',
-        'kaliningrad' => 'Калининграда',
-        'voronezh' => 'Воронежа',
-        'far-east' => 'Дальнего Востока',
-        'krasnodar' => 'Краснодара',
-        'thailand' => 'Тайланда',
-        'ufa' => 'Уфы',
-        'kazan' => 'Казани'
-    ];
+    private array $invalidCodes = CityInvalidCodeConst::NOT_VALID_CODES;
+    public array $possibleCityCodes = CityCodesConst::CITY_CODES;
+    public array $cityNames = CityNameListConst::CITY_NAME_LIST;
+    public array $cityCodes = CityConst::CITY_CODES;
+    public array $where = CityConst::WHERE;
+    public array $what = CityConst::WHAT;
 
-    public const DEFAULT_CITY = 'st-petersburg';
+    public const DEFAULT_CITY = CityConst::DEFAULT_CITY;
 
     public function getUserCityName(): string
     {

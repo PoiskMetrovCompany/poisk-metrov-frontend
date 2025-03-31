@@ -2,7 +2,15 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\DeletedFavoriteBuildingRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserFavoriteBuildingRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserFavoritePlanRepositoryInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
+use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
+use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Http\Resources\ApartmentResource;
 use App\Models\Apartment;
 use App\Models\CRMSyncRequiredForUser;
@@ -16,21 +24,35 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
 /**
- * Class FavoritesService.
+ * @package App\Services
+ * @implements FavoritesServiceInterface
+ * @property-read PriceFormattingServiceInterface $priceFormattingService
+ * @property-read RealEstateServiceInterface $realEstateService
+ * @property-read ApartmentServiceInterface $apartmentService
+ * @property-read UserFavoritePlanRepositoryInterface $userFavoritePlanRepository
+ * @property-read UserFavoriteBuildingRepositoryInterface $userFavoriteBuildingRepository
+ * @property-read DeletedFavoriteBuildingRepositoryInterface $deletedFavoriteBuildingRepository
+ * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
  */
 class FavoritesService implements FavoritesServiceInterface
 {
     public function __construct(
-        protected PriceFormattingService $priceFormattingService,
-        protected RealEstateService $realEstateService,
-        protected ApartmentService $apartmentService
+        protected PriceFormattingServiceInterface $priceFormattingService,
+        protected RealEstateServiceInterface $realEstateService,
+        protected ApartmentServiceInterface $apartmentService,
+        protected UserFavoritePlanRepositoryInterface $userFavoritePlanRepository,
+        protected UserFavoriteBuildingRepositoryInterface $userFavoriteBuildingRepository,
+        protected DeletedFavoriteBuildingRepositoryInterface $deletedFavoriteBuildingRepository,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+        protected ApartmentRepositoryInterface $apartmentRepository
     ) {
     }
 
     public function getBuildingCodesForFavoritePlans(): array
     {
         $offerIds = $this->getFavoritePlanOfferIds();
-        $buildingIds = Apartment::whereIn('offer_id', $offerIds)->get()->pluck('complex_id')->unique();
+        $buildingIds = $this->apartmentRepository->findByOfferId($offerIds)->pluck('complex_id')->unique();
 
         return ResidentialComplex::whereIn('id', $buildingIds)->get()->pluck('code')->toArray();
     }
@@ -55,6 +77,7 @@ class FavoritesService implements FavoritesServiceInterface
     public function getFavoritePlanData(): array
     {
         $offerIds = $this->getFavoritePlanOfferIds();
+        // TODO: переделать на второй итерации рефакторинга
         $apartments = Apartment::whereIn('offer_id', $offerIds)->orderBy('price')->get();
 
         return ApartmentResource::collection($apartments)->toArray(new Request());
@@ -63,13 +86,13 @@ class FavoritesService implements FavoritesServiceInterface
     public function getBuildingsForFavoritePlans(): array
     {
         $offerIds = $this->getFavoritePlanOfferIds();
-        $buildingIds = Apartment::whereIn('offer_id', $offerIds)->get()->pluck('complex_id')->unique();
-
-        return ResidentialComplex::whereIn('id', $buildingIds)->get()->pluck('code')->toArray();
+        $buildingIds = $this->apartmentRepository->findByOfferId($offerIds)->pluck('complex_id')->unique();
+         return $this->residentialComplexRepository->findInBuildingId($buildingIds)->pluck('code')->toArray();
     }
 
     public function getBuildingDataSorted(array $codes, string $parameter, string $order): mixed
     {
+        // TODO: исправить этот метод на второй итерации
         $buildings = ResidentialComplex::whereIn('code', $codes)
             ->with('apartments')
             ->withCount('apartments')
@@ -166,7 +189,6 @@ class FavoritesService implements FavoritesServiceInterface
     }
 
     public function syncFavoriteApartmentsWithCookies()
-
     {
         $user = Auth::user();
 
@@ -184,9 +206,9 @@ class FavoritesService implements FavoritesServiceInterface
             foreach ($offerIds as $offer) {
                 //If plan from cookies is not in favorite plans and apartment still exists, create it
                 if (! in_array($offer, $favoriteApartmentCodes) &&
-                    Apartment::where('offer_id', $offer)->exists() &&
-                    ! UserFavoritePlan::where(['user_id' => $user->id, 'offer_id' => $offer])->exists()) {
-                    UserFavoritePlan::create(['user_id' => $user->id, 'offer_id' => $offer]);
+                    $this->apartmentRepository->isExists(['offer_id' => $offer]) &&
+                    !$this->userFavoritePlanRepository->isExists(['user_id' => $user->id, 'offer_id' => $offer])) {
+                    $this->userFavoritePlanRepository->store(['user_id' => $user->id, 'offer_id' => $offer]);
                 }
             }
         }
@@ -211,9 +233,12 @@ class FavoritesService implements FavoritesServiceInterface
 
             foreach ($buildingCodes as $code) {
                 if (! in_array($code, $favoriteBuildingCodes) &&
-                    ResidentialComplex::where('code', $code)->exists() &&
-                    ! UserFavoriteBuilding::where(['user_id' => $user->id, 'complex_code' => $code])->exists()) {
-                    UserFavoriteBuilding::create(['user_id' => $user->id, 'complex_code' => $code]);
+                    $this->residentialComplexRepository->isExists(['code' => $code]) &&
+                    !$this->userFavoriteBuildingRepository->isExists(['user_id' => $user->id, 'complex_code' => $code])) {
+                    $this->userFavoriteBuildingRepository->store([
+                        'user_id' => $user->id,
+                        'complex_code' => $code
+                    ]);
                 }
             }
         }
@@ -233,14 +258,14 @@ class FavoritesService implements FavoritesServiceInterface
             case 'apartment':
                 switch ($action) {
                     case 'add':
-                        if (! UserFavoritePlan::where('offer_id', $code)->exists()) {
-                            UserFavoritePlan::create(['user_id' => $user->id, 'offer_id' => $code]);
+                        if (!$this->userFavoritePlanRepository->isExists(['offer_id' => $code])) {
+                            $this->userFavoritePlanRepository->store(['user_id' => $user->id, 'offer_id' => $code]);
                             setrawcookie('cachedFavoritePlansCount', '-1', time() - 100000, '/');
                         }
                         break;
                     case 'remove':
-                        if (UserFavoritePlan::where('offer_id', $code)->exists()) {
-                            UserFavoritePlan::where(['user_id' => $user->id, 'offer_id' => $code])->delete();
+                        if ($this->userFavoritePlanRepository->isExists(['offer_id' => $code])) {
+                            $builder = $this->userFavoritePlanRepository->find(['user_id' => $user->id, 'offer_id' => $code])->delete();
                             setrawcookie('cachedFavoritePlansCount', '-1', time() - 100000, '/');
                         }
                         break;
@@ -249,17 +274,20 @@ class FavoritesService implements FavoritesServiceInterface
             case 'building':
                 switch ($action) {
                     case 'add':
-                        if (! UserFavoriteBuilding::where('complex_code', $code)->exists()) {
-                            UserFavoriteBuilding::create(['user_id' => $user->id, 'complex_code' => $code]);
+                        if (!$this->userFavoriteBuildingRepository->isExists(['complex_code' => $code])) {
+                            $this->userFavoriteBuildingRepository->store(['user_id' => $user->id, 'complex_code' => $code]);
                             setrawcookie('cachedFavoriteBuildingsCount', '-1', time() - 100000, '/');
                         }
                         break;
                     case 'remove':
-                        if (UserFavoriteBuilding::where('complex_code', $code)->exists()) {
-                            UserFavoriteBuilding::where(['user_id' => $user->id, 'complex_code' => $code])->delete();
+                        if ($this->userFavoriteBuildingRepository->isExists(['complex_code' => $code])) {
+                            $this->userFavoriteBuildingRepository->find(['user_id' => $user->id, 'complex_code' => $code])->delete();
 
-                            if (! DeletedFavoriteBuilding::where(['user_id' => $user->id, 'complex_code' => $code])->exists()) {
-                                DeletedFavoriteBuilding::create(['user_id' => $user->id, 'complex_code' => $code]);
+                            if (!$this->deletedFavoriteBuildingRepository->isExists(['user_id' => $user->id, 'complex_code' => $code])) {
+                                $this->deletedFavoriteBuildingRepository->store([
+                                    'user_id' => $user->id,
+                                    'complex_code' => $code
+                                ]);
                             }
 
                             setrawcookie('cachedFavoriteBuildingsCount', '-1', time() - 100000, '/');

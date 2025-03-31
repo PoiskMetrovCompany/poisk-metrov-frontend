@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Services\GoogleDriveServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use Google\Model;
 use Google\Service\Docs;
 use Google\Service\Drive;
@@ -14,9 +16,18 @@ use Psr\Http\Message\StreamInterface;
 use Google_Service_Sheets_ValueRange;
 
 /**
- * Class GoogleDriveService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements GoogleDriveServiceInterface
+ * @property-read Google_Client $googleClient
+ * @property-read Drive $driveService
+ * @property-read Docs $docsService
+ * @property-read Sheets $sheetService
+ * @property-read string $configFileName
+ * @property-read string $defaultFileFields
+ * @property-read TextServiceInterface $textService
  */
-class GoogleDriveService extends AbstractService
+class GoogleDriveService extends AbstractService implements GoogleDriveServiceInterface
 {
     private Google_Client $googleClient;
     private Drive $driveService;
@@ -26,7 +37,7 @@ class GoogleDriveService extends AbstractService
     private string $defaultFileFields = 'contentHints/thumbnail,fileExtension,iconLink,id,name,size,thumbnailLink,webContentLink,webViewLink,mimeType,parents';
 
     public function __construct(
-        private TextService $textService
+        private TextServiceInterface $textService
     ) {
         $pathToConfig = Storage::path($this->configFileName);
         putenv("GOOGLE_APPLICATION_CREDENTIALS={$pathToConfig}");
@@ -96,14 +107,14 @@ class GoogleDriveService extends AbstractService
         return $this->driveService->files->export($documentId, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')->getBody();
     }
 
-    public function getSheetData(string $sheetId, string $range)
+    public function getSheetData(string $sheetId, string $range): array
     {
         $data = $this->sheetService->spreadsheets_values->get($sheetId, $range);
 
         return $data->getValues();
     }
 
-    public function addRowToSheet(string $sheetId, array $rowData, string $range)
+    public function addRowToSheet(string $sheetId, array $rowData, string $range): void
     {
         foreach ($rowData as &$data) {
             if ($data == null || $data == '') {

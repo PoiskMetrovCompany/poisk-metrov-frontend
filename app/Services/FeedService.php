@@ -2,7 +2,17 @@
 
 namespace App\Services;
 
+use App\Core\Common\Feeds\NmarketFeedConst;
+use App\Core\Common\Feeds\AvitoFeedConst;
+use App\Core\Common\Feeds\ComplexesFeedConst;
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\RealtyFeedEntryRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexFeedSiteNameRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\FeedServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\FeedParsers\AvitoParser;
 use App\FeedParsers\ComplexParser;
 use App\FeedParsers\FeedFormat;
@@ -23,58 +33,32 @@ use Log;
 use Storage;
 
 /**
- * Class FeedService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements FeedServiceInterface
+ * @property-read Collection $managersFiles
+ * @property-read array $realtyFeedLinks
+ * @property-read array $avitoFeedLinks
+ * @property-read array $version2FeedLinks
+ * @property-read array $complexesFeedLinks
+ * @property-read RealtyFeedParser $realtyFeedParser
+ * @property-read AvitoParser $avitoFeedParser
+ * @property-read ComplexParser $complexParser
+ * @property-read Version2Parser $version2Parser
+ * @property-read TextServiceInterface $textService
+ * @property-read CityServiceInterface $cityService
+ * @property-read ApartmentServiceInterface $apartmentService
+ * @property-read RealtyFeedEntryRepositoryInterface $realtyFeedEntryRepository
+ * @property-read ResidentialComplexFeedSiteNameRepositoryInterface $residentialComplexFeedSiteNameRepository
+ * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
  */
 class FeedService extends AbstractService implements FeedServiceInterface
 {
-    public array $realtyFeedLinks = [
-        'https://ekaterinburg.brusnika.ru/feed/etagi-nsk',
-        'https://p16.realty.cat/export/feed/65c889c5a0b27a70e496721661a5fa3d',
-        'https://p16.realty.cat/export/feed/be28fa4b7ebba4d4cdf084512e914210',
-        'https://p16.realty.cat/export/feed/bd4b9352b0b520880997c9d09ce2e705',
-        'https://p16.realty.cat/export/feed/09de3e3756497772462cf83b13fd55dc',
-        //empty - 'https://p16.realty.cat/export/feed/27b33db26c0b5835e5080d428b891650',
-        'https://p16.realty.cat/export/feed/5afa0e5d6cbe625c49bbdb61e979c7cc',
-        'https://p16.realty.cat/export/feed/b709f3e4797f29308f85b4e754975d40',
-        'https://p16.realty.cat/export/feed/8ec09e613d190a513f81ae3bdaa7380b',
-        'https://p16.realty.cat/export/feed/1524d821686bae630e9674f0f69f0f2e',
-        'https://p16.realty.cat/export/feed/3a2d085609aadfa1fa6f83e48fec3366',
-        'https://p16.realty.cat/export/feed/d28cf6250949c9e7958dff617d08a48b',
-        'https://p16.realty.cat/export/feed/ac66e3e57bf9b894bd149f80ab836d34',
-        'https://domoplaner.ru/dc-api/feeds/332-0YGF1253leF29n25lTYTH8WH2DABK2tTxV37eQp3Fu3PiR5SxN3CpJMBUqWBsYCS',
-        'https://domoplaner.ru/dc-api/feeds/332-pcLhWx9gsYBBY6E5lj5BVsItsPXIvOws4bvjHSQ9pAuxkk9oejOZAFIz9GvHAemK',
-        'https://domoplaner.ru/dc-api/feeds/1-sV7VjzM5lb5iwZdvftKJQsAONOsaTJ7G57mQeKHnCCLqesqIciPYV8A9KiGFF5uv',
-        'https://domoplaner.ru/dc-api/feeds/1-dxiR80sqMIKEzWbvPQke3CIQJLyYv9WXkUI1Cy1g66JVdRkXmxANrqHZUDL0gR7A',
-        'https://domoplaner.ru/dc-api/feeds/1-uBwBUExgBSuyvX0WQGvOtoPwxuuVLbKY26NKX9x3lJN61j8wT5MGH4SFKkYqy8WD',
-        'https://domoplaner.ru/dc-api/feeds/340-6fIy1dQMPrBZWKvrnfwJIRs5UM7aILIRVMfQ6hgSBpyr0N4hqi0FHWFkGe15K1Tm',
-        'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q5zaTXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dNxUSIDZkZnW3azJXh8MTcxNzA2Mjk1OHwxMWJmZQ/211-yandex.xml?feed_id=4949',
-        'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q10bjXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dNwUSIDZkZnW3GzJXh8MTY4NTUxNDk3Mnw4ZWUzMA/166-yandex.xml?feed_id=3135',
-        'https://api.macroserver.ru/estate/export/yandex/OzA5_WiGLTOJUuUfZsa-aAnYrqeYWBlO7q10bjXLcTWdInddefntJn-Gx9oKQ2qDosqdi_K_c8t7HhEqgVzInjUi_sG_3P3HqxDZrIROtRuZqBKBbk-f9dByUSMHZkZnW3GzJXh8MTY5ODk4OTUwMXxlZTZkOA/166-yandex.xml?feed_id=3911',
-    ];
-    public array $avitoFeedLinks = [
-        'https://p16.realty.cat/export/feed/4b54bf794c930617436e9e8697e3a606',
-        'https://p16.realty.cat/export/feed/caa5ec2939e429e483493719f4caa0d8',
-        'https://p16.realty.cat/export/feed/193ad98c1a2062345a4ee319169bb02a',
-        'https://domoplaner.ru/dc-api/feeds/320-5F6J4e3KREIJrKJ4uZWuWQMLxaYoN7lVuqbHYprv5LqljQFs0axEIHN9XHXnBVhW',
-        'https://domoplaner.ru/dc-api/feeds/320-wihjrFMKz0Qlj33ziQ7QTvUmZttlQFmsWZzq1WZA2T0tobfr4xhallOgmlKQN5Kr',
-        'https://domoplaner.ru/dc-api/feeds/320-ogwh2CedxHNGKlCaENoEWT9IB7YNlBwyKHBZHMGtV5toY2w3xb0RiWF6IEwQNbYN',
-        'https://domoplaner.ru/dc-api/feeds/320-4FJfZ6KODKlmQLw7UEALpaGuNz7KnqSXCbD0NlYTW0OhIHIGeOlussHhrZdjYNjy',
-        'https://domoplaner.ru/dc-api/feeds/320-AN7TYhAlUAo5pbhbEPcyJ5pRlAQTC7pZuy35Z6hy0jY3wf61LI1NLQjfk8gnEeK4',
-
-    ];
-    public array $version2FeedLinks = [
-        'https://p16.realty.cat/export/feed/bbe8534b7b1e845807328a2636849ed4',
-        'https://p16.realty.cat/export/feed/b83fb65ff3f2c24b2cee08f0f85e8e1d',
-        'https://p16.realty.cat/export/feed/23a6e135fdd8e6f2c6fad74d946a2c2f',
-        'https://domoplaner.ru/dc-api/feeds/340-pm5ZO6IPwSvA7LGUYJqYerxgljHc2ejck2EmDvrncVppJ3XCkiu6irf7qfqESVJM',
-
-    ];
-    public array $complexesFeedLinks = [
-        'https://p16.realty.cat/export/feed/9bd636cdab2501438f09e9650774ed85',
-        'https://p16.realty.cat/export/feed/8acf20ffa4cc9e6e0d42a496c75a4e7e',
-        'https://www.yasnybereg.ru/import/xmlDomclick.xml',
-        'https://www.yasnybereg.ru/import/xmlDomclick_domavesna.xml',
-    ];
+    public array $realtyFeedLinks = NmarketFeedConst::URLS;
+    public array $avitoFeedLinks = AvitoFeedConst::URLS;
+    public array $version2FeedLinks = NmarketFeedConst::URLS_OVERRIDE;
+    public array $complexesFeedLinks = ComplexesFeedConst::URLS;
 
     private RealtyFeedParser $realtyFeedParser;
     private AvitoParser $avitoFeedParser;
@@ -82,9 +66,13 @@ class FeedService extends AbstractService implements FeedServiceInterface
     private Version2Parser $version2Parser;
 
     public function __construct(
-        protected TextService $textService,
-        protected CityService $cityService,
-        protected ApartmentService $apartmentService
+        protected TextServiceInterface $textService,
+        protected CityServiceInterface $cityService,
+        protected ApartmentServiceInterface $apartmentService,
+        protected RealtyFeedEntryRepositoryInterface $realtyFeedEntryRepository,
+        protected ResidentialComplexFeedSiteNameRepositoryInterface $residentialComplexFeedSiteNameRepository,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+        protected ApartmentRepositoryInterface $apartmentRepository
     ) {
         $this->realtyFeedParser = new RealtyFeedParser();
         $this->avitoFeedParser = new AvitoParser();
@@ -111,10 +99,10 @@ class FeedService extends AbstractService implements FeedServiceInterface
                     'city' => 'novosibirsk'
                 ];
 
-                $realtyFeedEntry = RealtyFeedEntry::where($feedData)->first();
+                $realtyFeedEntry = $this->realtyFeedEntryRepository->find($feedData)->first();
 
                 if ($realtyFeedEntry == null) {
-                    $realtyFeedEntry = RealtyFeedEntry::create($feedData);
+                    $realtyFeedEntry = $this->realtyFeedEntryRepository->store($feedData);
                 }
             }
         }
@@ -126,38 +114,39 @@ class FeedService extends AbstractService implements FeedServiceInterface
             $feedData['name'] = Str::random(32);
         }
 
-        RealtyFeedEntry::create($feedData);
+        $this->realtyFeedEntryRepository->store($feedData);
     }
 
     public function updateFeedEntry(array $feedData): void
     {
-        $realtyFeedEntry = RealtyFeedEntry::where(['id' => $feedData['id']])->first();
+        $realtyFeedEntry = $this->realtyFeedEntryRepository->findById($feedData['id']);
 
         if ($realtyFeedEntry != null) {
             if (! isset($feedData['name'])) {
                 $feedData['name'] = Str::random(32);
             }
-
+            // TODO: вот ещё момент который надо исправить на второй итерации
             $realtyFeedEntry->update($feedData);
         }
     }
 
     public function deleteFeedEntry(array $feedData): void
     {
-        $realtyFeedEntry = RealtyFeedEntry::where(['id' => $feedData['id']])->first();
+        $realtyFeedEntry = $this->realtyFeedEntryRepository->findById($feedData['id']);
 
         if ($realtyFeedEntry != null) {
+            // TODO: вот ещё момент который надо исправить на второй итерации
             $realtyFeedEntry->delete();
         }
     }
 
     public function updateFeedName(array $feedNameData): void
     {
-        $feedName = ResidentialComplexFeedSiteName::where(['id' => $feedNameData['id']])->first();
+        $feedName = $this->residentialComplexFeedSiteNameRepository->findById($feedNameData['id']);
 
         if ($feedName != null) {
             if (isset($feedNameData['site_name'])) {
-                $feedNameData['pair_found'] = ResidentialComplex::where(['name' => $feedNameData['site_name']])->exists();
+                $feedNameData['pair_found'] = $this->residentialComplexRepository->isExists(['name' => $feedNameData['site_name']]);
             }
 
             $feedName->update($feedNameData);
@@ -167,10 +156,12 @@ class FeedService extends AbstractService implements FeedServiceInterface
     public function getFeeds(): Collection
     {
         return RealtyFeedEntry::all();
+        // TODO: применить это - return $this->realtyFeedEntryRepository->list();
     }
 
     public function getFeedNames(): Collection
     {
+        // TODO: тут сделать как в getFeeds
         return ResidentialComplexFeedSiteName::all();
     }
 
@@ -225,7 +216,7 @@ class FeedService extends AbstractService implements FeedServiceInterface
 
     public function downloadAllFeeds(bool $log = false, bool $ignoreIfExists = false): void
     {
-        RealtyFeedEntry::all()->each(function (RealtyFeedEntry $entry) use ($log, $ignoreIfExists) {
+        $this->realtyFeedEntryRepository->list([], false)->each(function (RealtyFeedEntry $entry) use ($log, $ignoreIfExists) {
             $this->downloadFeed($entry, $log, $ignoreIfExists);
         });
     }
@@ -237,7 +228,7 @@ class FeedService extends AbstractService implements FeedServiceInterface
         }
 
         $this->realtyFeedParser->parseFeeds();
-
+        // TODO: проверить работочпособность этих парсеров
 //        $this->avitoFeedParser->parseFeeds();
 //        $this->complexParser->parseFeeds();
 //        $this->version2Parser->parseFeeds();
@@ -253,13 +244,16 @@ class FeedService extends AbstractService implements FeedServiceInterface
 
         //Ожидается что очистка квартир из новых фидов будет происходить после очистки квартир из нмаркета
         $releveantOfferIdsFromOtherFeeds = RealtyFeedApartment::pluck('offer_id')->merge(AvitoApartment::pluck('offer_id')->merge(ComplexApartment::pluck('offer_id')->merge(Version2Apartment::pluck('offer_id'))))->unique();
-        $apartmentsFromNewFeeds = Apartment::where(['feed_source' => 'realtyfeed'])
+        // TODO: что то придумать с "orwhere"
+        $apartmentsFromNewFeeds = $this->apartmentRepository->find(['feed_source' => 'realtyfeed'])
             ->orwhere(['feed_source' => 'avito'])
             ->orwhere(['feed_source' => 'complex'])
             ->orwhere(['feed_source' => 'version2'])
             ->pluck('offer_id');
 
-        $apartmentsFromNewFeeds = Apartment::whereIn('offer_id', $apartmentsFromNewFeeds)->whereNotIn('offer_id', $releveantOfferIdsFromOtherFeeds)->get();
+        $apartmentsFromNewFeeds = $this->apartmentRepository->findByOfferIdBuilder($apartmentsFromNewFeeds)
+            ->whereNotIn('offer_id', $releveantOfferIdsFromOtherFeeds)
+            ->get();
         $this->Log("{$apartmentsFromNewFeeds->count()} apartments from new feeds will be deleted");
 
         foreach ($apartmentsFromNewFeeds as $apartment) {

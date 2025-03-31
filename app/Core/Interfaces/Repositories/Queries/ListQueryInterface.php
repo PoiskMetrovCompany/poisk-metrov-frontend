@@ -8,7 +8,8 @@ interface ListQueryInterface
 {
     /**
      * @param array|null $attributes
+     * @param bool $collect
      * @return Collection|null
      */
-    public function list(?array $attributes): ?Collection;
+    public function list(?array $attributes, bool $collect=true): ?Collection;
 }

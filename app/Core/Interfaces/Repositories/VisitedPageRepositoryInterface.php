@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Core\Interfaces\Repositories;
 
-use App\Models\VisitedPage;
 use Illuminate\Support\Collection;
 
 interface VisitedPageRepositoryInterface

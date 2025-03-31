@@ -8,8 +8,11 @@ use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Models\Apartment;
 use App\Models\ResidentialComplex;
 use App\Models\User;
+use App\Repositories\Build\FindQueryBuilderTrait;
 use App\Repositories\Queries\FindByKeyQueryTrait;
+use App\Repositories\Queries\FindByOfferIdQueryTrait;
 use App\Repositories\Queries\FindOfferIdQueryTrait;
+use App\Repositories\Queries\IsExistsQueryTrait;
 use App\Repositories\Queries\JoinQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use App\Repositories\Queries\FindByIdQueryTrait;
@@ -26,6 +29,9 @@ final class ApartmentRepository implements ApartmentRepositoryInterface
     use FindOfferIdQueryTrait;
     use JoinQueryTrait;
     use NotInListQueryTrait;
+    use IsExistsQueryTrait;
+    use FindByOfferIdQueryTrait;
+    use FindQueryBuilderTrait;
 
     protected Model $model;
     public function __construct(

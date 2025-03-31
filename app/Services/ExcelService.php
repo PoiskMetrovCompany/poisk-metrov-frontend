@@ -2,19 +2,27 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\ExcelServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 
 /**
- * Class ExcelService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements ExcelServiceInterface
+ * @property-read Collection $managersFiles
+ * @property-read TextServiceInterface $textService
+ * @property-read CityServiceInterface $cityService
  */
-class ExcelService extends AbstractService
+class ExcelService extends AbstractService implements ExcelServiceInterface
 {
     private Collection $managersFiles;
 
-    public function __construct(protected TextService $textService, protected CityService $cityService)
+    public function __construct(protected TextServiceInterface $textService, protected CityServiceInterface $cityService)
     {
         $config = Storage::json('google-managers.json');
 

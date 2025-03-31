@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
-use App\Models\VisitedPage;
-use App\Repositories\VisitedPageRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;

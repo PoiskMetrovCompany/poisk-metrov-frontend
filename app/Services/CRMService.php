@@ -6,7 +6,8 @@ use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\CRM\Commands\CreateLead;
 
 /**
- * Class CRMService.
+ * @package App\Services
+ * @implements CRMServiceInterface
  */
 class CRMService implements CRMServiceInterface
 {

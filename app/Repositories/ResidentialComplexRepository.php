@@ -3,10 +3,14 @@
 namespace App\Repositories;
 
 use AllowDynamicProperties;
+use App\Core\Interfaces\Repositories\Queries\IsExistsQueryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Models\BestOffer;
 use App\Models\ResidentialComplex;
+use App\Repositories\Queries\FindInBuildingIdQueryTrait;
+use App\Repositories\Queries\IsCodeQueryTrait;
+use App\Repositories\Queries\IsExistsQueryTrait;
 use App\Services\CityService;
 use Illuminate\Support\Collection as BasicCollection;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,6 +20,9 @@ use Illuminate\Support\Facades\Auth;
 #[AllowDynamicProperties]
 final class ResidentialComplexRepository implements ResidentialComplexRepositoryInterface
 {
+    use IsExistsQueryTrait;
+    use FindInBuildingIdQueryTrait;
+
     public function __construct(
         protected CityServiceInterface $cityService,
         protected ResidentialComplex $model

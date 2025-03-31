@@ -21,7 +21,14 @@ use Illuminate\Support\Facades\Auth;
 use Log;
 
 /**
- * Class ApartmentService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements ApartmentServiceInterface
+ * @property-read VisitedPagesServiceInterface $visitedPagesService
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
+ * @property-read RealEstateServiceInterface $realEstateService
+ * @property-read CityServiceInterface $cityService
+ * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  */
 class ApartmentService extends AbstractService implements ApartmentServiceInterface
 {

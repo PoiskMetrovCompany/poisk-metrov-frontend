@@ -2,32 +2,55 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ChatSessionRepositoryInterface;
+use App\Core\Interfaces\Repositories\ChatTokenCRMLeadPairRepositoryInterface;
+use App\Core\Interfaces\Repositories\GroupChatBotMessageRepositoryInterface;
+use App\Core\Interfaces\Repositories\ManagerChatMessageRepositoryInterface;
+use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserChatMessageRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\Events\ChatUpdated;
 use App\Events\ManagerMessage;
 use App\Events\UserMessage;
 use App\Models\ChatSession;
-use App\Models\ChatTokenCRMLeadPair;
 use App\Models\GroupChatBotMessage;
-use App\Models\Manager;
-use App\Models\ManagerChatMessage;
 use App\Models\User;
-use App\Models\UserChatMessage;
 use App\Telegram\InlineButtons\ReplyToClientButton;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 
 /**
- * Class ChatService.
+ * @package App\Services
+ * @implements ChatServiceInterface
+ * @property-read int $maxMessageLength
+ * @property-read TelegramService $telegramService
+ * @property-read CRMServiceInterface $crmService
+ * @property-read ManagerRepositoryInterface $managerRepository
+ * @property-read ChatTokenCRMLeadPairRepositoryInterface $chatTokenCRMLeadPairRepository
+ * @property-read UserRepositoryInterface $userRepository
+ * @property-read ChatSessionRepositoryInterface $chatSessionRepository
+ * @property-read UserChatMessageRepositoryInterface $userChatMessageRepository
+ * @property-read GroupChatBotMessageRepositoryInterface $groupChatBotMessageRepository
+ * @property-read ManagerChatMessageRepositoryInterface $managerChatMessageRepository
  */
 class ChatService implements ChatServiceInterface
 {
+    // TODO: в некоторых методах следует убрать обращения к моделям, оставить это до следующей итерации рефакторинга
+
     private int $maxMessageLength = 4096;
 
     public function __construct(
         protected TelegramService $telegramService,
-        protected CRMServiceInterface $crmService
+        protected CRMServiceInterface $crmService,
+        protected ManagerRepositoryInterface $managerRepository,
+        protected ChatTokenCRMLeadPairRepositoryInterface $chatTokenCRMLeadPairRepository,
+        protected UserRepositoryInterface $userRepository,
+        protected ChatSessionRepositoryInterface $chatSessionRepository,
+        protected UserChatMessageRepositoryInterface $userChatMessageRepository,
+        protected GroupChatBotMessageRepositoryInterface $groupChatBotMessageRepository,
+        protected ManagerChatMessageRepositoryInterface $managerChatMessageRepository
     ) {
     }
 
@@ -41,15 +64,15 @@ class ChatService implements ChatServiceInterface
         if ($user) {
             $this->crmService->createLead($user->phone, $sessionHistory, $user->crm_city, $user->name);
         } else if (config('app.send_chat_without_auth')) {
-            $manager = Manager::where(['id' => $session->manager_id])->first();
+            $manager = $this->managerRepository->findById($session->manager_id);
             //Функция выполняется из команды где нет кук, поэтому город определяем по городу оператора чата
             $city = $manager->city;
             $result = json_decode($this->crmService->createLead('', $sessionHistory, $city, 'Посетитель'));
             $chatToken = $session->chat_token;
             $tokenLeadPairData = ['chat_token' => $chatToken, 'crm_id' => $result->id, 'crm_city' => $city];
 
-            if (! User::where(['chat_token' => $chatToken])->exists()) {
-                ChatTokenCRMLeadPair::create($tokenLeadPairData);
+            if (!$this->userRepository->isExists(['chat_token' => $chatToken])) {
+                $this->chatTokenCRMLeadPairRepository->store($tokenLeadPairData);
             }
         }
     }
@@ -93,7 +116,7 @@ class ChatService implements ChatServiceInterface
 
     public function getChatHistoryAsString(string $chatToken, bool $withMarkdown = true, bool $noSizeLimit = false): string
     {
-        $user = User::where('chat_token', $chatToken)->first();
+        $user = $this->userRepository->findByChatToken($chatToken);
         $historyMessage = '';
         $clientHistory = $this->getChatHistory($chatToken, $user);
         $messageSeparator = '----------------';
@@ -138,7 +161,7 @@ class ChatService implements ChatServiceInterface
             $managerId = $managerMessages[0]->manager_id;
 
             if ($managerId != null) {
-                $managerName = User::where('id', $managerId)->first()->name;
+                $managerName = $this->userRepository->findById($managerId)->name;
             }
         }
 
@@ -167,9 +190,9 @@ class ChatService implements ChatServiceInterface
     public function getChatHistory(string $chatToken, $user, bool $nonDeletedOnly = false): array
     {
         if ($nonDeletedOnly) {
-            $allSessions = ChatSession::where('chat_token', $chatToken)->get();
+            $allSessions = $this->chatSessionRepository->list(['chat_token' => $chatToken]);
         } else {
-            $allSessions = ChatSession::withTrashed()->where('chat_token', $chatToken)->get();
+            $allSessions = $this->chatSessionRepository->withTrashedList(['chat_token' => $chatToken]);
         }
 
         $history = [];
@@ -191,7 +214,7 @@ class ChatService implements ChatServiceInterface
         // $this->telegramService->sendMessage($sentMessage, $session->manager_telegram_id);
         //Для обновления сессии
         $session->touch();
-        UserChatMessage::create([
+        $this->userChatMessageRepository->store([
             'chat_session_id' => $session->id,
             'message' => $message,
             'chat_token' => $chatToken
@@ -222,10 +245,10 @@ class ChatService implements ChatServiceInterface
             ];
             $response = $this->telegramService->sendMessage($sentMessage, $group, $parameters);
             $newGroupChatMessageParameters = ['sender_chat_token' => $chatToken, 'message' => $message, 'message_id' => $response->result->messageId, 'group_id' => $group];
-            GroupChatBotMessage::create($newGroupChatMessageParameters);
+            $this->groupChatBotMessageRepository->store($newGroupChatMessageParameters);
         } else {
             $newGroupChatMessageParameters = ['sender_chat_token' => $chatToken, 'message' => $message, 'message_id' => 0, 'group_id' => 0];
-            GroupChatBotMessage::create($newGroupChatMessageParameters);
+            $this->groupChatBotMessageRepository->store($newGroupChatMessageParameters);
         }
 
         $date = Carbon::now()->format('Y/m/d H:i:s');
@@ -237,10 +260,10 @@ class ChatService implements ChatServiceInterface
 
     public function getManagerChatHistory($chatToken): array
     {
-        $user = User::where('chat_token', $chatToken)->first();
+        $user = $this->userRepository->findByChatToken($chatToken);
         $messages = $this->getChatHistory($chatToken, $user);
         $countMessages = count($messages);
-        $startDateString = UserChatMessage::where('chat_token', $chatToken)->min('created_at');
+        $startDateString = $this->userChatMessageRepository->list($chatToken)->min('created_at');
         $startDate = new \DateTime($startDateString);
         $currDate = new \DateTime();
         $daysFromStart = $currDate->diff($startDate)->days;
@@ -255,7 +278,7 @@ class ChatService implements ChatServiceInterface
 
     private function getChatData(string $chatToken, string $userName, string $message, string $date, string $status): array
     {
-        $user = User::where('chat_token', $chatToken)->first();
+        $user = $this->userRepository->findByChatToken($chatToken);
         $history = $this->getChatHistory($chatToken, $user);
         $countMessages = count($history);
 
@@ -272,7 +295,7 @@ class ChatService implements ChatServiceInterface
 
     public function getNewChatData(string $chatToken, string $userName, string $message, string $date): array
     {
-        $userMessages = GroupChatBotMessage::where('sender_chat_token', $chatToken)->get();
+        $userMessages = $this->groupChatBotMessageRepository->list(['sender_chat_token' => $chatToken]);
         $countMessages = count($userMessages);
 
         $result = [
@@ -288,7 +311,7 @@ class ChatService implements ChatServiceInterface
 
     public function tryStartSession($managerId, $chatToken)
     {
-        $session = ChatSession::where('chat_token', $chatToken)->first();
+        $session = $this->chatSessionRepository->findByChatToken($chatToken);
 
         if ($session != null && $session->manager_id != $managerId) {
             return 'Session already started';
@@ -306,8 +329,8 @@ class ChatService implements ChatServiceInterface
             'manager_id' => $managerId,
         ];
 
-        $session = ChatSession::create($newSessionParameters);
-        $messagesInGroups = GroupChatBotMessage::where('sender_chat_token', $chatToken)->get();
+        $session = $this->chatSessionRepository->store($newSessionParameters);
+        $messagesInGroups = $this->groupChatBotMessageRepository->list(['sender_chat_token' => $chatToken]);
 
         foreach ($messagesInGroups as $message) {
             if ($message->group_id != 0 && $message->message_id != 0) {
@@ -315,27 +338,34 @@ class ChatService implements ChatServiceInterface
                 $this->telegramService->editMessageReplyMarkup($message->message_id, $message->group_id, []);
             }
 
-            $userMessage = UserChatMessage::create(['chat_session_id' => $session->id, 'chat_token' => $message->sender_chat_token, 'message' => $message->message]);
+            $userMessage = $this->userChatMessageRepository->store([
+                'chat_session_id' => $session->id,
+                'chat_token' => $message->sender_chat_token,
+                'message' => $message->message
+            ]);
+            // TODO: тут пока непонятно как организовать репозиторий, оставлю обращение от модели
             $userMessage->update(['created_at' => $message->created_at]);
             $message->delete();
+            // END
         }
     }
 
+    // TODO: нет смысла держать это в сервисах ИСКОРЕНИТЬ!!!
     private function getUserForToken(string $chatToken)
     {
-        return User::where('chat_token', $chatToken)->first();
+        return $this->userRepository->findByChatToken($chatToken);
     }
 
     public function sendMessageToSession(string $message, string $apiToken, string $chatToken): void
     {
-        $manager = User::where('api_token', $apiToken)->first();
+        $manager = $this->userRepository->findByApiToken($apiToken);
 
         if ($manager == null) {
             return;
         }
 
         $managerUserId = $manager->id;
-        $manager = Manager::where('user_id', $manager->id)->first();
+        $manager = $this->managerRepository->findByUserId($managerUserId);
 
         if ($manager == null) {
             return;
@@ -345,8 +375,15 @@ class ChatService implements ChatServiceInterface
         $managerProfilePic = $manager->avatar_file_name;
         $session = ChatSession::where('chat_token', $chatToken)->latest('created_at')->first();
 
+        /*
+         * TODO: нет понимания как организовать репозиторий для этого обращения
+         * $session = $this->chatSessionRepository->findByChatToken($chatToken);
+         * но надо сделать как то сверх гибко.
+         * ВЕРНУТЬСЯ ВО ВТОРОЙ ИТЕРАЦИИ РЕФАКТОРИНГА!!!
+         */
+
         if ($session == null) {
-            $session = ChatSession::create([
+            $session = $this->chatSessionRepository->store([
                 'chat_token' => $chatToken,
                 'manager_id' => $managerUserId,
             ]);
@@ -359,7 +396,7 @@ class ChatService implements ChatServiceInterface
             $managerName
         );
 
-        ManagerChatMessage::create([
+        $this->managerChatMessageRepository->store([
             'chat_session_id' => $session->id,
             'message' => $message,
             'manager_id' => $managerUserId,
@@ -374,12 +411,18 @@ class ChatService implements ChatServiceInterface
     public function getChats($managerId): array
     {
         // $sessions = ChatSession::where('manager_id', $managerId)->orderBy('created_at')->get()->unique('chat_token');
+        /*
+         * TODO: нет понимания как организовать репозиторий для этого обращения
+         * $session = $this->chatSessionRepository->findByChatToken($chatToken);
+         * но надо сделать как то сверх гибко.
+         * ВЕРНУТЬСЯ ВО ВТОРОЙ ИТЕРАЦИИ РЕФАКТОРИНГА!!!
+         */
         $sessions = ChatSession::withTrashed()->where('manager_id', $managerId)->orderBy('created_at', 'desc')->get()->unique('chat_token');
         $result = [];
 
         foreach ($sessions as $session) {
             $item = [];
-            $user = User::where('chat_token', $session->chat_token)->first();
+            $user = $this->userRepository->findByChatToken($session->chat_token);
             $history = $this->getChatHistory($session->chat_token, $user);
 
             if (count($history) == 0) {
@@ -403,12 +446,24 @@ class ChatService implements ChatServiceInterface
 
     public function getChatsWithoutManager(): array
     {
+        /*
+         * TODO: нет понимания как организовать репозиторий для этого обращения
+         * $session = $this->chatSessionRepository->findByChatToken($chatToken);
+         * но надо сделать как то сверх гибко.
+         * ВЕРНУТЬСЯ ВО ВТОРОЙ ИТЕРАЦИИ РЕФАКТОРИНГА!!!
+         */
         $chatsWithoutManager = GroupChatBotMessage::orderBy('created_at')->get()->unique('sender_chat_token');
         $result = [];
 
         foreach ($chatsWithoutManager as $chat) {
             $item = [];
-            $user = User::where('chat_token', $chat->sender_chat_token)->first();
+            $user = $this->userRepository->findByChatToken($chat->sender_chat_token);
+            /*
+             * TODO: нет понимания как организовать репозиторий для этого обращения
+             * $session = $this->chatSessionRepository->findByChatToken($chatToken);
+             * но надо сделать как то сверх гибко.
+             * ВЕРНУТЬСЯ ВО ВТОРОЙ ИТЕРАЦИИ РЕФАКТОРИНГА!!!
+             */
             $history = GroupChatBotMessage::where('sender_chat_token', $chat->sender_chat_token)->orderBy('created_at')->get();
             $item['message'] = $history[count($history) - 1]->message;
             $item['name'] = $user ? $user->name : 'Посетитель';

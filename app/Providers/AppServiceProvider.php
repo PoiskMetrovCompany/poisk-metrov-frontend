@@ -3,24 +3,39 @@
 namespace App\Providers;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\BuilderRepositoryInterface;
+use App\Core\Interfaces\Repositories\ChatSessionRepositoryInterface;
+use App\Core\Interfaces\Repositories\ChatTokenCRMLeadPairRepositoryInterface;
 use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\DeletedFavoriteBuildingRepositoryInterface;
+use App\Core\Interfaces\Repositories\GroupChatBotMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
+use App\Core\Interfaces\Repositories\ManagerChatMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
+use App\Core\Interfaces\Repositories\RealtyFeedEntryRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexFeedSiteNameRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserChatMessageRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserFavoriteBuildingRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserFavoritePlanRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
+use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
 use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Core\Interfaces\Services\BankServiceInterface;
+use App\Core\Interfaces\Services\BuilderServiceInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\CRMServiceInterface;
+use App\Core\Interfaces\Services\ExcelServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Core\Interfaces\Services\FeedServiceInterface;
+use App\Core\Interfaces\Services\GoogleDriveServiceInterface;
 use App\Core\Interfaces\Services\ManagersServiceInterface;
 use App\Core\Interfaces\Services\NewsServiceInterface;
 use App\Core\Interfaces\Services\PDFServiceInterface;
@@ -33,27 +48,40 @@ use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use App\Repositories\ApartmentRepository;
+use App\Repositories\BuilderRepository;
+use App\Repositories\ChatSessionRepository;
+use App\Repositories\ChatTokenCRMLeadPairRepository;
 use App\Repositories\ComplexRepository;
+use App\Repositories\DeletedFavoriteBuildingRepository;
+use App\Repositories\GroupChatBotMessageRepository;
 use App\Repositories\InteractionRepository;
+use App\Repositories\ManagerChatMessageRepository;
 use App\Repositories\ManagerRepository;
+use App\Repositories\RealtyFeedEntryRepository;
 use App\Repositories\ReservationRepository;
+use App\Repositories\ResidentialComplexFeedSiteNameRepository;
 use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\UserAdsAgreementRepository;
+use App\Repositories\UserChatMessageRepository;
+use App\Repositories\UserFavoriteBuildingRepository;
+use App\Repositories\UserFavoritePlanRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VisitedPageRepository;
-use App\Repositories\VisitedPageRepositoryInterface;
 use App\Services\AdsAgreementService;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
 use App\Services\BankService;
+use App\Services\BuilderService;
 use App\Services\CachingService;
 use App\Services\ChatService;
 use App\Services\CityService;
 use App\Services\CRMService;
+use App\Services\ExcelService;
 use App\Services\FavoritesService;
 use App\Services\FeedService;
 use App\Services\FileService;
+use App\Services\GoogleDriveService;
 use App\Services\ManagersService;
 use App\Services\NewsService;
 use App\Services\PDFService;
@@ -193,6 +221,21 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PDFServiceInterface::class, PDFService::class);
     }
 
+    final public function registerBuilderService(): void
+    {
+        $this->app->singleton(BuilderServiceInterface::class, BuilderService::class);
+    }
+
+    final public function registerGoogleDriveService(): void
+    {
+        $this->app->singleton(GoogleDriveServiceInterface::class, GoogleDriveService::class);
+    }
+
+    final public function registerExcelService(): void
+    {
+        $this->app->singleton(ExcelServiceInterface::class, ExcelService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -239,6 +282,61 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(VisitedPageRepositoryInterface::class, VisitedPageRepository::class);
     }
 
+    final public function registerBuilderRepository(): void
+    {
+        $this->app->singleton(BuilderRepositoryInterface::class, BuilderRepository::class);
+    }
+
+    final public function registerChatTokenCRMLeadPairRepository(): void
+    {
+        $this->app->singleton(ChatTokenCRMLeadPairRepositoryInterface::class, ChatTokenCRMLeadPairRepository::class);
+    }
+
+    final public function registerChatSessionRepository(): void
+    {
+        $this->app->singleton(ChatSessionRepositoryInterface::class, ChatSessionRepository::class);
+    }
+
+    final public function registerUserChatMessageRepository(): void
+    {
+        $this->app->singleton(UserChatMessageRepositoryInterface::class, UserChatMessageRepository::class);
+    }
+
+    final public function registerManagerChatMessageRepository(): void
+    {
+        $this->app->singleton(ManagerChatMessageRepositoryInterface::class, ManagerChatMessageRepository::class);
+    }
+
+    final public function registerGroupChatBotMessageRepository(): void
+    {
+        $this->app->singleton(GroupChatBotMessageRepositoryInterface::class, GroupChatBotMessageRepository::class);
+    }
+
+    final public function registerUserFavoritePlanRepository(): void
+    {
+        $this->app->singleton(UserFavoritePlanRepositoryInterface::class, UserFavoritePlanRepository::class);
+    }
+
+    final public function registerUserFavoriteBuildingRepository(): void
+    {
+        $this->app->singleton(UserFavoriteBuildingRepositoryInterface::class, UserFavoriteBuildingRepository::class);
+    }
+
+    final public function registerDeletedFavoriteBuildingRepository(): void
+    {
+        $this->app->singleton(DeletedFavoriteBuildingRepositoryInterface::class, DeletedFavoriteBuildingRepository::class);
+    }
+
+    final public function registerRealtyFeedEntryRepository(): void
+    {
+        $this->app->singleton(RealtyFeedEntryRepositoryInterface::class, RealtyFeedEntryRepository::class);
+    }
+
+    final public function registerResidentialComplexFeedSiteNameRepository(): void
+    {
+        $this->app->singleton(ResidentialComplexFeedSiteNameRepositoryInterface::class, ResidentialComplexFeedSiteNameRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -265,6 +363,9 @@ class AppServiceProvider extends ServiceProvider
         $this->registerSearchService();
         $this->registerBankService();
         $this->registerPDFService();
+        $this->registerBuilderService();
+        $this->registerGoogleDriveService();
+        $this->registerExcelService();
 
         /// Repositories
         $this->registerReservationRepository();
@@ -276,6 +377,18 @@ class AppServiceProvider extends ServiceProvider
         $this->registerUserAdsAgreementRepository();
         $this->registerResidentialComplexRepository();
         $this->registerVisitedPageRepository();
+        $this->registerBuilderRepository();
+        $this->registerChatTokenCRMLeadPairRepository();
+        $this->registerChatSessionRepository();
+        $this->registerUserChatMessageRepository();
+        $this->registerManagerChatMessageRepository();
+        $this->registerChatTokenCRMLeadPairRepository();
+        $this->registerGroupChatBotMessageRepository();
+        $this->registerUserFavoritePlanRepository();
+        $this->registerUserFavoriteBuildingRepository();
+        $this->registerDeletedFavoriteBuildingRepository();
+        $this->registerRealtyFeedEntryRepository();
+        $this->registerResidentialComplexFeedSiteNameRepository();
     }
 
     /**

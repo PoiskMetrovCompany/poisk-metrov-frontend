@@ -11,7 +11,13 @@ use Illuminate\Support\Facades\Storage;
 use Log;
 
 /**
- * Class CachingService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements CachingServiceInterface
+ * @property-read string $cacheFileName
+ * @property-read string $searchDataCacheFileName
+ * @property-read string $residentialComplexCacheFolder
+ * @property-read CityServiceInterface $cityService
  */
 class CachingService extends AbstractService implements CachingServiceInterface
 {

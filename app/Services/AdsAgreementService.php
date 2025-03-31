@@ -6,7 +6,12 @@ use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Models\UserAdsAgreement;
 
-#[AllowDynamicProperties]
+/**
+ * @package App\Services
+ * @extends AbstractService
+ * @implements AdsAgreementServiceInterface
+ * @property-read UserAdsAgreementRepositoryInterface $userAdsAgreementRepository
+ */
 class AdsAgreementService extends AbstractService implements AdsAgreementServiceInterface
 {
     public function __construct(protected UserAdsAgreementRepositoryInterface $userAdsAgreementRepository)

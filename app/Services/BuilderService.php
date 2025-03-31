@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Services;
+use App\Core\Interfaces\Repositories\BuilderRepositoryInterface;
+use App\Core\Interfaces\Services\BuilderServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\GoogleDriveServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Models\Builder;
 use App\Services\CityService;
 use App\Services\GoogleDriveService;
@@ -10,18 +15,25 @@ use Illuminate\Support\Facades\Storage;
 use Str;
 
 /**
- * Class BuilderService
+ * @package App\Services
+ * @extends AbstractService
+ * @implements BuilderServiceInterface
+ * @property-read TextServiceInterface $textService
+ * @property-read CityServiceInterface $cityService
+ * @property-read GoogleDriveServiceInterface $googleService
+ * @property-read BuilderRepositoryInterface $builderRepository
  */
-class BuilderService extends AbstractService
+class BuilderService extends AbstractService implements BuilderServiceInterface
 {
     public function __construct(
-        protected TextService $textService,
-        protected CityService $cityService,
-        protected GoogleDriveService $googleService
+        protected TextServiceInterface $textService,
+        protected CityServiceInterface $cityService,
+        protected GoogleDriveServiceInterface $googleService,
+        protected BuilderRepositoryInterface $builderRepository
     ) {
     }
 
-    public function updateBuilders()
+    public function updateBuilders(): void
     {
         $infoSheet = 'БАЗА ЗАСТР.';
         $configsFolder = 'deal-bot';
@@ -58,8 +70,8 @@ class BuilderService extends AbstractService
                 $builderAttributes['construction'] = trim($constructionColumn);
                 $builderAttributes['builder'] = trim($builderColumn);
 
-                if (! Builder::where($builderAttributes)->exists()) {
-                    Builder::create($builderAttributes);
+                if (!$this->builderRepository->isExists($builderAttributes)) {
+                    $this->builderRepository->store($builderAttributes);
                 }
             }
         }

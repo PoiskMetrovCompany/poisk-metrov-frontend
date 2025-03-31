@@ -2,7 +2,14 @@
 
 namespace App\Services;
 
+use App\Core\Common\Banks\BanksData;
+use App\Core\Common\Banks\BanksFilePathData;
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\BankServiceInterface;
+use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Http\Resources\BankResource;
 use App\Http\Resources\MortgageProgramResource;
 use App\Http\Resources\MortgageResource;
@@ -11,7 +18,6 @@ use App\Models\Mortgage;
 use App\Models\MortgageCity;
 use App\Models\MortgageProgram;
 use App\Models\MortgageProgramPivot;
-use App\Repositories\ApartmentRepository;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -20,57 +26,59 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
- * Class BankService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements BankServiceInterface
+ * @property-read TextServiceInterface $textService
+ * @property-read CityServiceInterface $cityService
+ * @property-read CachingServiceInterface $cachingService
+ * @property-read ApartmentServiceInterface $apartmentService
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
+ * @property-read array $preferredBanks
+ * @property-read int $minInitialFee
+ * @property-read array $mortgageTypesExceptions
+ * @property-read array $regionIdsForCities
+ * @property-read string $rawTariffsJsonPath
+ * @property-read string $rawDataJsonPath
+ * @property-read string $tariffsJsonPath
+ * @property-read string $banksJsonPath
+ * @property-read Collection $rawBanks
+ * @property-read Collection $rawTariffs
+ * @property-read Collection $banks
+ * @property-read Collection $tariffs
  */
 class BankService extends AbstractService implements BankServiceInterface
 {
-    public array $preferredBanks = [
-        'Альфа-Банк',
-        'Совкомбанк',
-        'Банк ДОМ.РФ',
-        'РНКБ',
-        'ПСБ',
-        'Росбанк',
-        'ВТБ',
-        'Уралсиб',
-        'Абсолют Банк',
-        'Ак Барс Банк',
-        'Россельхозбанк',
-        'МТС Банк',
-        'Банк ТКБ',
-        'Банк Жилищного Финансирования',
-        'Банк Акцепт',
-        'Газпромбанк',
-        'Банк «РОССИЯ»',
-        'Банк «Санкт-Петербург»',
-        'Металлинвестбанк',
-        'Почта Банк',
-        'Банк «Левобережный»'
-    ];
-    //В базе данных есть ипотеки меньше 20, но мы берем только актуальные
-    public int $minInitialFee = 20;
-    public array $mortgageTypesExceptions = ['Дальневосточная', 'Арктическая'];
-    //Смотреть в запросе при нажатии на кнопку Показать еще
-    private array $regionIdsForCities = [
-        'novosibirsk' => 677,
-        'st-petersburg' => 211
-    ];
-    private string $rawTariffsJsonPath = 'banks/raw-tariffs.json';
-    private string $rawDataJsonPath = 'banks/raw-banks-data.json';
-    private string $tariffsJsonPath = 'banks/tariffs.json';
-    private string $banksJsonPath = 'banks/banks.json';
+    // TODO: особо не трогать работу с банками без нужды
+
+    public array $preferredBanks;
+    public int $minInitialFee;
+    public array $mortgageTypesExceptions;
+    private array $regionIdsForCities;
+    private string $rawTariffsJsonPath;
+    private string $rawDataJsonPath;
+    private string $tariffsJsonPath;
+    private string $banksJsonPath;
     private Collection $rawBanks;
     private Collection $rawTariffs;
     private Collection $banks;
     private Collection $tariffs;
 
     public function __construct(
-        protected TextService $textService,
-        protected CityService $cityService,
-        protected CachingService $cachingService,
-        protected ApartmentService $apartmentService,
-        protected ApartmentRepository $apartmentRepository,
+        protected TextServiceInterface $textService,
+        protected CityServiceInterface $cityService,
+        protected CachingServiceInterface $cachingService,
+        protected ApartmentServiceInterface $apartmentService,
+        protected ApartmentRepositoryInterface $apartmentRepository,
     ) {
+        $this->preferredBanks = BanksData::$preferredBanks;
+        $this->minInitialFee = BanksData::$minInitialFee;
+        $this->mortgageTypesExceptions = BanksData::$mortgageTypesExceptions;
+        $this->regionIdsForCities = BanksData::$regionIdsForCities;
+        $this->rawTariffsJsonPath = BanksFilePathData::$rawTariffsJsonPath;
+        $this->rawDataJsonPath = BanksFilePathData::$rawDataJsonPath;
+        $this->tariffsJsonPath = BanksFilePathData::$tariffsJsonPath;
+        $this->banksJsonPath = BanksFilePathData::$banksJsonPath;
         $this->loadData();
     }
 

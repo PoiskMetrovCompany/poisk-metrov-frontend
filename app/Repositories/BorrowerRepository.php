@@ -12,7 +12,7 @@ use App\Repositories\Queries\StoreQueryTrait;
 use App\Repositories\Queries\UpdateQueryTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class BorrowerRepository implements BorrowerRepositoryInterface
+final class BorrowerRepository implements BorrowerRepositoryInterface
 {
     use ListQueryTrait;
     use StoreQueryTrait;
