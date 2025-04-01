@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Core\Interfaces\Repositories\NewsRepositoryInterface;
+use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Services\NewsServiceInterface;
 use App\Models\News;
 use Illuminate\Support\Collection;
@@ -13,11 +14,14 @@ use Illuminate\Support\Facades\Storage;
  * @extends AbstractService
  * @implements NewsServiceInterface
  * @property-read NewsRepositoryInterface $newsRepository
+ * @property-read RelationshipEntityRepositoryInterface $relationshipEntityRepository
  */
 final class NewsService extends AbstractService implements NewsServiceInterface
 {
-    // TODO: возможно возвращаемый тип стоит заменить на "Model"
-    public function __construct(protected NewsRepositoryInterface $newsRepository)
+    public function __construct(
+        protected NewsRepositoryInterface $newsRepository,
+        protected RelationshipEntityRepositoryInterface $relationshipEntityRepository
+    )
     {
 
     }
@@ -67,8 +71,7 @@ final class NewsService extends AbstractService implements NewsServiceInterface
 
     public function getNews(): Collection
     {
-        // TODO: этот метод вообще ненужен, он избыточен
-        return News::all()->sortBy('created_at')->reverse();
+        return $this->newsRepository->list([])->sortBy('created_at')->reverse();
     }
 
     public function getArticleForSite(int $id): array
@@ -80,16 +83,14 @@ final class NewsService extends AbstractService implements NewsServiceInterface
         }
 
         $articleData['article'] = $article;
-        // TODO: с этим тоже непонятно что делать...
-        $articleData['recomended'] = News::where('id', '<>', $id)->limit(3)->get();
+        $articleData['recomended'] = $this->relationshipEntityRepository->findByEquivalentSample($id);
 
         return $articleData;
     }
 
     public function getNewsBatch(int $offset): array
     {
-        // TODO: подумать что с этим делать, возможно стоит создать метод
-        $news = News::offset($offset)->limit(9)->get()->sortBy('created_at');
+        $news = $this->newsRepository->sortByLimited($offset, 9);
         $res = [];
 
         foreach ($news as $article) {

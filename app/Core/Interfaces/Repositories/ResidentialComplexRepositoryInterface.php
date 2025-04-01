@@ -2,20 +2,27 @@
 
 namespace App\Core\Interfaces\Repositories;
 
+use App\Core\Interfaces\Repositories\Build\FindNotQueryBuilderInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByIdQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindInBuildingIdQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\IsCodeQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\IsExistsQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByCodeQueryInterface;
+use App\Core\Interfaces\Repositories\Queries\FindHasQueryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BasicCollection;
 
+/**
+ * @template TRepository
+ */
 interface ResidentialComplexRepositoryInterface extends
     IsExistsQueryInterface,
     FindByCodeQueryInterface,
     FindInBuildingIdQueryInterface,
-    FindByIdQueryInterface
+    FindByIdQueryInterface,
+    FindNotQueryBuilderInterface,
+    FindHasQueryInterface
 {
     /**
      * @return Collection

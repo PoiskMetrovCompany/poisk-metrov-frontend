@@ -125,8 +125,7 @@ final class FeedService extends AbstractService implements FeedServiceInterface
             if (! isset($feedData['name'])) {
                 $feedData['name'] = Str::random(32);
             }
-            // TODO: вот ещё момент который надо исправить на второй итерации
-            $realtyFeedEntry->update($feedData);
+            $this->realtyFeedEntryRepository->update($realtyFeedEntry, $feedData);
         }
     }
 
@@ -135,8 +134,7 @@ final class FeedService extends AbstractService implements FeedServiceInterface
         $realtyFeedEntry = $this->realtyFeedEntryRepository->findById($feedData['id']);
 
         if ($realtyFeedEntry != null) {
-            // TODO: вот ещё момент который надо исправить на второй итерации
-            $realtyFeedEntry->delete();
+            $this->realtyFeedEntryRepository->destroy($realtyFeedEntry);
         }
     }
 
@@ -155,14 +153,12 @@ final class FeedService extends AbstractService implements FeedServiceInterface
 
     public function getFeeds(): Collection
     {
-        return RealtyFeedEntry::all();
-        // TODO: применить это - return $this->realtyFeedEntryRepository->list();
+        return $this->realtyFeedEntryRepository->list([]);
     }
 
     public function getFeedNames(): Collection
     {
-        // TODO: тут сделать как в getFeeds
-        return ResidentialComplexFeedSiteName::all();
+        return $this->residentialComplexFeedSiteNameRepository->list([]);
     }
 
     public function downloadFeed(RealtyFeedEntry $realtyFeedEntry, bool $log = false, bool $ignoreIfExists = false): bool
@@ -228,11 +224,9 @@ final class FeedService extends AbstractService implements FeedServiceInterface
         }
 
         $this->realtyFeedParser->parseFeeds();
-        // TODO: проверить работочпособность этих парсеров
-//        $this->avitoFeedParser->parseFeeds();
-//        $this->complexParser->parseFeeds();
-//        $this->version2Parser->parseFeeds();
-//        $this->privateRealtyFeedParser->parseFeeds();
+        $this->avitoFeedParser->parseFeeds();
+        $this->complexParser->parseFeeds();
+        $this->version2Parser->parseFeeds();
     }
 
     public function mergeFeeds(): void
@@ -244,7 +238,6 @@ final class FeedService extends AbstractService implements FeedServiceInterface
 
         //Ожидается что очистка квартир из новых фидов будет происходить после очистки квартир из нмаркета
         $releveantOfferIdsFromOtherFeeds = RealtyFeedApartment::pluck('offer_id')->merge(AvitoApartment::pluck('offer_id')->merge(ComplexApartment::pluck('offer_id')->merge(Version2Apartment::pluck('offer_id'))))->unique();
-        // TODO: что то придумать с "orwhere"
         $apartmentsFromNewFeeds = $this->apartmentRepository->find(['feed_source' => 'realtyfeed'])
             ->orwhere(['feed_source' => 'avito'])
             ->orwhere(['feed_source' => 'complex'])

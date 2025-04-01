@@ -4,6 +4,7 @@ namespace App\Core\Interfaces\Services;
 
 
 use App\Models\News;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 interface NewsServiceInterface

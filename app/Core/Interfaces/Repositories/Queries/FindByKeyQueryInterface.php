@@ -2,6 +2,9 @@
 
 namespace App\Core\Interfaces\Repositories\Queries;
 
+/**
+ * @template TQuery
+ */
 interface FindByKeyQueryInterface
 {
     /**

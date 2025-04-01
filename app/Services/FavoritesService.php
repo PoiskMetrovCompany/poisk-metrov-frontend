@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\DeletedFavoriteBuildingRepositoryInterface;
+use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserFavoriteBuildingRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserFavoritePlanRepositoryInterface;
@@ -34,6 +35,7 @@ use Illuminate\Support\Facades\Cookie;
  * @property-read DeletedFavoriteBuildingRepositoryInterface $deletedFavoriteBuildingRepository
  * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  * @property-read ApartmentRepositoryInterface $apartmentRepository
+ * @property-read RelationshipEntityRepositoryInterface $relationshipEntityRepository
  */
 final class FavoritesService implements FavoritesServiceInterface
 {
@@ -45,7 +47,8 @@ final class FavoritesService implements FavoritesServiceInterface
         protected UserFavoriteBuildingRepositoryInterface $userFavoriteBuildingRepository,
         protected DeletedFavoriteBuildingRepositoryInterface $deletedFavoriteBuildingRepository,
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
-        protected ApartmentRepositoryInterface $apartmentRepository
+        protected ApartmentRepositoryInterface $apartmentRepository,
+        protected RelationshipEntityRepositoryInterface $relationshipEntityRepository,
     ) {
     }
 
@@ -77,8 +80,7 @@ final class FavoritesService implements FavoritesServiceInterface
     public function getFavoritePlanData(): array
     {
         $offerIds = $this->getFavoritePlanOfferIds();
-        // TODO: переделать на второй итерации рефакторинга
-        $apartments = Apartment::whereIn('offer_id', $offerIds)->orderBy('price')->get();
+        $apartments = $this->apartmentRepository->findByOfferIdBuilder($offerIds, 'price');
 
         return ApartmentResource::collection($apartments)->toArray(new Request());
     }
@@ -92,28 +94,7 @@ final class FavoritesService implements FavoritesServiceInterface
 
     public function getBuildingDataSorted(array $codes, string $parameter, string $order): mixed
     {
-        // TODO: исправить этот метод на второй итерации
-        $buildings = ResidentialComplex::whereIn('code', $codes)
-            ->with('apartments')
-            ->withCount('apartments')
-            ->has('apartments')
-            ->orderBy('apartments_count', 'DESC')
-            ->get();
-
-        $buildings = $buildings->sortBy(
-            function (ResidentialComplex $building, int $key) use ($parameter, $order) {
-                $price = $building
-                    ->apartments
-                    ->sortBy([[$parameter, $order]])
-                    ->first()
-                ->{"{$parameter}"};
-
-                return $price;
-            },
-            SORT_NATURAL
-        )->values();
-
-        return $buildings;
+        return $this->relationshipEntityRepository->buildingSort($codes, $parameter, $order);
     }
 
     public function getFavoriteBuildingCodes(): array

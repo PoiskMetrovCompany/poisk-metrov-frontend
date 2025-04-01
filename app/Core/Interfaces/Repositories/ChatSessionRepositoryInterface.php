@@ -7,6 +7,9 @@ use App\Core\Interfaces\Repositories\Queries\ListQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\ListTrashedQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\StoreQueryInterface;
 
+/**
+ * @template TRepository
+ */
 interface ChatSessionRepositoryInterface extends
     ListQueryInterface,
     ListTrashedQueryInterface,

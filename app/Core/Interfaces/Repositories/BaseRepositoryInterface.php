@@ -9,6 +9,7 @@ use App\Core\Interfaces\Repositories\Queries\StoreQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\ListQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\UpdateQueryInterface;
 
+
 interface BaseRepositoryInterface extends
     ListQueryInterface,
     StoreQueryInterface,

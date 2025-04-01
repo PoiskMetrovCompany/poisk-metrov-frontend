@@ -5,9 +5,11 @@ namespace App\Repositories;
 use App\Core\Interfaces\Repositories\RealtyFeedEntryRepositoryInterface;
 use App\Models\RealtyFeedEntry;
 use App\Repositories\Build\FindQueryBuilderTrait;
+use App\Repositories\Queries\DestroyQueryTrait;
 use App\Repositories\Queries\FindByIdQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use App\Repositories\Queries\StoreQueryTrait;
+use App\Repositories\Queries\UpdateQueryTrait;
 
 final class RealtyFeedEntryRepository implements RealtyFeedEntryRepositoryInterface
 {
@@ -15,8 +17,10 @@ final class RealtyFeedEntryRepository implements RealtyFeedEntryRepositoryInterf
     use StoreQueryTrait;
     use FindByIdQueryTrait;
     use FindQueryBuilderTrait;
+    use UpdateQueryTrait;
+    use DestroyQueryTrait;
 
-    public function __construct(RealtyFeedEntry $model)
+    public function __construct(protected RealtyFeedEntry $model)
     {
 
     }

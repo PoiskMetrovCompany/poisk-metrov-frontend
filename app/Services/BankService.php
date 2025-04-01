@@ -49,7 +49,7 @@ use Illuminate\Support\Str;
  */
 final class BankService extends AbstractService implements BankServiceInterface
 {
-    // TODO: особо не трогать работу с банками без нужды
+    // особо не трогать работу с банками без нужды
 
     public array $preferredBanks;
     public int $minInitialFee;

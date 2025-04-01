@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Core\Interfaces\Services\UserServiceInterface;
@@ -29,6 +30,7 @@ use Illuminate\Validation\UnauthorizedException;
  * @see FavoritesServiceInterface
  * @see CityServiceInterface
  * @see UserServiceInterface
+ * @see UserRepositoryInterface
  */
 class UserController extends Controller
 {
@@ -40,7 +42,8 @@ class UserController extends Controller
     public function __construct(
         protected FavoritesServiceInterface $favoritesService,
         protected CityServiceInterface $cityService,
-        protected UserServiceInterface $userService
+        protected UserServiceInterface $userService,
+        protected UserRepositoryInterface $userRepository,
     ) {
     }
 
@@ -303,7 +306,7 @@ class UserController extends Controller
      */
     public function getUsers()
     {
-        $users = $this->userService->getUsers();
+        $users = $this->userRepository->list([]);
         return UserResource::collection($users);
     }
 

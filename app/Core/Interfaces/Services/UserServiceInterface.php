@@ -7,11 +7,6 @@ use Illuminate\Support\Collection;
 interface UserServiceInterface
 {
     /**
-     * @return Collection
-     */
-    public function getUsers(): Collection;
-
-    /**
      * @param int $id
      * @param string $role
      */

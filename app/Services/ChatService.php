@@ -446,25 +446,16 @@ final class ChatService implements ChatServiceInterface
 
     public function getChatsWithoutManager(): array
     {
-        /*
-         * TODO: нет понимания как организовать репозиторий для этого обращения
-         * $session = $this->chatSessionRepository->findByChatToken($chatToken);
-         * но надо сделать как то сверх гибко.
-         * ВЕРНУТЬСЯ ВО ВТОРОЙ ИТЕРАЦИИ РЕФАКТОРИНГА!!!
-         */
-        $chatsWithoutManager = GroupChatBotMessage::orderBy('created_at')->get()->unique('sender_chat_token');
+        $chatsWithoutManager = $this->groupChatBotMessageRepository->sortedUnique('created_at', 'sender_chat_token');
         $result = [];
 
         foreach ($chatsWithoutManager as $chat) {
             $item = [];
             $user = $this->userRepository->findByChatToken($chat->sender_chat_token);
-            /*
-             * TODO: нет понимания как организовать репозиторий для этого обращения
-             * $session = $this->chatSessionRepository->findByChatToken($chatToken);
-             * но надо сделать как то сверх гибко.
-             * ВЕРНУТЬСЯ ВО ВТОРОЙ ИТЕРАЦИИ РЕФАКТОРИНГА!!!
-             */
-            $history = GroupChatBotMessage::where('sender_chat_token', $chat->sender_chat_token)->orderBy('created_at')->get();
+            $history = $this->groupChatBotMessageRepository
+                ->find(['sender_chat_token' => $chat->sender_chat_token])
+                ->orderBy('created_at')
+                ->get();
             $item['message'] = $history[count($history) - 1]->message;
             $item['name'] = $user ? $user->name : 'Посетитель';
             $item['time'] = $history[count($history) - 1]->created_at;

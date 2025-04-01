@@ -4,6 +4,9 @@ namespace App\Core\Interfaces\Repositories\Queries;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @template TQuery
+ */
 interface JoinQueryInterface
 {
     /**

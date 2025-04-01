@@ -8,8 +8,8 @@ use App\Core\Interfaces\Repositories\Queries\FindByKeyQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByIdQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByChatTokenQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByApiTokenQueryInterface;
+use App\Core\Interfaces\Repositories\Queries\UpdateQueryInterface;
 
-// TODO: пока только запрос на список и чтение, потом добавлю другие варианты запросов
 /**
  * @template TRepository
  */
@@ -19,7 +19,8 @@ interface UserRepositoryInterface extends
     FindByKeyQueryInterface,
     IsExistsQueryInterface,
     FindByChatTokenQueryInterface,
-    FindByApiTokenQueryInterface
+    FindByApiTokenQueryInterface,
+    UpdateQueryInterface
 {
 
 }

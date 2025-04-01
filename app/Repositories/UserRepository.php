@@ -10,6 +10,7 @@ use App\Repositories\Queries\FindByKeyQueryTrait;
 use App\Repositories\Queries\IsExistsQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use App\Repositories\Queries\FindByIdQueryTrait;
+use App\Repositories\Queries\UpdateQueryTrait;
 use Illuminate\Database\Eloquent\Model;
 
 final class UserRepository implements UserRepositoryInterface
@@ -20,6 +21,7 @@ final class UserRepository implements UserRepositoryInterface
     use IsExistsQueryTrait;
     use FindByChatTokenQueryTrait;
     use FindByApiTokenQueryTrait;
+    use UpdateQueryTrait;
 
     protected Model $model;
 

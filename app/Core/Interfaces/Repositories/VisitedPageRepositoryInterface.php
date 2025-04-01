@@ -4,6 +4,9 @@ namespace App\Core\Interfaces\Repositories;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @template TRepository
+ */
 interface VisitedPageRepositoryInterface
 {
     /**

@@ -22,16 +22,11 @@ final class UserService extends AbstractService implements UserServiceInterface
     {
 
     }
-    public function getUsers(): Collection
-    {
-        // TODO: ИСКОРЕНИТЬ!!!
-        return $this->userRepository->list([]);
-    }
 
     public function updateRole(int $id, string $role)
     {
-        // TODO: ИСКОРЕНИТЬ!!!
-        $this->userRepository->findById($id)->update(['role' => $role]);
+        $user = $this->userRepository->findById($id);
+        $this->userRepository->update($user, ['role' => $role]);
     }
 
     public function deleteUser(int $id)

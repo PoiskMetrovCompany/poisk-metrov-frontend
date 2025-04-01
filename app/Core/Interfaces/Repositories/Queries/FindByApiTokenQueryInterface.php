@@ -5,6 +5,9 @@ namespace App\Core\Interfaces\Repositories\Queries;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @template TQuery
+ */
 interface FindByApiTokenQueryInterface
 {
     /**

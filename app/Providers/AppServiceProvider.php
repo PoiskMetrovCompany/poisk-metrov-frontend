@@ -14,6 +14,7 @@ use App\Core\Interfaces\Repositories\ManagerChatMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\NewsRepositoryInterface;
 use App\Core\Interfaces\Repositories\RealtyFeedEntryRepositoryInterface;
+use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Repositories\RenovationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexCategoryRepositoryInterface;
@@ -66,6 +67,7 @@ use App\Repositories\ManagerChatMessageRepository;
 use App\Repositories\ManagerRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\RealtyFeedEntryRepository;
+use App\Repositories\RelationshipEntityRepository;
 use App\Repositories\RenovationRepository;
 use App\Repositories\ReservationRepository;
 use App\Repositories\ResidentialComplexCategoryRepository;
@@ -385,6 +387,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ResidentialComplexCategoryRepositoryInterface::class, ResidentialComplexCategoryRepository::class);
     }
 
+    final public function registerRelationshipEntityRepository(): void
+    {
+        $this->app->singleton(RelationshipEntityRepositoryInterface::class, RelationshipEntityRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -444,6 +451,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerNewsRepository();
         $this->registerRenovationRepository();
         $this->registerResidentialComplexCategoryRepository();
+        $this->registerRelationshipEntityRepository();
     }
 
     /**

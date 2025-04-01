@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\SearchServiceInterface;
@@ -30,54 +31,34 @@ use Str;
  * @implements SearchServiceInterface
  * @property-read CachingServiceInterface $cachingService
  * @property-read CityServiceInterface $cityService
+ * @property-read RelationshipEntityRepositoryInterface $relationshipEntityRepository
  */
 final class SearchService extends AbstractService implements SearchServiceInterface
 {
     public function __construct(
-        protected CachingServiceInterface $cachingService,
-        protected CityServiceInterface $cityService
+        protected CachingServiceInterface               $cachingService,
+        protected CityServiceInterface                  $cityService,
+        protected RelationshipEntityRepositoryInterface $relationshipEntityRepository,
     ) {
     }
 
-    // TODO: сложный метод... переработать...
     public function getSearchDataForCity(string $cityCode): array
     {
-        $locationData = Location::select(['district', 'region', 'locality', 'id', 'capital'])->where('code', $cityCode)->get();
-        $capitals = $locationData->pluck('capital')->unique();
-        $capitalDistricts = $locationData->whereNotIn('locality', $capitals)->pluck('district')->unique();
-        //Не включаем район если он районная столица или столичная область
-        //NOTE: в capital districts попадает Мошковский Сельсовет
-        $districts = $locationData
-            ->whereNotIn('district', $capitalDistricts)
-            ->pluck('district')
-            ->merge($locationData->whereNotIn('locality', $capitals)->pluck('locality'))
-            ->unique();
-
-        $locationsInCity = $locationData->pluck('id')->toArray();
-        $buildingData = ResidentialComplex::select()->whereIn('location_id', $locationsInCity)->has('apartments')->get();
-        $names = $buildingData->pluck('name');
-        $builders = $buildingData->pluck('builder')->unique();
-        $addresses = $buildingData->pluck('address')->unique();
-        $stations = $buildingData->pluck('metro_station')->unique()->whereNotNull();
-
-        //Закомментировал наличие ипотек так как у двух квартир с 5. сан узлами их нет
-        $apartmentData = Apartment::select()
-            ->whereIn('complex_id', $buildingData->pluck('id')->toArray())
-            // ->has('mortgageTypes')
-            ->get();
-
-        $data['apartment_count'] = $apartmentData->count();
-        $data['cheapest'] = $apartmentData->pluck('price')->min();
-        $data['most_expensive'] = $apartmentData->pluck('price')->max();
-        $data['smallest'] = $apartmentData->pluck('area')->min();
-        $data['biggest'] = $apartmentData->pluck('area')->max();
-        $data['capital'] = $capitals->first();
-        $data['region'] = $locationData->whereNotIn('capital', $capitalDistricts)->pluck('region')->first();
+        $note = $this->relationshipEntityRepository->processingOfPlacementData($cityCode);
+        $locationsInCity = $note['locationData']->pluck('id')->toArray();
+        $complexAndApartmentFilter = $this->relationshipEntityRepository->complexAndApartmentFilter($locationsInCity);
+        $data['apartment_count'] = $complexAndApartmentFilter['apartmentData']->count();
+        $data['cheapest'] = $complexAndApartmentFilter['apartmentData']->pluck('price')->min();
+        $data['most_expensive'] = $complexAndApartmentFilter['apartmentData']->pluck('price')->max();
+        $data['smallest'] = $complexAndApartmentFilter['apartmentData']->pluck('area')->min();
+        $data['biggest'] = $complexAndApartmentFilter['apartmentData']->pluck('area')->max();
+        $data['capital'] = $note['capitals']->first();
+        $data['region'] = $note['locationData']->whereNotIn('capital', $note['capitalDistricts'])->pluck('region')->first();
 
         // Crimea
         if ($data['region'] == null) {
-            if ($locationData->count()) {
-                $data['region'] = $locationData->first()->{'region'};
+            if ($note['locationData']->count()) {
+                $data['region'] = $note['locationData']->first()->{'region'};
             } else {
                 Log::info('No location data for [' . $cityCode . ']');
                 $data['region'] = 'Неизвестно';
@@ -86,39 +67,39 @@ final class SearchService extends AbstractService implements SearchServiceInterf
 
         $data['names'] = [
             'field' => 'name',
-            'values' => $this->generateValues($names)
+            'values' => $this->generateValues($complexAndApartmentFilter['names'])
         ];
         $data['builders'] = [
             'field' => 'builder',
-            'values' => $this->generateValues($builders)
+            'values' => $this->generateValues($complexAndApartmentFilter['builders'])
         ];
         $data['addresses'] = [
             'field' => 'address',
-            'values' => $this->generateValues($addresses)
+            'values' => $this->generateValues($complexAndApartmentFilter['addresses'])
         ];
         $data['stations'] = [
             'field' => 'metro_station',
-            'values' => $this->generateValues($stations)
+            'values' => $this->generateValues($complexAndApartmentFilter['stations'])
         ];
         $data['districts'] = [
             'field' => 'district',
-            'values' => $this->generateValues($districts)
+            'values' => $this->generateValues($note['districts'])
         ];
 
         $dropdownData = [];
-        $dropdownData['years'] = new YearsDropdownData($apartmentData);
-        $dropdownData['rooms'] = new RoomsDropdownData($apartmentData);
+        $dropdownData['years'] = new YearsDropdownData($complexAndApartmentFilter['apartmentData']);
+        $dropdownData['rooms'] = new RoomsDropdownData($complexAndApartmentFilter['apartmentData']);
         $dropdownData['prices'] = new PricesDropdownData();
         $dropdownData['floors'] = new FloorsDropdownData();
         $dropdownData['area'] = new AreaDropdownData();
         $dropdownData['kitchen_area'] = new KitchenDropdownData();
-        $dropdownData['finishing'] = new FinishingDropdownData($apartmentData);
-        $dropdownData['bathroom_unit'] = new ToiletDropdownData($apartmentData);
-        $dropdownData['mortgages'] = new MortgageDropdownData($apartmentData);
+        $dropdownData['finishing'] = new FinishingDropdownData($complexAndApartmentFilter['apartmentData']);
+        $dropdownData['bathroom_unit'] = new ToiletDropdownData($complexAndApartmentFilter['apartmentData']);
+        $dropdownData['mortgages'] = new MortgageDropdownData($complexAndApartmentFilter['apartmentData']);
         $dropdownData['registration'] = new RegistrationDropdownData($data['capital'], $data['region']);
         $dropdownData['metro'] = new MetroDropdownData();
         $dropdownData['apartments'] = new ApartmentTypeDropdownData();
-        $dropdownData['materials'] = new MaterialDropdownData($apartmentData);
+        $dropdownData['materials'] = new MaterialDropdownData($complexAndApartmentFilter['apartmentData']);
 
         $data['dropdownData'] = $dropdownData;
 

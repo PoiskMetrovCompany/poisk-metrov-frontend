@@ -4,6 +4,9 @@ namespace App\Core\Interfaces\Repositories\Queries;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @template TQuery
+ */
 interface FindByIdQueryInterface
 {
     /**

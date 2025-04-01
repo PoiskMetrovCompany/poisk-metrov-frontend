@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexCategoryRepositoryInterface;
+use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
  * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  * @property-read ResidentialComplexCategoryRepositoryInterface $residentialComplexCategoryRepository
  * @property-read ApartmentRepositoryInterface $apartmentRepository
+ * @property-read RelationshipEntityRepositoryInterface $relationshipEntityRepository
  */
 final class RealEstateService implements RealEstateServiceInterface
 {
@@ -37,6 +39,7 @@ final class RealEstateService implements RealEstateServiceInterface
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
         protected ResidentialComplexCategoryRepositoryInterface $residentialComplexCategoryRepository,
         protected ApartmentRepositoryInterface $apartmentRepository,
+        protected RelationshipEntityRepositoryInterface $relationshipEntityRepository
     ) {
     }
 
@@ -44,7 +47,6 @@ final class RealEstateService implements RealEstateServiceInterface
     {
         $visiedRealEstates = $this->visitedPagesService->getVisitedBuildings();
         $visitedCategoryCount = new Collection();
-        // TODO: пока оставлю это решение, оно вполне приемлимо, но хотелось бы что бы "appFromRepository" был абстрактным
         $mostVisitedCategory = $this->residentialComplexCategoryRepository->appFromRepository()->category_name;
 
         foreach ($visiedRealEstates as $visiedRealEstate) {
@@ -100,16 +102,16 @@ final class RealEstateService implements RealEstateServiceInterface
         return $link;
     }
 
-    // TODO: сложный метод, пересмотреть на второй итерации рефакторинга
     public function getCatalogueWithfilters(array $validated, string $cityCode): Builder
     {
-        $buildingsQuery = ResidentialComplex::with('location')
-            ->whereHas('location', function ($query) use ($cityCode) {
-                return $query->where('code', $cityCode);
-            });
+        $buildingsQuery = $this->relationshipEntityRepository->residentialComplexIsCityCode($cityCode);
 
         if (!Auth::user()) {
-            $buildingsQuery->whereNotIn('builder', ResidentialComplex::$privateBuilders);
+            $buildingsQuery = $this->residentialComplexRepository->findNot(
+                $buildingsQuery,
+                'builder',
+                ResidentialComplex::$privateBuilders
+            );
         }
 
         $buildingsQuery->with('apartments')
@@ -243,14 +245,10 @@ final class RealEstateService implements RealEstateServiceInterface
                 $condition = '<>';
             }
 
-            //TODO: тут надо что то придумать
             if ($searchableInApartments) {
                 //Снова костыль для поиска по исключению апартаментов - в buildingsQuery нет каких-то айдишников и при исключении приходит меньше квартир
                 if ($field == 'apartment_type' && $condition == '<>' && $value == 'Апартамент') {
-                    $buildingsInCity = ResidentialComplex::
-                        whereHas('location', function ($query) use ($cityCode) {
-                            return $query->where('code', $cityCode);
-                        });
+                    $buildingsInCity = $this->residentialComplexRepository->findHas($cityCode);
                     $apartmentsQuery->orWhere($field, $condition, $value)->whereIn('complex_id', $buildingsInCity->pluck('id'));
                     continue;
                 }
