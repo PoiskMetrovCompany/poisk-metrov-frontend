@@ -9,4 +9,10 @@ interface FileServiceInterface
      * @return array
      */
     public function fileInfo(array $attributes): array;
+
+    /**
+     * @param string|null $URL
+     * @return string|null
+     */
+    public function getFileAsBase64(string|null $URL): string|null;
 }

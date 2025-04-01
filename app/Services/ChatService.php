@@ -35,7 +35,7 @@ use Illuminate\Support\Carbon;
  * @property-read GroupChatBotMessageRepositoryInterface $groupChatBotMessageRepository
  * @property-read ManagerChatMessageRepositoryInterface $managerChatMessageRepository
  */
-class ChatService implements ChatServiceInterface
+final class ChatService implements ChatServiceInterface
 {
     // TODO: в некоторых методах следует убрать обращения к моделям, оставить это до следующей итерации рефакторинга
 

@@ -2,14 +2,18 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Services\YandexSearchServiceInterface;
 use Http;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class YandexSearchService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements YandexSearchServiceInterface
+ * @property-read array $keys
  */
-class YandexSearchService extends AbstractService
+final class YandexSearchService extends AbstractService implements YandexSearchServiceInterface
 {
     private array $keys = [];
 

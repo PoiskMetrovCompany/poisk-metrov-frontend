@@ -19,7 +19,7 @@ use Log;
  * @property-read string $residentialComplexCacheFolder
  * @property-read CityServiceInterface $cityService
  */
-class CachingService extends AbstractService implements CachingServiceInterface
+final class CachingService extends AbstractService implements CachingServiceInterface
 {
     private string $cacheFileName = 'cached-cards.json';
     private string $searchDataCacheFileName = 'search-data.json';

@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexCategoryRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
@@ -16,15 +19,24 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Class RealEstateService.
+ * @package App\Services
+ * @implements RealEstateServiceInterface
+ * @property-read CachingServiceInterface $cachingService
+ * @property-read VisitedPagesServiceInterface $visitedPagesService
+ * @property-read CityServiceInterface $cityService
+ * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
+ * @property-read ResidentialComplexCategoryRepositoryInterface $residentialComplexCategoryRepository
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
  */
-class RealEstateService implements RealEstateServiceInterface
+final class RealEstateService implements RealEstateServiceInterface
 {
     public function __construct(
         protected CachingServiceInterface $cachingService,
         protected VisitedPagesServiceInterface $visitedPagesService,
         protected CityServiceInterface $cityService,
-        protected ResidentialComplexRepository $residentialComplexRepository,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+        protected ResidentialComplexCategoryRepositoryInterface $residentialComplexCategoryRepository,
+        protected ApartmentRepositoryInterface $apartmentRepository,
     ) {
     }
 
@@ -32,10 +44,11 @@ class RealEstateService implements RealEstateServiceInterface
     {
         $visiedRealEstates = $this->visitedPagesService->getVisitedBuildings();
         $visitedCategoryCount = new Collection();
-        $mostVisitedCategory = ResidentialComplexCategory::first()->category_name;
+        // TODO: пока оставлю это решение, оно вполне приемлимо, но хотелось бы что бы "appFromRepository" был абстрактным
+        $mostVisitedCategory = $this->residentialComplexCategoryRepository->appFromRepository()->category_name;
 
         foreach ($visiedRealEstates as $visiedRealEstate) {
-            $building = ResidentialComplex::where('code', $visiedRealEstate)->first();
+            $building = $this->residentialComplexRepository->findByCode($visiedRealEstate);
 
             foreach ($building->categories as $category) {
                 if (! $visitedCategoryCount->keys()->contains($category->category_name)) {
@@ -50,7 +63,7 @@ class RealEstateService implements RealEstateServiceInterface
             }
         }
 
-        return ResidentialComplexCategory::where('category_name', $mostVisitedCategory)->first();
+        return $this->residentialComplexCategoryRepository->find(['category_name' => $mostVisitedCategory])->first();
     }
 
     public function getRealEstateRecommendations(ResidentialComplexCategory|null $mostVisitedCategory): \Illuminate\Support\Collection
@@ -73,7 +86,7 @@ class RealEstateService implements RealEstateServiceInterface
     public function getCatalogueLinkForCategory(string|ResidentialComplexCategory $category): string
     {
         if (is_string($category)) {
-            $category = ResidentialComplexCategory::where('category_name', $category)->first();
+            $category = $this->residentialComplexCategoryRepository->find(['category_name' => $category])->first();
         }
 
         $recommendedRealEstates = $this->getRealEstateRecommendations($category);
@@ -87,6 +100,7 @@ class RealEstateService implements RealEstateServiceInterface
         return $link;
     }
 
+    // TODO: сложный метод, пересмотреть на второй итерации рефакторинга
     public function getCatalogueWithfilters(array $validated, string $cityCode): Builder
     {
         $buildingsQuery = ResidentialComplex::with('location')
@@ -96,8 +110,6 @@ class RealEstateService implements RealEstateServiceInterface
 
         if (!Auth::user()) {
             $buildingsQuery->whereNotIn('builder', ResidentialComplex::$privateBuilders);
-//        } else {
-//            $buildingsQuery->whereIn('builder', ResidentialComplex::$privateBuilders);
         }
 
         $buildingsQuery->with('apartments')
@@ -194,7 +206,7 @@ class RealEstateService implements RealEstateServiceInterface
 
     public function countApartmentsForFilters(array $validated, $buildingsQuery, string $cityCode)
     {
-        $apartmentsQuery = Apartment::whereIn('complex_id', $buildingsQuery->pluck('id'));
+        $apartmentsQuery = $this->apartmentRepository->findByInComplexId($buildingsQuery->pluck('id'));
 
         $fillQuery = function (Builder $query, string $field, string $condition, $value) {
             if (is_array($value)) {
@@ -231,6 +243,7 @@ class RealEstateService implements RealEstateServiceInterface
                 $condition = '<>';
             }
 
+            //TODO: тут надо что то придумать
             if ($searchableInApartments) {
                 //Снова костыль для поиска по исключению апартаментов - в buildingsQuery нет каких-то айдишников и при исключении приходит меньше квартир
                 if ($field == 'apartment_type' && $condition == '<>' && $value == 'Апартамент') {

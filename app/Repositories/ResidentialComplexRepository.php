@@ -8,6 +8,8 @@ use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Models\BestOffer;
 use App\Models\ResidentialComplex;
+use App\Repositories\Queries\FindByCodeQueryTrait;
+use App\Repositories\Queries\FindByIdQueryTrait;
 use App\Repositories\Queries\FindInBuildingIdQueryTrait;
 use App\Repositories\Queries\IsCodeQueryTrait;
 use App\Repositories\Queries\IsExistsQueryTrait;
@@ -20,6 +22,8 @@ use Illuminate\Support\Facades\Auth;
 #[AllowDynamicProperties]
 final class ResidentialComplexRepository implements ResidentialComplexRepositoryInterface
 {
+    use FindByIdQueryTrait;
+    use FindByCodeQueryTrait;
     use IsExistsQueryTrait;
     use FindInBuildingIdQueryTrait;
 

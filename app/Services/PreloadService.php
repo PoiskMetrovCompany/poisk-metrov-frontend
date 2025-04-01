@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Services\PreloadServiceInterface;
+
 /**
- * Class PreloadService.
+ * @package App\Services
+ * @implements PreloadServiceInterface
  */
-class PreloadService
+final class PreloadService implements PreloadServiceInterface
 {
     public function preloadFolder(string $folderName): array
     {

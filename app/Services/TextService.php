@@ -2,15 +2,19 @@
 
 namespace App\Services;
 
+use App\Core\Common\MonthConst;
+use App\Core\Common\TextConst;
 use App\Core\Interfaces\Services\TextServiceInterface;
 use DateTime;
 use Illuminate\Support\Collection;
 use Str;
 
 /**
- * Class TextService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements TextServiceInterface
  */
-class TextService extends AbstractService implements TextServiceInterface
+final class TextService extends AbstractService implements TextServiceInterface
 {
     public function cleanupNmarketImageURL(string $url): string
     {
@@ -29,7 +33,7 @@ class TextService extends AbstractService implements TextServiceInterface
 
     public function isValidPercentNumber(string $string): bool
     {
-        $allowedSymbols = new Collection(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '.', ',', '%']);
+        $allowedSymbols = new Collection(TextConst::ALLOWED_SYMBOLS);
 
         foreach (str_split($string) as $symbol) {
             if (! $allowedSymbols->contains($symbol)) {
@@ -130,20 +134,7 @@ class TextService extends AbstractService implements TextServiceInterface
 
     public function formatDate(string $rawDate): string
     {
-        $months = [
-            '01' => 'января',
-            '02' => 'февраля',
-            '03' => 'марта',
-            '04' => 'апреля',
-            '05' => 'мая',
-            '06' => 'июня',
-            '07' => 'июля',
-            '08' => 'августа',
-            '09' => 'сентября',
-            '10' => 'октября',
-            '11' => 'ноября',
-            '12' => 'декабря'
-        ];
+        $months = MonthConst::MONTHS;
         $date = new DateTime($rawDate);
         $day = $date->format('d');
         $monthNumber = $date->format('m');

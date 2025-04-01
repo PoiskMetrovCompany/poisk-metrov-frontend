@@ -23,7 +23,7 @@ use Str;
  * @property-read GoogleDriveServiceInterface $googleService
  * @property-read BuilderRepositoryInterface $builderRepository
  */
-class BuilderService extends AbstractService implements BuilderServiceInterface
+final class BuilderService extends AbstractService implements BuilderServiceInterface
 {
     public function __construct(
         protected TextServiceInterface $textService,

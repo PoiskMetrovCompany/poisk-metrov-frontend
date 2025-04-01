@@ -9,6 +9,7 @@ use App\Models\Apartment;
 use App\Models\ResidentialComplex;
 use App\Models\User;
 use App\Repositories\Build\FindQueryBuilderTrait;
+use App\Repositories\Queries\FindByInComplexIdQueryTrait;
 use App\Repositories\Queries\FindByKeyQueryTrait;
 use App\Repositories\Queries\FindByOfferIdQueryTrait;
 use App\Repositories\Queries\FindOfferIdQueryTrait;
@@ -32,13 +33,15 @@ final class ApartmentRepository implements ApartmentRepositoryInterface
     use IsExistsQueryTrait;
     use FindByOfferIdQueryTrait;
     use FindQueryBuilderTrait;
+    use FindByInComplexIdQueryTrait;
 
-    protected Model $model;
     public function __construct(
         protected CityServiceInterface $cityService,
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
-    ) {
-        $this->model = new Apartment();
+        protected Apartment $model
+    )
+    {
+
     }
 
     /* TODO: ----------------- потом подумать что с этим сделать ----------------- */

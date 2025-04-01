@@ -53,7 +53,7 @@ use Storage;
  * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  * @property-read ApartmentRepositoryInterface $apartmentRepository
  */
-class FeedService extends AbstractService implements FeedServiceInterface
+final class FeedService extends AbstractService implements FeedServiceInterface
 {
     public array $realtyFeedLinks = NmarketFeedConst::URLS;
     public array $avitoFeedLinks = AvitoFeedConst::URLS;

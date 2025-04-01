@@ -21,7 +21,7 @@ use App\Core\Common\Cities\CityConst;
  * @property-read array $where
  * @property-read array $what
  */
-class CityService extends AbstractService implements CityServiceInterface
+final class CityService extends AbstractService implements CityServiceInterface
 {
     private array $invalidCodes = CityInvalidCodeConst::NOT_VALID_CODES;
     public array $possibleCityCodes = CityCodesConst::CITY_CODES;

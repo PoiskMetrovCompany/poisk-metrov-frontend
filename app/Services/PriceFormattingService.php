@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
 
 /**
- * Class PriceFormattingService.
+ * @package App\Services
+ * @implements PriceFormattingServiceInterface
  */
-class PriceFormattingService implements PriceFormattingServiceInterface
+final class PriceFormattingService implements PriceFormattingServiceInterface
 {
     public function fullPrice(int|null $priceAsNumber, string $delimiter = ' ')
     {

@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
  * @property-read TextServiceInterface $textService
  * @property-read CityServiceInterface $cityService
  */
-class ExcelService extends AbstractService implements ExcelServiceInterface
+final class ExcelService extends AbstractService implements ExcelServiceInterface
 {
     private Collection $managersFiles;
 

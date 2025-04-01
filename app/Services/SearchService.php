@@ -25,9 +25,13 @@ use Log;
 use Str;
 
 /**
- * Class SearchService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements SearchServiceInterface
+ * @property-read CachingServiceInterface $cachingService
+ * @property-read CityServiceInterface $cityService
  */
-class SearchService extends AbstractService implements SearchServiceInterface
+final class SearchService extends AbstractService implements SearchServiceInterface
 {
     public function __construct(
         protected CachingServiceInterface $cachingService,
@@ -35,6 +39,7 @@ class SearchService extends AbstractService implements SearchServiceInterface
     ) {
     }
 
+    // TODO: сложный метод... переработать...
     public function getSearchDataForCity(string $cityCode): array
     {
         $locationData = Location::select(['district', 'region', 'locality', 'id', 'capital'])->where('code', $cityCode)->get();

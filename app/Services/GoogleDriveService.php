@@ -27,7 +27,7 @@ use Google_Service_Sheets_ValueRange;
  * @property-read string $defaultFileFields
  * @property-read TextServiceInterface $textService
  */
-class GoogleDriveService extends AbstractService implements GoogleDriveServiceInterface
+final class GoogleDriveService extends AbstractService implements GoogleDriveServiceInterface
 {
     private Google_Client $googleClient;
     private Drive $driveService;

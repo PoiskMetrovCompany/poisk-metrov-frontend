@@ -47,7 +47,7 @@ use Illuminate\Support\Str;
  * @property-read Collection $banks
  * @property-read Collection $tariffs
  */
-class BankService extends AbstractService implements BankServiceInterface
+final class BankService extends AbstractService implements BankServiceInterface
 {
     // TODO: особо не трогать работу с банками без нужды
 

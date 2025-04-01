@@ -8,6 +8,12 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * @package App\Services\Parser
+ * @implements ParserCbrServiceInterface
+ * @property-read string $url
+ * @property-read string $filePath
+ */
 final class ParserCbrService implements ParserCbrServiceInterface
 {
     protected string $url;

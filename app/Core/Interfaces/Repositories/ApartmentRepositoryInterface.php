@@ -11,6 +11,7 @@ use App\Core\Interfaces\Repositories\Queries\JoinQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\NotInListQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\IsExistsQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByOfferIdQueryInterface;
+use App\Core\Interfaces\Repositories\Queries\FindByInComplexIdQueryInterface;
 
 /**
  * @template TRepository
@@ -24,7 +25,8 @@ interface ApartmentRepositoryInterface extends
     NotInListQueryInterface,
     IsExistsQueryInterface,
     FindByOfferIdQueryInterface,
-    FindQueryBuilderInterface
+    FindQueryBuilderInterface,
+    FindByInComplexIdQueryInterface
 {
 
 }

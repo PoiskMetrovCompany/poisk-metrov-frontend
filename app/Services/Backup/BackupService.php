@@ -11,10 +11,13 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 /**
+ * @package App\Services\Backup
  * @see Disk
  * @see BackupHistoryServiceInterface
  * @see AppServiceProvider::registerBackupService()
  * @implements BackupServiceInterface
+ * @property-read Disk $disk
+ * @property-read BackupHistoryServiceInterface $backupHistoryService
  */
 final class BackupService implements BackupServiceInterface
 {

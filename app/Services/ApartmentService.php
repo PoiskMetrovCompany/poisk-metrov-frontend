@@ -30,7 +30,7 @@ use Log;
  * @property-read CityServiceInterface $cityService
  * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  */
-class ApartmentService extends AbstractService implements ApartmentServiceInterface
+final class ApartmentService extends AbstractService implements ApartmentServiceInterface
 {
     public function __construct(
         protected VisitedPagesServiceInterface $visitedPagesService,

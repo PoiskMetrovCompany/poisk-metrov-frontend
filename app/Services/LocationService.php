@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\LocationServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Log;
 use stdClass;
@@ -9,11 +11,14 @@ use Storage;
 use Str;
 
 /**
- * Class LocationService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements LocationServiceInterface
+ * @property-read CityServiceInterface $cityService
  */
-class LocationService extends AbstractService
+final class LocationService extends AbstractService implements LocationServiceInterface
 {
-    public function __construct(protected CityService $cityService)
+    public function __construct(protected CityServiceInterface $cityService)
     {
 
     }

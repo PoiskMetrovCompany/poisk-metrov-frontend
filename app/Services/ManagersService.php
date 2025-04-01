@@ -2,19 +2,28 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Services\ManagersServiceInterface;
 use App\Models\Manager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class ManagersService
+ * @package App\Services
+ * @extends AbstractService
+ * @implements ManagersServiceInterface
+ * @property-read $chatConfig
+ * @property-read TelegramService $telegramService
+ * @property-read ManagerRepositoryInterface $managerRepository
  */
-class ManagersService extends AbstractService implements ManagersServiceInterface
+final class ManagersService extends AbstractService implements ManagersServiceInterface
 {
     private $chatConfig;
 
-    public function __construct(protected TelegramService $telegramService)
+    public function __construct(
+        protected TelegramService $telegramService,
+        protected ManagerRepositoryInterface $managerRepository,
+    )
     {
         $this->chatConfig = Storage::json('chat-config.json');
     }
@@ -46,7 +55,7 @@ class ManagersService extends AbstractService implements ManagersServiceInterfac
 
     public function getManagersList(): Collection
     {
-        return Manager::all();
+        return $this->managerRepository->list([], false);
     }
 
     public static function getFromApp(): ManagersService

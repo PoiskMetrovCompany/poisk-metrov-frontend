@@ -12,8 +12,11 @@ use App\Core\Interfaces\Repositories\GroupChatBotMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerChatMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
+use App\Core\Interfaces\Repositories\NewsRepositoryInterface;
 use App\Core\Interfaces\Repositories\RealtyFeedEntryRepositoryInterface;
+use App\Core\Interfaces\Repositories\RenovationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexCategoryRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexFeedSiteNameRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
@@ -35,10 +38,13 @@ use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\Core\Interfaces\Services\ExcelServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Core\Interfaces\Services\FeedServiceInterface;
+use App\Core\Interfaces\Services\GeoCodeServiceInterface;
 use App\Core\Interfaces\Services\GoogleDriveServiceInterface;
+use App\Core\Interfaces\Services\LocationServiceInterface;
 use App\Core\Interfaces\Services\ManagersServiceInterface;
 use App\Core\Interfaces\Services\NewsServiceInterface;
 use App\Core\Interfaces\Services\PDFServiceInterface;
+use App\Core\Interfaces\Services\PreloadServiceInterface;
 use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
@@ -47,6 +53,7 @@ use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
+use App\Core\Interfaces\Services\YandexSearchServiceInterface;
 use App\Repositories\ApartmentRepository;
 use App\Repositories\BuilderRepository;
 use App\Repositories\ChatSessionRepository;
@@ -57,8 +64,11 @@ use App\Repositories\GroupChatBotMessageRepository;
 use App\Repositories\InteractionRepository;
 use App\Repositories\ManagerChatMessageRepository;
 use App\Repositories\ManagerRepository;
+use App\Repositories\NewsRepository;
 use App\Repositories\RealtyFeedEntryRepository;
+use App\Repositories\RenovationRepository;
 use App\Repositories\ReservationRepository;
+use App\Repositories\ResidentialComplexCategoryRepository;
 use App\Repositories\ResidentialComplexFeedSiteNameRepository;
 use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\UserAdsAgreementRepository;
@@ -80,8 +90,10 @@ use App\Services\CRMService;
 use App\Services\ExcelService;
 use App\Services\FavoritesService;
 use App\Services\FeedService;
-use App\Services\FileService;
+use App\Services\File\FileService;
+use App\Services\GeoCodeService;
 use App\Services\GoogleDriveService;
+use App\Services\LocationService;
 use App\Services\ManagersService;
 use App\Services\NewsService;
 use App\Services\PDFService;
@@ -94,6 +106,7 @@ use App\Services\SerializedCollection\SerializedCollectionService;
 use App\Services\TextService;
 use App\Services\UserService;
 use App\Services\VisitedPagesService;
+use App\Services\YandexSearchService;
 use Arhitector\Yandex\Disk;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -236,6 +249,26 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ExcelServiceInterface::class, ExcelService::class);
     }
 
+    final public function registerGeoCodeService(): void
+    {
+        $this->app->singleton(GeoCodeServiceInterface::class, GeoCodeService::class);
+    }
+
+    final public function registerLocationService(): void
+    {
+        $this->app->singleton(LocationServiceInterface::class, LocationService::class);
+    }
+
+    final public function registerPreloadService(): void
+    {
+        $this->app->singleton(PreloadServiceInterface::class, PreloadService::class);
+    }
+
+    final public function registerYandexSearchService(): void
+    {
+        $this->app->singleton(YandexSearchServiceInterface::class, YandexSearchService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -337,6 +370,21 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ResidentialComplexFeedSiteNameRepositoryInterface::class, ResidentialComplexFeedSiteNameRepository::class);
     }
 
+    final public function registerNewsRepository(): void
+    {
+        $this->app->singleton(NewsRepositoryInterface::class, NewsRepository::class);
+    }
+
+    final public function registerRenovationRepository(): void
+    {
+        $this->app->singleton(RenovationRepositoryInterface::class, RenovationRepository::class);
+    }
+
+    final public function registerResidentialComplexCategoryRepository(): void
+    {
+        $this->app->singleton(ResidentialComplexCategoryRepositoryInterface::class, ResidentialComplexCategoryRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -366,6 +414,10 @@ class AppServiceProvider extends ServiceProvider
         $this->registerBuilderService();
         $this->registerGoogleDriveService();
         $this->registerExcelService();
+        $this->registerGeoCodeService();
+        $this->registerLocationService();
+        $this->registerPreloadService();
+        $this->registerYandexSearchService();
 
         /// Repositories
         $this->registerReservationRepository();
@@ -389,6 +441,9 @@ class AppServiceProvider extends ServiceProvider
         $this->registerDeletedFavoriteBuildingRepository();
         $this->registerRealtyFeedEntryRepository();
         $this->registerResidentialComplexFeedSiteNameRepository();
+        $this->registerNewsRepository();
+        $this->registerRenovationRepository();
+        $this->registerResidentialComplexCategoryRepository();
     }
 
     /**

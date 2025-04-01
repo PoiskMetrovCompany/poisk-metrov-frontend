@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\RenovationRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Core\Interfaces\Services\PDFServiceInterface;
 use App\Http\Resources\ApartmentResource;
@@ -16,11 +19,21 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 
 /**
- * Class PDFService.
+ * @package App\Services
+ * @implements PDFServiceInterface
+ * @property-read FavoritesServiceInterface $favoritesService
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
+ * @property-read RenovationRepositoryInterface $renovationRepository
+ * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  */
-class PDFService implements PDFServiceInterface
+final class PDFService implements PDFServiceInterface
 {
-    public function __construct(protected FavoritesServiceInterface $favoritesService)
+    public function __construct(
+        protected FavoritesServiceInterface $favoritesService,
+        protected ApartmentRepositoryInterface $apartmentRepository,
+        protected RenovationRepositoryInterface $renovationRepository,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+    )
     {
     }
 
@@ -72,12 +85,13 @@ class PDFService implements PDFServiceInterface
 
     public function getApartmentsData(array $offerIds): array
     {
-        $apartments = Apartment::whereIn('offer_id', $offerIds)->get();
+        $apartments = $this->apartmentRepository->isExists(['offer_id' => $offerIds]);
         $groupedApartments = [];
 
         foreach ($apartments as $i => &$apartment) {
             unset($apartments[$i]);
-            $renovations = Renovation::where('offer_id', $apartment->offer_id)->first();
+            $renovations = $this->renovationRepository->findByOfferId($apartment->offer_id);
+
 
             if ($renovations != []) {
                 $parsed = json_decode($renovations);
@@ -112,6 +126,7 @@ class PDFService implements PDFServiceInterface
 
         foreach ($groupedApartments as $j => $group) {
             $complex = ResidentialComplex::where('id', $group['complex_id'])->first();
+            $complex = $this->residentialComplexRepository->findById($group['complex_id']);
 
             if ($complex->apartments()->get()->count() == 0) {
                 continue;
@@ -131,7 +146,7 @@ class PDFService implements PDFServiceInterface
         $complexesData = [];
 
         foreach ($buildingCodes as $code) {
-            $complex = ResidentialComplex::where('code', $code)->first();
+            $complex = $this->residentialComplexRepository->findByCode($code);
 
             if ($complex->apartments()->get()->count() == 0) {
                 continue;

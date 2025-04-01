@@ -10,6 +10,16 @@ use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
 
+/**
+ * @package App\Services
+ * @implements SerializedCollectionServiceInterface
+ * @property-read InteractionRepositoryInterface $interactionRepository
+ * @property-read ApartmentRepositoryInterface $apartmentRepository
+ * @property-read ManagerRepositoryInterface $managerRepository
+ * @property-read UserRepositoryInterface $userRepository
+ * @property-read ReservationRepositoryInterface $reservationRepository
+ * @property-read ComplexRepositoryInterface $complexRepository
+ */
 final class SerializedCollectionService implements SerializedCollectionServiceInterface
 {
     use ApartmentListSerializedTrait;

@@ -12,7 +12,7 @@ use App\Models\UserAdsAgreement;
  * @implements AdsAgreementServiceInterface
  * @property-read UserAdsAgreementRepositoryInterface $userAdsAgreementRepository
  */
-class AdsAgreementService extends AbstractService implements AdsAgreementServiceInterface
+final class AdsAgreementService extends AbstractService implements AdsAgreementServiceInterface
 {
     public function __construct(protected UserAdsAgreementRepositoryInterface $userAdsAgreementRepository)
     {

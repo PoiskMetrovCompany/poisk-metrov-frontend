@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Cookie;
  * @property-read ResidentialComplexRepositoryInterface $residentialComplexRepository
  * @property-read ApartmentRepositoryInterface $apartmentRepository
  */
-class FavoritesService implements FavoritesServiceInterface
+final class FavoritesService implements FavoritesServiceInterface
 {
     public function __construct(
         protected PriceFormattingServiceInterface $priceFormattingService,

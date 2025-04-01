@@ -9,7 +9,7 @@ use App\CRM\Commands\CreateLead;
  * @package App\Services
  * @implements CRMServiceInterface
  */
-class CRMService implements CRMServiceInterface
+final class CRMService implements CRMServiceInterface
 {
     public function createLead(string $phone, string $comment, string $city, string|null $name = null)
     {

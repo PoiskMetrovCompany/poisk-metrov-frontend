@@ -6,8 +6,10 @@ use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * @package App\Services\Backup
  * @see AppServiceProvider::registerBackupHistoryService()
  * @implements BackupHistoryServiceInterface
+ * @property-read static $filePath
  */
 final class BackupHistoryService implements BackupHistoryServiceInterface
 {

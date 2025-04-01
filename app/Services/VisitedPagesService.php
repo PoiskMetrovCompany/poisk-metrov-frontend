@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
 /**
- * Class VisitedPagesService.
+ * @package App\Services
+ * @extends AbstractService
+ * @implements VisitedPagesServiceInterface
+ * @property-read VisitedPageRepositoryInterface $visitedPageRepository
  */
-class VisitedPagesService extends AbstractService implements VisitedPagesServiceInterface
+final class VisitedPagesService extends AbstractService implements VisitedPagesServiceInterface
 {
     public function __construct(protected VisitedPageRepositoryInterface $visitedPageRepository)
     {

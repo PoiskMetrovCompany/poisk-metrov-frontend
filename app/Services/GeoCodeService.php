@@ -2,20 +2,29 @@
 
 namespace App\Services;
 
+use App\Core\Interfaces\Services\GeoCodeServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use Http;
 use Illuminate\Support\Facades\Storage;
 
-class GeoCodeService extends AbstractService
+/**
+ * @package App\Services
+ * @extends AbstractService
+ * @implements GeoCodeServiceInterface
+ * @property-read string $key
+ * @property-read TextServiceInterface $textService
+ */
+final class GeoCodeService extends AbstractService implements GeoCodeServiceInterface
 {
     protected string $key;
 
-    public function __construct(protected TextService $textService)
+    public function __construct(protected TextServiceInterface $textService)
     {
         $data = Storage::json('yandex-geocoder-key.json');
         $this->key = $data['key'];
     }
 
-    public function getGeoData(string $addressOrCoordinates)
+    public function getGeoData(string $addressOrCoordinates): mixed
     {
         //coordinates format must be longitude/latitude
         $addressForSearch = $this->textService->unicodeToCyrillics(str_replace(' ', '+', $addressOrCoordinates));
