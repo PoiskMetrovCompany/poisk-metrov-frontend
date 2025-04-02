@@ -98,7 +98,7 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
 
     public function getCode(array $attributes, string $cityCode): Collection
     {
-        return ResidentialComplex::whereIn($attributes)
+        return ResidentialComplex::whereIn($attributes[0], $attributes[1])
             ->whereHas('location', function (Builder $locationQuery) use ($cityCode) {
                 return $locationQuery->where('code', $cityCode);
             })
