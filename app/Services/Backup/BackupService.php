@@ -7,7 +7,6 @@ use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Providers\AppServiceProvider;
 use Arhitector\Yandex\Disk;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -28,8 +27,9 @@ final class BackupService implements BackupServiceInterface
         $this->backupHistoryService = $backupHistoryService;
     }
 
-    public function backupWeb(string $toDate, string $filename, string $archiveDir, string $archivePath): void
+    private function backupWeb(string $toDate, string $filename, string $archiveDir, string $archivePath): void
     {
+        $depthPath = 3;
         if (!is_dir($archiveDir)) {
             mkdir($archiveDir, 0755, true);
         }
@@ -41,15 +41,20 @@ final class BackupService implements BackupServiceInterface
                     throw new Exception('Не удалось создать архив.');
                 }
 
-                $baseDir = realpath(dirname(__DIR__, 3));
+                $baseDir = realpath(dirname(__DIR__, $depthPath));
 
                 $excludedPaths = [
-                    '/vendor',
-                    '/node_modules',
-                    '/.idea',
-                    '/.run',
-                    '/.vscode',
-                    $filename,
+                    realpath($baseDir . '/vendor'),
+                    realpath($baseDir . '/node_modules'),
+                    realpath($baseDir . '/.idea'),
+                    realpath($baseDir . '/.git'),
+                    realpath($baseDir . '/.run'),
+                    realpath($baseDir . '/.vscode'),
+                    realpath($baseDir . '/storage'),
+                    realpath($baseDir . '/public/build'),
+                    realpath($baseDir . '/public/galleries'),
+                    realpath($baseDir . '/public/complexes'),
+                    realpath($baseDir . '/public/news'),
                 ];
 
                 $iterator = new RecursiveIteratorIterator(
@@ -65,7 +70,7 @@ final class BackupService implements BackupServiceInterface
 
                     $shouldExclude = false;
                     foreach ($excludedPaths as $excludedPath) {
-                        if (strpos($filePath, $excludedPath) !== false) {
+                        if ($excludedPath && strpos($filePath, $excludedPath) === 0) {
                             $shouldExclude = true;
                             break;
                         }
@@ -86,47 +91,41 @@ final class BackupService implements BackupServiceInterface
             }
         }
     }
-    public function backupDB(): void
+    private function backupDB(): void
     {
+        $depthPath = 3;
         $username = env('DB_USERNAME');
         $password = env('DB_PASSWORD');
         $dbname = env('DB_DATABASE');
-        $toDate = date('Y-m-d-H-i-s');
-        $filename = "{$toDate}_backup.sql";
-        $path =  dirname(__DIR__,3) . '/' . $filename;
+        $toDate = date('y-m-d');
+        $filename = "backup.sql";
+        $path = dirname(__DIR__, $depthPath) . '/' . $filename;
         exec("mysqldump -u{$username} -p{$password} {$dbname} > {$path}");
     }
 
     public function execute(): void
     {
-        $toDate = date('Y-m-d-H-i-s');
-        $filename = "{$toDate}_backup.tar";
-        $archiveDir = dirname(__DIR__, 3);
-        $localArchivePath = "{$archiveDir}/{$filename}";
-        $remoteFilePath = "Бэкапы сайта Поиск Метров/{$filename}";
+        $depthPath = 3;
+        $toDate = date('y-m-d');
+        $filename = "{$toDate}_.tar";
+        $archiveDir = dirname(__DIR__, $depthPath);
+        $archivePath = "{$archiveDir}/{$filename}";
+
+
+        $this->backupHistoryService->handler(['name' => $filename, 'created_at' => $toDate, 'yaDisk' => $this->disk]);
 
         try {
             $this->backupDB();
-            $this->backupWeb($toDate, $filename, $archiveDir, $localArchivePath);
-            $resource = $this->disk->getResource($remoteFilePath);
-            $this->uploadFile($resource, $localArchivePath);
-
-            array_map('unlink', glob(dirname(__DIR__, 3) . '/' . '*_backup.sql'));
-            unlink($localArchivePath);
-
         } catch (\Exception $e) {
-            throw new \Exception("Ошибка при выполнении бэкапа: " . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
-    }
 
-    private function uploadFile($resource, $filePath): void
-    {
-        $fileSize = filesize($filePath);
+        $this->backupWeb($toDate, $filename, $archiveDir, $archivePath);
 
-        try {
-            $resource->upload($filePath);
-        } catch (\Exception $e) {
-            throw new \Exception("Ошибка при загрузке файла на Yandex.Disk: " . $e->getMessage());
-        }
+        $resource = $this->disk->getResource("Бэкапы сайта Поиск Метров/{$filename}");
+
+        $resource->upload(dirname(__DIR__, $depthPath) . '/' . $filename);
+        array_map('unlink', glob(dirname(__DIR__, $depthPath) .'/' . $filename));
+        array_map('unlink', array_filter(glob(dirname(__DIR__, $depthPath) . '/' . '*.sql'), 'file_exists'));
     }
 }
