@@ -106,7 +106,7 @@ final class BackupService implements BackupServiceInterface
     public function execute(): void
     {
         $depthPath = 3;
-        $toDate = date('Y-m-d-H-i-s');
+        $toDate = date('d-m-y');
         $filename = "{$toDate}_.tar";
         $archiveDir = dirname(__DIR__, $depthPath);
         $archivePath = "{$archiveDir}/{$filename}";
