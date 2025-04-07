@@ -1,7 +1,12 @@
 <?php
 
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\Api\V1\Account\AuthorizeAccountController;
+use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
+use App\Http\Controllers\Api\V1\Users\ListUserController;
+use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FavoritesController;
@@ -35,7 +40,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/get-current-user-data', [UserController::class, 'getCurrentUserData']);
+    Route::get('/get-current-user-data', [UserController::class, 'getCurrentUserData']); // UNKNOWN
     Route::get('/get-all-real-estate', [RealEstateController::class, 'getAllRealEstate']);
     Route::get('/get-all-apartments', [ApartmentController::class, 'getAllApartments']);
     Route::get('/get-public-files', [FileController::class, 'getPublicFiles']);
@@ -49,8 +54,8 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/delete-file', [FileController::class, 'deleteFile']);
     Route::delete('/delete-folder', [FileController::class, 'deleteFolder']);
     Route::get('/managers-list', [ManagersController::class, 'getManagersList']);
-    Route::get('/users-list', [UserController::class, 'getUsers']);
-    Route::put('/update-role', [UserController::class, 'updateRole']);
+    Route::get('/users-list', [UserController::class, 'getUsers']);  // UNKNOWN
+    Route::put('/update-role', [UserController::class, 'updateRole']);  // UNKNOWN
 
     Route::put('/feeds/create', [FeedController::class, 'createFeed']);
     Route::put('/feeds/update', [FeedController::class, 'updateFeed']);
@@ -69,9 +74,9 @@ Route::middleware('auth:api')->group(function () {
 Route::get('/get-article', [NewsController::class, 'getArticle']);
 Route::get('/get-news', [NewsController::class, 'getNews']);
 Route::get('/like-count', [FavoritesController::class, 'countFavorites']);
-Route::post('/authorize-user', [UserController::class, 'authorizeUser']);
+Route::post('/authorize-user', [UserController::class, 'authorizeUser']); // UNKNOWN
 Route::post('/confirm-user', [PhoneController::class, 'sendUserConfirmationMessage']);
-Route::post('/log-out', [UserController::class, 'logOut']);
+Route::post('/log-out', [UserController::class, 'logOut']); // UNKNOWN
 Route::post('/call-confirmed', [PhoneController::class, 'onCallConfirmed']);
 Route::post('/call-failed', [PhoneController::class, 'onCallFailed']);
 Route::post('/leave-request', [CRMController::class, 'store']);
@@ -98,12 +103,35 @@ Route::group(['middleware' => ['web']], function () {
     });
 });
 
+/**
+ * @param string $className
+ * @return array
+ */
+function operation(string $className): array
+{
+    return [$className, '__invoke'];
+}
+
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
     /// Cbr
-   Route::prefix('cbr')->group(function () {
-       Route::get('actual-date', [CbrController::class, 'actualDate']);
+   Route::namespace('CBR')->prefix('cbr')->group(function () {
+       Route::get('actual-date', [CbrController::class, 'actualDate'])->name('cbr.actualDate');
    });
-   /// END
+   /// END Cbr
+
+    /// User
+    Route::namespace('USER')->prefix('users')->group(function () {
+        Route::get('/get-current-user-data', operation(GetCurrentUserDataController::class))->name('user.get-current-user-data');
+        Route::get('/list', operation(ListUserController::class))->name('user.list');
+        Route::get('/update-role', operation(UpdateRoleUserController::class))->name('user.update-role');
+        /// Account
+        Route::namespace('ACCOUNT')->prefix('account')->group(function () {
+            Route::get('/authorize', operation(AuthorizeAccountController::class))->name('account.authorize');
+            Route::get('/logout', operation(LogoutAccountController::class))->name('account.authorize');
+        });
+        /// END Account
+    });
+    /// END User
 });
 /// END
