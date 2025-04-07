@@ -80,8 +80,9 @@ final class FavoritesService implements FavoritesServiceInterface
     public function getFavoritePlanData(): array
     {
         $offerIds = $this->getFavoritePlanOfferIds();
-        $apartments = $this->apartmentRepository->findByOfferIdBuilder($offerIds, 'price');
-
+        $apartments = $this->apartmentRepository->findByOfferIdBuilder($offerIds, 'price')
+            ->orderBy('price')
+            ->get();
         return ApartmentResource::collection($apartments)->toArray(new Request());
     }
 

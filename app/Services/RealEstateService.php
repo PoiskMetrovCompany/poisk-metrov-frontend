@@ -17,6 +17,7 @@ use App\Models\ResidentialComplexCategory;
 use App\Repositories\ResidentialComplexRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -43,7 +44,7 @@ final class RealEstateService implements RealEstateServiceInterface
     ) {
     }
 
-    public function getRecommendedCategory(): ResidentialComplexCategory
+    public function getRecommendedCategory(): ?Model
     {
         $visiedRealEstates = $this->visitedPagesService->getVisitedBuildings();
         $visitedCategoryCount = new Collection();
@@ -65,7 +66,11 @@ final class RealEstateService implements RealEstateServiceInterface
             }
         }
 
-        return $this->residentialComplexCategoryRepository->find(['category_name' => $mostVisitedCategory])->first();
+        return $this->residentialComplexCategoryRepository
+            ->find(['category_name' => $mostVisitedCategory])
+            ->get()
+            ->first();
+//        return ResidentialComplexCategory::where(['category_name' => $mostVisitedCategory])->first();
     }
 
     public function getRealEstateRecommendations(ResidentialComplexCategory|null $mostVisitedCategory): \Illuminate\Support\Collection

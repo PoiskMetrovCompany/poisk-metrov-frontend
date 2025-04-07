@@ -6,6 +6,7 @@ use App\Core\Interfaces\Repositories\NewsRepositoryInterface;
 use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Services\NewsServiceInterface;
 use App\Models\News;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,7 +26,7 @@ final class NewsService extends AbstractService implements NewsServiceInterface
     {
 
     }
-    public function createOrUpdateArticle(array $data, $file = null): News
+    public function createOrUpdateArticle(array $data, $file = null): Model
     {
         $article = null;
 
@@ -64,14 +65,17 @@ final class NewsService extends AbstractService implements NewsServiceInterface
         $article->delete();
     }
 
-    public function getArticle(int $id): News
+    public function getArticle(int $id): Model
     {
         return $this->newsRepository->findById($id);
     }
 
     public function getNews(): Collection
     {
-        return $this->newsRepository->list([])->sortBy('created_at')->reverse();
+        return $this->newsRepository->listBuilder([])
+            ->get()
+            ->sortBy('created_at')
+            ->reverse();
     }
 
     public function getArticleForSite(int $id): array

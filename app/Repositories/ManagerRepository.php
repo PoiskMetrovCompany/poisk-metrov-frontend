@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Models\Manager;
 use App\Repositories\Queries\FindByIdQueryTrait;
+use App\Repositories\Queries\FindByPhoneQueryTrait;
 use App\Repositories\Queries\FindByUserIdQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ final class ManagerRepository implements ManagerRepositoryInterface
     use ListQueryTrait;
     use FindByIdQueryTrait;
     use FindByUserIdQueryTrait;
+    use FindByPhoneQueryTrait;
 
     protected Model $model;
 

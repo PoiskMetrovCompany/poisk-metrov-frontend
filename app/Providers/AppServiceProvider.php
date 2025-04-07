@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\AuthorizationCallRepositoryInterface;
 use App\Core\Interfaces\Repositories\BuilderRepositoryInterface;
 use App\Core\Interfaces\Repositories\ChatSessionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ChatTokenCRMLeadPairRepositoryInterface;
@@ -56,6 +57,7 @@ use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use App\Core\Interfaces\Services\YandexSearchServiceInterface;
 use App\Repositories\ApartmentRepository;
+use App\Repositories\AuthorizationCallRepository;
 use App\Repositories\BuilderRepository;
 use App\Repositories\ChatSessionRepository;
 use App\Repositories\ChatTokenCRMLeadPairRepository;
@@ -392,6 +394,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(RelationshipEntityRepositoryInterface::class, RelationshipEntityRepository::class);
     }
 
+    final public function registerAuthorizationCallRepository(): void
+    {
+        $this->app->singleton(AuthorizationCallRepositoryInterface::class, AuthorizationCallRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -452,6 +459,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerRenovationRepository();
         $this->registerResidentialComplexCategoryRepository();
         $this->registerRelationshipEntityRepository();
+        $this->registerAuthorizationCallRepository();
     }
 
     /**

@@ -4,14 +4,15 @@ namespace App\Core\Interfaces\Services;
 
 use App\Models\ResidentialComplexCategory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 interface RealEstateServiceInterface
 {
     /**
-     * @return ResidentialComplexCategory
+     * @return null|ResidentialComplexCategory
      */
-    public function getRecommendedCategory(): ResidentialComplexCategory;
+    public function getRecommendedCategory(): ?Model;
 
     /**
      * @param ResidentialComplexCategory|null $mostVisitedCategory

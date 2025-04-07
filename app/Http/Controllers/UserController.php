@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\AuthorizationCallRepositoryInterface;
+use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
@@ -31,6 +33,8 @@ use Illuminate\Validation\UnauthorizedException;
  * @see CityServiceInterface
  * @see UserServiceInterface
  * @see UserRepositoryInterface
+ * @see ManagerRepositoryInterface
+ * @see AuthorizationCallRepositoryInterface
  */
 class UserController extends Controller
 {
@@ -38,12 +42,17 @@ class UserController extends Controller
      * @param FavoritesServiceInterface $favoritesService
      * @param CityServiceInterface $cityService
      * @param UserServiceInterface $userService
+     * @param UserRepositoryInterface $userRepository
+     * @param ManagerRepositoryInterface $managerRepository
+     * @param AuthorizationCallRepositoryInterface $authorizationCallRepository
      */
     public function __construct(
         protected FavoritesServiceInterface $favoritesService,
         protected CityServiceInterface $cityService,
         protected UserServiceInterface $userService,
         protected UserRepositoryInterface $userRepository,
+        protected ManagerRepositoryInterface $managerRepository,
+        protected AuthorizationCallRepositoryInterface $authorizationCallRepository,
     ) {
     }
 
@@ -89,7 +98,7 @@ class UserController extends Controller
         if ($user) {
             $returnData['status'] = 'Already logged in';
             $user->connectWithManager();
-            $managerForUser = Manager::where('phone', $authorizeUserRequest->validated('phone'))->first();
+            $managerForUser = $this->managerRepository->findByPhone($authorizeUserRequest->validated('phone'));
 
             if (
                 isset($authorizeUserRequest->returnApiKey) &&
@@ -120,19 +129,23 @@ class UserController extends Controller
             return;
         }
 
-        $user = User::where('phone', $phone)->first();
+        $user = $this->userRepository->findByPhone($phone);
         $userExists = $user != null;
         $hasName = false;
 
         if ($userExists) {
             $hasName = $user->name != null;
         } else {
-            $user = User::create(['phone' => $phone]);
+            $user = $this->userRepository->store(['phone' => $phone]);
         }
 
         if (! $userExists || ! $hasName) {
             //Recreate for name input
-            AuthorizationCall::create(['pincode' => $pincode, 'phone' => $phone, 'call_id' => $callId]);
+            $this->authorizationCallRepository->store([
+                'pincode' => $pincode,
+                'phone' => $phone,
+                'call_id' => $callId
+            ]);
             return response()->json(['status' => 'NeedFill'], 200);
         }
 
@@ -151,7 +164,7 @@ class UserController extends Controller
 
         $returnData['status'] = 'Authorization success';
 
-        $managerForUser = Manager::where('phone', $phone)->first();
+        $managerForUser = $this->managerRepository->findByPhone($authorizeUserRequest->validated('phone'));
 
         if (
             isset($authorizeUserRequest->returnApiKey) &&

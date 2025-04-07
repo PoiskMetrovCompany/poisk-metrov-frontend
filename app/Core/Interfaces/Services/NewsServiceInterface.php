@@ -12,9 +12,9 @@ interface NewsServiceInterface
     /**
      * @param array $data
      * @param $file
-     * @return News
+     * @return Model
      */
-    public function createOrUpdateArticle(array $data, $file = null): News;
+    public function createOrUpdateArticle(array $data, $file = null): Model;
 
     /**
      * @param int $id
@@ -23,9 +23,9 @@ interface NewsServiceInterface
 
     /**
      * @param int $id
-     * @return News
+     * @return Model
      */
-    public function getArticle(int $id): News;
+    public function getArticle(int $id): Model;
 
     /**
      * @return Collection

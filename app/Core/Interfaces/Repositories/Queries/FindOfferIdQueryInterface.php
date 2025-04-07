@@ -10,5 +10,9 @@ use Illuminate\Database\Eloquent\Builder;
  */
 interface FindOfferIdQueryInterface
 {
-    public function findByOfferIdBuilder(Collection $visitedPages): Builder;
+    /**
+     * @param Collection|array $visitedPages
+     * @return Builder
+     */
+    public function findByOfferIdBuilder(Collection|array $visitedPages): Builder;
 }

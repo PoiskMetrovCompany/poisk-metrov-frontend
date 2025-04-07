@@ -4,22 +4,23 @@ namespace App\Core\Interfaces\Services;
 
 use App\Models\ChatSession;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 interface ChatServiceInterface
 {
     /**
-     * @param ChatSession $session
+     * @param Model $session
      * @return void
      */
-    public function sendSessionToCRM(ChatSession $session): void;
+    public function sendSessionToCRM(Model $session): void;
 
     /**
      * @param array $sessionHistory
-     * @param User|null $user
+     * @param Model|null $user
      * @param bool $withMarkdown
      * @return array
      */
-    public function getSessionHistoryAsString(array $sessionHistory, User|null $user, bool $withMarkdown = true): array;
+    public function getSessionHistoryAsString(array $sessionHistory, Model|null $user, bool $withMarkdown = true): array;
 
     /**
      * @param string $chatToken
@@ -30,29 +31,29 @@ interface ChatServiceInterface
     public function getChatHistoryAsString(string $chatToken, bool $withMarkdown = true, bool $noSizeLimit = false): string;
 
     /**
-     * @param ChatSession $session
-     * @param User|null $user
+     * @param Model $session
+     * @param Model|null $user
      * @return array
      */
-    public function getMessagesFromSession(ChatSession $session, User|null $user): array;
+    public function getMessagesFromSession(Model $session, Model|null $user): array;
 
     /**
      * @param string $chatToken
-     * @param $user
+     * @param ?Model $user
      * @param bool $nonDeletedOnly
      * @return array
      */
-    public function getChatHistory(string $chatToken, $user, bool $nonDeletedOnly = false): array;
+    public function getChatHistory(string $chatToken, ?Model $user, bool $nonDeletedOnly = false): array;
 
     /**
      * @param string $userName
      * @param string $message
      * @param string $chatToken
-     * @param ChatSession $session
+     * @param Model $session
      * @param int|null $userId
      * @return void
      */
-    public function sendChatMessage(string $userName, string $message, string $chatToken, ChatSession $session, int $userId = null): void;
+    public function sendChatMessage(string $userName, string $message, string $chatToken, Model $session, int $userId = null): void;
 
     /**
      * @param string $userName
