@@ -5,11 +5,16 @@ namespace App\Repositories;
 use AllowDynamicProperties;
 use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Models\VisitedPage;
+use App\Repositories\Build\FindQueryBuilderTrait;
+use App\Repositories\Queries\StoreQueryTrait;
 use Illuminate\Support\Collection;
 
 #[AllowDynamicProperties]
 final class VisitedPageRepository implements VisitedPageRepositoryInterface
 {
+    use StoreQueryTrait;
+    use FindQueryBuilderTrait;
+
     public function __construct(protected VisitedPage $model)
     {
 

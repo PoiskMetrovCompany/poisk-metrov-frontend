@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\PDFServiceInterface;
 use App\Models\Apartment;
 use App\Models\ResidentialComplex;
@@ -14,14 +16,24 @@ use Throwable;
 
 /**
  * @see AppServiceProvider::registerPDFService()
+ * @see AppServiceProvider::registerResidentialComplexRepository()
+ * @see AppServiceProvider::registerApartmentRepository()
  * @see PDFServiceInterface
+ * @see ResidentialComplexRepositoryInterface
+ * @see ApartmentRepositoryInterface
  */
 class PDFController extends Controller
 {
     /**
      * @param PDFServiceInterface $pdfService
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
+     * @param ApartmentRepositoryInterface $apartmentRepository
      */
-    public function __construct(protected PDFServiceInterface $pdfService)
+    public function __construct(
+        protected PDFServiceInterface $pdfService,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+        protected ApartmentRepositoryInterface $apartmentRepository,
+    )
     {
     }
 
@@ -33,7 +45,7 @@ class PDFController extends Controller
     public function getBuildingPresentation(Request $request, string $buildingCode)
     {
         $filePathAndName = $this->pdfService->downloadBuildingPdf([$buildingCode]);
-        $building = ResidentialComplex::where('code', $buildingCode)->first();
+        $building = $this->residentialComplexRepository->findByCode($buildingCode);
         $filePath = $filePathAndName[0];
         $fileName = "{$building->name}.pdf";
         $headers = ['ContentType' => 'application/pdf'];
@@ -49,7 +61,7 @@ class PDFController extends Controller
     public function getApartmentPresentation(Request $request, string $apartmentCode)
     {
         $filePathAndName = $this->pdfService->downloadApartmentPdf([$apartmentCode]);
-        $buildingName = Apartment::where('offer_id', $apartmentCode)->first()->residentialComplex->name;
+        $buildingName = $this->apartmentRepository->findByOfferId($apartmentCode)->residentialComplex->name;
         $filePath = $filePathAndName[0];
         $fileName = "{$buildingName}.pdf";
         $headers = ['ContentType' => 'application/pdf'];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
@@ -22,6 +23,7 @@ use Throwable;
  * @see RealEstateServiceInterface
  * @see SearchServiceInterface
  * @see CityServiceInterface
+ * @see ResidentialComplexRepositoryInterface
  */
 class CatalogueViewController extends Controller
 {
@@ -30,14 +32,14 @@ class CatalogueViewController extends Controller
      * @param RealEstateServiceInterface $realEstateService
      * @param SearchServiceInterface $searchService
      * @param CityServiceInterface $cityService
-     * @param ResidentialComplexRepository $residentialComplexRepository
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
      */
     public function __construct(
         protected CachingServiceInterface $cachingService,
         protected RealEstateServiceInterface $realEstateService,
         protected SearchServiceInterface $searchService,
         protected CityServiceInterface $cityService,
-        protected ResidentialComplexRepository $residentialComplexRepository
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository
     ) {
     }
 

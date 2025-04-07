@@ -11,6 +11,7 @@ use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\DeletedFavoriteBuildingRepositoryInterface;
 use App\Core\Interfaces\Repositories\GroupChatBotMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
+use App\Core\Interfaces\Repositories\LocationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerChatMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\NewsRepositoryInterface;
@@ -21,6 +22,7 @@ use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexCategoryRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexFeedSiteNameRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\SpriteImagePositionRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserChatMessageRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserFavoriteBuildingRepositoryInterface;
@@ -65,6 +67,7 @@ use App\Repositories\ComplexRepository;
 use App\Repositories\DeletedFavoriteBuildingRepository;
 use App\Repositories\GroupChatBotMessageRepository;
 use App\Repositories\InteractionRepository;
+use App\Repositories\LocationRepository;
 use App\Repositories\ManagerChatMessageRepository;
 use App\Repositories\ManagerRepository;
 use App\Repositories\NewsRepository;
@@ -75,6 +78,7 @@ use App\Repositories\ReservationRepository;
 use App\Repositories\ResidentialComplexCategoryRepository;
 use App\Repositories\ResidentialComplexFeedSiteNameRepository;
 use App\Repositories\ResidentialComplexRepository;
+use App\Repositories\SpriteImagePositionRepository;
 use App\Repositories\UserAdsAgreementRepository;
 use App\Repositories\UserChatMessageRepository;
 use App\Repositories\UserFavoriteBuildingRepository;
@@ -399,6 +403,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(AuthorizationCallRepositoryInterface::class, AuthorizationCallRepository::class);
     }
 
+    final public function registerLocationRepository(): void
+    {
+        $this->app->singleton(LocationRepositoryInterface::class, LocationRepository::class);
+    }
+
+    final public function registerSpriteImagePositionRepository(): void
+    {
+        $this->app->singleton(SpriteImagePositionRepositoryInterface::class, SpriteImagePositionRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -460,6 +474,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerResidentialComplexCategoryRepository();
         $this->registerRelationshipEntityRepository();
         $this->registerAuthorizationCallRepository();
+        $this->registerLocationRepository();
     }
 
     /**

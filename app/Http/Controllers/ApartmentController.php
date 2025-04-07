@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\LocationRepositoryInterface;
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
 use App\Http\Requests\ApartmentListRequest;
@@ -13,6 +16,7 @@ use App\Http\Resources\ResidentialComplexResource;
 use App\Models\Apartment;
 use App\Models\Location;
 use App\Models\ResidentialComplex;
+use App\Repositories\LocationRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,18 +28,32 @@ use Throwable;
 /**
  * @see AppServiceProvider::registerApartmentService()
  * @see AppServiceProvider::registerPriceFormattingService()
+ * @see AppServiceProvider::registerApartmentRepository()
+ * @see AppServiceProvider::registerResidentialComplexRepository()
+ * @see AppServiceProvider::registerLocationRepository()
  * @see ApartmentServiceInterface
  * @see PriceFormattingServiceInterface
+ * @see ApartmentRepositoryInterface
+ * @see ResidentialComplexRepositoryInterface
+ * @see LocationRepositoryInterface
  */
 class ApartmentController extends Controller
 {
     /**
      * @param ApartmentServiceInterface $apartmentService
      * @param PriceFormattingServiceInterface $priceFormattingService
+     * @param ApartmentRepositoryInterface $apartmentRepository
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
+     * @param LocationRepository $locationRepository
      */
     public function __construct(
         protected ApartmentServiceInterface $apartmentService,
-        protected PriceFormattingServiceInterface $priceFormattingService)
+        protected PriceFormattingServiceInterface $priceFormattingService,
+        protected ApartmentRepositoryInterface $apartmentRepository,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+        // TODO: тут должен быть интерфейс!!!
+        protected LocationRepository $locationRepository,
+    )
     {
     }
 
@@ -46,26 +64,26 @@ class ApartmentController extends Controller
      */
     public function view(Request $request, string $offer_id)
     {
-        $apartment = Apartment::where('offer_id', $offer_id)->first();
+        $apartment = $this->apartmentRepository->findByOfferIdOnce($offer_id);
 
         if ($apartment == null) {
             return abort('404');
         }
 
-        $complex = ResidentialComplex::where('id', $apartment->complex_id)->first();
-        $location = Location::where('id', $complex->location_id)->first();
-        $apartments = Apartment::where([
+        $complex = $this->residentialComplexRepository->findById($apartment->complex_id);
+        $location = $this->locationRepository->findById($complex->location_id);
+
+        $apartments = $this->apartmentRepository->find([
             'apartment_type' => $apartment->apartment_type,
             'room_count' => $apartment->room_count,
             'complex_id' => $apartment->complex_id,
-            ['offer_id', '!=', $apartment->offer_id]]);
+            ['offer_id', '!=', $apartment->offer_id]
+        ]);
 
         $apartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
 
         if (!Auth::user()) {
             $apartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
-//        } else {
-//            $apartment->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
 
         $apartments->limit(10);
@@ -111,7 +129,7 @@ class ApartmentController extends Controller
      */
     public function getAllApartments()
     {
-        $allBuildings = ResidentialComplex::all();
+        $allBuildings = $this->residentialComplexRepository->list([]);
         $apartments = new Collection();
 
         foreach ($allBuildings as $building) {
@@ -134,7 +152,7 @@ class ApartmentController extends Controller
     public function updateApartment(UpdateApartmentRequest $updateApartmentRequest)
     {
         $validated = $updateApartmentRequest->validated();
-        $apartment = Apartment::where('id', $validated['id']);
+        $apartment = $this->apartmentRepository->findById($validated['id']);
         unset($validated['id']);
         $apartment->update($validated);
     }
@@ -233,7 +251,7 @@ class ApartmentController extends Controller
      */
     public function getApartmentViews(string $complexCode)
     {
-        $building = ResidentialComplex::where('code', $complexCode)->first();
+        $building = $this->residentialComplexRepository->findByCode($complexCode);
         $filteredApartments = $building->apartments();
         $priceSortOrder = [];
         $areaSortOrder = [];
@@ -249,7 +267,7 @@ class ApartmentController extends Controller
     public function getApartmentViewsWithFilters(ApartmentListRequest $request, string $complexCode)
     {
         $filteredApartments = $this->apartmentService->getFilteredApartmentQuery($request->validated(), $complexCode);
-        $buildingName = ResidentialComplex::where('code', $complexCode)->first()->name;
+        $buildingName = $this->residentialComplexRepository->findByCode($complexCode)->name;
         $priceSortOrder = $request->validated($request->priceSortOrder);
         $areaSortOrder = $request->validated($request->areaSortOrder);
 

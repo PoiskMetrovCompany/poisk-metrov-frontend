@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
@@ -31,7 +32,7 @@ class HomePageController extends Controller
      * @param CityServiceInterface $cityService
      * @param ApartmentServiceInterface $apartmentService
      * @param NewsServiceInterface $newsService
-     * @param ResidentialComplexRepository $residentialComplexRepository
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
      */
     public function __construct(
         protected SearchServiceInterface $searchService,
@@ -39,7 +40,7 @@ class HomePageController extends Controller
         protected CityServiceInterface $cityService,
         protected ApartmentServiceInterface $apartmentService,
         protected NewsServiceInterface $newsService,
-        protected ResidentialComplexRepository $residentialComplexRepository
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository
     ) {
     }
 

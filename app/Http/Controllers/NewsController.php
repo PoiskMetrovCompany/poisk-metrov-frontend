@@ -31,7 +31,6 @@ class NewsController extends Controller
     public function deleteArticle(Request $request)
     {
         $id = $request->id;
-
         $this->newsService->deleteArticle($id);
     }
 
@@ -55,7 +54,6 @@ class NewsController extends Controller
     public function getArticle(RequestById $request)
     {
         $id = $request->validated('id');
-
         return NewsResource::make($this->newsService->getArticle($id));
     }
 
@@ -66,7 +64,6 @@ class NewsController extends Controller
     public function getNews(Request $request)
     {
         $news = $this->newsService->getNews();
-
         return NewsResource::collection($news);
     }
 

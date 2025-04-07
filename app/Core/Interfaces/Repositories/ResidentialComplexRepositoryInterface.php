@@ -9,6 +9,7 @@ use App\Core\Interfaces\Repositories\Queries\IsCodeQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\IsExistsQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByCodeQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindHasQueryInterface;
+use App\Core\Interfaces\Repositories\Queries\ListQueryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BasicCollection;
@@ -17,6 +18,7 @@ use Illuminate\Support\Collection as BasicCollection;
  * @template TRepository
  */
 interface ResidentialComplexRepositoryInterface extends
+    ListQueryInterface,
     IsExistsQueryInterface,
     FindByCodeQueryInterface,
     FindInBuildingIdQueryInterface,

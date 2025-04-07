@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\CRM\Commands\CreateLead;
@@ -16,6 +17,7 @@ use stdClass;
  * @see AppServiceProvider::registerAdsAgreementService()
  * @see CRMServiceInterface
  * @see AdsAgreementServiceInterface
+ * @see UserAdsAgreementRepositoryInterface
  */
 class CRMController extends Controller
 {
@@ -24,10 +26,12 @@ class CRMController extends Controller
     /**
      * @param CRMServiceInterface $crmService
      * @param AdsAgreementServiceInterface $adsService
+     * @param UserAdsAgreementRepositoryInterface $userAdsAgreementRepository
      */
     public function __construct(
         protected CRMServiceInterface $crmService,
-        protected AdsAgreementServiceInterface $adsService
+        protected AdsAgreementServiceInterface $adsService,
+        protected UserAdsAgreementRepositoryInterface $userAdsAgreementRepository,
     )
     {
     }
@@ -97,7 +101,9 @@ class CRMController extends Controller
             'phone' => 'required'
         ]);
 
-        UserAdsAgreement::where('phone', $validated['phone'])->update(['agreement' => false]);
+        $this->userAdsAgreementRepository
+            ->find(['phone' => $validated['phone']])
+            ->update(['agreement' => false]);
         return response()->json(['message' => 'success'], 200);
     }
 }

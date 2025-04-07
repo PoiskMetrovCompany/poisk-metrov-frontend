@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Http\Requests\ManagerMessageRequest;
@@ -26,7 +27,8 @@ class ManagerChatController extends Controller
     public function __construct(
         protected ChatServiceInterface $chatService,
         protected TelegramService $telegramService,
-        protected TextServiceInterface $textService
+        protected TextServiceInterface $textService,
+        protected ManagerRepositoryInterface $managerRepository,
     ) {
     }
 
@@ -48,7 +50,7 @@ class ManagerChatController extends Controller
     public function tryStartSession(Request $request)
     {
         $userId = $request['id'];
-        $managerId = Manager::where('user_id', $userId)->first()->id;
+        $managerId = $this->managerRepository->findById($userId)->id;
         $chatToken = $request['chatToken'];
 
         return $this->chatService->tryStartSession($managerId, $chatToken);
@@ -74,8 +76,7 @@ class ManagerChatController extends Controller
      */
     function getChats(Request $request)
     {
-        $managerId = Manager::where('user_id', $request->managerId)->first()->id;
-
+        $managerId = $this->managerRepository->findById($request->managerId)->id;
         return $this->chatService->getChats($managerId);
     }
 

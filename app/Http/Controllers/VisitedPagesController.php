@@ -2,15 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Http\Requests\AddVisitedPageRequest;
 use App\Models\CRMSyncRequiredForUser;
 use App\Models\VisitedPage;
+use App\Providers\AppServiceProvider;
 use Cookie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @see AppServiceProvider::registerVisitedPageRepository()
+ * @see VisitedPageRepositoryInterface
+ */
 class VisitedPagesController extends Controller
 {
+    /**
+     * @param VisitedPageRepositoryInterface $visitedPageRepository
+     */
+    public function __construct(protected VisitedPageRepositoryInterface $visitedPageRepository)
+    {
+
+    }
+
     /**
      * @return void
      */
@@ -46,8 +60,10 @@ class VisitedPagesController extends Controller
     /**
      * @param AddVisitedPageRequest $addVisitedPageRequest
      * @return \Illuminate\Http\JsonResponse
+     *
+     * Убрал public static function
      */
-    public static function updatePagesVisited(AddVisitedPageRequest $addVisitedPageRequest)
+    public function updatePagesVisited(AddVisitedPageRequest $addVisitedPageRequest)
     {
         $page = $addVisitedPageRequest->validated('page');
         $code = $addVisitedPageRequest->validated('code');
@@ -64,8 +80,8 @@ class VisitedPagesController extends Controller
             'code' => $code
         ];
 
-        if (! VisitedPage::where($conditions)->exists()) {
-            $visitedPage = VisitedPage::create($conditions);
+        if (!$this->visitedPageRepository->find($conditions)->exists()) {
+            $visitedPage = $this->visitedPageRepository->store($conditions);
             return response()->json(['status' => "Created new visited page {$visitedPage->code}"], 200);
         }
 

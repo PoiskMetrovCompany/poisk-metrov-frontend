@@ -15,6 +15,7 @@ use App\Repositories\Queries\FindHasQueryTrait;
 use App\Repositories\Queries\FindInBuildingIdQueryTrait;
 use App\Repositories\Queries\IsCodeQueryTrait;
 use App\Repositories\Queries\IsExistsQueryTrait;
+use App\Repositories\Queries\ListQueryTrait;
 use App\Services\CityService;
 use Illuminate\Support\Collection as BasicCollection;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 #[AllowDynamicProperties]
 final class ResidentialComplexRepository implements ResidentialComplexRepositoryInterface
 {
+    use ListQueryTrait;
     use FindByIdQueryTrait;
     use FindByCodeQueryTrait;
     use IsExistsQueryTrait;

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ChatSessionRepositoryInterface;
+use App\Core\Interfaces\Repositories\GroupChatBotMessageRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Http\Requests\ClientMessageRequest;
@@ -9,6 +12,7 @@ use App\Models\ChatSession;
 use App\Models\GroupChatBotMessage;
 use App\Models\User;
 use App\Providers\AppServiceProvider;
+use App\Repositories\UserRepository;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -19,8 +23,15 @@ use Storage;
 /**
  * @see AppServiceProvider::registerChatService()
  * @see AppServiceProvider::registerCityService()
+ * @see AppServiceProvider::registerUserRepository()
+ * @see AppServiceProvider::registerChatSessionRepository()
+ * @see AppServiceProvider::registerGroupChatBotMessageRepository()
+ * @see TelegramService
  * @see ChatServiceInterface
  * @see CityServiceInterface
+ * @see UserRepositoryInterface
+ * @see ChatSessionRepositoryInterface
+ * @see GroupChatBotMessageRepositoryInterface
  */
 class ChatController extends Controller
 {
@@ -30,11 +41,17 @@ class ChatController extends Controller
      * @param TelegramService $telegramService
      * @param ChatServiceInterface $chatService
      * @param CityServiceInterface $cityService
+     * @param UserRepositoryInterface $userRepository
+     * @param ChatSessionRepositoryInterface $chatSession
+     * @param GroupChatBotMessageRepositoryInterface $groupChatBotMessageRepository
      */
     public function __construct(
         protected TelegramService $telegramService,
         protected ChatServiceInterface $chatService,
-        protected CityServiceInterface $cityService
+        protected CityServiceInterface $cityService,
+        protected UserRepositoryInterface $userRepository,
+        protected ChatSessionRepositoryInterface $chatSession,
+        protected GroupChatBotMessageRepositoryInterface $groupChatBotMessageRepository,
     ) {
         $this->chatConfig = Storage::json('chat-config.json');
     }
@@ -56,14 +73,14 @@ class ChatController extends Controller
             $userName = "{$user->name} {$user->surname}";
         } else {
             $chatToken = Cookie::get('chat_token');
-            $user = User::where('chat_token', $chatToken)->first();
+            $user = $this->userRepository->findByChatToken($chatToken);
 
             if ($user) {
                 $userName = "{$user->name} {$user->surname}";
             }
         }
 
-        $session = ChatSession::where('chat_token', $chatToken)->first();
+        $session = $this->chatSession->findByChatToken($chatToken);
 
         if ($session) {
             $this->chatService->sendChatMessage($userName, $message, $chatToken, $session);
@@ -105,7 +122,7 @@ class ChatController extends Controller
             $history = new Collection($this->chatService->getChatHistory($chatToken, $user));
             //Костыль - в сессиях GroupChatBotMessage пересоздается как обычное сообщение
             //Но если сессия не началась, то пользователь не увидит свои сообщения если перезагрузит страницу т.к. они не принадлежат никакой сессии и не появляются в истории
-            $orphanMessages = GroupChatBotMessage::where(['sender_chat_token' => $chatToken])->get();
+            $orphanMessages = $this->groupChatBotMessageRepository->find(['sender_chat_token' => $chatToken])->get();
 
             if ($orphanMessages->count() > 0) {
                 foreach ($orphanMessages as &$orphanMessage) {

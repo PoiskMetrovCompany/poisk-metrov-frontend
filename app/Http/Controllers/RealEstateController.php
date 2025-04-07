@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Http\Requests\BuildingRequest;
 use App\Http\Requests\UpdateRealEstateRequest;
@@ -16,14 +17,20 @@ use Throwable;
 
 /**
  * @see AppServiceProvider::registerApartmentService()
+ * @see AppServiceProvider::registerResidentialComplexRepository()
  * @see ApartmentServiceInterface
+ * @see ResidentialComplexRepositoryInterface
  */
 class RealEstateController extends Controller
 {
     /**
      * @param ApartmentServiceInterface $apartmentService
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
      */
-    public function __construct(protected ApartmentServiceInterface $apartmentService)
+    public function __construct(
+        protected ApartmentServiceInterface $apartmentService,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+    )
     {
     }
 
@@ -42,7 +49,7 @@ class RealEstateController extends Controller
     public function updateRealEstate(UpdateRealEstateRequest $updateRealEstateRequest)
     {
         $validated = $updateRealEstateRequest->validated();
-        $realEstate = ResidentialComplex::where('id', $validated['id']);
+        $realEstate = $this->residentialComplexRepository->findById($validated['id']);
         unset($validated['id']);
         $realEstate->update($validated);
     }
@@ -55,7 +62,7 @@ class RealEstateController extends Controller
      */
     public function view(BuildingRequest $buildingRequest, string $code)
     {
-        $building = ResidentialComplex::where('code', $code)->first();
+        $building = $this->residentialComplexRepository->findByCode($code);
         $buildingResource = ResidentialComplexResource::make($building)->toArray($buildingRequest);
         $apartmentController = app()->make(ApartmentController::class);
         $validated = request()->query();

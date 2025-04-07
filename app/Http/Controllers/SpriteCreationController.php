@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\SpriteImagePositionRepositoryInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Models\ResidentialComplex;
 use App\Models\SpriteImagePosition;
 use App\Providers\AppServiceProvider;
+use App\Repositories\ResidentialComplexRepository;
 use App\Services\TextService;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -13,14 +16,24 @@ use Illuminate\Support\Str;
 
 /**
  * @see AppServiceProvider::registerTextService()
+ * @see AppServiceProvider::registerSpriteImagePositionRepository()
+ * @see AppServiceProvider::registerResidentialComplexRepository()
  * @see TextServiceInterface
+ * @see SpriteImagePositionRepositoryInterface
+ * @see ResidentialComplexRepositoryInterface
  */
 class SpriteCreationController extends Controller
 {
     /**
-     * @param TextService $textService
+     * @param TextServiceInterface $textService
+     * @param SpriteImagePositionRepositoryInterface $spriteImagePositionRepository
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
      */
-    public function __construct(protected TextServiceInterface $textService)
+    public function __construct(
+        protected TextServiceInterface $textService,
+        protected SpriteImagePositionRepositoryInterface $spriteImagePositionRepository,
+        protected ResidentialComplexRepositoryInterface $residentialComplexRepository
+    )
     {
     }
 
@@ -75,14 +88,14 @@ class SpriteCreationController extends Controller
         $secondSizeX = $desiredSecondSizeX;
         $secondSizeY = $desiredSecondSizeY;
 
-        $firstExistingPosition = SpriteImagePosition::where('filepath', '=', $firstImagePath)->first();
+        $firstExistingPosition = $this->spriteImagePositionRepository->find(['filepath' => $firstImagePath])->first();
 
         if ($firstExistingPosition != null) {
             $firstExistingPosition->delete();
         }
 
         if ($firstImagePath != $outputPath) {
-            SpriteImagePosition::create([
+            $this->spriteImagePositionRepository->store([
                 'building_id' => $buildingId,
                 'filepath' => $firstImagePath,
                 'x' => 0,
@@ -92,7 +105,7 @@ class SpriteCreationController extends Controller
             ]);
         }
 
-        SpriteImagePosition::create([
+        $this->spriteImagePositionRepository->store([
             'building_id' => $buildingId,
             'filepath' => $secondImagePath,
             'x' => imagesx($newImage) - $secondSizeX,
@@ -113,7 +126,7 @@ class SpriteCreationController extends Controller
         $publicPath = public_path();
         $tempSpritePath = 'tempsprites';
         Storage::deleteDirectory($tempSpritePath);
-        $buildings = ResidentialComplex::all();
+        $buildings = $this->residentialComplexRepository->list([]);
         $buildingUrls = [];
 
         if (! Storage::directoryExists($tempSpritePath)) {
@@ -185,7 +198,7 @@ class SpriteCreationController extends Controller
                 continue;
             }
 
-            $building = ResidentialComplex::where("code", $code)->first();
+            $building = $this->residentialComplexRepository->findByCode($code);
             $outputFileName = "{$specificOutputPath}/{$code}.jpg";
 
             for ($i = 0; $i < count($images) - 1 && $i < 5; $i++) {

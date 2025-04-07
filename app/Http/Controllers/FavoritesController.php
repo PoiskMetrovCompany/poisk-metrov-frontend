@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
@@ -22,11 +23,13 @@ use Illuminate\Support\Facades\Cookie;
  * @see AppServiceProvider::registerFavoritesService()
  * @see AppServiceProvider::registerCachingService()
  * @see AppServiceProvider::registerApartmentService()
+ * @see AppServiceProvider::registerApartmentRepository()
  * @see PriceFormattingServiceInterface
  * @see RealEstateServiceInterface
  * @see FavoritesServiceInterface
  * @see CachingServiceInterface
  * @see ApartmentServiceInterface
+ * @see ApartmentRepositoryInterface
  */
 class FavoritesController extends Controller
 {
@@ -36,6 +39,7 @@ class FavoritesController extends Controller
      * @param FavoritesServiceInterface $favoritesService
      * @param CachingServiceInterface $cachingService
      * @param ApartmentServiceInterface $apartmentService
+     * @param ApartmentRepositoryInterface $apartmentRepository
      */
     public function __construct(
         protected PriceFormattingServiceInterface $priceFormattingService,
@@ -43,6 +47,7 @@ class FavoritesController extends Controller
         protected FavoritesServiceInterface $favoritesService,
         protected CachingServiceInterface $cachingService,
         protected ApartmentServiceInterface $apartmentService,
+        protected ApartmentRepositoryInterface $apartmentRepository,
     ) {
     }
 
@@ -83,7 +88,7 @@ class FavoritesController extends Controller
         $parameter = $favoritesViewsRequest->validated('parameter');
         $offerIds = $this->favoritesService->getFavoritePlanOfferIds();
 
-        $apartments = Apartment::whereIn('offer_id', $offerIds)->orderBy($parameter, $order)->get();
+        $apartments = $this->apartmentRepository->findByOfferId($offerIds, [$parameter, $order]);
         $apartments = ApartmentResource::collection($apartments)->toArray($favoritesViewsRequest);
 
         $views = [];

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Services\ChatServiceInterface;
+use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Http\Requests\TelegramCallbackRequest;
 use App\Models\Manager;
 use App\Models\User;
@@ -12,14 +14,15 @@ use App\Telegram\TelegramResponse;
 use Illuminate\Support\Facades\Log;
 use Storage;
 
+// TODO: ИГНОРИРОВАТЬ РЕФАКТОРИНГ!!!!
 class TelegramController extends Controller
 {
     private $chatConfig;
 
     public function __construct(
         protected TelegramService $telegramService,
-        protected ChatService $chatService,
-        protected TextService $textService
+        protected ChatServiceInterface $chatService,
+        protected TextServiceInterface $textService
     ) {
         $this->chatConfig = Storage::json('chat-config.json');
     }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Interfaces\Repositories\AuthorizationCallRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
+use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Http\Requests\CallStatusIDRequest;
 use App\Http\Requests\ConfirmUserRequest;
@@ -13,7 +16,13 @@ use Illuminate\Http\Request;
 
 /**
  * @see AppServiceProvider::registerAdsAgreementService()
+ * @see AppServiceProvider::registerUserAdsAgreementRepository()
+ * @see AppServiceProvider::registerUserRepository()
+ * @see AppServiceProvider::registerAuthorizationCallRepository()
  * @see AdsAgreementServiceInterface
+ * @see UserAdsAgreementRepositoryInterface
+ * @see UserRepositoryInterface
+ * @see AuthorizationCallRepositoryInterface
  */
 class PhoneController extends Controller
 {
@@ -24,8 +33,16 @@ class PhoneController extends Controller
 
     /**
      * @param AdsAgreementServiceInterface $adsService
+     * @param UserAdsAgreementRepositoryInterface $adsAgreementRepository
+     * @param UserRepositoryInterface $userRepository
+     * @param AuthorizationCallRepositoryInterface $authorizationCallRepository
      */
-    public function __construct(protected AdsAgreementServiceInterface $adsService)
+    public function __construct(
+        protected AdsAgreementServiceInterface $adsService,
+        protected UserAdsAgreementRepositoryInterface $adsAgreementRepository,
+        protected UserRepositoryInterface $userRepository,
+        protected AuthorizationCallRepositoryInterface $authorizationCallRepository,
+    )
     {
         $phoneConfig = json_decode(file_get_contents(storage_path("app/call-data.json")));
 
@@ -86,23 +103,23 @@ class PhoneController extends Controller
     {
         $phone = $confirmUserRequest->validated('phone');
 
-        $isUserAds = UserAdsAgreement::where('phone', $phone)->first();
+        $isUserAds = $this->adsAgreementRepository->findByPhone($phone);
 
         if ($isUserAds == null) {
             $this->adsService->setAdsAgreement($phone, null);
         }
 
-        if (User::where(['phone' => $phone, 'is_test' => true])->exists()) {
+        if ($this->userRepository->find(['phone' => $phone, 'is_test' => true])->exists()) {
             $data = [
                 'phone' => $phone,
                 'pincode' => 1234,
                 'call_id' => rand(1, 1000000)
             ];
 
-            $call = AuthorizationCall::where('phone', $phone)->first();
+            $call = $this->authorizationCallRepository->findByPhone($phone);
 
             if ($call == null) {
-                AuthorizationCall::create($data);
+                $this->authorizationCallRepository->store($data);
             } else {
                 $call->update($data);
                 $call->save();
@@ -124,7 +141,7 @@ class PhoneController extends Controller
             return json_encode(['status' => $response->status, 'data' => $response->data]);
         }
 
-        $call = AuthorizationCall::where('phone', $phone)->first();
+        $call = $this->authorizationCallRepository->findByPhone($phone);
         $data = [
             'phone' => $phone,
             'pincode' => $response->data->pincode,
@@ -132,7 +149,7 @@ class PhoneController extends Controller
         ];
 
         if ($call == null) {
-            AuthorizationCall::create($data);
+            $this->authorizationCallRepository->store($data);
         } else {
             $call->update($data);
             $call->save();

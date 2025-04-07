@@ -50,34 +50,27 @@ use Illuminate\View\View;
  */
 class ReservationController extends Controller
 {
-    protected ReservationServiceInterface $reservationService;
-    protected SerializedCollectionServiceInterface $collectionService;
-    protected ReservationRepository $reservationRepository;
-    protected InteractionRepository $interactionRepository;
-    protected UserRepositoryInterface $userRepository;
-    protected ApartmentRepositoryInterface $apartmentRepository;
-    protected ManagerRepositoryInterface $managerRepository;
-    protected ComplexRepositoryInterface $complexRepository;
-
+    /**
+     * @param ReservationServiceInterface $reservationService
+     * @param SerializedCollectionServiceInterface $collectionService
+     * @param ReservationRepositoryInterface $reservationRepository
+     * @param InteractionRepositoryInterface $interactionRepository
+     * @param UserRepositoryInterface $userRepository
+     * @param ApartmentRepositoryInterface $apartmentRepository
+     * @param ManagerRepositoryInterface $managerRepository
+     * @param ComplexRepositoryInterface $complexRepository
+     */
     public function __construct(
-        ReservationServiceInterface $reservationService,
-        SerializedCollectionServiceInterface $collectionService,
-        ReservationRepositoryInterface $reservationRepository,
-        InteractionRepositoryInterface $interactionRepository,
-        UserRepositoryInterface $userRepository,
-        ApartmentRepositoryInterface $apartmentRepository,
-        ManagerRepositoryInterface $managerRepository,
-        ComplexRepositoryInterface $complexRepository
+        protected ReservationServiceInterface $reservationService,
+        protected SerializedCollectionServiceInterface $collectionService,
+        protected ReservationRepositoryInterface $reservationRepository,
+        protected InteractionRepositoryInterface $interactionRepository,
+        protected UserRepositoryInterface $userRepository,
+        protected ApartmentRepositoryInterface $apartmentRepository,
+        protected ManagerRepositoryInterface $managerRepository,
+        protected ComplexRepositoryInterface $complexRepository
     )
     {
-        $this->reservationService = $reservationService;
-        $this->collectionService = $collectionService;
-        $this->reservationRepository = $reservationRepository;
-        $this->interactionRepository = $interactionRepository;
-        $this->userRepository = $userRepository;
-        $this->apartmentRepository = $apartmentRepository;
-        $this->managerRepository = $managerRepository;
-        $this->complexRepository = $complexRepository;
     }
 
     public function indexPage(int $id)

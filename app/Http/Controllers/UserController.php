@@ -28,7 +28,12 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\UnauthorizedException;
 
 /**
+ * @see AppServiceProvider::registerFavoritesService()
+ * @see AppServiceProvider::registerCityService()
  * @see AppServiceProvider::registerUserService()
+ * @see AppServiceProvider::registerUserRepository()
+ * @see AppServiceProvider::registerManagerRepository()
+ * @see AppServiceProvider::registerAuthorizationCallRepository()
  * @see FavoritesServiceInterface
  * @see CityServiceInterface
  * @see UserServiceInterface
@@ -120,7 +125,10 @@ class UserController extends Controller
 
         $phone = $authorizeUserRequest->validated('phone');
         $pincode = $authorizeUserRequest->validated('pincode');
-        $call = AuthorizationCall::where('pincode', $pincode)->where('phone', $phone)->first();
+        $call = $this->authorizationCallRepository
+            ->find(['pincode' => $pincode])
+            ->find(['phone' => $phone])
+            ->first();
 
         if ($call != null && $call->exists()) {
             $callId = $call->call_id;
@@ -282,7 +290,7 @@ class UserController extends Controller
             return response()->json(['status' => 'Unauthorized'], 401);
         }
 
-        $userModel = User::where('phone', $phone)->first();
+        $userModel = $this->userRepository->findByPhone($phone);
         $userModel->update(['name' => $name]);
         $userModel->update(['surname' => $surname]);
         $userModel->update(['patronymic' => $patronymic]);
