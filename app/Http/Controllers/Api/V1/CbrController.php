@@ -7,10 +7,38 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use OpenApi\Annotations as OA;
 
 class CbrController extends Controller
 {
     /**
+     * @OA\Schema(
+     *       schema="Cbr/ActualDate",
+     *       @OA\Property(
+     *           property="status",
+     *           type="string"
+     *       ),
+     *   	@OA\Property(
+     *         property="error",
+     *         type="string"
+     *       )
+     *  ),
+     *
+     * @OA\Get(
+         * tags={"Cbr"},
+         * path="/api/v1/cbr/actual-date/",
+         * summary="Актуализация расписания заседаний директоров ЦБ",
+         * description="Возвращение JSON объекта",
+         * @OA\Response(
+             * response=200,
+             * description="УСПЕХ!",
+         * ),
+         * @OA\Response(
+             * response=404,
+             * description="Resource not found"
+         * )
+     * )
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function actualDate(): JsonResponse

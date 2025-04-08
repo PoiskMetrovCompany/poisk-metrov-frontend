@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 class ListUserController extends Controller
 {
@@ -17,6 +18,33 @@ class ListUserController extends Controller
     }
 
     /**
+     * @OA\Schema(
+     *       schema="User/List",
+     *       @OA\Property(
+     *           property="status",
+     *           type="string"
+     *       ),
+     *   	@OA\Property(
+     *         property="error",
+     *         type="string"
+     *       )
+     *  ),
+     *
+     * @OA\Get(
+         * tags={"User"},
+         * path="/api/v1/users/list",
+         * summary="получение списка пользователей (клиенты)",
+         * description="Возвращение JSON объекта",
+         * @OA\Response(
+             * response=200,
+             * description="УСПЕХ!",
+        * ),
+         * @OA\Response(
+             * response=404,
+             * description="Resource not found"
+         * )
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      */

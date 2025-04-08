@@ -9,6 +9,8 @@ use App\Http\Resources\Users\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
+
 
 class UpdateRoleUserController extends Controller
 {
@@ -18,8 +20,39 @@ class UpdateRoleUserController extends Controller
     }
 
     /**
-     * @param UpdateRoleRequest $request
-     * @return void
+     * @OA\Schema(
+        * schema="User/UpdateRole",
+         * @OA\Property(
+             * property="status",
+             * type="string"
+         * ),
+         * @OA\Property(
+             * property="error",
+             * type="string"
+         * )
+         * ),
+         *
+         * @OA\Post(
+             * tags={"User"},
+             * path="/api/v1/users/update-role",
+             * summary="обновление роли пользователя.",
+             * description="Возвращение JSON объекта",
+         * @OA\Response(
+             * response=200,
+             * description="УСПЕХ!",
+     *     @OA\JsonContent(
+                * @OA\Property(property="id", type="integer", example="1"),
+                * @OA\Property(property="role", type="string", example="Менеджер")
+        * )
+         * ),
+         * @OA\Response(
+             * response=404,
+             * description="Resource not found"
+         * )
+     * )
+     *
+    * @param UpdateRoleRequest $request
+    * @return void
      */
     public function __invoke(UpdateRoleRequest $request): JsonResponse
     {

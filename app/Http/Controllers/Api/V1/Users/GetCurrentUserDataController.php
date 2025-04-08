@@ -8,11 +8,39 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 class GetCurrentUserDataController extends Controller
 {
     /**
-     * @param Request $request
+     * @OA\Schema(
+     *      schema="User/GetCurrent",
+     *      @OA\Property(
+     *          property="status",
+     *          type="string"
+     *      ),
+     *  	@OA\Property(
+     *        property="error",
+     *        type="string"
+     *      )
+     * ),
+     *
+     * @OA\Get(
+         * tags={"User"},
+         * path="/api/v1/users/get-current",
+         * summary="Получение информации о текущем авторизованном пользователе.",
+         * description="Возвращение JSON объекта",
+         * @OA\Response(
+             * response=200,
+             * description="УСПЕХ!",
+         * ),
+         * @OA\Response(
+             * response=404,
+             * description="Resource not found"
+         * )
+     * )
+     *
+    * @param Request $request
      * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse

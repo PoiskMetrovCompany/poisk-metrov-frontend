@@ -3,10 +3,12 @@
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\Api\V1\Account\AuthorizeAccountController;
 use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
+use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
 use App\Http\Controllers\Api\V1\CbrController;
 use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
 use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
+use App\Http\Controllers\Api\V1\Users\UpdateUserController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FavoritesController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\TelegramSurveyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitedPagesController;
 use Illuminate\Http\Request;
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +41,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+/// TODO: ВЕРНУТЬСЯ ПРИ ПОСТУПЛЕНИИ ЗАДАЧ ПО АДМИНКЕ И АКТУАЛИЗИРОВАТЬ МАРШРУТЫ В АДМИНКЕ!!!
 Route::middleware('auth:api')->group(function () {
     Route::get('/get-current-user-data', [UserController::class, 'getCurrentUserData']); // UNKNOWN
     Route::get('/get-all-real-estate', [RealEstateController::class, 'getAllRealEstate']);
@@ -92,46 +95,70 @@ Route::post('/ziudGBZDikfuwAGD3ioruGSBFDofyafh873nabFXGorf3', [TelegramSurveyCon
 Route::post('/ivujfiBXZDFsodjBXD483uf98shGZDFahis398af3', [TelegramSurveyController::class, 'callbackStPetersburg']);
 
 Route::group(['middleware' => ['web']], function () {
-    Route::post('/update-user', [UserController::class, 'updateUser']);
+    Route::post('/update-user', [UserController::class, 'updateUser']);  // UNKNOWN
     Route::post('/switch-like', [FavoritesController::class, 'switchLike'])->withoutMiddleware('api');
     Route::get('/favorite-plan-views', [FavoritesController::class, 'getFavoritePlanViews'])->withoutMiddleware('api');
     Route::get('/favorite-building-views', [FavoritesController::class, 'getFavoriteBuildingViews'])->withoutMiddleware('api');
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::post('/update-profile', [UserController::class, 'updateProfile']);
+        Route::post('/update-profile', [UserController::class, 'updateProfile']); // UNKNOWN
         Route::post('/update-pages-visited', [VisitedPagesController::class, 'updatePagesVisited']);
     });
 });
+/// END
 
-/**
- * @param string $className
- * @return array
- */
-function operation(string $className): array
-{
-    return [$className, '__invoke'];
+if (!function_exists('operation')) {
+    /**
+     * @param string $className
+     * @return array
+     */
+    function operation(string $className): array {
+        return [$className, '__invoke'];
+    }
 }
-
+/// Override API
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
     /// Cbr
    Route::namespace('CBR')->prefix('cbr')->group(function () {
-       Route::get('actual-date', [CbrController::class, 'actualDate'])->name('cbr.actualDate');
+       Route::get('actual-date', [CbrController::class, 'actualDate'])->name('api.v1.cbr.actualDate');
    });
    /// END Cbr
 
     /// User
     Route::namespace('USER')->prefix('users')->group(function () {
-        Route::get('/get-current-user-data', operation(GetCurrentUserDataController::class))->name('user.get-current-user-data');
-        Route::get('/list', operation(ListUserController::class))->name('user.list');
-        Route::get('/update-role', operation(UpdateRoleUserController::class))->name('user.update-role');
+        Route::get('/get-current', operation(GetCurrentUserDataController::class))
+            ->middleware('auth:api')
+            ->name('api.v1.user.get-current');
+
+        Route::get('/list', operation(ListUserController::class))
+            ->middleware('auth:api')
+            ->name('api.v1.user.list');
+
+        Route::get('/update-role', operation(UpdateRoleUserController::class))
+            ->middleware('auth:api')
+            ->name('api.v1.user.update-role');
+
+        Route::group(['middleware' => ['web']], function () {
+            Route::post('/update', operation(UpdateUserController::class))
+                ->middleware('auth:api')
+                ->name('api.v1.user.update-user');
+        });
+
         /// Account
         Route::namespace('ACCOUNT')->prefix('account')->group(function () {
-            Route::get('/authorize', operation(AuthorizeAccountController::class))->name('account.authorize');
-            Route::get('/logout', operation(LogoutAccountController::class))->name('account.authorize');
+            Route::post('/authorize', operation(AuthorizeAccountController::class))
+                ->name('api.v1.account.authorize');
+
+            Route::get('/logout', operation(LogoutAccountController::class))
+                ->name('api.v1.account.logout');
+
+            Route::group(['middleware' => 'auth'], function () {
+                Route::post('/update-profile', operation(UpdateAccountController::class));
+            });
         });
         /// END Account
     });
     /// END User
 });
-/// END
+/// END Api Version 1

@@ -1,0 +1,269 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Документация по API",
+        "description": "API документация",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/users/account/update-profile/": {
+            "post": {
+                "tags": [
+                    "UserAccount"
+                ],
+                "summary": "Обновление профиля",
+                "description": "Возвращение JSON объекта",
+                "operationId": "6a6079e69770a3ae51bc159b722a9ec1",
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (999) 999-99-99"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван"
+                                        },
+                                        "surname": {
+                                            "type": "string",
+                                            "example": "Поляков"
+                                        },
+                                        "patronymic": {
+                                            "type": "string",
+                                            "example": "Олегович"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "my.example@mail.ru"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/cbr/actual-date/": {
+            "get": {
+                "tags": [
+                    "Cbr"
+                ],
+                "summary": "Актуализация расписания заседаний директоров ЦБ",
+                "description": "Возвращение JSON объекта",
+                "operationId": "1dbb2c5e8badea0200c6096694b369d7",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/get-current": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получение информации о текущем авторизованном пользователе.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "a196ade5a0687ada7821afc65d4492a5",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/list": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "получение списка пользователей (клиенты)",
+                "description": "Возвращение JSON объекта",
+                "operationId": "e96960073f0ab15cc2ede6e37bd1f0ea",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update-role": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "обновление роли пользователя.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "6045f8eb6c6539b748a8dee8360fae30",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "role": {
+                                            "type": "string",
+                                            "example": "Менеджер"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "обновление роли пользователя.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "41cd7d49967bceb933c767e593eedfd9",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (991) 000-00-00"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Андрей"
+                                        },
+                                        "surname": {
+                                            "type": "string",
+                                            "example": "Шихавцов"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User/Account/Update": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Cbr/ActualDate": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User/GetCurrent": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User/List": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User/UpdateRole": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User/Update": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "User",
+            "description": "Операции над юзерами для админки"
+        },
+        {
+            "name": "UserAccount",
+            "description": "Операции над юзерами"
+        },
+        {
+            "name": "Cbr",
+            "description": "Актуализация расписания директоров ЦБ"
+        }
+    ]
+}

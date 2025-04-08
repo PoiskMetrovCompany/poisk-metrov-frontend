@@ -47,7 +47,7 @@ function phoneInputForm() {
         let userInfo = new FormData(event.target);
         userInfo.set('phone', phoneNumber);
         event.target.style.opacity = 0.5;
-        const response = await axios.post("/api/update-user", userInfo);
+        const response = await axios.post("/api/v1/user/update", userInfo);
         console.log(response)
         if (!response.status.toString().startsWith("2") || response.data.status == "error") {
             personalInfo.style.display = "none";
@@ -66,7 +66,9 @@ function phoneInputForm() {
 
         waitingForCodeConfirmation = true;
         formData.set("pincode", codeInput.value);
+        // TODO: разобраться почему не работает - /api/v1/users/account/authorize
         const response = await axios.post("/api/authorize-user", formData);
+        console.log(response)
         waitingForCodeConfirmation = false;
 
         if (response.status.toString().startsWith("2")) {
@@ -96,6 +98,7 @@ function phoneInputForm() {
         event.target.style.opacity = 0.5;
         sendCodeAgain.className = "common-button disabled";
         const response = await axios.post("/api/confirm-user", formData);
+        console.log(response)
         event.target.style.opacity = 1;
         phonePopup.style.display = "none";
 

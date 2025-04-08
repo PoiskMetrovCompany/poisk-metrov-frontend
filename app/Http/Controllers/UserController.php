@@ -125,10 +125,12 @@ class UserController extends Controller
 
         $phone = $authorizeUserRequest->validated('phone');
         $pincode = $authorizeUserRequest->validated('pincode');
-        $call = $this->authorizationCallRepository
-            ->find(['pincode' => $pincode])
-            ->find(['phone' => $phone])
-            ->first();
+        // TODO: пересмотреть это решение позже
+//        $call = $this->authorizationCallRepository
+//            ->find(['pincode' => $pincode])
+//            ->find(['phone' => $phone])
+//            ->first();
+        $call = AuthorizationCall::where('pincode', $pincode)->where('phone', $phone)->first();
 
         if ($call != null && $call->exists()) {
             $callId = $call->call_id;

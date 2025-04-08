@@ -9,6 +9,7 @@ use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\VisitedPagesController;
 use App\Http\Requests\AuthorizeUserRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -25,9 +26,10 @@ class AuthorizeAccountController extends Controller
     {
 
     }
+
     /**
      * @param AuthorizeUserRequest $authorizeUserRequest
-     * @return \Illuminate\Http\JsonResponse|void
+     * @return JsonResponse|void
      */
     public function __invoke(AuthorizeUserRequest $authorizeUserRequest)
     {
