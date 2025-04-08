@@ -1,7 +1,7 @@
 import { loadOfficesMap} from "./loadMap";
 
 document.addEventListener("DOMContentLoaded", () => {
-    const officeLocationsNsk = [[82.924701, 55.062063], [82.97524499999993, 55.03895456965725]];
+    const officeLocationsNsk = [[82.924830, 55.062135], [82.97524499999993, 55.03895456965725]];
     const officeLocationsSpb = [[30.31244549999996, 59.90215356423468]];
     loadOfficesMap(officeLocationsNsk, 'map-nsk');
     loadOfficesMap(officeLocationsSpb, 'map-spb');
