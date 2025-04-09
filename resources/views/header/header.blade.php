@@ -1,3 +1,9 @@
+@php
+    $phone = '8 (800) 444-40-45';
+    $workTimeStart = '10:00';
+    $workTimeEnd = '20:00';
+@endphp
+
 <header id="top-bar" class="header top-bar common-padding">
     <div class="header top-bar main">
         <div class="header vertical-content">
@@ -8,6 +14,13 @@
             <div class="header top-bar-half">
                 @include('header.site-logo')
                 @include('header.links')
+            </div>
+            <div class="header top-bar-half">
+                @include('header.contacts-mobille', [
+                    'phone' => $phone,
+                    'workTimeStart' => $workTimeStart,
+                    'workTimeEnd' => $workTimeEnd,
+                ])
             </div>
             <div class="header top-bar-half">
                 @include('header.contacts')
