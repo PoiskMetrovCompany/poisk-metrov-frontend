@@ -584,9 +584,12 @@ button.action-button-outline {
 
 .control-action-button button {
     width: 30%;
-
+}
 ymaps .infrastructure.menu.icon-container {
     background-color: #e9e9e900;
+}
+.header section.header-mobile-contact {
+    display: none;
 }
 
 @media (min-width: 1024px) and (max-width: 1240px) {
@@ -597,24 +600,31 @@ ymaps .infrastructure.menu.icon-container {
     .action-form-card {
         font-size: 90%;
     }
+
     .action-accordion__item-container span.active {
         width: 13%;
     }
+
     .input-wrapper span.ico-2 {
         width: 7%;
     }
+
     .card-file .card-file__upload .card-file__upload-30 button {
         height: 3.6em;
     }
-    .card-file__upload .card-file__upload-70 div{
+
+    .card-file__upload .card-file__upload-70 div {
         margin-top: -1em;
     }
-    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 {
         width: 32%;
     }
-    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
         width: 68%;
     }
+
     .co-borrower .action-accordion__item-container span.active {
         font-size: 0.7em;
     }
@@ -625,74 +635,95 @@ ymaps .infrastructure.menu.icon-container {
         width: 65%;
         margin: 0 auto;
     }
+
     .revervation_user__card-container {
         width: 18.5em;
     }
+
     .actions-bottom {
         width: 80%;
     }
+
     a.action-button:hover,
     button.action-button:hover {
         width: 45%;
     }
+
     a.action-button-outline:hover,
     button.action-button-outline:hover {
         width: 52%;
     }
+
     .actions-navbar__active-indicator {
         padding: 1%;
     }
+
     .revervation__title {
         flex-wrap: wrap;
     }
+
     .revervation__title p {
         font-size: 125%;
     }
+
     .apartment-col {
         font-size: 86%;
     }
-    nav.apartment-grid{
+
+    nav.apartment-grid {
         margin-bottom: -1em;
     }
+
     nav .apartment-col,
     .revervation_user__card-item,
     .actions-navbar__point,
     .action-form-card {
         font-size: 94%;
     }
+
     .full-row {
         top: -1.2em;
     }
+
     .actions-navbar__min {
         width: 88%;
     }
-    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 {
         width: 38%;
     }
-    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
         width: 65%;
     }
+
     .card-file .card-file__upload {
         position: relative;
         left: 10%;
     }
+
     .card-file .card-file__upload {
         width: 90%;
     }
+
     .card-file .card-file__upload .card-file__upload-30 {
         width: 36%;
     }
+
     .card-file .card-file__upload .card-file__upload-70 {
         width: 60%;
     }
+
     .card-file .card-file__upload .card-file__upload-70 p {
         font-size: 93%;
     }
+
     .card-file .card-file__upload .card-file__upload-70 div {
         margin-top: -1em;
     }
+
     button#btn-add_co_borrower {
-        width: 18%!important;
+        width: 18% !important;
     }
 }
 
@@ -700,78 +731,101 @@ ymaps .infrastructure.menu.icon-container {
     .reservation__layout {
         width: 62%;
     }
+
     .revervation_user__card-container {
         width: 28%;
     }
+
     .apartment-grid {
         padding: 1.1em;
     }
+
     .actions-bottom {
         width: 80%;
     }
+
     a.action-button:hover,
     button.action-button:hover {
         width: 45%;
     }
+
     a.action-button-outline:hover,
     button.action-button-outline:hover {
         width: 52%;
     }
+
     .actions-navbar__active-indicator {
         padding: 1%;
     }
+
     .revervation__title {
         flex-wrap: wrap;
     }
+
     .revervation__title p {
         font-size: 114%;
     }
+
     .revervation_user__card-container {
         padding: 0% 2% 0% 2%;
     }
+
     .action-accordion .filter.base-container {
         display: flex;
     }
+
     .card-file .card-file__upload .card-file__upload-70 {
         margin: 1.1em 0em 0em 0.1em;
     }
+
     .card-file .card-file__upload .card-file__upload-70 div {
-        width: 100%!important;
+        width: 100% !important;
     }
+
     .co-borrower .card-file .card-file__upload .card-file__upload-70 {
         width: 100%;
         font-size: 90%;
     }
+
     .card-file .card-file__upload .card-file__upload-30 button {
         width: 95%;
     }
+
     .card-file .card-file__upload {
         padding: 0.8em;
     }
+
     .apartment-col {
         font-size: 86%;
     }
-    nav.apartment-grid{
+
+    nav.apartment-grid {
         margin-bottom: -1em;
     }
+
     nav .apartment-col,
     .revervation_user__card-item,
     .actions-navbar__point,
     .action-form-card {
         font-size: 86%;
     }
+
     .full-row {
         top: -1.2em;
     }
+
     .actions-navbar__min {
         width: 100%;
     }
+
     .action-accordion__item-container span.active {
         width: 14%;
     }
+
     .revervation_user__card-body .revervation_user__card-item {
         font-size: 94%;
     }
+
     .input-wrapper span.ico-2 {
         width: 8%;
     }
@@ -782,138 +836,170 @@ ymaps .infrastructure.menu.icon-container {
         top: 0.1em;
     }
 
-    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 {
         width: 38%;
     }
-    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
         width: 65%;
     }
+
     .card-file .card-file__upload {
         position: relative;
         left: 5%;
     }
+
     .card-file .card-file__upload {
         width: 95%;
     }
+
     .card-file .card-file__upload .card-file__upload-30 {
         width: 36%;
     }
+
     .card-file .card-file__upload .card-file__upload-70 {
         width: 60%;
     }
+
     .card-file .card-file__upload .card-file__upload-70 p {
         font-size: 93%;
     }
+
     .card-file .card-file__upload .card-file__upload-70 div {
         margin-top: -1em;
         width: 90%;
     }
+
     .card-file .card-file__upload .card-file__upload-30 button {
         height: 3.4em;
     }
+
     .co-borrower .card-file .card-file__upload .card-file__upload-30 button {
         font-size: 74%;
     }
+
     button#btn-add_co_borrower {
         width: 24% !important;
     }
 }
 
 @media (min-width: 774px) and (max-width: 990px) {
-    .revervation__grid {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        flex-wrap: wrap;
+        .revervation__grid {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        nav .apartment-col,
+        .apartment-col,
+        .revervation_user__card-item,
+        .actions-navbar__point,
+        .action-form-card {
+            font-size: 90%;
+        }
+
+        .revervation_user__card-container {
+            width: 100%;
+            margin-bottom: 3em;
+        }
+
+        .revervation_user__card-body {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .evervation_user__card-data {
+            margin: 0.8em 0em 0.8em 0em;
+        }
+
+        .reservation__layout {
+            width: 100%;
+        }
+
+        .revervation__title p {
+            font-size: 1.3em;
+        }
+
+        .actions-bottom {
+            width: 65%;
+        }
+
+        .action-form-card__title {
+            width: 35%;
+        }
+
+        .action-form-card__description {
+            width: 65%;
+        }
+
+        .action-accordion__item-container span.active {
+            width: 13%;
+        }
+
+        .action-accordion .filter.base-container {
+            display: flex;
+        }
+
+        .input-wrapper span.ico-2 {
+            width: 8%;
+        }
+
+        .card-file .card-file__upload {
+            position: relative;
+            left: 10%;
+            width: 90%;
+        }
+
+        .action-accordion-user-info__dropdown-large span {
+            left: 67%;
+        }
+
+        .card-file .card-file__upload .card-file__upload-70 div {
+            margin-top: -1em;
+        }
+
+        .co-borrower__card-footer button {
+            width: 21%;
+        }
+
+        .card-file .card-file__upload .card-file__upload-30 {
+            width: 34%;
+        }
+
+        legend,
+        fieldset span,
+        input {
+            font-size: 90%;
+        }
+
+        section.apartment-grid__wrap,
+        nav.apartment-grid {
+            display: none;
+        }
+
+        .apartment-grid-min {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .apartment-grid-container {
+            background-color: #fff;
+            padding: 3% 3% 3% 3%;
+            width: 48%;
+            border-radius: 1em;
+            font-size: 90%;
+        }
+
+        .apartment-grid-container .apartment-grid-min__label {
+            color: #9E9E9E;
+        }
+
+        .apartment-grid-container table tbody tr {
+            font-weight: 400;
+        }
     }
-    nav .apartment-col,
-    .apartment-col,
-    .revervation_user__card-item,
-    .actions-navbar__point,
-    .action-form-card {
-        font-size: 90%;
-    }
-    .revervation_user__card-container {
-        width: 100%;
-        margin-bottom: 3em;
-    }
-    .revervation_user__card-body {
-        display: flex;
-        justify-content: space-around;
-    }
-    .evervation_user__card-data {
-        margin: 0.8em 0em 0.8em 0em;
-    }
-    .reservation__layout {
-        width: 100%;
-    }
-    .revervation__title p {
-        font-size: 1.3em;
-    }
-    .actions-bottom {
-        width: 65%;
-    }
-    .action-form-card__title {
-        width: 35%;
-    }
-    .action-form-card__description {
-        width: 65%;
-    }
-    .action-accordion__item-container span.active {
-        width: 13%;
-    }
-    .action-accordion .filter.base-container {
-        display: flex;
-    }
-    .input-wrapper span.ico-2 {
-        width: 8%;
-    }
-    .card-file .card-file__upload {
-        position: relative;
-        left: 10%;
-        width: 90%;
-    }
-    .action-accordion-user-info__dropdown-large span {
-        left: 67%;
-    }
-    .card-file .card-file__upload .card-file__upload-70 div {
-        margin-top: -1em;
-    }
-    .co-borrower__card-footer button {
-        width: 21%;
-    }
-    .card-file .card-file__upload .card-file__upload-30 {
-        width: 34%;
-    }
-    legend,
-    fieldset span,
-    input
-    {
-        font-size: 90%;
-    }
-    section.apartment-grid__wrap,
-    nav.apartment-grid {
-        display: none;
-    }
-    .apartment-grid-min {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .apartment-grid-container {
-        background-color: #fff;
-        padding: 3% 3% 3% 3%;
-        width: 48%;
-        border-radius: 1em;
-        font-size: 90%;
-    }
-    .apartment-grid-container .apartment-grid-min__label{
-        color: #9E9E9E;
-    }
-    .apartment-grid-container table tbody tr {
-        font-weight: 400;
-    }
-}
 
 @media (max-width: 630px) {
     main {
@@ -1069,6 +1155,11 @@ ymaps .infrastructure.menu.icon-container {
 }
 
 @media (max-width: 430px) {
+    header#top-bar,
+    mobile-toolbar {
+        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
+    }
+
     .actions-navbar__min {
         width: auto;
     }
@@ -1340,5 +1431,25 @@ ymaps .infrastructure.menu.icon-container {
     .co-borrower .action-accordion-user-info__dropdown-large span {
         left: 25%;
     }
+    .header section.header-mobile-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        align-items: center;
+        position: relative;
+        right: 1.5em;
+    }
+    .header section.header-mobile-contact b {
+        font-weight: 400;
+    }
+    .header section.header-mobile-contact b,
+    .header section.header-mobile-contact small {
+        line-height: 140%;
+    }
+    .header section.header-mobile-contact small {
+        color: #818181;
+    }
 }
+
+
 
