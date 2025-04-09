@@ -1148,6 +1148,40 @@ ymaps .infrastructure.menu.icon-container {
     }
 }
 
+@media (width: 600px) {
+    #current-city-mobile-button {
+        display: none!important;
+    }
+    header#top-bar,
+    mobile-toolbar {
+        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
+    }
+    .header section.header-mobile-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        align-items: center;
+        position: relative;
+        left: 65%;
+        width: 65%;
+    }
+    .header section.header-mobile-contact b {
+        font-weight: 400;
+        display: flex;
+        justify-content: end;
+    }
+    .header section.header-mobile-contact small {
+        position: relative;
+        left: 12%;
+        color: #818181;
+    }
+    header section.header-mobile-contact b,
+    .header section.header-mobile-contact small {
+        line-height: 140%;
+        width: 100%;
+    }
+}
+
 @media (max-width: 430px) {
     .actions-navbar__point {
         margin-right: 2%;
@@ -1187,7 +1221,7 @@ ymaps .infrastructure.menu.icon-container {
     }
 }
 
-@media (max-width: 375px) {
+@media (min-width: 320px) and (max-width: 375px) {
     header#top-bar,
     mobile-toolbar {
         box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
@@ -1198,7 +1232,8 @@ ymaps .infrastructure.menu.icon-container {
         justify-content: end;
         align-items: center;
         position: relative;
-        right: 1.5em;
+        left: 26%;
+        width: 65%;
     }
     .header section.header-mobile-contact b {
         font-weight: 400;
@@ -1206,12 +1241,140 @@ ymaps .infrastructure.menu.icon-container {
         justify-content: end;
     }
     .header section.header-mobile-contact small {
+        position: relative;
+        right: -3%;
         color: #818181;
     }
     header section.header-mobile-contact b,
     .header section.header-mobile-contact small {
         line-height: 140%;
-        width: 62%!important;
+        width: 100%;
     }
 }
 
+@media (max-width: 320px) {
+    .header section.header-mobile-contact {
+        left: 21%!important;
+        width: 71%!important;
+    }
+    .header section.header-mobile-contact small {
+        right: 15%;
+    }
+}
+
+/**
+    Кастомный стили
+*/
+
+@media (width: 390px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 2%;
+    }
+}
+@media (width: 384px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 3%;
+    }
+}
+@media (width: 360px) {
+    .header section.header-mobile-contact small {
+        right: 2%;
+    }
+}
+
+@media (width: 353px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 5%!important;
+    }
+}
+
+@media (width: 344px) {
+    .header section.header-mobile-contact small {
+        right: 11%;
+    }
+}
+
+@media (width: 320px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 3%;
+    }
+}
+
+@media (width: 412px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 0%;
+    }
+}
+
+@media (width: 430px) {
+    #current-city-mobile-button {
+        display: none!important;
+    }
+    header#top-bar,
+    mobile-toolbar {
+        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
+    }
+    .header section.header-mobile-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        align-items: center;
+        position: relative;
+        left: 35%;
+        width: 65%;
+    }
+    .header section.header-mobile-contact b {
+        font-weight: 400;
+        display: flex;
+        justify-content: end;
+    }
+    .header section.header-mobile-contact small {
+        position: relative;
+        left: 12%;
+        color: #818181;
+    }
+    header section.header-mobile-contact b,
+    .header section.header-mobile-contact small {
+        line-height: 140%;
+        width: 100%;
+    }
+}
+
+@media (width: 480px) or (width: 540px) {
+    #current-city-mobile-button {
+        display: none!important;
+    }
+    header#top-bar,
+    mobile-toolbar {
+        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
+    }
+    .header section.header-mobile-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        align-items: center;
+        position: relative;
+        left: 43%;
+        width: 65%;
+    }
+    .header section.header-mobile-contact b {
+        font-weight: 400;
+        display: flex;
+        justify-content: end;
+    }
+    .header section.header-mobile-contact small {
+        position: relative;
+        left: 12%;
+        color: #818181;
+    }
+    header section.header-mobile-contact b,
+    .header section.header-mobile-contact small {
+        line-height: 140%;
+        width: 100%;
+    }
+}
