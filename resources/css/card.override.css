@@ -1,0 +1,4 @@
+building-card:hover div[type="top-content"],
+building-card:focus div[type="top-content"]{
+    /*max-height: 150%!important;*/
+}

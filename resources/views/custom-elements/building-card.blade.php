@@ -2,7 +2,7 @@
     $spritePositionsStr = json_encode($spritePositions);
     $metroMoveIcon = $metro_type == 'transport' ? 'car' : 'people';
 @endphp
-@vite('resources/js/coordinateStorage.js')
+@vite(['resources/css/card.override.css', 'resources/js/coordinateStorage.js'])
 <building-card id="{{ $code }}" city="{{ $location['code'] }}" long="{{ $longitude }}" lat="{{ $latitude }}"
     buildingname="{{ $name }}" metro="{{ $metro_station }}" metrominutes="{{ $metroMinutes }}"
     metromoveicon="{{ $metroMoveIcon }}">

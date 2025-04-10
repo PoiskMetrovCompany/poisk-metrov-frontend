@@ -2,7 +2,7 @@
     @isset($apartmentSpecifics[$i])
         <div class="plans-filter apartment-dropdown header">
             <div>
-                <div>
+                <div id="type_apartment">
                     {{ $apartmentSpecifics[$i]['fullName'] }}
                 </div>
                 <div>
