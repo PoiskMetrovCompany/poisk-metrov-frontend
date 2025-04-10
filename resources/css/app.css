@@ -584,10 +584,24 @@ button.action-button-outline {
 
 .control-action-button button {
     width: 30%;
-
+}
 ymaps .infrastructure.menu.icon-container {
     background-color: #e9e9e900;
 }
+
+a.apartment-type-card-item {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    justify-content: space-around;
+    align-items: center;
+    width: 21rem;
+    gap: 10px;
+}
+a.apartment-type-card-item:hover div {
+    color: #E46219!important;
+    transition: .6s;
+}
+
 
 @media (min-width: 1024px) and (max-width: 1240px) {
     nav .apartment-col,
