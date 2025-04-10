@@ -21,6 +21,8 @@
             <div class="icon arrow-tailless orange"></div>
             {{-- For mobile --}}
         </div>
+
+
         <div id="apartment-dropdown-{{ $i }}" class="plans-filter apartment-dropdown container">
             <div class="plans-filter apartment-dropdown buttons-grid" style="display: none">
                 <div id="apartment-dropdown-price-sort-{{ $i }}" class="plans-filter apartment-dropdown buttons">
@@ -51,3 +53,5 @@
         </div>
     @endisset
 @endfor
+
+@vite('resources/js/anchorLink.js')

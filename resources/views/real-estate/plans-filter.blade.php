@@ -7,6 +7,10 @@
         'buttonIcon' => 'filters-button',
         'buttonText' => 'Фильтры',
     ])
+    <!-- Якорь если в ссылке он присутствует -->
+    <span class="anchor"></span>
+    <!-- END -->
+
     <div class="plans-filter filters-container">
         @include('real-estate.main-filters')
         @include('filters.buttons.years')
