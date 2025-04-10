@@ -11,6 +11,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/css/swiper.override.css',
+                'resources/css/card.override.css',
 
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
