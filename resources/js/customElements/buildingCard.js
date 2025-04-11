@@ -42,73 +42,72 @@ export class BuildingCard extends HTMLElement {
     }
 
     slideAnimation() {
-        // const background = this.querySelector("[type=top-content]");
-        // const more = this.querySelector("[type=more]");
-        // const description = this.querySelector("[type=description-container]");
-        // const additionalDescription = this.querySelector("[type=additional-info]");
-        //
-        // if (!background || !more || !description) {
-        //     return;
-        // }
-        //
-        // let isSlideUp = false;
-        // let isInTransition = false;
-        //
-        // description.addEventListener("mouseover", () => slideUp(true));
-        // description.addEventListener("mouseleave", () => slideDown(true));
-        // description.addEventListener("click", switchSlide);
-        //
-        // function switchSlide() {
-        //     if (isInTransition) {
-        //         return;
-        //     }
-        //
-        //     if (isSlideUp) {
-        //         slideDown();
-        //     } else {
-        //         slideUp();
-        //     }
-        // }
-        //
-        // function slideUp(forced = false) {
-        //     if ((isInTransition || isSlideUp) && !forced) {
-        //         return;
-        //     }
-        //
-        //     description.style.maxHeight = "100%";
-        //     background.style.maxHeight = "28%";
-        //     more.style.display = "none";
-        //     additionalDescription.style.display = "grid";
-        //
-        //     if (!forced) {
-        //         isInTransition = true;
-        //
-        //         setTimeout(() => {
-        //             isSlideUp = true;
-        //             isInTransition = false;
-        //         }, 350);
-        //     }
-        // }
-        //
-        // function slideDown(forced = false) {
-        //     if ((isInTransition || !isSlideUp) && !forced) {
-        //         return;
-        //     }
-        //
-        //     // description.style.maxHeight = "45%";
-        //     background.style.maxHeight = "55%";
-        //     more.style.display = "grid";
-        //     additionalDescription.style.display = "";
-        //
-        //     if (!forced) {
-        //         isInTransition = true;
-        //
-        //         setTimeout(() => {
-        //             isSlideUp = false;
-        //             isInTransition = false;
-        //         }, 350);
-        //     }
-        // }
+        const background = this.querySelector("[type=top-content]");
+        const more = this.querySelector("[type=more]");
+        const description = this.querySelector("[type=description-container]");
+        const additionalDescription = this.querySelector("[type=additional-info]");
+
+        if (!background || !more || !description) {
+            return;
+        }
+
+        let isSlideUp = false;
+        let isInTransition = false;
+
+        description.addEventListener("mouseover", () => slideUp(true));
+        description.addEventListener("mouseleave", () => slideDown(true));
+        description.addEventListener("click", switchSlide);
+
+        function switchSlide() {
+            if (isInTransition) {
+                return;
+            }
+
+            if (isSlideUp) {
+                slideDown();
+            } else {
+                slideUp();
+            }
+        }
+
+        function slideUp(forced = false) {
+            if ((isInTransition || isSlideUp) && !forced) {
+                return;
+            }
+
+            description.style.maxHeight = "100%";
+            // background.style.maxHeight = "28%";
+            more.style.display = "none";
+            additionalDescription.style.display = "grid";
+
+            if (!forced) {
+                isInTransition = true;
+                setTimeout(() => {
+                    isSlideUp = true;
+                    isInTransition = false;
+                }, 350);
+            }
+        }
+
+        function slideDown(forced = false) {
+            if ((isInTransition || !isSlideUp) && !forced) {
+                return;
+            }
+
+            // description.style.maxHeight = "45%";
+            background.style.maxHeight = "55%";
+            more.style.display = "grid";
+            additionalDescription.style.display = "";
+
+            if (!forced) {
+                isInTransition = true;
+
+                setTimeout(() => {
+                    isSlideUp = false;
+                    isInTransition = false;
+                }, 350);
+            }
+        }
     }
 
     async setMap(map, yMapElement, deselectAll) {
@@ -198,5 +197,15 @@ export class BuildingCard extends HTMLElement {
 
     connectedCallback() {
         setTimeout(() => this.load())
+    }
+}
+
+const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+async function mobileLoadAnimation() {
+    if (/android|iphone|ipad|ipod|mobile/i.test(userAgent) || /tablet|ipad/i.test(userAgent)) {
+        console.log("Пользователь зашел с мобильного устройства или планшета");
+        let buildingCard = new BuildingCard();
+        await buildingCard.load();
     }
 }
