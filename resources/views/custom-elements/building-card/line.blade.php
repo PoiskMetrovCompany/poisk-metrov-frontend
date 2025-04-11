@@ -3,13 +3,13 @@
         @php
             $link = '#';
 
-            if ($data[$num]['name'] === 'студ.') $link= '#apartment_type_study';
-            if ($data[$num]['name'] === '1к. кв.') $link= '#apartment_type_one';
-            if ($data[$num]['name'] === '2к. кв.') $link= '#apartment_type_two';
-            if ($data[$num]['name'] === '3к. кв.') $link= '#apartment_type_free';
-            if ($data[$num]['name'] === '4к. кв.') $link= '#apartment_type_foo';
-            if ($data[$num]['name'] === '5к. кв.') $link= '#apartment_type_five';
-            if ($data[$num]['name'] === '6к. кв.') $link= '#apartment_type_six';
+            if ($data[$num]['name'] === 'студ.') $link .= 'Студии';
+            if ($data[$num]['name'] === '1к. кв.') $link .= '1-комнатные';
+            if ($data[$num]['name'] === '2к. кв.') $link .= '2-комнатные';
+            if ($data[$num]['name'] === '3к. кв.') $link .= '3-комнатные';
+            if ($data[$num]['name'] === '4к. кв.') $link .= '4-комнатные';
+            if ($data[$num]['name'] === '5к. кв.') $link .= '5-комнатные';
+            if ($data[$num]['name'] === '6к. кв.') $link .= '6-комнатные';
         @endphp
         <a class="apartment-type-card-item" href="/{{$code}}/{{$link}}" style="
             display: grid;

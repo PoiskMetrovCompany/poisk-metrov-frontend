@@ -56,7 +56,8 @@ building-card {
         }
 
         @include media-breakpoint-up(xxl) {
-            height: 354px;
+            //height: 354px;
+            height: 331px;
         }
 
         // &>a {
