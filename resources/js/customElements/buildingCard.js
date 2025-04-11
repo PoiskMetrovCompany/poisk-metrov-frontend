@@ -76,13 +76,12 @@ export class BuildingCard extends HTMLElement {
             }
 
             description.style.maxHeight = "100%";
-            background.style.maxHeight = "28%";
+            // background.style.maxHeight = "28%";
             more.style.display = "none";
             additionalDescription.style.display = "grid";
 
             if (!forced) {
                 isInTransition = true;
-
                 setTimeout(() => {
                     isSlideUp = true;
                     isInTransition = false;
@@ -95,7 +94,7 @@ export class BuildingCard extends HTMLElement {
                 return;
             }
 
-            description.style.maxHeight = "45%";
+            // description.style.maxHeight = "45%";
             background.style.maxHeight = "55%";
             more.style.display = "grid";
             additionalDescription.style.display = "";
@@ -198,5 +197,15 @@ export class BuildingCard extends HTMLElement {
 
     connectedCallback() {
         setTimeout(() => this.load())
+    }
+}
+
+const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+async function mobileLoadAnimation() {
+    if (/android|iphone|ipad|ipod|mobile/i.test(userAgent) || /tablet|ipad/i.test(userAgent)) {
+        console.log("Пользователь зашел с мобильного устройства или планшета");
+        let buildingCard = new BuildingCard();
+        await buildingCard.load();
     }
 }

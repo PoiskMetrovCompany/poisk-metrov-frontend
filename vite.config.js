@@ -11,6 +11,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/css/swiper.override.css',
+                'resources/css/card.override.css',
 
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
@@ -57,6 +58,7 @@ export default defineConfig({
                 'resources/js/reservation/index.js',
                 'resources/js/reservation/request.js',
                 'resources/js/coordinateStorage.js',
+                'resources/js/anchorLink.js',
 
             ],
             refresh: true,
