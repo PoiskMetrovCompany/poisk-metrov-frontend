@@ -605,7 +605,6 @@ a.apartment-type-card-item:hover div {
     transition: .6s;
 }
 
-
 @media (min-width: 1024px) and (max-width: 1240px) {
     nav .apartment-col,
     .apartment-col,
@@ -1015,6 +1014,12 @@ a.apartment-type-card-item:hover div {
     }
 }
 
+@media (min-width: 730px) and (max-width: 743px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 10%);
+    }
+}
+
 @media (max-width: 630px) {
     main {
         width: 90%;
@@ -1196,6 +1201,123 @@ a.apartment-type-card-item:hover div {
     }
 }
 
+@media (min-width: 690px) and (max-width: 730px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 15%);
+    }
+}
+
+@media (min-width: 640px) and (max-width: 690px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 20%);
+    }
+}
+
+@media (min-width: 600px) and (max-width: 640px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 30%);
+    }
+}
+
+@media (min-width: 570px) and (max-width: 600px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 40%);
+    }
+}
+
+@media (min-width: 520px) and (max-width: 570px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 52%);
+    }
+}
+
+@media (width: 480px) or (width: 540px) {
+    #current-city-mobile-button {
+        display: none!important;
+    }
+    header#top-bar,
+    mobile-toolbar {
+        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
+    }
+    .header section.header-mobile-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        align-items: center;
+        position: relative;
+        left: 43%;
+        width: 65%;
+    }
+    .header section.header-mobile-contact b {
+        font-weight: 400;
+        display: flex;
+        justify-content: end;
+    }
+    .header section.header-mobile-contact small {
+        position: relative;
+        left: 12%;
+        color: #818181;
+    }
+    header section.header-mobile-contact b,
+    .header section.header-mobile-contact small {
+        line-height: 140%;
+        width: 100%;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 520px) {
+    header section.header-mobile-contact {
+        left: calc(100% - 56%);
+    }
+}
+
+@media (width: 430px) and (height: 932px) {
+    .header section.header-mobile-contact {
+        display: none;
+    }
+}
+
+@media (min-width: 430px) and (max-width: 743px) {
+    #current-city-mobile-button {
+        display: none!important;
+    }
+
+    header#top-bar,
+    mobile-toolbar {
+        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
+    }
+    .header section.header-mobile-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        align-items: center;
+        position: relative;
+        /*left: calc(100% - 15%);*/
+        width: 65%;
+    }
+    .header section.header-mobile-contact b {
+        font-weight: 400;
+        display: flex;
+        justify-content: end;
+    }
+    .header section.header-mobile-contact small {
+        position: relative;
+        left: 12%;
+        color: #818181;
+    }
+    header section.header-mobile-contact b,
+    .header section.header-mobile-contact small {
+        line-height: 140%;
+        width: 100%;
+    }
+}
+
+@media (min-width: 430px) and (max-width: 480px) {
+    .header section.header-mobile-contact {
+        left: calc(100% - 62%);
+    }
+}
+
 @media (max-width: 430px) {
     .actions-navbar__point {
         margin-right: 2%;
@@ -1226,102 +1348,6 @@ a.apartment-type-card-item:hover div {
     }
     .header section.header-mobile-contact small {
         color: #818181;
-    }
-}
-
-@media (width: 430px) and (height: 932px) {
-    .header section.header-mobile-contact {
-        display: none;
-    }
-}
-
-@media (min-width: 320px) and (max-width: 375px) {
-    header#top-bar,
-    mobile-toolbar {
-        box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
-    }
-    .header section.header-mobile-contact {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: end;
-        align-items: center;
-        position: relative;
-        left: 26%;
-        width: 65%;
-    }
-    .header section.header-mobile-contact b {
-        font-weight: 400;
-        display: flex;
-        justify-content: end;
-    }
-    .header section.header-mobile-contact small {
-        position: relative;
-        right: -3%;
-        color: #818181;
-    }
-    header section.header-mobile-contact b,
-    .header section.header-mobile-contact small {
-        line-height: 140%;
-        width: 100%;
-    }
-}
-
-@media (max-width: 320px) {
-    .header section.header-mobile-contact {
-        left: 21%!important;
-        width: 71%!important;
-    }
-    .header section.header-mobile-contact small {
-        right: 15%;
-    }
-}
-
-/**
-    Кастомный стили
-*/
-
-@media (width: 390px) {
-    .header-mobile-contact small {
-        position: relative;
-        right: 2%;
-    }
-}
-@media (width: 384px) {
-    .header-mobile-contact small {
-        position: relative;
-        right: 3%;
-    }
-}
-@media (width: 360px) {
-    .header section.header-mobile-contact small {
-        right: 2%;
-    }
-}
-
-@media (width: 353px) {
-    .header-mobile-contact small {
-        position: relative;
-        right: 5%!important;
-    }
-}
-
-@media (width: 344px) {
-    .header section.header-mobile-contact small {
-        right: 11%;
-    }
-}
-
-@media (width: 320px) {
-    .header-mobile-contact small {
-        position: relative;
-        right: 3%;
-    }
-}
-
-@media (width: 412px) {
-    .header-mobile-contact small {
-        position: relative;
-        right: 0%;
     }
 }
 
@@ -1359,10 +1385,34 @@ a.apartment-type-card-item:hover div {
     }
 }
 
-@media (width: 480px) or (width: 540px) {
-    #current-city-mobile-button {
-        display: none!important;
+@media (width: 412px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 0%;
     }
+}
+
+@media (width: 390px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 2%;
+    }
+}
+
+@media (width: 384px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 3%;
+    }
+}
+
+@media (width: 360px) {
+    .header section.header-mobile-contact small {
+        right: 2%;
+    }
+}
+
+@media (min-width: 355px) and (max-width: 375px) {
     header#top-bar,
     mobile-toolbar {
         box-shadow: 0px 4px 24px 3px rgba(0, 0, 0, 0.05);
@@ -1373,7 +1423,7 @@ a.apartment-type-card-item:hover div {
         justify-content: end;
         align-items: center;
         position: relative;
-        left: 43%;
+        left: 26%;
         width: 65%;
     }
     .header section.header-mobile-contact b {
@@ -1383,12 +1433,70 @@ a.apartment-type-card-item:hover div {
     }
     .header section.header-mobile-contact small {
         position: relative;
-        left: 12%;
+        right: 3%;
         color: #818181;
     }
     header section.header-mobile-contact b,
     .header section.header-mobile-contact small {
         line-height: 140%;
         width: 100%;
+    }
+}
+
+@media (width: 353px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 5%!important;
+    }
+}
+
+@media (width: 344px) {
+    .header section.header-mobile-contact small {
+        right: 11%;
+    }
+}
+
+@media (min-width: 344px) and (max-width: 355px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 13%;
+    }
+}
+
+@media (min-width: 335px) and (max-width: 344px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 16%;
+    }
+}
+
+@media (min-width: 327px) and (max-width: 335px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 19%;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 327px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 23%;
+    }
+}
+
+@media (max-width: 320px) {
+    .header section.header-mobile-contact {
+        left: 21%!important;
+        width: 71%!important;
+    }
+    .header section.header-mobile-contact small {
+        right: 57%;
+    }
+}
+
+@media (width: 320px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 3%;
     }
 }
