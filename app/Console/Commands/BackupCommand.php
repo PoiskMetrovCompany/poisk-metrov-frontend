@@ -6,6 +6,7 @@ use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
 use Arhitector\Yandex\Disk;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @see BackupService::execute

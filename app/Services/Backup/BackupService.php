@@ -27,8 +27,9 @@ final class BackupService implements BackupServiceInterface
         $this->backupHistoryService = $backupHistoryService;
     }
 
-    public function backupWeb(string $toDate, string $filename, string $archiveDir, string $archivePath): void
+    private function backupWeb(string $toDate, string $filename, string $archiveDir, string $archivePath): void
     {
+        $depthPath = 3;
         if (!is_dir($archiveDir)) {
             mkdir($archiveDir, 0755, true);
         }
@@ -40,7 +41,21 @@ final class BackupService implements BackupServiceInterface
                     throw new Exception('Не удалось создать архив.');
                 }
 
-                $baseDir = realpath(dirname(__DIR__, 3));
+                $baseDir = realpath(dirname(__DIR__, $depthPath));
+
+                $excludedPaths = [
+                    realpath($baseDir . '/vendor'),
+                    realpath($baseDir . '/node_modules'),
+                    realpath($baseDir . '/.idea'),
+                    realpath($baseDir . '/.git'),
+                    realpath($baseDir . '/.run'),
+                    realpath($baseDir . '/.vscode'),
+                    realpath($baseDir . '/storage'),
+                    realpath($baseDir . '/public/build'),
+                    realpath($baseDir . '/public/galleries'),
+                    realpath($baseDir . '/public/complexes'),
+                    realpath($baseDir . '/public/news'),
+                ];
 
                 $iterator = new RecursiveIteratorIterator(
                     new RecursiveDirectoryIterator($baseDir, RecursiveDirectoryIterator::SKIP_DOTS)
@@ -53,14 +68,15 @@ final class BackupService implements BackupServiceInterface
                         continue;
                     }
 
-                    if (
-                        basename($filePath) === $filename ||
-                        strpos($filePath, '/vendor') !== false ||
-                        strpos($filePath, '/node_modules') !== false ||
-                        strpos($filePath, '/.idea') !== false ||
-                        strpos($filePath, '/.run') !== false ||
-                        strpos($filePath, '/.vscode') !== false
-                    ) {
+                    $shouldExclude = false;
+                    foreach ($excludedPaths as $excludedPath) {
+                        if ($excludedPath && strpos($filePath, $excludedPath) === 0) {
+                            $shouldExclude = true;
+                            break;
+                        }
+                    }
+
+                    if ($shouldExclude) {
                         continue;
                     }
 
@@ -75,26 +91,24 @@ final class BackupService implements BackupServiceInterface
             }
         }
     }
-    public function backupDB(): void
+    private function backupDB(): void
     {
+        $depthPath = 3;
         $username = env('DB_USERNAME');
         $password = env('DB_PASSWORD');
         $dbname = env('DB_DATABASE');
-        $toDate = date('Y-m-d-H-i-s');
-        $filename = "{$toDate}_backup.sql";
-        $path =  dirname(__DIR__,3) . '/' . $filename;
-        // dump database
+        $toDate = date('y-m-d');
+        $filename = "backup.sql";
+        $path = dirname(__DIR__, $depthPath) . '/' . $filename;
         exec("mysqldump -u{$username} -p{$password} {$dbname} > {$path}");
-
-        // Удаление .sql
-        array_map('unlink', glob(dirname(__FILE__, 2) . $filename));
     }
 
     public function execute(): void
     {
-        $toDate = date('Y-m-d-H-i-s');
-        $filename = "{$toDate}_backup.tar";
-        $archiveDir = dirname(__DIR__,3);
+        $depthPath = 3;
+        $toDate = date('d-m-y');
+        $filename = "{$toDate}_.tar";
+        $archiveDir = dirname(__DIR__, $depthPath);
         $archivePath = "{$archiveDir}/{$filename}";
 
 
@@ -108,9 +122,10 @@ final class BackupService implements BackupServiceInterface
 
         $this->backupWeb($toDate, $filename, $archiveDir, $archivePath);
 
-        $resource = $this->disk->getResource($archivePath);
+        $resource = $this->disk->getResource("Бэкапы сайта Поиск Метров/{$filename}");
 
-        $resource->upload($archivePath);
-        array_map('unlink', glob(dirname(__DIR__, 3) .'/' . $filename));
+        $resource->upload(dirname(__DIR__, $depthPath) . '/' . $filename);
+        array_map('unlink', glob(dirname(__DIR__, $depthPath) .'/' . $filename));
+        array_map('unlink', array_filter(glob(dirname(__DIR__, $depthPath) . '/' . '*.sql'), 'file_exists'));
     }
 }
