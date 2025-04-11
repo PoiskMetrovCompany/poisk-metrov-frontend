@@ -71,7 +71,7 @@
                         <div iconType="health" class="infrastructure menu icon-container">
                             <div class="icon content-hospital grey4 d24x24"></div>
                         </div>
-                        <div>Здоровье</div>
+                        <div>Аптеки</div>
                     </div>
                     <div class="icon check orange d24x24"></div>
                 </div>
