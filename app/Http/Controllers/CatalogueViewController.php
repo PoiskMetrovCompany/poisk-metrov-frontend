@@ -7,11 +7,15 @@ use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Core\Interfaces\Services\SearchServiceInterface;
 use App\Http\Requests\GetFilteredCatalogueRequest;
+use App\Http\Resources\ResidentialComplexCardResource;
+use App\Models\Apartment;
+use App\Models\ResidentialComplex;
 use App\Providers\AppServiceProvider;
 use App\Repositories\ResidentialComplexRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Throwable;
+use TypeError;
 
 /**
  * @see AppServiceProvider::registerCachingService()
@@ -47,12 +51,12 @@ class CatalogueViewController extends Controller
      */
     public function getFilteredCatalogueWithSearchData(GetFilteredCatalogueRequest $request)
     {
+
         $request->cityCode = $this->cityService->getUserCity();
         $request->offset = 0;
         $request->limit = 18;
         $response = $this->getFilteredCatalogueViews($request);
         $response['filterData'] = $this->searchService->getSearchData();
-
         $view = view('catalogue', $response);
 
         try {
@@ -62,11 +66,6 @@ class CatalogueViewController extends Controller
         }
     }
 
-    /**
-     * @param GetFilteredCatalogueRequest $request
-     * @return array
-     * @throws Throwable
-     */
     public function getFilteredCatalogueViews(GetFilteredCatalogueRequest $request)
     {
         $request->cityCode = $this->cityService->getUserCity();
@@ -80,16 +79,13 @@ class CatalogueViewController extends Controller
             $viewElement = $validated['cardelement'];
         }
 
-        // while ($request->offset > $filteredCatalogueData['fullfilledCount'] ) {
-        //     $request->offset -= $request->limit;
-        // }
-
         $codes = $filteredBuildings
             ->offset($request->offset)
             ->limit($request->limit)
             ->get()
             ->pluck('code')
             ->toArray();
+
         $allCodes = $filteredCatalogueData['allCodes'];
 
         $cards = $this->cachingService->getCards($codes);
@@ -97,14 +93,17 @@ class CatalogueViewController extends Controller
 
         $data = array_values($cards);
         $allData = array_values($allCards);
-        $views = [];
 
+        $views = [];
         foreach ($data as $card) {
             $views[] = view($viewElement, $card)->render();
         }
 
         $countPages = ceil($filteredCatalogueData['fullfilledCount'] / $request->limit) + 1;
-        $paginator = view('common.paginator-with-show-more', ['id' => 'catalogue-paginator', 'pageCount' => $countPages])->render();
+        $paginator = view('common.paginator-with-show-more', [
+            'id' => 'catalogue-paginator',
+            'pageCount' => $countPages,
+        ])->render();
 
         $filteredCatalogueData['catalogueItems'] = $views;
         $filteredCatalogueData['catalogueBuildings'] = $allData;
