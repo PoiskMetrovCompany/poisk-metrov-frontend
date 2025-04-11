@@ -13,7 +13,7 @@ final class BackupHistoryService implements BackupHistoryServiceInterface
 {
     protected static $filePath = 'backups.json';
 
-    public function setHistory(array $attributes): void
+    private function setHistory(array $attributes): void
     {
         if (!Storage::disk('local')->exists(self::$filePath)) {
             Storage::disk('local')->put(self::$filePath, json_encode([]));
@@ -35,7 +35,7 @@ final class BackupHistoryService implements BackupHistoryServiceInterface
         Storage::disk('local')->put(self::$filePath, json_encode($content, JSON_PRETTY_PRINT));
     }
 
-    public function getHistoryAll(): array
+    private function getHistoryAll(): array
     {
         $content = Storage::disk('local')->get(self::$filePath);
         return json_decode($content, true);

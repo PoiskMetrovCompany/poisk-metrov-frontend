@@ -22,7 +22,7 @@ class RealEstateService implements RealEstateServiceInterface
 {
     public function __construct(
         protected CachingServiceInterface $cachingService,
-        protected VisitedPagesServiceInterface $visitedPagesService,
+        protected VisitedPagesService $visitedPagesService,
         protected CityServiceInterface $cityService,
         protected ResidentialComplexRepository $residentialComplexRepository,
     ) {
@@ -37,17 +37,21 @@ class RealEstateService implements RealEstateServiceInterface
         foreach ($visiedRealEstates as $visiedRealEstate) {
             $building = ResidentialComplex::where('code', $visiedRealEstate)->first();
 
-            foreach ($building->categories as $category) {
-                if (! $visitedCategoryCount->keys()->contains($category->category_name)) {
-                    $visitedCategoryCount[$category->category_name] = 0;
-                }
+            // TODO: разобраться в баге "foreach ($building->categories as $category) {" убрать обработчик либо журналировать
+            try {
+                foreach ($building->categories as $category) {
+                    if (!$visitedCategoryCount->keys()->contains($category->category_name)) {
+                        $visitedCategoryCount[$category->category_name] = 0;
+                    }
 
-                $visitedCategoryCount[$category->category_name] += 1;
+                    $visitedCategoryCount[$category->category_name] += 1;
 
-                if ($visitedCategoryCount[$category->category_name] == $visitedCategoryCount->max()) {
-                    $mostVisitedCategory = $category->category_name;
+                    if ($visitedCategoryCount[$category->category_name] == $visitedCategoryCount->max()) {
+                        $mostVisitedCategory = $category->category_name;
+                    }
                 }
-            }
+            } catch (\ErrorException $e) {}
+
         }
 
         return ResidentialComplexCategory::where('category_name', $mostVisitedCategory)->first();
@@ -235,9 +239,9 @@ class RealEstateService implements RealEstateServiceInterface
                 //Снова костыль для поиска по исключению апартаментов - в buildingsQuery нет каких-то айдишников и при исключении приходит меньше квартир
                 if ($field == 'apartment_type' && $condition == '<>' && $value == 'Апартамент') {
                     $buildingsInCity = ResidentialComplex::
-                        whereHas('location', function ($query) use ($cityCode) {
-                            return $query->where('code', $cityCode);
-                        });
+                    whereHas('location', function ($query) use ($cityCode) {
+                        return $query->where('code', $cityCode);
+                    });
                     $apartmentsQuery->orWhere($field, $condition, $value)->whereIn('complex_id', $buildingsInCity->pluck('id'));
                     continue;
                 }

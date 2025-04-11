@@ -2,7 +2,7 @@
     $spritePositionsStr = json_encode($spritePositions);
     $metroMoveIcon = $metro_type == 'transport' ? 'car' : 'people';
 @endphp
-@vite('resources/js/coordinateStorage.js')
+@vite(['resources/css/card.override.css', 'resources/js/coordinateStorage.js'])
 <building-card id="{{ $code }}" city="{{ $location['code'] }}" long="{{ $longitude }}" lat="{{ $latitude }}"
     buildingname="{{ $name }}" metro="{{ $metro_station }}" metrominutes="{{ $metroMinutes }}"
     metromoveicon="{{ $metroMoveIcon }}">
@@ -40,16 +40,17 @@
         </header>
         @include('common.divider')
         <ul>
-            @include('custom-elements.building-card.line', ['data' => $apartmentSpecifics, 'num' => 0])
-            @include('custom-elements.building-card.line', ['data' => $apartmentSpecifics, 'num' => 1])
+            @include('custom-elements.building-card.line', ['data' => $apartmentSpecifics, 'num' => 0, 'code' => $code])
+            @include('custom-elements.building-card.line', ['data' => $apartmentSpecifics, 'num' => 1, 'code' => $code])
         </ul>
         <div type="more">Подробнее</div>
         <div type="additional-info">
             <ul>
-                @include('custom-elements.building-card.line', ['data' => $apartmentSpecifics, 'num' => 2])
+                @include('custom-elements.building-card.line', ['data' => $apartmentSpecifics, 'num' => 2, 'code' => $code])
                 @include('custom-elements.building-card.line', [
                     'data' => $apartmentSpecifics,
                     'num' => 3,
+                    'code' => $code
                 ])
             </ul>
             @include('common.divider')

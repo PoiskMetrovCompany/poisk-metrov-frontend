@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ResidentialComplex;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -125,7 +126,11 @@ class ResidentialComplexCardResource extends JsonResource
             'minPricePerMeterDisplay' => PriceTextFormatter::priceToText($minPricePerMeter, ' ', ' ₽', 1),
             'isFavorite' => $this->isFavorite(),
             'residentialComplexClass' => $residentialComplexClass,
-            'sectionCount' => $sectionCount
+            'sectionCount' => $sectionCount,
+            // TODO: возможно стоит использовать 'apartments' !!!!
+//            'apartments' => ResidentialComplex::select('apartments.id')->where('code', $this->code)
+//                ->join('apartments', 'apartments.complex_id', '=', 'residential_complexes.id')
+//                ->get()
         ];
     }
 }
