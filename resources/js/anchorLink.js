@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const dropdownHeaderElement = dropdown.previousElementSibling;
                         setTimeout(
                             () => { dropdownHeaderElement.click() },
-                            1500
+                            500
                         );
                     }
                 } catch (error) { }
