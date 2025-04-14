@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (anchorIndex !== -1) {
                 try {
                     const dropdown = document.querySelector(`#apartment-dropdown-${anchorIndex}`);
+
                     if (dropdown) {
                         const dropdownHeaderElement = dropdown.previousElementSibling;
                         setTimeout(

@@ -1,3 +1,8 @@
+html {
+    scroll-behavior: smooth;
+    scroll-timeline: .7s;
+}
+
 #apartment-dropdown-0.animate__fadeInDown,
 #apartment-dropdown-1.animate__fadeInDown,
 #apartment-dropdown-2.animate__fadeInDown,
@@ -6,7 +11,7 @@
 #apartment-dropdown-5.animate__fadeInDown,
 #apartment-dropdown-6.animate__fadeInDown {
     animation-name: customFadeInDown;
-    animation-duration: 0.4s;
+    animation-duration: auto;
 }
 
 #apartment-dropdown-0.animate__fadeInUp,
