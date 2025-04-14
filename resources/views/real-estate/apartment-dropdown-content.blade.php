@@ -1,3 +1,4 @@
+@vite('resources/css/animation.override.css')
 @for ($i = 0; $i < count($apartments); $i++)
     @isset($apartmentSpecifics[$i])
         <div class="plans-filter apartment-dropdown header">
@@ -23,7 +24,7 @@
         </div>
 
 
-        <div id="apartment-dropdown-{{ $i }}" class="plans-filter apartment-dropdown container">
+        <div id="apartment-dropdown-{{ $i }}" class="plans-filter apartment-dropdown container animate__animated">
             <div class="plans-filter apartment-dropdown buttons-grid" style="display: none">
                 <div id="apartment-dropdown-price-sort-{{ $i }}" class="plans-filter apartment-dropdown buttons">
                     <div class="plans-filter apartment-dropdown button" roomCount="{{ $apartmentSpecifics[$i]['roomCount'] }}"
