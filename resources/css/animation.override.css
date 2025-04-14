@@ -9,6 +9,12 @@
     }
 }
 
-#apartment-dropdown-0.animate__fadeInDown {
+#apartment-dropdown-0.animate__fadeInDown,
+#apartment-dropdown-1.animate__fadeInDown,
+#apartment-dropdown-2.animate__fadeInDown,
+#apartment-dropdown-3.animate__fadeInDown,
+#apartment-dropdown-4.animate__fadeInDown,
+#apartment-dropdown-5.animate__fadeInDown,
+#apartment-dropdown-6.animate__fadeInDown {
     animation-name: customFadeInDown;
 }
