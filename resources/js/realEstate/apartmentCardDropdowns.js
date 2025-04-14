@@ -62,12 +62,21 @@ export function loadDropdowns(priceSortingForRoomCount, areaSortingForRoomCount)
             const isOpen = dropdown.classList.contains("open");
 
             if (isOpen) {
-                dropdown.classList.remove("open");
-                dropdown.classList.remove("animate__fadeInDown");
-                tick.style.transform = "rotateX(180deg)";
+                dropdown.classList.add("animate__fadeInUp");
+
+                dropdown.addEventListener('animationend', handleAnimationEnd);
+
+                function handleAnimationEnd() {
+
+                    dropdown.classList.remove("open", "animate__fadeInUp");
+                    tick.style.transform = "rotateX(180deg)";
+
+                    dropdown.removeEventListener('animationend', handleAnimationEnd);
+                }
             } else {
-                dropdown.classList.add("open");
+                dropdown.classList.remove("animate__fadeInUp");
                 dropdown.classList.add("animate__fadeInDown");
+                dropdown.classList.add("open");
                 tick.style.transform = "rotateX(0deg)";
             }
         };

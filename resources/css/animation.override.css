@@ -1,3 +1,25 @@
+#apartment-dropdown-0.animate__fadeInDown,
+#apartment-dropdown-1.animate__fadeInDown,
+#apartment-dropdown-2.animate__fadeInDown,
+#apartment-dropdown-3.animate__fadeInDown,
+#apartment-dropdown-4.animate__fadeInDown,
+#apartment-dropdown-5.animate__fadeInDown,
+#apartment-dropdown-6.animate__fadeInDown {
+    animation-name: customFadeInDown;
+    animation-duration: 0.4s;
+}
+
+#apartment-dropdown-0.animate__fadeInUp,
+#apartment-dropdown-1.animate__fadeInUp,
+#apartment-dropdown-2.animate__fadeInUp,
+#apartment-dropdown-3.animate__fadeInUp,
+#apartment-dropdown-4.animate__fadeInUp,
+#apartment-dropdown-5.animate__fadeInUp,
+#apartment-dropdown-6.animate__fadeInUp{
+    animation-name: customFadeInUp;
+    /*animation-duration: 0.4s;*/
+}
+
 @keyframes customFadeInDown {
     from {
         opacity: 0;
@@ -9,12 +31,14 @@
     }
 }
 
-#apartment-dropdown-0.animate__fadeInDown,
-#apartment-dropdown-1.animate__fadeInDown,
-#apartment-dropdown-2.animate__fadeInDown,
-#apartment-dropdown-3.animate__fadeInDown,
-#apartment-dropdown-4.animate__fadeInDown,
-#apartment-dropdown-5.animate__fadeInDown,
-#apartment-dropdown-6.animate__fadeInDown {
-    animation-name: customFadeInDown;
+@keyframes customFadeInUp {
+    from {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    to {
+        opacity: 1;
+        animation-duration: 0.1s;
+        transform: translateY(-30px);
+    }
 }
