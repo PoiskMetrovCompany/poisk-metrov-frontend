@@ -66,15 +66,13 @@ function phoneInputForm() {
 
         waitingForCodeConfirmation = true;
         formData.set("pincode", codeInput.value);
-        // TODO: разобраться почему не работает - /api/v1/users/account/authorize
-        const response = await axios.post("/api/authorize-user", formData);
-        console.log(response)
+        const response = await axios.post("/api/v1/users/account/authorize", formData);
         waitingForCodeConfirmation = false;
 
         if (response.status.toString().startsWith("2")) {
-            if (response.data.status == "Authorization success") {
+            if (response.data.status === "Authorization success") {
                 window.location.reload();
-            } else if (response.data.status == "NeedFill") {
+            } else if (response.data.status === "NeedFill") {
                 codePopup.style.display = "none";
                 personalInfo.style.display = "block";
             }
@@ -88,7 +86,7 @@ function phoneInputForm() {
     phoneForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if (timerInterval != undefined) {
+        if (timerInterval !== undefined) {
             return;
         }
 
@@ -102,7 +100,7 @@ function phoneInputForm() {
         event.target.style.opacity = 1;
         phonePopup.style.display = "none";
 
-        if (!response.status.toString().startsWith("2") || response.data.status == "error") {
+        if (!response.status.toString().startsWith("2") || response.data.status === "error") {
             failure.style.display = "block";
             console.error(response.data.data);
         } else {
@@ -113,7 +111,7 @@ function phoneInputForm() {
     });
 
     sendCodeAgain.addEventListener("click", async () => {
-        if (!formData || timerInterval != undefined) {
+        if (!formData || timerInterval !== undefined) {
             return;
         }
 
@@ -141,7 +139,7 @@ function phoneInputForm() {
 
         timer -= 1;
 
-        if (timer == -1) {
+        if (timer === -1) {
             clearInterval(timerInterval);
             timer = 59;
             timerInterval = undefined;

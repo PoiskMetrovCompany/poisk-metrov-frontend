@@ -21,7 +21,6 @@ class AuthorizeAccountController extends Controller
         protected ManagerRepositoryInterface $managerRepository,
         protected UserRepositoryInterface $userRepository,
         protected FavoritesServiceInterface $favoritesService
-
     )
     {
 
