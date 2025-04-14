@@ -1392,8 +1392,8 @@ a.apartment-type-card-item:hover div {
     }
 }
 
-@media (width: 390px) {
-    .header-mobile-contact small {
+@media (min-width: 385px) and (max-width: 395px) {
+    .header section.header-mobile-contact small {
         position: relative;
         right: 2%;
     }
@@ -1406,9 +1406,44 @@ a.apartment-type-card-item:hover div {
     }
 }
 
+@media (min-width: 378px) and (max-width: 383px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 4%;
+    }
+}
+
+@media (min-width: 377px) and (max-width: 378px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 5%;
+    }
+}
+
+@media (width: 376px) {
+    .header-mobile-contact small {
+        position: relative;
+        right: 8%;
+    }
+}
+
+@media (min-width: 368px) and (max-width: 376px) {
+    .header-mobile-contact b {
+        position: relative;
+        left: -3%;
+    }
+}
+
 @media (width: 360px) {
     .header section.header-mobile-contact small {
         right: 2%;
+    }
+}
+
+@media (min-width: 355px) and (max-width: 356px) {
+    .header-mobile-contact small {
+        position: relative;
+        left: -4%;
     }
 }
 
@@ -1431,11 +1466,11 @@ a.apartment-type-card-item:hover div {
         display: flex;
         justify-content: end;
     }
-    .header section.header-mobile-contact small {
-        position: relative;
-        right: 3%;
-        color: #818181;
-    }
+    /*.header section.header-mobile-contact small {*/
+    /*    !*position: relative;*!*/
+    /*    !*right: 3%;*!*/
+    /*    color: #818181;*/
+    /*}*/
     header section.header-mobile-contact b,
     .header section.header-mobile-contact small {
         line-height: 140%;
@@ -1443,10 +1478,10 @@ a.apartment-type-card-item:hover div {
     }
 }
 
-@media (width: 353px) {
+@media (min-width: 353px) and (max-width: 354px) {
     .header-mobile-contact small {
         position: relative;
-        right: 5%!important;
+        right: 12% !important;
     }
 }
 
@@ -1463,14 +1498,35 @@ a.apartment-type-card-item:hover div {
     }
 }
 
-@media (min-width: 335px) and (max-width: 344px) {
+@media (min-width: 341px) and (max-width: 344px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 15%;
+    }
+}
+
+@media (min-width: 337px) and (max-width: 341px) {
     .header section.header-mobile-contact small {
         position: relative;
         right: 16%;
     }
 }
 
-@media (min-width: 327px) and (max-width: 335px) {
+@media (min-width: 330px) and (max-width: 337px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 19%;
+    }
+}
+
+@media (min-width: 325px) and (max-width: 330px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 19%;
+    }
+}
+
+@media (width: 321px) {
     .header section.header-mobile-contact small {
         position: relative;
         right: 19%;
@@ -1498,5 +1554,26 @@ a.apartment-type-card-item:hover div {
     .header-mobile-contact small {
         position: relative;
         right: 3%;
+    }
+}
+
+@media (min-width: 314px) and (max-width: 319px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 61%;
+    }
+}
+
+@media (min-width: 311px) and (max-width: 314px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 65%;
+    }
+}
+
+@media (min-width: 309px) and (max-width: 311px) {
+    .header section.header-mobile-contact small {
+        position: relative;
+        right: 67%;
     }
 }
