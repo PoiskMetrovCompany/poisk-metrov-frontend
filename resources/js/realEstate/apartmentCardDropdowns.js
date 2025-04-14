@@ -59,14 +59,18 @@ export function loadDropdowns(priceSortingForRoomCount, areaSortingForRoomCount)
         }
 
         header.onclick = () => {
-            if (dropdown.className.endsWith(" open")) {
-                dropdown.className = defaultClass;
+            const isOpen = dropdown.classList.contains("open");
+
+            if (isOpen) {
+                dropdown.classList.remove("open");
+                dropdown.classList.remove("animate__fadeInDown");
                 tick.style.transform = "rotateX(180deg)";
             } else {
-                dropdown.className = defaultClass + " open";
+                dropdown.classList.add("open");
+                dropdown.classList.add("animate__fadeInDown");
                 tick.style.transform = "rotateX(0deg)";
             }
-        }
+        };
     });
 
     loadPlanCardButtons();

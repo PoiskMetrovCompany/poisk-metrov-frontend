@@ -17,6 +17,9 @@
     <link rel="preconnect"
         href="https://yastatic.net/s3/front-maps-static/maps-front-jsapi-3/3.0.13965858/build/static/bundles/vector.js" />
     <link rel="preconnect" href="https://mc.yandex.ru/metrika/tag.js" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
 
     @yield('preload-images')
