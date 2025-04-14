@@ -68,7 +68,8 @@ export function loadDropdowns(priceSortingForRoomCount, areaSortingForRoomCount)
 
                 function handleAnimationEnd() {
 
-                    dropdown.classList.remove("open", "animate__fadeInUp");
+                    dropdown.classList.remove("open",);
+                    dropdown.classList.remove("animate__fadeInUp");
                     tick.style.transform = "rotateX(180deg)";
 
                     dropdown.removeEventListener('animationend', handleAnimationEnd);

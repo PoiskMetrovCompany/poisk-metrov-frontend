@@ -17,7 +17,7 @@
 #apartment-dropdown-5.animate__fadeInUp,
 #apartment-dropdown-6.animate__fadeInUp{
     animation-name: customFadeInUp;
-    /*animation-duration: 0.4s;*/
+    animation-duration: 0.1s;
 }
 
 @keyframes customFadeInDown {
@@ -37,8 +37,7 @@
         transform: translateY(0px);
     }
     to {
-        opacity: 1;
-        animation-duration: 0.1s;
-        transform: translateY(-30px);
+        opacity: 0.7;
+        transform: translateY(-20px);
     }
 }
