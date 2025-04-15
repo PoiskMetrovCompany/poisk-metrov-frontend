@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Account\AuthorizeAccountController;
 use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
 use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\Users\AuthenticationAccountController;
 use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
 use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
@@ -147,7 +148,10 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         /// Account
         Route::namespace('ACCOUNT')->prefix('account')->group(function () {
-            Route::post('/authorize', operation(AuthorizeAccountController::class))
+            Route::post('/authentication', operation(AuthenticationAccountController::class))
+                ->name('api.v1.account.authentication');
+
+            Route::post('/authorization', operation(AuthorizeAccountController::class))
                 ->name('api.v1.account.authorize');
 
             Route::get('/logout', operation(LogoutAccountController::class))

@@ -66,7 +66,7 @@ function phoneInputForm() {
 
         waitingForCodeConfirmation = true;
         formData.set("pincode", codeInput.value);
-        const response = await axios.post("/api/v1/users/account/authorize", formData);
+        const response = await axios.post("/api/v1/users/account/authorization", formData);
         waitingForCodeConfirmation = false;
 
         if (response.status.toString().startsWith("2")) {
@@ -95,14 +95,12 @@ function phoneInputForm() {
         codePopupPhoneDisplay.textContent = phoneNumber;
         event.target.style.opacity = 0.5;
         sendCodeAgain.className = "common-button disabled";
-        const response = await axios.post("/api/confirm-user", formData);
-        console.log(response)
+        const response = await axios.post("/api/v1/users/account/authentication", formData);
         event.target.style.opacity = 1;
         phonePopup.style.display = "none";
-
-        if (!response.status.toString().startsWith("2") || response.data.status === "error") {
+        console.log(response)
+        if (!response.status.toString().startsWith("2") || response.status === "error") {
             failure.style.display = "block";
-            console.error(response.data.data);
         } else {
             codePopup.style.display = "block";
             codeInput.focus();
@@ -117,7 +115,8 @@ function phoneInputForm() {
 
         codeForm.style.opacity = 0.5;
         sendCodeAgain.className = "common-button disabled";
-        const response = await axios.post("/api/confirm-user", formData);
+        // const response = await axios.post("/api/confirm-user", formData);
+        const response = await axios.post("/api/v1/users/account/authentication", formData);
         codeForm.style.opacity = 1;
 
         if (!response.status.toString().startsWith("2")) {
