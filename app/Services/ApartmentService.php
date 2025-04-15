@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
@@ -14,8 +15,6 @@ use App\Models\MortgageType;
 use App\Models\Renovation;
 use App\Models\ResidentialComplex;
 use App\Models\UserFavoritePlan;
-use App\Repositories\ResidentialComplexRepository;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Log;

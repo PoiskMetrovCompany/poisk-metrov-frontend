@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Services\GeoCodeServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
 use Http;

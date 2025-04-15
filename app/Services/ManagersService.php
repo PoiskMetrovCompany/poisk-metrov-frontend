@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Services\ManagersServiceInterface;
 use App\Models\Manager;

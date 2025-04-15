@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Services\YandexSearchServiceInterface;
 use Http;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Storage;
 
 /**

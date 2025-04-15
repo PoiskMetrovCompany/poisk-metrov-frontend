@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use Illuminate\Database\Eloquent\Collection;

@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Services;
-use AllowDynamicProperties;
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
-use App\Models\UserAdsAgreement;
 
 /**
  * @package App\Services

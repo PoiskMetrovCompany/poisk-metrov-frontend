@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\NewsRepositoryInterface;
 use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Services\NewsServiceInterface;
-use App\Models\News;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;

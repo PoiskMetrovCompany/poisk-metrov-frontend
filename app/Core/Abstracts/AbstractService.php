@@ -1,12 +1,22 @@
 <?php
 
-namespace App\Services;
+namespace App\Core\Abstracts;
 
 /**
- * Class AbstractService.
+ * @template TService.
  */
 abstract class AbstractService
 {
+    public function generateRandomVerificationCode(): string
+    {
+        $code = "";
+        $codeLength = 4;
+        for ($i = 0; $i < $codeLength; $i++) {
+            $code .= rand(0, 9);
+        }
+        return $code;
+    }
+
     public function getSimilarNames(string|null $name, string $column, string $modelName, array $additionalConditions = []): array
     {
         if ($name == null) {

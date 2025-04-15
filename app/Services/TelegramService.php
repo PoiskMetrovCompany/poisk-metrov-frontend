@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\CRM\cURL;
 use App\Telegram\TelegramResponse;
 use Illuminate\Support\Facades\Log;

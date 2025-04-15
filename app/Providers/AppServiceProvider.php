@@ -36,6 +36,7 @@ use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Core\Interfaces\Services\BankServiceInterface;
 use App\Core\Interfaces\Services\BuilderServiceInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
+use App\Core\Interfaces\Services\CallServiceInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\CRMServiceInterface;
@@ -92,6 +93,7 @@ use App\Services\Backup\BackupService;
 use App\Services\BankService;
 use App\Services\BuilderService;
 use App\Services\CachingService;
+use App\Services\CallService;
 use App\Services\ChatService;
 use App\Services\CityService;
 use App\Services\CRMService;
@@ -277,6 +279,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(YandexSearchServiceInterface::class, YandexSearchService::class);
     }
 
+    final public function registerCallService(): void
+    {
+        $this->app->singleton(CallServiceInterface::class, CallService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -446,6 +453,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerLocationService();
         $this->registerPreloadService();
         $this->registerYandexSearchService();
+        $this->registerCallService();
 
         /// Repositories
         $this->registerReservationRepository();

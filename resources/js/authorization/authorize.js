@@ -31,6 +31,7 @@ function phoneInputForm() {
     let waitingForCodeConfirmation = false;
 
     if (!codeInput) {
+        alert(123)
         return;
     }
 
@@ -47,9 +48,10 @@ function phoneInputForm() {
         let userInfo = new FormData(event.target);
         userInfo.set('phone', phoneNumber);
         event.target.style.opacity = 0.5;
-        const response = await axios.post("/api/v1/user/update", userInfo);
-        console.log(response)
-        if (!response.status.toString().startsWith("2") || response.data.status == "error") {
+        const response = await axios.post("/api/v1/users/account/update-profile", userInfo);
+
+        // TODO: в условии что то не так
+        if (response.status !== 200) {
             personalInfo.style.display = "none";
             failure.style.display = "block";
             console.error(response.data.data);
@@ -68,18 +70,16 @@ function phoneInputForm() {
         formData.set("pincode", codeInput.value);
         const response = await axios.post("/api/v1/users/account/authorization", formData);
         waitingForCodeConfirmation = false;
-
-        if (response.status.toString().startsWith("2")) {
+        if (response.status === 200) {
             if (response.data.status === "Authorization success") {
                 window.location.reload();
-            } else if (response.data.status === "NeedFill") {
+            } else {
                 codePopup.style.display = "none";
                 personalInfo.style.display = "block";
             }
         } else {
             codePopup.style.display = "none";
             failure.style.display = "block";
-            console.error(response.data);
         }
     }
 
@@ -98,7 +98,6 @@ function phoneInputForm() {
         const response = await axios.post("/api/v1/users/account/authentication", formData);
         event.target.style.opacity = 1;
         phonePopup.style.display = "none";
-        console.log(response)
         if (!response.status.toString().startsWith("2") || response.status === "error") {
             failure.style.display = "block";
         } else {

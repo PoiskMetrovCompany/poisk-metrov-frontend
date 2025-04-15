@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Core\Common\Feeds\NmarketFeedConst;
+use App\Core\Abstracts\AbstractService;
 use App\Core\Common\Feeds\AvitoFeedConst;
 use App\Core\Common\Feeds\ComplexesFeedConst;
+use App\Core\Common\Feeds\NmarketFeedConst;
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\RealtyFeedEntryRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexFeedSiteNameRepositoryInterface;
@@ -18,13 +19,10 @@ use App\FeedParsers\ComplexParser;
 use App\FeedParsers\FeedFormat;
 use App\FeedParsers\RealtyFeedParser;
 use App\FeedParsers\Version2Parser;
-use App\Models\Apartment;
 use App\Models\Avito\AvitoApartment;
 use App\Models\Complex\ComplexApartment;
 use App\Models\RealtyFeed\RealtyFeedApartment;
 use App\Models\RealtyFeedEntry;
-use App\Models\ResidentialComplex;
-use App\Models\ResidentialComplexFeedSiteName;
 use App\Models\Version2\Version2Apartment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Http;

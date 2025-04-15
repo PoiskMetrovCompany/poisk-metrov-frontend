@@ -1,15 +1,12 @@
 <?php
 
 namespace App\Services;
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\BuilderRepositoryInterface;
 use App\Core\Interfaces\Services\BuilderServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\GoogleDriveServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
-use App\Models\Builder;
-use App\Services\CityService;
-use App\Services\GoogleDriveService;
-use App\Services\TextService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Str;

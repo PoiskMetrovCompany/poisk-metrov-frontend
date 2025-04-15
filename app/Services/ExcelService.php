@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\ExcelServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;

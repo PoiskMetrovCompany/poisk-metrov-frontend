@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\ApartmentController;
-use App\Http\Controllers\Api\V1\Account\AuthorizeAccountController;
+use App\Http\Controllers\Api\V1\Account\AuthenticationAccountController;
+use App\Http\Controllers\Api\V1\Account\AuthorizationAccountController;
 use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
 use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
 use App\Http\Controllers\Api\V1\CbrController;
-use App\Http\Controllers\Api\V1\Users\AuthenticationAccountController;
 use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
 use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
@@ -25,7 +25,6 @@ use App\Http\Controllers\TelegramSurveyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitedPagesController;
 use Illuminate\Http\Request;
-use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -151,7 +150,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             Route::post('/authentication', operation(AuthenticationAccountController::class))
                 ->name('api.v1.account.authentication');
 
-            Route::post('/authorization', operation(AuthorizeAccountController::class))
+            Route::post('/authorization', operation(AuthorizationAccountController::class))
                 ->name('api.v1.account.authorize');
 
             Route::get('/logout', operation(LogoutAccountController::class))

@@ -6,6 +6,72 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/v1/users/account/authentication/": {
+            "post": {
+                "tags": [
+                    "UserAccount"
+                ],
+                "summary": "Определение аккаунта",
+                "description": "Возвращение JSON объекта",
+                "operationId": "8c20cba46338fae5fd094c0563b1ddb6",
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (999) 999-99-99"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/account/authorization/": {
+            "post": {
+                "tags": [
+                    "UserAccount"
+                ],
+                "summary": "Авторизация профиля",
+                "description": "Возвращение JSON объекта",
+                "operationId": "33630a95cb7594b61737497402796b7b",
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (999) 999-99-99"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "example": "код из СМС"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/users/account/update-profile/": {
             "post": {
                 "tags": [
@@ -184,6 +250,28 @@
     },
     "components": {
         "schemas": {
+            "User/Account/Authentication": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User/Account/Authorization": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "User/Account/Update": {
                 "properties": {
                     "status": {

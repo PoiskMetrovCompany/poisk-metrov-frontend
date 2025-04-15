@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
+use App\Core\Common\Cities\CityCodesConst;
+use App\Core\Common\Cities\CityConst;
+use App\Core\Common\Cities\CityInvalidCodeConst;
+use App\Core\Common\Cities\CityNameListConst;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use App\Core\Common\Cities\CityCodesConst;
-use App\Core\Common\Cities\CityNameListConst;
-use App\Core\Common\Cities\CityInvalidCodeConst;
-use App\Core\Common\Cities\CityConst;
 
 /**
  * @package App\Services

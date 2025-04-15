@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Common\MonthConst;
 use App\Core\Common\TextConst;
 use App\Core\Interfaces\Services\TextServiceInterface;

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Interfaces\Repositories\RelationshipEntityRepositoryInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
@@ -19,9 +20,6 @@ use App\DropdownData\RegistrationDropdownData;
 use App\DropdownData\RoomsDropdownData;
 use App\DropdownData\ToiletDropdownData;
 use App\DropdownData\YearsDropdownData;
-use App\Models\Apartment;
-use App\Models\Location;
-use App\Models\ResidentialComplex;
 use Log;
 use Str;
 

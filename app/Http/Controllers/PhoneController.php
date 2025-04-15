@@ -12,6 +12,7 @@ use App\Models\AuthorizationCall;
 use App\Models\User;
 use App\Models\UserAdsAgreement;
 use App\Providers\AppServiceProvider;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
@@ -44,12 +45,12 @@ class PhoneController extends Controller
         protected AuthorizationCallRepositoryInterface $authorizationCallRepository,
     )
     {
-        $phoneConfig = json_decode(file_get_contents(storage_path("app/call-data.json")));
+        $phoneConfig = []; //json_decode(file_get_contents(storage_path("app/call-data.json")));
 
-        $this->apiKey = $phoneConfig->APIkey;
-        $this->campaignId = $phoneConfig->campaignId;
-        $this->flashCallURL = $phoneConfig->flashCallURL;
-        $this->callPhoneURL = $phoneConfig->callPhoneURL;
+//        $this->apiKey = $phoneConfig->APIkey;
+//        $this->campaignId = $phoneConfig->campaignId;
+//        $this->flashCallURL = $phoneConfig->flashCallURL;
+//        $this->callPhoneURL = $phoneConfig->callPhoneURL;
     }
 
     /**
@@ -104,7 +105,6 @@ class PhoneController extends Controller
         $phone = $confirmUserRequest->validated('phone');
 
         $isUserAds = $this->adsAgreementRepository->findByPhone($phone);
-
         if ($isUserAds == null) {
             $this->adsService->setAdsAgreement($phone, null);
         }

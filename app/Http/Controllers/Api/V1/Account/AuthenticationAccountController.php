@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Users;
+namespace App\Http\Controllers\Api\V1\Account;
 
+use App\Core\Common\CallUrlEnum;
 use App\Core\Interfaces\Repositories\AuthorizationCallRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
+use App\Core\Interfaces\Services\CallServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ConfirmUserRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 /**
  * @see AppServiceProvider::registerAdsAgreementService()
@@ -34,23 +36,54 @@ class AuthenticationAccountController extends Controller
      * @param UserAdsAgreementRepositoryInterface $adsAgreementRepository
      * @param UserRepositoryInterface $userRepository
      * @param AuthorizationCallRepositoryInterface $authorizationCallRepository
+     * @param CallServiceInterface $callService
      */
     public function __construct(
         protected AdsAgreementServiceInterface $adsService,
         protected UserAdsAgreementRepositoryInterface $adsAgreementRepository,
         protected UserRepositoryInterface $userRepository,
         protected AuthorizationCallRepositoryInterface $authorizationCallRepository,
+        protected CallServiceInterface $callService,
     )
     {
-        $phoneConfig = json_decode(file_get_contents(storage_path("app/call-data.json")));
 
-        $this->apiKey = $phoneConfig->APIkey;
-        $this->campaignId = $phoneConfig->campaignId;
-        $this->flashCallURL = $phoneConfig->flashCallURL;
-        $this->callPhoneURL = $phoneConfig->callPhoneURL;
+        $this->apiKey = config('call.api_key');
+        $this->campaignId = config('call.campaing_id');
+        $this->flashCallURL = CallUrlEnum::FLASH_CALL_URL->value;
+        $this->callPhoneURL = CallUrlEnum::CALL_PHONE_URL->value;
     }
 
     /**
+     * @OA\Schema(
+         * schema="User/Account/Authentication",
+         * @OA\Property(
+             * property="status",
+             * type="string"
+         * ),
+         * @OA\Property(
+             * property="error",
+             * type="string"
+         * )
+     * ),
+     *
+     * @OA\Post(
+         * tags={"UserAccount"},
+         * path="/api/v1/users/account/authentication/",
+         * summary="Определение аккаунта",
+         * description="Возвращение JSON объекта",
+         * @OA\Response(
+             * response=201,
+             * description="УСПЕХ!",
+             * @OA\JsonContent(
+                * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+             * )
+         * ),
+         * @OA\Response(
+             * response=404,
+             * description="Resource not found"
+         * )
+     * )
+     *
      * @param ConfirmUserRequest $confirmUserRequest
      * @return JsonResponse
      */
@@ -87,10 +120,9 @@ class AuthenticationAccountController extends Controller
         }
 
         $fields['phone'] = $phone;
-        $fields['pincode'] = $this->generateRandomVerificationCode();
+        $fields['pincode'] = $this->callService->generateRandomVerificationCode();
 
-        $response = $this->sendRequest($this->flashCallURL, $fields);
-
+        $response = $this->callService->sendRequest($this->apiKey, $this->campaignId, $this->flashCallURL, $fields);
         if ($response == null) {
             return new JsonResponse(
                 data: [

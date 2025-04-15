@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\Abstracts\AbstractService;
 use App\Core\Common\Banks\BanksData;
 use App\Core\Common\Banks\BanksFilePathData;
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;

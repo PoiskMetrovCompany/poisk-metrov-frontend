@@ -199,5 +199,5 @@ return [
 
     'admin_url' => env('ADMIN_URL', 'http://127.0.0.1:4200/#/chats/id/'),
     'agent_pages_enabled' => env('AGENT_PAGES_ENABLED', false),
-    'use_geolocation' => env('USE_GEOLOCATION', false)
+    'use_geolocation' => env('USE_GEOLOCATION', false),
 ];
