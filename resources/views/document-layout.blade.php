@@ -19,6 +19,8 @@
     <link rel="preconnect" href="https://mc.yandex.ru/metrika/tag.js" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.10/SmoothScroll.min.js"
+            integrity="sha256-huW7yWl7tNfP7lGk46XE+Sp0nCotjzYodhVKlwaNeco=" crossOrigin="anonymous"></script>
 
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
 
