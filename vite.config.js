@@ -60,7 +60,6 @@ export default defineConfig({
                 'resources/js/reservation/request.js',
                 'resources/js/coordinateStorage.js',
                 'resources/js/anchorLink.js',
-                'resources/js/smoothScroll.js',
 
             ],
             refresh: true,

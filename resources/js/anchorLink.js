@@ -1,33 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
     function smoothScroll(target, duration) {
-        const targetElement = document.querySelector(target);
-        if (!targetElement) return;
+            const targetElement = document.querySelector(target);
+            if (!targetElement) return;
 
-        const targetPosition = targetElement.offsetTop;
-        const startPosition = window.pageYOffset;
-        const distance = targetPosition - startPosition;
-        let startTime = null;
+            const targetPosition = targetElement.offsetTop;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
 
-        function animation(currentTime) {
-            if (startTime === null) startTime = currentTime;
-            const timeElapsed = currentTime - startTime;
-            const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-            window.scrollTo(0, run);
-            if (timeElapsed < duration) requestAnimationFrame(animation);
-        }
-
-        function easeInOutCubic(t, b, c, d) {
-            t /= d / 2;
-
-            if (t < 1) {
-                return (c / 2) * t * t * t + b;
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = easeOutQuint(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
             }
 
-            t -= 2;
-            return (c / 2) * (t * t * t + 2) + b;
+        function easeOutQuint(t, b, c, d) {
+            t /= d;
+            t--;
+            return c * (t * t * t * t * t + 100) + b;
         }
 
-        requestAnimationFrame(animation);
+            requestAnimationFrame(animation);
     }
 
     function action() {
@@ -50,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     dropdown.addEventListener('animationend', (event) => {
                         if (event.animationName === 'customFadeInDown' && !isScrolled) {
-                            smoothScroll(`#apartment-dropdown-${anchorIndex}`, 1000);
+                            smoothScroll(`#apartment-dropdown-${anchorIndex}`, 1500);
                             isScrolled = true;
                         }
                     }, { once: true });
