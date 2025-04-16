@@ -1,10 +1,43 @@
+[type="description-container"]:hover {
+    cursor: pointer;
+}
+
 @media (min-width: 920px) {
-    building-card:hover:not(:has(image-gallery:hover)) {
+    [type="top-content"]:hover ~ building-card {
         transition: .7s;
-        height: 770px;
+        height: 600px !important;
     }
+
+    building-card:has([type="description-container"]:hover) {
+        transition: 0.7s;
+        height: 770px !important;
+    }
+
+    building-card:not([type="description-container"]:hover) {
+        transition: 0.2s;
+    }
+
+    [type="description-container"]:hover ~ image-gallery {
+        height: 330px !important;
+    }
+
     building-card:hover #top-content {
-        min-height: 331px!important;
+        transition: 0.7s;
+        min-height: 331px !important;
+    }
+}
+
+@media (min-width: 924px) and (max-width: 1024px) {
+    building-card:has([type="description-container"]:hover) {
+        transition: 0.7s;
+        height: 650px !important;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1619px) {
+    building-card:has([type="description-container"]:hover) {
+        transition: 0.7s;
+        height: auto !important;
     }
 }
 

@@ -6,7 +6,7 @@
     }
 @endphp
 
-<image-gallery spritepositions="{{ $spritePositionsStr }}" style="background-image: url({{ "/storage/$spriteUrl" }})">
+<image-gallery ignore-hover spritepositions="{{ $spritePositionsStr }}" style="background-image: url({{ "/storage/$spriteUrl" }})">
     {{-- TODO: load start sprite position --}}
     <a type="card-area" href="/{{ $code }}{{ $queryString }}">
         @for ($i = 0; $i < 5 && $i < count($spritePositions); $i++)

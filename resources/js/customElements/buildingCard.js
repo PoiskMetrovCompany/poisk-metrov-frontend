@@ -54,21 +54,8 @@ export class BuildingCard extends HTMLElement {
         let isSlideUp = false;
         let isInTransition = false;
 
-        description.addEventListener("mouseover", () => slideUp(true));
-        description.addEventListener("mouseleave", () => slideDown(true));
-        description.addEventListener("click", switchSlide);
-
-        function switchSlide() {
-            if (isInTransition) {
-                return;
-            }
-
-            if (isSlideUp) {
-                slideDown();
-            } else {
-                slideUp();
-            }
-        }
+        description.addEventListener("mouseenter", () => { slideUp(true) });
+        description.addEventListener("mouseleave", () => { slideDown(true) });
 
         function slideUp(forced = false) {
             if ((isInTransition || isSlideUp) && !forced) {
@@ -76,7 +63,6 @@ export class BuildingCard extends HTMLElement {
             }
 
             description.style.maxHeight = "100%";
-            // background.style.maxHeight = "28%";
             more.style.display = "none";
             additionalDescription.style.display = "grid";
 
@@ -93,15 +79,12 @@ export class BuildingCard extends HTMLElement {
             if ((isInTransition || !isSlideUp) && !forced) {
                 return;
             }
-
             // description.style.maxHeight = "45%";
-            background.style.maxHeight = "55%";
             more.style.display = "grid";
             additionalDescription.style.display = "";
 
             if (!forced) {
                 isInTransition = true;
-
                 setTimeout(() => {
                     isSlideUp = false;
                     isInTransition = false;
