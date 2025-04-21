@@ -23,6 +23,7 @@ class ManagerChatController extends Controller
      * @param ChatServiceInterface $chatService
      * @param TelegramService $telegramService
      * @param TextServiceInterface $textService
+     * @param ManagerRepositoryInterface $managerRepository
      */
     public function __construct(
         protected ChatServiceInterface $chatService,

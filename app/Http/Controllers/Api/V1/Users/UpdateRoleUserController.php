@@ -52,14 +52,14 @@ class UpdateRoleUserController extends Controller
      * )
      *
     * @param UpdateRoleRequest $request
-    * @return void
+    * @return JsonResponse
      */
     public function __invoke(UpdateRoleRequest $request): JsonResponse
     {
         $id = $request->validated('id');
         $role = $request->validated('role');
-
         $service = $this->userService->updateRole($id, $role);
+
         return new JsonResponse(
             data: new UserResource($service),
             status: Response::HTTP_CREATED

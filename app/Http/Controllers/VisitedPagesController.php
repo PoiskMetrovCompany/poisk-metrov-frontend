@@ -20,9 +20,10 @@ class VisitedPagesController extends Controller
     /**
      * @param VisitedPageRepositoryInterface $visitedPageRepository
      */
-    public function __construct(protected VisitedPageRepositoryInterface $visitedPageRepository)
+    public function __construct(
+        protected VisitedPageRepositoryInterface $visitedPageRepository
+    )
     {
-
     }
 
     /**
