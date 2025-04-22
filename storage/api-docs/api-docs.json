@@ -173,6 +173,24 @@
                 }
             }
         },
+        "/api/v1/users/list?includes=UserFavoriteBuilding,": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "получение списка пользователей (клиенты)",
+                "description": "Возвращение JSON объекта",
+                "operationId": "4fa4160939a50c1938f00cbf584ea277",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/users/update-role": {
             "post": {
                 "tags": [
@@ -306,6 +324,17 @@
                 "type": "object"
             },
             "User/List": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User/List/Relationship": {
                 "properties": {
                     "status": {
                         "type": "string"

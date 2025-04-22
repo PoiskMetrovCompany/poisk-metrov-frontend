@@ -16,6 +16,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const RELATIONSHIP = [
+        'UserFavoriteBuilding' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+    ];
     /**
      * The attributes that are mass assignable.
      *

@@ -8,12 +8,12 @@ use App\Core\Abstracts\Trait\AddTypeEntityTrait;
 use App\Core\Abstracts\Trait\GetFilterParamsTrait;
 use App\Core\Abstracts\Trait\GetResourceIncludeTrait;
 use App\Core\Abstracts\Trait\IdentifierRequestTrait;
-use App\Core\Abstracts\Trait\RelationshipTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-abstract class AbstractOperations
+abstract class AbstractOperations extends Controller
 {
     use GetResourceIncludeTrait;
     use GetFilterParamsTrait;
@@ -21,17 +21,11 @@ abstract class AbstractOperations
     use AddTypeEntityTrait;
     use AddAttributesTrait;
     use AddMetaDataResponseTrait;
-    use RelationshipTrait;
 
     /**
      * @return string
      */
-    abstract public function getTypeProcedure(): string;
-
-    /**
-     * @return string
-     */
-    abstract public function getModelClass(): string;
+    abstract public function getEntityClass(): string;
 
     /**
      * @return string

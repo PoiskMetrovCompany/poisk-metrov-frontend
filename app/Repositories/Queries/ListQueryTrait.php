@@ -2,14 +2,13 @@
 
 namespace App\Repositories\Queries;
 
-use Illuminate\Support\Collection as SCollection;
-use Illuminate\Database\Eloquent\Collection as ECollection;
+use Illuminate\Database\Eloquent\Collection;
 
 trait ListQueryTrait
 {
-    public function list(?array $attributes, bool $collect=true): SCollection|ECollection|array
+    public function list(?array $attributes, bool $collect=true): Collection|array
     {
-        $data = $this->model::where($attributes)->get()->toArray();
-        return $collect ? collect($data) : $data;
+        return $this->model::where($attributes)->get();
+//        return $collect ? collect($data) : $data;
     }
 }

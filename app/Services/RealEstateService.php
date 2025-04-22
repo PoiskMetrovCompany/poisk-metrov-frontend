@@ -53,17 +53,20 @@ final class RealEstateService implements RealEstateServiceInterface
         foreach ($visiedRealEstates as $visiedRealEstate) {
             $building = $this->residentialComplexRepository->findByCode($visiedRealEstate);
 
-            foreach ($building->categories as $category) {
-                if (! $visitedCategoryCount->keys()->contains($category->category_name)) {
-                    $visitedCategoryCount[$category->category_name] = 0;
-                }
+            // TODO: разобраться в баге "foreach ($building->categories as $category) {" убрать обработчик либо журналировать
+            try {
+                foreach ($building->categories as $category) {
+                    if (!$visitedCategoryCount->keys()->contains($category->category_name)) {
+                        $visitedCategoryCount[$category->category_name] = 0;
+                    }
 
-                $visitedCategoryCount[$category->category_name] += 1;
+                    $visitedCategoryCount[$category->category_name] += 1;
 
-                if ($visitedCategoryCount[$category->category_name] == $visitedCategoryCount->max()) {
-                    $mostVisitedCategory = $category->category_name;
+                    if ($visitedCategoryCount[$category->category_name] == $visitedCategoryCount->max()) {
+                        $mostVisitedCategory = $category->category_name;
+                    }
                 }
-            }
+            } catch (\ErrorException $e) {}
         }
 
         return $this->residentialComplexCategoryRepository

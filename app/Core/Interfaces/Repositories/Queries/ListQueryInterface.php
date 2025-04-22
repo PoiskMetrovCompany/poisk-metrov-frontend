@@ -2,8 +2,7 @@
 
 namespace App\Core\Interfaces\Repositories\Queries;
 
-use Illuminate\Support\Collection as SCollection;
-use Illuminate\Database\Eloquent\Collection as ECollection;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @template TQuery
@@ -13,7 +12,7 @@ interface ListQueryInterface
     /**
      * @param array|null $attributes
      * @param bool $collect
-     * @return SCollection|ECollection|array
+     * @return Collection|array
      */
-    public function list(?array $attributes, bool $collect=true): SCollection|ECollection|array;
+    public function list(?array $attributes, bool $collect=true): Collection|array;
 }

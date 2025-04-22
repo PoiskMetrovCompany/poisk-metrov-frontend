@@ -170,7 +170,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.user.get-current');
 
         Route::get('/list', operation(ListUserController::class))
-            ->middleware('auth:api')
+//            ->middleware('auth:api')
             ->name('api.v1.user.list');
 
         Route::patch('/update-role', operation(UpdateRoleUserController::class))
