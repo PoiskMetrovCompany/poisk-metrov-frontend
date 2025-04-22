@@ -319,7 +319,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.file.chats.get-history');
 
         Route::get('/get-user-token', operation(GetUserChatTokenController::class))
-            ->name('api.v1.file.chats.get-history');
+            ->name('api.v1.file.chats.get-token');
 
         Route::post('/send-message', operation(SendChatMessageController::class))
             ->name('api.v1.file.chats.send-message');
