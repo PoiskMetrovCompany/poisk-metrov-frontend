@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1\Crm;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\CRM\Commands\CreateLead;
-use App\Http\Controllers\Controller;
+use App\Http\Resources\Crm\CrmResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use stdClass;
 
-class StoreCrmController extends Controller
+class StoreCrmController extends AbstractOperations
 {
     public function __construct(
         protected AdsAgreementServiceInterface $adsService,
@@ -44,8 +45,22 @@ class StoreCrmController extends Controller
         ]);
 
         return new JsonResponse(
-            data: $returned,
+            data: [
+                ...self::identifier(),
+                ...self::attributes($returned),
+                ...self::metaData($request, $request->all()),
+            ],
             status: Response::HTTP_CREATED
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return 'Crm';
+    }
+
+    public function getResourceClass(): string
+    {
+        return CrmResource::class;
     }
 }

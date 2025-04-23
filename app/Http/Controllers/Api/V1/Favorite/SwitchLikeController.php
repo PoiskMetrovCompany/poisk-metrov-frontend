@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Favorite;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LikeSwitchRequest;
+use App\Http\Resources\Favorite\FavoriteResource;
+use App\Models\UserFavoriteBuilding;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SwitchLikeController extends Controller
+class SwitchLikeController extends AbstractOperations
 {
     /**
      * @param FavoritesServiceInterface $favoritesService
@@ -19,20 +23,36 @@ class SwitchLikeController extends Controller
     }
 
     /**
-     * @param LikeSwitchRequest $likeSwitchRequest
+     * @param LikeSwitchRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function __invoke(LikeSwitchRequest $likeSwitchRequest)
+    public function __invoke(LikeSwitchRequest $request)
     {
         $user = Auth::user();
 
         if ($user) {
-            $type = $likeSwitchRequest->validated('type');
-            $code = $likeSwitchRequest->validated('code');
-            $action = $likeSwitchRequest->validated('action');
+            $type = $request->validated('type');
+            $code = $request->validated('code');
+            $action = $request->validated('action');
             $this->favoritesService->switchLike($type, $code, $action);
         }
 
-        return $this->favoritesService->countFavoritesDetailed();
+        return new JsonResponse(
+            data: [
+                ...self::identifier(),
+                ...self::attributes($this->favoritesService->countFavoritesDetailed()),
+                ...self::metaData($request, $request->all())
+            ]
+        );
+    }
+
+    public function getEntityClass(): string
+    {
+        return UserFavoriteBuilding::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return FavoriteResource::class;
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Requests\FavoritesViewsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
+// TODO: при рефакторинге фронта вернуться
 class GetFavoriteBuildingViewsControllers extends Controller
 {
     public function __construct(

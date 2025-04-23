@@ -11,6 +11,7 @@ use App\Http\Resources\ApartmentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
+// TODO: при рефакторинге фронта вернуться
 class GetFavoritePlanViewsController extends Controller
 {
     /**

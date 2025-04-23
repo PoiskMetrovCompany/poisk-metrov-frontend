@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1\Feeds;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Services\FeedServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeedRequest;
+use App\Http\Resources\Feeds\FeedResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class DeleteFeedController extends Controller
+class DeleteFeedController extends AbstractOperations
 {
     /**
      * @param FeedServiceInterface $feedService
@@ -23,12 +25,26 @@ class DeleteFeedController extends Controller
      * @param FeedRequest $feedRequest
      * @return JsonResponse
      */
-    public function __invoke(FeedRequest $feedRequest): JsonResponse
+    public function __invoke(FeedRequest $request): JsonResponse
     {
-        $this->feedService->deleteFeedEntry($feedRequest->validated());
+        $this->feedService->deleteFeedEntry($request->validated());
         return new JsonResponse(
-            data: [],
+            data: [
+                ...self::identifier(),
+                ...self::attributes([]),
+                ...self::metaData($request, $request->all()),
+            ],
             status: Response::HTTP_NO_CONTENT
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return 'Feed';
+    }
+
+    public function getResourceClass(): string
+    {
+        return FeedResource::class;
     }
 }
