@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers\Api\V1\File;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileUploadRequest;
+use App\Http\Resources\FileResource;
+use App\Models\File;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class UpdateFilesController extends Controller
+class UpdateFilesController extends AbstractOperations
 {
     /**
      * @param FileUploadRequest $fileUploadRequest
      * @return JsonResponse
      */
-    public function uploadFiles(FileUploadRequest $fileUploadRequest): JsonResponse
+    public function uploadFiles(FileUploadRequest $request): JsonResponse
     {
-        $files = $fileUploadRequest->allFiles();
-        $filePath = $fileUploadRequest->validated('filePath');
+        $files = $request->allFiles();
+        $filePath = $request->validated('filePath');
 
         foreach ($files as $file) {
             $targetPath = $filePath;
@@ -30,8 +33,22 @@ class UpdateFilesController extends Controller
         }
 
         return new JsonResponse(
-            data: [],
+            data: [
+                ...self::identifier(),
+                ...self::attributes([]),
+                ...self::metaData($request, $request->all()),
+            ],
             status: Response::HTTP_OK
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return File::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return FileResource::class;
     }
 }
