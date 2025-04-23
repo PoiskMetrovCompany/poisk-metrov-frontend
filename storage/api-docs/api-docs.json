@@ -14,6 +14,22 @@
                 "summary": "Определение аккаунта",
                 "description": "Возвращение JSON объекта",
                 "operationId": "8c20cba46338fae5fd094c0563b1ddb6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (993) 952-00-85"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "201": {
                         "description": "УСПЕХ!",
@@ -23,7 +39,7 @@
                                     "properties": {
                                         "phone": {
                                             "type": "string",
-                                            "example": "+7 (999) 999-99-99"
+                                            "example": "+7 (993) 952-00-85"
                                         }
                                     },
                                     "type": "object"
@@ -32,7 +48,20 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found"
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -45,6 +74,26 @@
                 "summary": "Авторизация профиля",
                 "description": "Возвращение JSON объекта",
                 "operationId": "33630a95cb7594b61737497402796b7b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "код из СМС"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "201": {
                         "description": "УСПЕХ!",
@@ -56,7 +105,7 @@
                                             "type": "string",
                                             "example": "+7 (999) 999-99-99"
                                         },
-                                        "code": {
+                                        "pincode": {
                                             "type": "string",
                                             "example": "код из СМС"
                                         }
@@ -67,7 +116,20 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found"
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -80,6 +142,38 @@
                 "summary": "Обновление профиля",
                 "description": "Возвращение JSON объекта",
                 "operationId": "6a6079e69770a3ae51bc159b722a9ec1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Иван"
+                                    },
+                                    "surname": {
+                                        "type": "string",
+                                        "example": "Поляков"
+                                    },
+                                    "patronymic": {
+                                        "type": "string",
+                                        "example": "Олегович"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "my.example@mail.ru"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "201": {
                         "description": "УСПЕХ!",
@@ -114,7 +208,20 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found"
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -231,7 +338,7 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "обновление роли пользователя.",
+                "summary": "Обновление пользователя.",
                 "description": "Возвращение JSON объекта",
                 "operationId": "41cd7d49967bceb933c767e593eedfd9",
                 "responses": {
@@ -246,7 +353,7 @@
                                     "properties": {
                                         "phone": {
                                             "type": "string",
-                                            "example": "+7 (991) 000-00-00"
+                                            "example": "+7 (993) 952-00-85"
                                         },
                                         "name": {
                                             "type": "string",
@@ -268,39 +375,6 @@
     },
     "components": {
         "schemas": {
-            "User/Account/Authentication": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "User/Account/Authorization": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "User/Account/Update": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
             "Cbr/ActualDate": {
                 "properties": {
                     "status": {
@@ -346,17 +420,6 @@
                 "type": "object"
             },
             "User/UpdateRole": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "User/Update": {
                 "properties": {
                     "status": {
                         "type": "string"

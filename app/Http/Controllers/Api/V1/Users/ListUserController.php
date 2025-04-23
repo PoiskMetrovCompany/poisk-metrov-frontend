@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
 
-class ListUserController extends AbstractOperations // Controller
+class ListUserController extends AbstractOperations
 {
     public function __construct(protected UserRepositoryInterface $userRepository)
     {

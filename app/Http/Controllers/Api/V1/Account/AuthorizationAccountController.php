@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Account;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Repositories\AuthorizationCallRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
@@ -10,6 +11,8 @@ use App\Core\Common\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\VisitedPagesController;
 use App\Http\Requests\AuthorizeUserRequest;
+use App\Http\Resources\Account\AccountResource;
+use App\Models\User;
 use Cookie;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,7 +31,7 @@ use OpenApi\Annotations as OA;
  * @see UserRepositoryInterface
  * @see FavoritesServiceInterface
  */
-class AuthorizationAccountController extends Controller
+class AuthorizationAccountController extends AbstractOperations
 {
     public function __construct(
         protected AuthorizationCallRepositoryInterface $authorizationCallRepository,
@@ -41,41 +44,39 @@ class AuthorizationAccountController extends Controller
     }
 
     /**
-     * @OA\Schema(
-         * schema="User/Account/Authorization",
-         * @OA\Property(
-             * property="status",
-             * type="string"
-         * ),
-         * @OA\Property(
-             * property="error",
-             * type="string"
-         * )
-     * ),
-     *
      * @OA\Post(
-         * tags={"UserAccount"},
-         * path="/api/v1/users/account/authorization/",
-         * summary="Авторизация профиля",
-         * description="Возвращение JSON объекта",
-         * @OA\Response(
-             * response=201,
-             * description="УСПЕХ!",
-             * @OA\JsonContent(
-                 * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
-                 * @OA\Property(property="code", type="string", example="код из СМС"),
-             * )
-         * ),
-         * @OA\Response(
-             * response=404,
-             * description="Resource not found"
-         * )
+     * tags={"UserAccount"},
+     * path="/api/v1/users/account/authorization/",
+     * summary="Авторизация профиля",
+     * description="Возвращение JSON объекта",
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     * @OA\Property(property="code", type="string", example="код из СМС")
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="УСПЕХ!",
+     * @OA\JsonContent(
+     * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     * @OA\Property(property="pincode", type="string", example="код из СМС")
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Resource not found",
+     * @OA\JsonContent(
+     * @OA\Property(property="error", type="string", example="Resource not found")
+     * )
+     * )
      * )
      *
      * @param AuthorizeUserRequest $authorizeUserRequest
      * @return JsonResponse
      */
-    public function __invoke(AuthorizeUserRequest $authorizeUserRequest): JsonResponse
+    public function __invoke(AuthorizeUserRequest $request): JsonResponse
     {
         $user = Auth::user();
 
@@ -84,11 +85,11 @@ class AuthorizationAccountController extends Controller
         if (!empty($user)) {
             $returnData['status'] = 'Already logged in';
             $user->connectWithManager();
-            $managerForUser = $this->managerRepository->findByPhone($authorizeUserRequest->validated('phone'));
+            $managerForUser = $this->managerRepository->findByPhone($request->validated('phone'));
 
             if (
-                isset($authorizeUserRequest->returnApiKey) &&
-                $authorizeUserRequest->returnApiKey == 'true' &&
+                isset($request->returnApiKey) &&
+                $request->returnApiKey == 'true' &&
                 ($user->role == 'admin' || $managerForUser !== null)
             ) {
                 if (! isset($user->api_token)) {
@@ -102,13 +103,17 @@ class AuthorizationAccountController extends Controller
             }
 
             return new JsonResponse(
-                data: $returnData,
+                data: [
+                    ...self::identifier(),
+                    ...self::attributes($returnData),
+                    ...self::metaData($request, $request->all()),
+                ],
                 status: Response::HTTP_OK
             );
         }
 
-        $phone = $authorizeUserRequest->validated('phone');
-        $pincode = $authorizeUserRequest->validated('pincode');
+        $phone = $request->validated('phone');
+        $pincode = $request->validated('pincode');
         $call = $this->authorizationCallRepository
             ->find(['pincode' => $pincode])
             ->find(['phone' => $phone])
@@ -119,7 +124,11 @@ class AuthorizationAccountController extends Controller
             $call->delete();
         } else {
             return new JsonResponse(
-                data: [],
+                data: [
+                    ...self::identifier(),
+                    ...self::attributes([123]),
+                    ...self::metaData($request, $request->all()),
+                ],
                 status: Response::HTTP_OK
             );
         }
@@ -141,7 +150,11 @@ class AuthorizationAccountController extends Controller
                 'call_id' => $callId
             ]);
             return new JsonResponse(
-                data: ['status' => 'NeedFill'],
+                data: [
+                    ...self::identifier(),
+                    ...self::attributes(['status' => 'NeedFill']),
+                    ...self::metaData($request, $request->all()),
+                ],
                 status: Response::HTTP_OK
             );
         }
@@ -154,14 +167,14 @@ class AuthorizationAccountController extends Controller
         Auth::loginUsingId($user->id, true);
         $this->favoritesService->syncFavoritesWithCookies();
         VisitedPagesController::syncVisitedPagesWithCookies();
-        $authorizeUserRequest->session()->regenerate();
+        $request->session()->regenerate();
 
         $this->createLeadForUser($user);
         $user->syncWithLead();
 
         $returnData['status'] = 'Authorization success';
 
-        $managerForUser = $this->managerRepository->findByPhone($authorizeUserRequest->validated('phone'));
+        $managerForUser = $this->managerRepository->findByPhone($request->validated('phone'));
 
         if (
             isset($authorizeUserRequest->returnApiKey) &&
@@ -178,10 +191,24 @@ class AuthorizationAccountController extends Controller
         $user->connectWithManager();
 
         return response()->json(
-            $returnData,
-            Response::HTTP_OK
+            data: [
+                ...self::identifier(),
+                ...self::attributes($returnData), // TODO: респонс что то должен возвращать
+                ...self::metaData($request, $request->all()),
+            ],
+            status: Response::HTTP_OK
         )->withoutCookie(
             Cookie::forget('chat_token')
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return User::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return AccountResource::class;
     }
 }

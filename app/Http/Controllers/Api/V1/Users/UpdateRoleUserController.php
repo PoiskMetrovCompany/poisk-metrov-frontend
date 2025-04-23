@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api\V1\Users;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\Users\UserResource;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
 
 
-class UpdateRoleUserController extends Controller
+class UpdateRoleUserController extends AbstractOperations
 {
     public function __construct(protected UserServiceInterface $userService)
     {
@@ -61,8 +63,22 @@ class UpdateRoleUserController extends Controller
         $service = $this->userService->updateRole($id, $role);
 
         return new JsonResponse(
-            data: new UserResource($service),
+            data: [
+                ...self::identifier(),
+                ...self::attributes($service),
+                ...self::metaData($request, $request->all()),
+            ],
             status: Response::HTTP_CREATED
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return User::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return UserResource::class;
     }
 }

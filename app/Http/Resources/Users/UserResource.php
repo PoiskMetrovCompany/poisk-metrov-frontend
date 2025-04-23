@@ -29,7 +29,7 @@ class UserResource extends AbstractResource
             'is_test' => $this->is_test,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            ...self::relationshipListOperation($this->id, $request->all(), User::RELATIONSHIP),
+            ...self::relationshipListOperation(User::class, $this->id, $request->all(), User::RELATIONSHIP),
         ];
     }
 }

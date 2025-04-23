@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Api\V1\Visited;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddVisitedPageRequest;
+use App\Http\Resources\PagesVisitedResource;
 use App\Models\CRMSyncRequiredForUser;
+use App\Models\VisitedPage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class UpdatePagesVisitedController extends Controller
+class UpdatePagesVisitedController extends AbstractOperations
 {
     /**
      * @param VisitedPageRepositoryInterface $visitedPageRepository
@@ -23,15 +26,15 @@ class UpdatePagesVisitedController extends Controller
     }
 
     /**
-     * @param AddVisitedPageRequest $addVisitedPageRequest
+     * @param AddVisitedPageRequest $request
      * @return \Illuminate\Http\JsonResponse
      *
      * Убрал public static function
      */
-    public function __invoke(AddVisitedPageRequest $addVisitedPageRequest)
+    public function __invoke(AddVisitedPageRequest $request)
     {
-        $page = $addVisitedPageRequest->validated('page');
-        $code = $addVisitedPageRequest->validated('code');
+        $page = $request->validated('page');
+        $code = $request->validated('code');
 
         $userId = Auth::id();
 
@@ -53,8 +56,22 @@ class UpdatePagesVisitedController extends Controller
         CRMSyncRequiredForUser::createForCurrentUser();
 
         return new JsonResponse(
-            data: ['status' => "Page with {$code} already exists"],
+            data: [
+                ...self::identifier(),
+                ...self::attributes(['status' => "Page with {$code} already exists"]),
+                ...self::metaData($request, $request->all())
+            ],
             status: Response::HTTP_OK
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return VisitedPage::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return PagesVisitedResource::class;
     }
 }

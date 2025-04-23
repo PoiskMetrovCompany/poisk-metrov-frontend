@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1\Users;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
 
-class GetCurrentUserDataController extends Controller
+class GetCurrentUserDataController extends AbstractOperations
 {
     /**
      * @OA\Schema(
@@ -50,16 +53,29 @@ class GetCurrentUserDataController extends Controller
         if ($user != null) {
             return new JsonResponse(
                 data: [
-                    'id' => $user['id'],
-                    'name' => $user['name'],
-                    'surname' => $user['surname'],
-                    'patronymic' => $user['patronymic'],
-                    'email' => $user['email'],
-                    'password' => ''
+                    ...self::identifier(),
+                    ...self::attributes($user),
+                    ...self::metaData($request, $request->all())
+//                    'id' => $user['id'],
+//                    'name' => $user['name'],
+//                    'surname' => $user['surname'],
+//                    'patronymic' => $user['patronymic'],
+//                    'email' => $user['email'],
+//                    'password' => ''
                 ],
                 status: Response::HTTP_OK,
             );
         }
         return new JsonResponse(data: [],status: Response::HTTP_OK);
+    }
+
+    public function getEntityClass(): string
+    {
+        return User::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return UserResource::class;
     }
 }

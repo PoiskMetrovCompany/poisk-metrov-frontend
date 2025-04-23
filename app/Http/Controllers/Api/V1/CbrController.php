@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CbrResource;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use OpenApi\Annotations as OA;
 
-class CbrController extends Controller
+class CbrController extends AbstractOperations
 {
     /**
      * @OA\Schema(
@@ -41,7 +44,7 @@ class CbrController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function actualDate(): JsonResponse
+    public function actualDate(Request $request): JsonResponse
     {
         $cbr = Storage::disk('local')->get('cbr.json');
         $cbrObjectStorage = json_decode($cbr, true);
@@ -58,8 +61,23 @@ class CbrController extends Controller
             }
         }
         }
-        return response()->json(
-            data: $closestDate ? $closestDate->format('Y-m-d') : null
+        return new JsonResponse(
+            data: [
+                ...self::identifier(),
+                ...self::attributes(['date' => $closestDate->format('Y-m-d')]),
+                ...self::metaData($request, $request->all()),
+            ],
+            status: Response::HTTP_OK
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return 'Cbr';
+    }
+
+    public function getResourceClass(): string
+    {
+        return CbrResource::class;
     }
 }

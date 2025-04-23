@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Account;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Common\CallUrlEnum;
 use App\Core\Interfaces\Repositories\AuthorizationCallRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
@@ -10,6 +11,9 @@ use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Core\Interfaces\Services\CallServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ConfirmUserRequest;
+use App\Http\Resources\Account\AccountResource;
+use App\Models\AuthorizationCall;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
@@ -24,7 +28,7 @@ use OpenApi\Annotations as OA;
  * @see UserRepositoryInterface
  * @see AuthorizationCallRepositoryInterface
  */
-class AuthenticationAccountController extends Controller
+class AuthenticationAccountController extends AbstractOperations
 {
     private string $campaignId;
     private string $apiKey;
@@ -54,69 +58,44 @@ class AuthenticationAccountController extends Controller
     }
 
     /**
-     * @OA\Schema(
-         * schema="User/Account/Authentication",
-         * @OA\Property(
-             * property="status",
-             * type="string"
-         * ),
-         * @OA\Property(
-             * property="error",
-             * type="string"
-         * )
-     * ),
-     *
      * @OA\Post(
-         * tags={"UserAccount"},
-         * path="/api/v1/users/account/authentication/",
-         * summary="Определение аккаунта",
-         * description="Возвращение JSON объекта",
-         * @OA\Response(
-             * response=201,
-             * description="УСПЕХ!",
-             * @OA\JsonContent(
-                * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
-             * )
-         * ),
-         * @OA\Response(
-             * response=404,
-             * description="Resource not found"
-         * )
+     * tags={"UserAccount"},
+     * path="/api/v1/users/account/authentication/",
+     * summary="Определение аккаунта",
+     * description="Возвращение JSON объекта",
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * @OA\Property(property="phone", type="string", example="+7 (993) 952-00-85")
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="УСПЕХ!",
+     * @OA\JsonContent(
+     * @OA\Property(property="phone", type="string", example="+7 (993) 952-00-85")
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Resource not found",
+     * @OA\JsonContent(
+     * @OA\Property(property="error", type="string", example="Resource not found")
+     * )
+     * )
      * )
      *
      * @param ConfirmUserRequest $confirmUserRequest
      * @return JsonResponse
      */
-    function __invoke(ConfirmUserRequest $confirmUserRequest): JsonResponse
+    function __invoke(ConfirmUserRequest $request): JsonResponse
     {
-        $phone = $confirmUserRequest->validated('phone');
+        $phone = $request->validated('phone');
 
         $isUserAds = $this->adsAgreementRepository->findByPhone($phone);
 
         if ($isUserAds == null) {
             $this->adsService->setAdsAgreement($phone, null);
-        }
-
-        if ($this->userRepository->find(['phone' => $phone, 'is_test' => true])->exists()) {
-            $data = [
-                'phone' => $phone,
-                'pincode' => 1234,
-                'call_id' => rand(1, 1000000)
-            ];
-
-            $call = $this->authorizationCallRepository->findByPhone($phone);
-
-            if ($call == null) {
-                $this->authorizationCallRepository->store($data);
-            } else {
-                $call->update($data);
-                $call->save();
-            }
-
-            return new JsonResponse(
-                data: [],
-                status: Response::HTTP_OK
-            );
         }
 
         $fields['phone'] = $phone;
@@ -126,7 +105,9 @@ class AuthenticationAccountController extends Controller
         if ($response == null) {
             return new JsonResponse(
                 data: [
-                    'data' => 'No response'
+                    ...self::identifier(),
+                    'attributes' => ['data' => 'No response'],
+                    ...self::metaData($request, $request->all()),
                 ],
                 status: Response::HTTP_OK
             );
@@ -135,13 +116,20 @@ class AuthenticationAccountController extends Controller
         if (is_string($response->data)) {
             return new JsonResponse(
                 data: [
-                    'data' => $response->data
+                    ...self::identifier(),
+                    'attributes' => ['data' => $response->data],
+                    ...self::metaData($request, $request->all()),
                 ],
                 status: Response::HTTP_OK
             );
         }
 
-        $call = $this->authorizationCallRepository->findByPhone($phone);
+        //TODO: вынести в сервис наверное
+        $phone = $request->validated('phone');
+        $pincode = $request->validated('pincode');
+        $call = AuthorizationCall::where('pincode', $pincode)->where('phone', $phone)->first();
+        // TODO: END
+
         $data = [
             'phone' => $phone,
             'pincode' => $response->data->pincode,
@@ -156,8 +144,22 @@ class AuthenticationAccountController extends Controller
         }
 
         return new JsonResponse(
-            data: [],
+            data: [
+                ...self::identifier(),
+                'attributes' => [],
+                ...self::metaData($request, $request->all()),
+            ],
             status: Response::HTTP_OK
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return User::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return AccountResource::class;
     }
 }

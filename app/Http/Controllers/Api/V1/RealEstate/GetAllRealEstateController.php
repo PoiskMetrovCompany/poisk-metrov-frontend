@@ -21,4 +21,5 @@ class GetAllRealEstateController extends Controller
             status: Response::HTTP_OK
         );
     }
+
 }

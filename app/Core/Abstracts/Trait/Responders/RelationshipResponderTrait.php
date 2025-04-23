@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Core\Abstracts\Trait;
+namespace App\Core\Abstracts\Trait\Responders;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use function React\Promise\map;
 
-trait RelationshipTrait
+trait RelationshipResponderTrait
 {
-    public function relationshipListOperation($searchData, array $requestAttributes, array $entityRelationship): array
+    public function relationshipOperation(): array
+    {
+        return [];
+    }
+
+    public function relationshipListOperation(mixed $entity, $searchData, array $requestAttributes, array $entityRelationship): array
     {
         $includes = [];
-        $entity = User::class;
 
         if (!isset($requestAttributes['includes'])) return ['includes' => []];
 

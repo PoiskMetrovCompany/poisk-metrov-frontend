@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Api\V1\Account;
 
+use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Resources\Account\AccountResource;
 use App\Http\Resources\Users\UserResource;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
 
-class UpdateAccountController extends Controller
+class UpdateAccountController extends AbstractOperations
 {
     public function __construct(
         protected UserRepositoryInterface $userRepository,
@@ -24,39 +27,40 @@ class UpdateAccountController extends Controller
     }
 
     /**
-     * @OA\Schema(
-     *       schema="User/Account/Update",
-     *       @OA\Property(
-     *           property="status",
-     *           type="string"
-     *       ),
-     *   	@OA\Property(
-     *         property="error",
-     *         type="string"
-     *       )
-     *  ),
-     *
      * @OA\Post(
-     *      tags={"UserAccount"},
-     *      path="/api/v1/users/account/update-profile/",
-     *      summary="Обновление профиля",
-     *      description="Возвращение JSON объекта",
-     *      @OA\Response(
-     *          response=201,
-     *          description="УСПЕХ!",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
-     *              @OA\Property(property="name", type="string", example="Иван"),
-     *              @OA\Property(property="surname", type="string", example="Поляков"),
-     *              @OA\Property(property="patronymic", type="string", example="Олегович"),
-     *              @OA\Property(property="email", type="string", example="my.example@mail.ru")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Resource not found"
-     *      )
-     *  )
+     *     tags={"UserAccount"},
+     *     path="/api/v1/users/account/update-profile/",
+     *     summary="Обновление профиля",
+     *     description="Возвращение JSON объекта",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *             @OA\Property(property="name", type="string", example="Иван"),
+     *             @OA\Property(property="surname", type="string", example="Поляков"),
+     *             @OA\Property(property="patronymic", type="string", example="Олегович"),
+     *             @OA\Property(property="email", type="string", example="my.example@mail.ru")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="УСПЕХ!",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *             @OA\Property(property="name", type="string", example="Иван"),
+     *             @OA\Property(property="surname", type="string", example="Поляков"),
+     *             @OA\Property(property="patronymic", type="string", example="Олегович"),
+     *             @OA\Property(property="email", type="string", example="my.example@mail.ru")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="User not found")
+     *         )
+     *     )
+     * )
      *
      * @param UpdateProfileRequest $request
      * @return JsonResponse
@@ -65,25 +69,38 @@ class UpdateAccountController extends Controller
     {
         $account = $request->validated();
 
-        if (Auth::user()->phone != $account->phone) {
+        if (Auth::user()->phone != $account['phone']) {
             return new JsonResponse(
                 data: [
-                    'status' => 'Unauthorized',
+                    ...self::identifier(),
+                    ...self::attributes(['status' => 'Unauthorized']),
+                    ...self::metaData($request, $request->all()),
                 ],
                 status: Response::HTTP_UNAUTHORIZED
             );
         }
 
-        $repository = $this->userRepository->findByPhone($account->phone);
+        $repository = $this->userRepository->findByPhone($account['phone']);
         $repository->update($account);
-        $this->userAdsAgreementRepository->findByPhone($account->phone)->update(['name' => $account->name]);
+        $this->userAdsAgreementRepository->findByPhone($account['phone'])->update(['name' => $account['name']]);
 
         return new JsonResponse(
             data: [
-                'user' => new UserResource($repository),
-                'status' => 'User updated',
+                ...self::identifier(),
+                ...self::attributes($repository),
+                ...self::metaData($request, $request->all()),
             ],
             status: Response::HTTP_OK
         );
+    }
+
+    public function getEntityClass(): string
+    {
+        return User::class;
+    }
+
+    public function getResourceClass(): string
+    {
+        return AccountResource::class;
     }
 }

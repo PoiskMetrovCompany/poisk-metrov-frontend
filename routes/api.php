@@ -158,10 +158,10 @@ if (!function_exists('operation')) {
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
     /// Cbr
-   Route::namespace('CBR')->prefix('cbr')->group(function () {
+    Route::namespace('CBR')->prefix('cbr')->group(function () {
        Route::get('actual-date', [CbrController::class, 'actualDate'])->name('api.v1.cbr.actualDate');
-   });
-   /// END Cbr
+    });
+    /// END Cbr
 
     /// User
     Route::namespace('USER')->prefix('users')->group(function () {
@@ -170,17 +170,19 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.user.get-current');
 
         Route::get('/list', operation(ListUserController::class))
-//            ->middleware('auth:api')
+            ->middleware('auth:api')
             ->name('api.v1.user.list');
 
+        // это работает где то в админке
         Route::patch('/update-role', operation(UpdateRoleUserController::class))
             ->middleware('auth:api')
             ->name('api.v1.user.update-role');
 
         Route::group(['middleware' => ['web']], function () {
-            Route::patch('/update', operation(UpdateUserController::class))
+        /// TODO: в свагере не робит
+            Route::post('/update', operation(UpdateUserController::class))
                 ->middleware('auth:api')
-                ->name('api.v1.user.update-user');
+                ->name('api.v1.user.update');
         });
 
         /// Account
@@ -195,7 +197,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
                 ->name('api.v1.account.logout');
 
             Route::group(['middleware' => 'auth'], function () {
-                Route::patch('/update-profile', operation(UpdateAccountController::class));
+                Route::post('/update-profile', operation(UpdateAccountController::class));
             });
         });
         /// END Account
@@ -217,8 +219,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// APARTMENTS
     Route::namespace('APARTMENT')->prefix('apartments')->group(function () {
         Route::get('/list', operation(ListApartmentController::class))
-            ->name('api.v1.apartments.list')
-            ->middleware('auth:api');
+            ->name('api.v1.apartments.list');
+//            ->middleware('auth:api');
 
         Route::patch('/update', operation(UpdateApartmentController::class))
             ->name('api.v1.apartments.update')
@@ -229,7 +231,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// MANAGER
     Route::namespace('MANAGER')->prefix('managers')->group(function () {
         Route::get('/list', operation(ListManagerController::class))
-            ->name('api.v1.managers.list')
+//            ->name('api.v1.managers.list')
             ->middleware('auth:api');
 
         Route::namespace('CHAT')->prefix('chats')->group(function () {
