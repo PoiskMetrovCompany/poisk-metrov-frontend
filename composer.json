@@ -32,6 +32,10 @@
         "symfony/dom-crawler": "^6.4"
     },
     "require-dev": {
+        "codeception/codeception": "^5.2",
+        "codeception/module-asserts": "*",
+        "codeception/module-laravel": "^3.2",
+        "codeception/module-phpbrowser": "*",
         "fakerphp/faker": "^1.9.1",
         "laravel-json-api/testing": "^2.1",
         "laravel/pint": "^1.0",
