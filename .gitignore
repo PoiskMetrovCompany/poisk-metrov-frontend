@@ -24,3 +24,4 @@ yarn-error.log
 /building-infrastructure.json
 /tmp
 /.run
+tests/Unit/Support/Data/dump.sql
