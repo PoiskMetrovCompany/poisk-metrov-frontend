@@ -8,6 +8,8 @@ use Illuminate\Routing\Controller as BaseController;
 use OpenApi\Annotations as OA;
 
 /**
+ * TODO: добавить схемы
+ *
  * @OA\Info(
  *     title="Документация по API",
  *     version="1.0.0",
