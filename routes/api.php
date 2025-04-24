@@ -60,91 +60,6 @@ use App\Http\Controllers\VisitedPagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-/*
- * TODO: ВЕРНУТЬСЯ ПРИ ПОСТУПЛЕНИИ ЗАДАЧ ПО АДМИНКЕ И АКТУАЛИЗИРОВАТЬ МАРШРУТЫ В АДМИНКЕ!!!
- * TODO: Или предложить https://orchid.software/ru/
- * */
-Route::middleware('auth:api')->group(function () {
-    Route::get('/get-current-user-data', [UserController::class, 'getCurrentUserData']); // UNKNOWN
-    Route::get('/get-all-real-estate', [RealEstateController::class, 'getAllRealEstate']); // UNKNOWN
-    Route::get('/get-all-apartments', [ApartmentController::class, 'getAllApartments']); // UNKNOWN
-    Route::get('/get-public-files', [FileController::class, 'getPublicFiles']); // UNKNOWN
-    Route::get('/download-file', [FileController::class, 'getFile']); // UNKNOWN
-    Route::post('/create-folder', [FileController::class, 'createFolder']); // UNKNOWN
-    Route::post('/upload-files', [FileController::class, 'uploadFiles']); // UNKNOWN
-    Route::post('/update-article', [NewsController::class, 'createOrUpdateArticle']); // TODO: когда появится задача по новостям вернуться
-    Route::put('/update-real-estate', [RealEstateController::class, 'updateRealEstate']); // UNKNOWN
-    Route::put('/update-apartment', [ApartmentController::class, 'updateApartment']); // UNKNOWN
-    Route::delete('/delete-article', [NewsController::class, 'deleteArticle']); // TODO: когда появится задача по новостям вернуться
-    Route::delete('/delete-file', [FileController::class, 'deleteFile']); // UNKNOWN
-    Route::delete('/delete-folder', [FileController::class, 'deleteFolder']); // UNKNOWN
-    Route::get('/managers-list', [ManagersController::class, 'getManagersList']); // UNKNOWN
-    Route::get('/users-list', [UserController::class, 'getUsers']);  // UNKNOWN
-    Route::put('/update-role', [UserController::class, 'updateRole']);  // UNKNOWN
-
-    Route::put('/feeds/create', [FeedController::class, 'createFeed']); // UNKNOWN
-    Route::put('/feeds/update', [FeedController::class, 'updateFeed']); // UNKNOWN
-    Route::delete('/feeds/delete', [FeedController::class, 'deleteFeed']); // UNKNOWN
-    Route::get('/feeds/all', [FeedController::class, 'getFeeds']); // UNKNOWN
-    Route::get('/feeds/get-names', [FeedController::class, 'getFeedNames']); // UNKNOWN
-    Route::put('/feeds/update-name', [FeedController::class, 'updateFeedName']); // UNKNOWN
-
-    Route::post('/manager-send-message', [ManagerChatController::class, 'sendMessageToSession']); // UNKNOWN
-    Route::get('/manager-chat-history', [ManagerChatController::class, 'getChatHistory']); // UNKNOWN
-    Route::get('/manager-chats', [ManagerChatController::class, 'getChats']); // UNKNOWN
-    Route::get('/manager-free-chats', [ManagerChatController::class, 'getChatsWithoutManager']); // UNKNOWN
-    Route::get('/try-start-session', [ManagerChatController::class, 'tryStartSession']); // UNKNOWN
-});
-
-Route::get('/get-article', [NewsController::class, 'getArticle']); // TODO: когда появится задача по новостям вернуться
-Route::get('/get-news', [NewsController::class, 'getNews']); // TODO: когда появится задача по новостям вернуться
-Route::get('/like-count', [FavoritesController::class, 'countFavorites']); // UNKNOWN
-Route::post('/authorize-user', [UserController::class, 'authorizeUser']); // UNKNOWN
-Route::post('/confirm-user', [PhoneController::class, 'sendUserConfirmationMessage']); // UNKNOWN
-Route::post('/log-out', [UserController::class, 'logOut']); // UNKNOWN
-Route::post('/call-confirmed', [PhoneController::class, 'onCallConfirmed']); // TODO: не реализованно
-Route::post('/call-failed', [PhoneController::class, 'onCallFailed']); // TODO: не реализованно
-Route::post('/leave-request', [CRMController::class, 'store']); // UNKNOWN
-Route::post('/leave-request-without-name', [CRMController::class, 'storeWithoutName']); // UNKNOWN
-Route::post('/revert-ads-agreement', [CRMController::class, 'resetAdsAgreement']); // UNKNOWN
-
-Route::get('/chat-history', [ChatController::class, 'getChatHistory']); // UNKNOWN
-Route::get('/chat-token', [ChatController::class, 'getUserChatToken']); // UNKNOWN
-Route::post('/send-chat-message', [ChatController::class, 'sendChatMessage']); // UNKNOWN
-
-// TODO: Это оставить как есть
-Route::post('/faweik3w4pofja23zcn23p1qpjzxkcnelrjq', [TelegramController::class, 'callbackRegister']);
-Route::post('/ziudGBZDikfuwAGD3ioruGSBFDofyafh873nabFXGorf3', [TelegramSurveyController::class, 'callbackNovosibirsk']);
-Route::post('/ivujfiBXZDFsodjBXD483uf98shGZDFahis398af3', [TelegramSurveyController::class, 'callbackStPetersburg']);
-// TODO: END
-
-Route::group(['middleware' => ['web']], function () {
-    Route::post('/update-user', [UserController::class, 'updateUser']);  // UNKNOWN
-    Route::post('/switch-like', [FavoritesController::class, 'switchLike'])->withoutMiddleware('api'); // UNKNOWN
-    Route::get('/favorite-plan-views', [FavoritesController::class, 'getFavoritePlanViews'])->withoutMiddleware('api'); // UNKNOWN
-    Route::get('/favorite-building-views', [FavoritesController::class, 'getFavoriteBuildingViews'])->withoutMiddleware('api'); // UNKNOWN
-
-    Route::group(['middleware' => 'auth'], function () {
-        Route::post('/update-profile', [UserController::class, 'updateProfile']); // UNKNOWN
-        Route::post('/update-pages-visited', [VisitedPagesController::class, 'updatePagesVisited']); // UNKNOWN
-    });
-});
-/// END
-
 if (!function_exists('operation')) {
     /**
      * @param string $className
@@ -166,15 +81,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// User
     Route::namespace('USER')->prefix('users')->group(function () {
         Route::get('/get-current', operation(GetCurrentUserDataController::class))
-//            ->middleware('auth:api')
+            ->middleware('auth:api')
             ->name('api.v1.user.get-current');
 
         Route::get('/list', operation(ListUserController::class))
-//            ->middleware('auth:api')
+            ->middleware('auth:api')
             ->name('api.v1.user.list');
 
         Route::patch('/update-role', operation(UpdateRoleUserController::class))
-//            ->middleware('auth:api')
+            ->middleware('auth:api')
             ->name('api.v1.user.update-role');
 
         Route::group(['middleware' => ['web']], function () {
@@ -206,49 +121,49 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// RealEstate
     Route::namespace('REAL-ESTATE')->prefix('real-estate')->group(function () {
         Route::get('/get-all', operation(GetAllRealEstateController::class))
-            ->name('api.v1.real-estate.get-all');
-//            ->middleware('auth:api');
+            ->name('api.v1.real-estate.get-all')
+            ->middleware('auth:api');
 
         Route::patch('/update', operation(UpdateRealEstateController::class))
-            ->name('api.v1.real-estate.update');
-//            ->middleware('auth:api');
+            ->name('api.v1.real-estate.update')
+            ->middleware('auth:api');
     });
     /// END
 
     /// APARTMENTS
     Route::namespace('APARTMENT')->prefix('apartments')->group(function () {
         Route::get('/list', operation(ListApartmentController::class))
-            ->name('api.v1.apartments.list');
-//            ->middleware('auth:api');
+            ->name('api.v1.apartments.list')
+            ->middleware('auth:api');
 
         Route::patch('/update', operation(UpdateApartmentController::class))
-            ->name('api.v1.apartments.update');
-//            ->middleware('auth:api');
+            ->name('api.v1.apartments.update')
+            ->middleware('auth:api');
     });
     /// END
 
     /// MANAGER
     Route::namespace('MANAGER')->prefix('managers')->group(function () {
         Route::get('/list', operation(ListManagerController::class))
-            ->name('api.v1.managers.list');
-//            ->middleware('auth:api');
+            ->name('api.v1.managers.list')
+            ->middleware('auth:api');
 
         Route::namespace('CHAT')->prefix('chats')->group(function () {
             Route::get('/read-without', operation(GetChatsWithoutManagerController::class))
-                ->name('api.v1.manager.chats.without');
-//                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.without')
+                ->middleware('auth:api');
 
             Route::get('/try-start-session', operation(TryStartSessionController::class))
-                ->name('api.v1.manager.chats.try-start-session');
-//                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.try-start-session')
+                ->middleware('auth:api');
 
             Route::get('/read', operation(GetChatsController::class))
-                ->name('api.v1.manager.chats.read');
-//                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.read')
+                ->middleware('auth:api');
 
             Route::post('/send-message-to-session', operation(SendMessageToSessionController::class))
-                ->name('api.v1.manager.chats.send-message-to-session');
-//                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.send-message-to-session')
+                ->middleware('auth:api');
         });
     });
     /// END
@@ -256,28 +171,28 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// FEED
     Route::namespace('FEED')->prefix('feeds')->group(function () {
         Route::post('/create', operation(CreateFeedController::class))
-            ->name('api.v1.feeds.create');
-//            ->middleware('auth:api');
+            ->name('api.v1.feeds.create')
+            ->middleware('auth:api');
 
         Route::get('/read', operation(ReadFeedController::class))
-            ->name('api.v1.feeds.read');
-//            ->middleware('auth:api');
+            ->name('api.v1.feeds.read')
+            ->middleware('auth:api');
 
         Route::get('/get-name', operation(GetFeedNamesController::class))
-            ->name('api.v1.feeds.get-name');
-//            ->middleware('auth:api');
+            ->name('api.v1.feeds.get-name')
+            ->middleware('auth:api');
 
         Route::post('/update', operation(UpdateFeedController::class))
-            ->name('api.v1.feeds.update');
-//            ->middleware('auth:api');
+            ->name('api.v1.feeds.update')
+            ->middleware('auth:api');
 
         Route::patch('/update-name', operation(UpdateFeedNamesController::class))
-            ->name('api.v1.feeds.update-name');
-//            ->middleware('auth:api');
+            ->name('api.v1.feeds.update-name')
+            ->middleware('auth:api');
 
         Route::delete('/delete', operation(DeleteFeedController::class))
-            ->name('api.v1.feeds.delete');
-//            ->middleware('auth:api');
+            ->name('api.v1.feeds.delete')
+            ->middleware('auth:api');
     });
     /// END
 
@@ -285,30 +200,30 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     Route::namespace('FILE')->prefix('files')->group(function () {
         // Этот роут надо в браузере запускать
         Route::get('/download', operation(DownloadFilesController::class))
-            ->name('api.v1.files.download');
-//            ->middleware('auth:api');
+            ->name('api.v1.files.download')
+            ->middleware('auth:api');
 
         Route::get('/delete', operation(DeleteFileController::class))
-            ->name('api.v1.files.delete');
-//            ->middleware('auth:api');
+            ->name('api.v1.files.delete')
+            ->middleware('auth:api');
 
         Route::get('/read', operation(ReadFileController::class))
-            ->name('api.v1.files.read');
-//            ->middleware('auth:api');
+            ->name('api.v1.files.read')
+            ->middleware('auth:api');
 
         Route::get('/update', operation(UpdateFilesController::class))
-            ->name('api.v1.files.update');
-//            ->middleware('auth:api');
+            ->name('api.v1.files.update')
+            ->middleware('auth:api');
 
         /// FOLDER
         Route::namespace('FOLDER')->prefix('folders')->group(function () {
             Route::get('/create', operation(CreateFolderController::class))
-                ->name('api.v1.file.folders.create');
-//                ->middleware('auth:api');
+                ->name('api.v1.file.folders.create')
+                ->middleware('auth:api');
 
             Route::get('/delete', operation(DeleteFolderController::class))
-                ->name('api.v1.file.folders.delete');
-//                ->middleware('auth:api');
+                ->name('api.v1.file.folders.delete')
+                ->middleware('auth:api');
         });
         /// END
     });
@@ -334,28 +249,28 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::group(['middleware' => ['web']], function () {
             Route::post('/switch-like', operation(SwitchLikeController::class))
-                ->name('api.v1.favorites.switch-like');
-//                ->withoutMiddleware('api');
+                ->name('api.v1.favorites.switch-like')
+                ->withoutMiddleware('api');
 
             // TODO: вспомнить об этом при рефакторинге фронта
             Route::get('/get-plan-views', operation(GetFavoritePlanViewsController::class))
-                ->name('api.v1.favorites.get-plan-views');
-//                ->withoutMiddleware('api');
+                ->name('api.v1.favorites.get-plan-views')
+                ->withoutMiddleware('api');
 
             // TODO: вспомнить об этом при рефакторинге фронта
             Route::get('/building-views', operation(GetFavoriteBuildingViewsControllers::class))
-                ->name('api.v1.favorites.building-views');
-//                ->withoutMiddleware('api');
+                ->name('api.v1.favorites.building-views')
+                ->withoutMiddleware('api');
         });
     });
     /// END
 
     /// Visited
     Route::namespace('VISITED')->prefix('visited')->group(function () {
-//        Route::group(['middleware' => 'auth'], function () {
+        Route::group(['middleware' => 'auth'], function () {
             Route::post('/update', operation(UpdatePagesVisitedController::class))
                 ->name('api.v1.visited.update');
-//        });
+        });
     });
     /// END
 
@@ -373,3 +288,26 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 });
 /// END Api Version 1
+
+
+
+/*
+ * TODO: ВЕРНУТЬСЯ ПРИ ПОСТУПЛЕНИИ ЗАДАЧ ПО АДМИНКЕ И АКТУАЛИЗИРОВАТЬ МАРШРУТЫ В АДМИНКЕ!!!
+ * TODO: Или предложить https://orchid.software/ru/
+ * */
+Route::middleware('auth:api')->group(function () {
+    Route::post('/update-article', [NewsController::class, 'createOrUpdateArticle']); // TODO: когда появится задача по новостям вернуться
+    Route::delete('/delete-article', [NewsController::class, 'deleteArticle']); // TODO: когда появится задача по новостям вернуться
+
+});
+
+Route::get('/get-article', [NewsController::class, 'getArticle']); // TODO: когда появится задача по новостям вернуться
+Route::get('/get-news', [NewsController::class, 'getNews']); // TODO: когда появится задача по новостям вернуться
+Route::post('/call-confirmed', [PhoneController::class, 'onCallConfirmed']); // TODO: не реализованно
+Route::post('/call-failed', [PhoneController::class, 'onCallFailed']); // TODO: не реализованно
+
+
+Route::post('/faweik3w4pofja23zcn23p1qpjzxkcnelrjq', [TelegramController::class, 'callbackRegister']);
+Route::post('/ziudGBZDikfuwAGD3ioruGSBFDofyafh873nabFXGorf3', [TelegramSurveyController::class, 'callbackNovosibirsk']);
+Route::post('/ivujfiBXZDFsodjBXD483uf98shGZDFahis398af3', [TelegramSurveyController::class, 'callbackStPetersburg']);
+
