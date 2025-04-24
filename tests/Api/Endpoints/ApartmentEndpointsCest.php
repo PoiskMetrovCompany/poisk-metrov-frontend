@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 
-namespace Tests\Api;
+namespace Tests\Api\Endpoints;
 
-use Codeception\Util\HttpCode;
 use Tests\Support\ApiTester;
 
 final class ApartmentEndpointsCest

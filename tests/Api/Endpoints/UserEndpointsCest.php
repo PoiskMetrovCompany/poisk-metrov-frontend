@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Api;
+namespace Tests\Api\Endpoints;
 
 use Tests\Support\ApiTester;
 

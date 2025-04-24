@@ -11,10 +11,11 @@ use Tests\Support\UnitTester;
 
 final class UserCest
 {
+    protected UserRepository $repository;
     public function userList(UnitTester $I): void
     {
-        $repository = new UserRepository(new User());
-        $users = $repository->list([]);
+        $this->repository = new UserRepository(new User());
+        $users = $this->repository->list([]);
         $I->assertNotEmpty($users);
         $I->assertCount(4, $users);
     }

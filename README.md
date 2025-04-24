@@ -8,6 +8,15 @@
 - **Frontend**: ***<span style="color: #6074d5;">Js</span>***
 - **CI\CD**: ***<span style="color: #6074d5;">Jenkins</span>***
 
+## Создание модульных тестов
+```bash
+  php vendor/bin/codecept generate:cest Unit Entity/Example
+```
+
+## Создание тестов для маршрутов
+```bash
+  php vendor/bin/codecept generate:cest Api Endpoints/Example
+```
 
 ### Документация API
 ***Доступна по адресу: http://localhost/api/documentation/***

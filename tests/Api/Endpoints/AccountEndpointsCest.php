@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Tests\Api;
+namespace Tests\Api\Endpoints;
 
 use App\Models\AuthorizationCall;
 use App\Repositories\AuthorizationCallRepository;
