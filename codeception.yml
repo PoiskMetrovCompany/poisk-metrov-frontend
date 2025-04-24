@@ -8,6 +8,9 @@ paths:
   envs: tests/_envs
 actor_suffix: Tester
 settings:
+  memory_limit: '7G'
+  colors: true
+  log: true
   bootstrap: Support/_bootstrap.php
 extensions:
   enabled:

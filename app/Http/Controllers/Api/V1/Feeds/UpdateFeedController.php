@@ -32,7 +32,7 @@ class UpdateFeedController extends AbstractOperations
                 ...self::attributes([]),
                 ...self::metaData($request, $request->all()),
             ],
-            status: Response::HTTP_OK
+            status: Response::HTTP_CREATED
         );
     }
 

@@ -13,17 +13,9 @@ final class FeedCest
 {
     protected RealtyFeedEntryRepository $repository;
 
-    public function _before(UnitTester $I): void
-    {
-        $this->repository = new RealtyFeedEntryRepository(new RealtyFeedEntry());
-    }
-    protected function _after(UnitTester $I)
-    {
-        unset($this->repository);
-    }
-
     public function testListFeed(UnitTester $I): void
     {
+        $this->repository = new RealtyFeedEntryRepository(new RealtyFeedEntry());
         $feeds = $this->repository->list([]);
         $I->assertNotEmpty($feeds);
     }

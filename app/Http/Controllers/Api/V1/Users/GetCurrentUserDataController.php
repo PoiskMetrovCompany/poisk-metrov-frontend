@@ -56,12 +56,6 @@ class GetCurrentUserDataController extends AbstractOperations
                     ...self::identifier(),
                     ...self::attributes($user),
                     ...self::metaData($request, $request->all())
-//                    'id' => $user['id'],
-//                    'name' => $user['name'],
-//                    'surname' => $user['surname'],
-//                    'patronymic' => $user['patronymic'],
-//                    'email' => $user['email'],
-//                    'password' => ''
                 ],
                 status: Response::HTTP_OK,
             );

@@ -24,7 +24,7 @@ class ListManagerController extends AbstractOperations
      * @param Request $request
      * @return JsonResponse
      */
-    public function getManagersList(Request $request)
+    public function __invoke(Request $request)
     {
         $managers = $this->managersService->getManagersList();
 

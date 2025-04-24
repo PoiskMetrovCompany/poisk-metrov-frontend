@@ -26,7 +26,7 @@ class SwitchLikeController extends AbstractOperations
      * @param LikeSwitchRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function __invoke(LikeSwitchRequest $request)
+    public function __invoke(LikeSwitchRequest $request): JsonResponse
     {
         $user = Auth::user();
 

@@ -166,16 +166,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// User
     Route::namespace('USER')->prefix('users')->group(function () {
         Route::get('/get-current', operation(GetCurrentUserDataController::class))
-            ->middleware('auth:api')
+//            ->middleware('auth:api')
             ->name('api.v1.user.get-current');
 
         Route::get('/list', operation(ListUserController::class))
-            ->middleware('auth:api')
+//            ->middleware('auth:api')
             ->name('api.v1.user.list');
 
-        // это работает где то в админке
         Route::patch('/update-role', operation(UpdateRoleUserController::class))
-            ->middleware('auth:api')
+//            ->middleware('auth:api')
             ->name('api.v1.user.update-role');
 
         Route::group(['middleware' => ['web']], function () {
@@ -207,12 +206,12 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// RealEstate
     Route::namespace('REAL-ESTATE')->prefix('real-estate')->group(function () {
         Route::get('/get-all', operation(GetAllRealEstateController::class))
-            ->name('api.v1.real-estate.get-all')
-            ->middleware('auth:api');
+            ->name('api.v1.real-estate.get-all');
+//            ->middleware('auth:api');
 
         Route::patch('/update', operation(UpdateRealEstateController::class))
-            ->name('api.v1.real-estate.update')
-            ->middleware('auth:api');
+            ->name('api.v1.real-estate.update');
+//            ->middleware('auth:api');
     });
     /// END
 
@@ -223,33 +222,33 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 //            ->middleware('auth:api');
 
         Route::patch('/update', operation(UpdateApartmentController::class))
-            ->name('api.v1.apartments.update')
-            ->middleware('auth:api');
+            ->name('api.v1.apartments.update');
+//            ->middleware('auth:api');
     });
     /// END
 
     /// MANAGER
     Route::namespace('MANAGER')->prefix('managers')->group(function () {
         Route::get('/list', operation(ListManagerController::class))
-//            ->name('api.v1.managers.list')
-            ->middleware('auth:api');
+            ->name('api.v1.managers.list');
+//            ->middleware('auth:api');
 
         Route::namespace('CHAT')->prefix('chats')->group(function () {
             Route::get('/read-without', operation(GetChatsWithoutManagerController::class))
-                ->name('api.v1.manager.chats.without')
-                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.without');
+//                ->middleware('auth:api');
 
             Route::get('/try-start-session', operation(TryStartSessionController::class))
-                ->name('api.v1.manager.chats.try-start-session')
-                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.try-start-session');
+//                ->middleware('auth:api');
 
             Route::get('/read', operation(GetChatsController::class))
-                ->name('api.v1.manager.chats.read')
-                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.read');
+//                ->middleware('auth:api');
 
             Route::post('/send-message-to-session', operation(SendMessageToSessionController::class))
-                ->name('api.v1.manager.chats.send-message-to-session')
-                ->middleware('auth:api');
+                ->name('api.v1.manager.chats.send-message-to-session');
+//                ->middleware('auth:api');
         });
     });
     /// END
@@ -257,28 +256,28 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// FEED
     Route::namespace('FEED')->prefix('feeds')->group(function () {
         Route::post('/create', operation(CreateFeedController::class))
-            ->name('api.v1.feeds.create')
-            ->middleware('auth:api');
+            ->name('api.v1.feeds.create');
+//            ->middleware('auth:api');
 
         Route::get('/read', operation(ReadFeedController::class))
-            ->name('api.v1.feeds.read')
-            ->middleware('auth:api');
+            ->name('api.v1.feeds.read');
+//            ->middleware('auth:api');
 
         Route::get('/get-name', operation(GetFeedNamesController::class))
-            ->name('api.v1.feeds.get-name')
-            ->middleware('auth:api');
+            ->name('api.v1.feeds.get-name');
+//            ->middleware('auth:api');
 
-        Route::patch('/update', operation(UpdateFeedController::class))
-            ->name('api.v1.feeds.update')
-            ->middleware('auth:api');
+        Route::post('/update', operation(UpdateFeedController::class))
+            ->name('api.v1.feeds.update');
+//            ->middleware('auth:api');
 
         Route::patch('/update-name', operation(UpdateFeedNamesController::class))
-            ->name('api.v1.feeds.update-name')
-            ->middleware('auth:api');
+            ->name('api.v1.feeds.update-name');
+//            ->middleware('auth:api');
 
         Route::delete('/delete', operation(DeleteFeedController::class))
-            ->name('api.v1.feeds.delete')
-            ->middleware('auth:api');
+            ->name('api.v1.feeds.delete');
+//            ->middleware('auth:api');
     });
     /// END
 
@@ -286,30 +285,30 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     Route::namespace('FILE')->prefix('files')->group(function () {
         // Этот роут надо в браузере запускать
         Route::get('/download', operation(DownloadFilesController::class))
-            ->name('api.v1.files.download')
-            ->middleware('auth:api');
+            ->name('api.v1.files.download');
+//            ->middleware('auth:api');
 
         Route::get('/delete', operation(DeleteFileController::class))
-            ->name('api.v1.files.delete')
-            ->middleware('auth:api');
+            ->name('api.v1.files.delete');
+//            ->middleware('auth:api');
 
         Route::get('/read', operation(ReadFileController::class))
-            ->name('api.v1.files.read')
-            ->middleware('auth:api');
+            ->name('api.v1.files.read');
+//            ->middleware('auth:api');
 
         Route::get('/update', operation(UpdateFilesController::class))
-            ->name('api.v1.files.update')
-            ->middleware('auth:api');
+            ->name('api.v1.files.update');
+//            ->middleware('auth:api');
 
         /// FOLDER
         Route::namespace('FOLDER')->prefix('folders')->group(function () {
             Route::get('/create', operation(CreateFolderController::class))
-                ->name('api.v1.file.folders.create')
-                ->middleware('auth:api');
+                ->name('api.v1.file.folders.create');
+//                ->middleware('auth:api');
 
             Route::get('/delete', operation(DeleteFolderController::class))
-                ->name('api.v1.file.folders.delete')
-                ->middleware('auth:api');
+                ->name('api.v1.file.folders.delete');
+//                ->middleware('auth:api');
         });
         /// END
     });
@@ -335,26 +334,28 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::group(['middleware' => ['web']], function () {
             Route::post('/switch-like', operation(SwitchLikeController::class))
-                ->name('api.v1.favorites.switch-like')
-                ->withoutMiddleware('api');
+                ->name('api.v1.favorites.switch-like');
+//                ->withoutMiddleware('api');
 
+            // TODO: вспомнить об этом при рефакторинге фронта
             Route::get('/get-plan-views', operation(GetFavoritePlanViewsController::class))
-                ->name('api.v1.favorites.get-plan-views')
-                ->withoutMiddleware('api');
+                ->name('api.v1.favorites.get-plan-views');
+//                ->withoutMiddleware('api');
 
+            // TODO: вспомнить об этом при рефакторинге фронта
             Route::get('/building-views', operation(GetFavoriteBuildingViewsControllers::class))
-                ->name('api.v1.favorites.building-views')
-                ->withoutMiddleware('api');
+                ->name('api.v1.favorites.building-views');
+//                ->withoutMiddleware('api');
         });
     });
     /// END
 
     /// Visited
     Route::namespace('VISITED')->prefix('visited')->group(function () {
-        Route::group(['middleware' => 'auth'], function () {
-            Route::patch('/update', operation(UpdatePagesVisitedController::class))
+//        Route::group(['middleware' => 'auth'], function () {
+            Route::post('/update', operation(UpdatePagesVisitedController::class))
                 ->name('api.v1.visited.update');
-        });
+//        });
     });
     /// END
 
