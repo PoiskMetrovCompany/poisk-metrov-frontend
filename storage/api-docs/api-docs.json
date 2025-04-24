@@ -84,7 +84,7 @@
                                         "type": "string",
                                         "example": "+7 (999) 999-99-99"
                                     },
-                                    "code": {
+                                    "pincode": {
                                         "type": "string",
                                         "example": "код из СМС"
                                     }
@@ -223,7 +223,119 @@
                             }
                         }
                     }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/apartments/list": {
+            "get": {
+                "tags": [
+                    "Apartment"
+                ],
+                "summary": "получение списка планировок",
+                "description": "Возвращение JSON объекта",
+                "operationId": "80d77721b0ffc035e0381293825bd313",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
                 }
+            }
+        },
+        "/api/v1/apartments/update/": {
+            "post": {
+                "tags": [
+                    "Apartment"
+                ],
+                "summary": "Обновление квартиры",
+                "description": "Возвращение JSON объекта",
+                "operationId": "3ba8c66ad2013e404270d831d3ed68c5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "h1": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "head_title": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "meta": {
+                                        "type": "string",
+                                        "example": "..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "h1": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "head_title": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "meta": {
+                                            "type": "string",
+                                            "example": "..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/cbr/actual-date/": {
@@ -244,6 +356,271 @@
                 }
             }
         },
+        "/api/v1/favorites/count": {
+            "get": {
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "получение уоличества понравившихся планировок",
+                "description": "Возвращение JSON объекта",
+                "operationId": "13a8bc89daa85695065006c52a03f2a5",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/feeds/get-name": {
+            "get": {
+                "tags": [
+                    "Feed"
+                ],
+                "summary": "получение имени фида",
+                "description": "Возвращение JSON объекта",
+                "operationId": "5b73a6a0c71c7513ce099b3c4c387145",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/feeds/read": {
+            "get": {
+                "tags": [
+                    "Feed"
+                ],
+                "summary": "получение конкретного фида",
+                "description": "Возвращение JSON объекта",
+                "operationId": "e95e3fdb3b59868f884916dc82580dc4",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/managers/list": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "получение списка менеджеров",
+                "description": "Возвращение JSON объекта",
+                "operationId": "4d85a3a7f7a6fa149aac69ade31875f5",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/real-estate/get-all": {
+            "get": {
+                "tags": [
+                    "RealEstate"
+                ],
+                "summary": "получение списка планировок",
+                "description": "Возвращение JSON объекта",
+                "operationId": "97e305b8dc4f1413746616ef9728a921",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/real-estate/update/": {
+            "post": {
+                "tags": [
+                    "RealEstate"
+                ],
+                "summary": "Обновление планировки",
+                "description": "Возвращение JSON объекта",
+                "operationId": "d99b72869dbbfd37f99a286b145e36f7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "h1": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "head_title": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "primary_material": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "primary_ceiling_height": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    },
+                                    "elevator": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "floors": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "3.14"
+                                    },
+                                    "corpuses": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    },
+                                    "parking": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "meta": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "on_main_page": {
+                                        "type": "boolean",
+                                        "example": "true"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "h1": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "head_title": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "primary_material": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "primary_ceiling_height": {
+                                            "type": "integer",
+                                            "example": "123"
+                                        },
+                                        "elevator": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "floors": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": "3.14"
+                                        },
+                                        "corpuses": {
+                                            "type": "integer",
+                                            "example": "123"
+                                        },
+                                        "parking": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "meta": {
+                                            "type": "string",
+                                            "example": "..."
+                                        },
+                                        "on_main_page": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users/get-current": {
             "get": {
                 "tags": [
@@ -256,10 +633,18 @@
                     "200": {
                         "description": "УСПЕХ!"
                     },
+                    "401": {
+                        "description": "Не авторизован"
+                    },
                     "404": {
                         "description": "Resource not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/users/list": {
@@ -277,7 +662,12 @@
                     "404": {
                         "description": "Resource not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/users/list?includes=UserFavoriteBuilding,": {
@@ -295,7 +685,12 @@
                     "404": {
                         "description": "Resource not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/users/update-role": {
@@ -303,9 +698,30 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "обновление роли пользователя.",
+                "summary": "Обновление роли пользователя.",
                 "description": "Возвращение JSON объекта",
                 "operationId": "6045f8eb6c6539b748a8dee8360fae30",
+                "requestBody": {
+                    "description": "Данные для обновления роли пользователя",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "Менеджер"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!",
@@ -315,7 +731,7 @@
                                     "properties": {
                                         "id": {
                                             "type": "integer",
-                                            "example": "1"
+                                            "example": 1
                                         },
                                         "role": {
                                             "type": "string",
@@ -328,9 +744,27 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found"
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Пользователь не найден"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/users/update": {
@@ -341,8 +775,33 @@
                 "summary": "Обновление пользователя.",
                 "description": "Возвращение JSON объекта",
                 "operationId": "41cd7d49967bceb933c767e593eedfd9",
+                "requestBody": {
+                    "description": "Данные для обновления пользователя",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Андрей"
+                                    },
+                                    "surname": {
+                                        "type": "string",
+                                        "example": "Шихавцов"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "УСПЕХ!"
                     },
                     "404": {
@@ -351,17 +810,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "phone": {
+                                        "error": {
                                             "type": "string",
-                                            "example": "+7 (993) 952-00-85"
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Андрей"
-                                        },
-                                        "surname": {
-                                            "type": "string",
-                                            "example": "Шихавцов"
+                                            "example": "Пользователь не найден"
                                         }
                                     },
                                     "type": "object"
@@ -369,7 +820,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
@@ -385,50 +841,12 @@
                     }
                 },
                 "type": "object"
-            },
-            "User/GetCurrent": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "User/List": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "User/List/Relationship": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "User/UpdateRole": {
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
             }
         }
     },
@@ -444,6 +862,26 @@
         {
             "name": "Cbr",
             "description": "Актуализация расписания директоров ЦБ"
+        },
+        {
+            "name": "RealEstate",
+            "description": "Операции над планировками"
+        },
+        {
+            "name": "Apartment",
+            "description": "Операции над квартирами"
+        },
+        {
+            "name": "Manager",
+            "description": "Операции над менеджерами"
+        },
+        {
+            "name": "Feed",
+            "description": "Операции над фидами"
+        },
+        {
+            "name": "Favorite",
+            "description": "Операции над избранным"
         }
     ]
 }

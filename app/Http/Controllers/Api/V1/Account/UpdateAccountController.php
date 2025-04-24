@@ -32,6 +32,7 @@ class UpdateAccountController extends AbstractOperations
      *     path="/api/v1/users/account/update-profile/",
      *     summary="Обновление профиля",
      *     description="Возвращение JSON объекта",
+     *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -68,26 +69,14 @@ class UpdateAccountController extends AbstractOperations
     public function __invoke(UpdateProfileRequest $request): JsonResponse
     {
         $account = $request->validated();
-
-        if (Auth::user()->phone != $account['phone']) {
-            return new JsonResponse(
-                data: [
-                    ...self::identifier(),
-                    ...self::attributes(['status' => 'Unauthorized']),
-                    ...self::metaData($request, $request->all()),
-                ],
-                status: Response::HTTP_UNAUTHORIZED
-            );
-        }
-
         $repository = $this->userRepository->findByPhone($account['phone']);
-        $repository->update($account);
+        $user = $this->userRepository->update($repository, $account);
         $this->userAdsAgreementRepository->findByPhone($account['phone'])->update(['name' => $account['name']]);
 
         return new JsonResponse(
             data: [
                 ...self::identifier(),
-                ...self::attributes($repository),
+                ...self::attributes($user),
                 ...self::metaData($request, $request->all()),
             ],
             status: Response::HTTP_OK

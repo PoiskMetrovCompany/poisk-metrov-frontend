@@ -13,18 +13,46 @@ use OpenApi\Annotations as OA;
  *     version="1.0.0",
  *     description="API документация",
  * ),
+ * @OA\SecurityScheme(
+ *      type="http",
+ *      securityScheme="bearerAuth",
+ *      scheme="bearer"
+ * )
  * @OA\Tag(
  *      name="User",
  *      description="Операции над юзерами для админки"
  *  ),
  * @OA\Tag(
- *       name="UserAccount",
- *       description="Операции над юзерами"
- *   )
+ *      name="UserAccount",
+ *      description="Операции над юзерами"
+ * )
  * @OA\Tag(
- *        name="Cbr",
- *        description="Актуализация расписания директоров ЦБ"
- *    )
+ *      name="Cbr",
+ *      description="Актуализация расписания директоров ЦБ"
+ * )
+ * @OA\Tag(
+ *      name="RealEstate",
+ *      description="Операции над планировками"
+ * )
+ * @OA\Tag(
+ *      name="Apartment",
+ *      description="Операции над квартирами"
+ *  )
+ *
+ * @OA\Tag(
+ *      name="Manager",
+ *      description="Операции над менеджерами"
+ * )
+ *
+ * @OA\Tag(
+ *      name="Feed",
+ *      description="Операции над фидами"
+ *  )
+ *
+ * @OA\Tag(
+ *       name="Favorite",
+ *       description="Операции над избранным"
+ *   )
  */
 class Controller extends BaseController
 {

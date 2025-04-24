@@ -22,39 +22,39 @@ class UpdateRoleUserController extends AbstractOperations
     }
 
     /**
-     * @OA\Schema(
-        * schema="User/UpdateRole",
-         * @OA\Property(
-             * property="status",
-             * type="string"
-         * ),
-         * @OA\Property(
-             * property="error",
-             * type="string"
-         * )
-         * ),
-         *
-         * @OA\Post(
-             * tags={"User"},
-             * path="/api/v1/users/update-role",
-             * summary="обновление роли пользователя.",
-             * description="Возвращение JSON объекта",
-         * @OA\Response(
-             * response=200,
-             * description="УСПЕХ!",
-     *     @OA\JsonContent(
-                * @OA\Property(property="id", type="integer", example="1"),
-                * @OA\Property(property="role", type="string", example="Менеджер")
-        * )
-         * ),
-         * @OA\Response(
-             * response=404,
-             * description="Resource not found"
-         * )
+     * @OA\Post(
+     *     tags={"User"},
+     *     path="/api/v1/users/update-role",
+     *     summary="Обновление роли пользователя.",
+     *     description="Возвращение JSON объекта",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Данные для обновления роли пользователя",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="role", type="string", example="Менеджер")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="УСПЕХ!",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="role", type="string", example="Менеджер")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Пользователь не найден")
+     *         )
+     *     )
      * )
      *
-    * @param UpdateRoleRequest $request
-    * @return JsonResponse
+     * @param UpdateRoleRequest $request
+     * @return JsonResponse
      */
     public function __invoke(UpdateRoleRequest $request): JsonResponse
     {

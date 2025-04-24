@@ -11,6 +11,7 @@ use App\Http\Resources\FeedResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 class ReadFeedController extends AbstractOperations
 {
@@ -25,6 +26,19 @@ class ReadFeedController extends AbstractOperations
     }
 
     /**
+     * @OA\Get(
+     *        tags={"Feed"},
+     *        path="/api/v1/feeds/read",
+     *        summary="получение конкретного фида",
+     *        description="Возвращение JSON объекта",
+     *        security={{"bearerAuth":{}}},
+     *        @OA\Response(response=200, description="УСПЕХ!"),
+     *        @OA\Response(
+     *            response=404,
+     *            description="Resource not found"
+     *        )
+     * )
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

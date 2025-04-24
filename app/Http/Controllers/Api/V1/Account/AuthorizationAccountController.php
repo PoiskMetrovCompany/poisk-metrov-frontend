@@ -53,7 +53,7 @@ class AuthorizationAccountController extends AbstractOperations
      * required=true,
      * @OA\JsonContent(
      * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
-     * @OA\Property(property="code", type="string", example="код из СМС")
+     * @OA\Property(property="pincode", type="string", example="код из СМС")
      * )
      * ),
      * @OA\Response(
@@ -126,7 +126,7 @@ class AuthorizationAccountController extends AbstractOperations
             return new JsonResponse(
                 data: [
                     ...self::identifier(),
-                    ...self::attributes([123]),
+                    ...self::attributes([]),
                     ...self::metaData($request, $request->all()),
                 ],
                 status: Response::HTTP_OK

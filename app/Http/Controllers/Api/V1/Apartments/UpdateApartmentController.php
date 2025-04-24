@@ -11,6 +11,7 @@ use App\Models\Apartment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 /**
  * @see ApartmentRepositoryInterface
@@ -28,6 +29,40 @@ class UpdateApartmentController extends AbstractOperations
 
     /**
      * TODO: сомнительное действие
+     * @OA\Post(
+     *       tags={"Apartment"},
+     *       path="/api/v1/apartments/update/",
+     *       summary="Обновление квартиры",
+     *       description="Возвращение JSON объекта",
+     *       security={{"bearerAuth":{}}},
+     *       @OA\RequestBody(
+     *           required=true,
+     *           @OA\JsonContent(
+     *               @OA\Property(property="id", type="integer", example="1"),
+     *               @OA\Property(property="h1", type="string", example="..."),
+     *               @OA\Property(property="head_title", type="string", example="..."),
+     *               @OA\Property(property="meta", type="string", example="..."),
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response=201,
+     *           description="УСПЕХ!",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="id", type="integer", example="1"),
+     *               @OA\Property(property="h1", type="string", example="..."),
+     *               @OA\Property(property="head_title", type="string", example="..."),
+     *               @OA\Property(property="meta", type="string", example="..."),
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="error", type="string", example="User not found")
+     *           )
+     *       )
+     *   )
+     *
      * @param UpdateApartmentRequest $request
      * @return JsonResponse
      */

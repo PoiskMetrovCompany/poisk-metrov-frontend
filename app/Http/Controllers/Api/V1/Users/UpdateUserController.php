@@ -28,17 +28,25 @@ class UpdateUserController extends AbstractOperations
      *     path="/api/v1/users/update",
      *     summary="Обновление пользователя.",
      *     description="Возвращение JSON объекта",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Данные для обновления пользователя",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *             @OA\Property(property="name", type="string", example="Андрей"),
+     *             @OA\Property(property="surname", type="string", example="Шихавцов")
+     *         )
+     *     ),
      *     @OA\Response(
-     *         response=200,
+     *         response=201,
      *         description="УСПЕХ!",
      *     ),
      *     @OA\Response(
      *         response=404,
      *         description="Resource not found",
      *         @OA\JsonContent(
-     *             @OA\Property(property="phone", type="string", example="+7 (993) 952-00-85"),
-     *             @OA\Property(property="name", type="string", example="Андрей"),
-     *             @OA\Property(property="surname", type="string", example="Шихавцов")
+     *             @OA\Property(property="error", type="string", example="Пользователь не найден")
      *         )
      *     )
      * )
@@ -48,6 +56,7 @@ class UpdateUserController extends AbstractOperations
      */
     public function __invoke(UpdateUserRequest $request): JsonResponse
     {
+        return new JsonResponse([123]);
         $user = $request->validated();
         $repository = $this->userRepository->findByPhone($user['phone']);
 
@@ -56,11 +65,9 @@ class UpdateUserController extends AbstractOperations
             return new JsonResponse(
                 data: [
                     ...self::identifier(),
-                    ...self::attributes(
-                        $repository
-//                        'user' => new UserResource($repository),
-//                        'auth_id' => Auth::id()
-                    ),
+//                    ...self::attributes(
+//                        $repository
+//                    ),
                     ...self::metaData($request, $request->all()),
                 ],
                 status: Response::HTTP_CREATED
@@ -74,9 +81,6 @@ class UpdateUserController extends AbstractOperations
                 ...self::identifier(),
                 ...self::attributes(
                     $repository
-//                    'user' => new UserResource($repository),
-//                    'auth_id' => Auth::id(),
-//                    'status' => 'User updated'
                 ),
                 ...self::metaData($request, $request->all()),
 

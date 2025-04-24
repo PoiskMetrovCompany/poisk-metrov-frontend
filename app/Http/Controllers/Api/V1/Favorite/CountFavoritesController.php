@@ -10,6 +10,7 @@ use App\Models\UserFavoriteBuilding;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 class CountFavoritesController extends AbstractOperations
 {
@@ -22,6 +23,18 @@ class CountFavoritesController extends AbstractOperations
     }
 
     /**
+     * @OA\Get(
+     *      tags={"Favorite"},
+     *      path="/api/v1/favorites/count",
+     *      summary="получение уоличества понравившихся планировок",
+     *      description="Возвращение JSON объекта",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Response(response=200, description="УСПЕХ!"),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource not found"
+     *      )
+     *  )
      * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse

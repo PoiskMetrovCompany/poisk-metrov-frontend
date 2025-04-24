@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 /**
  * @see ResidentialComplexRepositoryInterface
@@ -28,6 +29,18 @@ class ListApartmentController extends AbstractOperations
     }
 
     /**
+     * @OA\Get(
+     *      tags={"Apartment"},
+     *      path="/api/v1/apartments/list",
+     *      summary="получение списка планировок",
+     *      description="Возвращение JSON объекта",
+     *      @OA\Response(response=200, description="УСПЕХ!"),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource not found"
+     *      )
+     * )
+     *
      * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse

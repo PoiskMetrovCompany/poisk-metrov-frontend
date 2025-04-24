@@ -88,12 +88,12 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->middleware('auth:api')
             ->name('api.v1.user.list');
 
-        Route::patch('/update-role', operation(UpdateRoleUserController::class))
+        Route::post('/update-role', operation(UpdateRoleUserController::class))
             ->middleware('auth:api')
             ->name('api.v1.user.update-role');
 
         Route::group(['middleware' => ['web']], function () {
-        /// TODO: в свагере не робит
+        /// TODO: работает в админке
             Route::post('/update', operation(UpdateUserController::class))
                 ->middleware('auth:api')
                 ->name('api.v1.user.update');
@@ -110,7 +110,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             Route::get('/logout', operation(LogoutAccountController::class))
                 ->name('api.v1.account.logout');
 
-            Route::group(['middleware' => 'auth'], function () {
+            Route::group(['middleware' => 'auth:api'], function () {
                 Route::post('/update-profile', operation(UpdateAccountController::class));
             });
         });
@@ -121,10 +121,9 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// RealEstate
     Route::namespace('REAL-ESTATE')->prefix('real-estate')->group(function () {
         Route::get('/get-all', operation(GetAllRealEstateController::class))
-            ->name('api.v1.real-estate.get-all')
-            ->middleware('auth:api');
+            ->name('api.v1.real-estate.get-all');
 
-        Route::patch('/update', operation(UpdateRealEstateController::class))
+        Route::post('/update', operation(UpdateRealEstateController::class))
             ->name('api.v1.real-estate.update')
             ->middleware('auth:api');
     });
@@ -133,10 +132,9 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// APARTMENTS
     Route::namespace('APARTMENT')->prefix('apartments')->group(function () {
         Route::get('/list', operation(ListApartmentController::class))
-            ->name('api.v1.apartments.list')
-            ->middleware('auth:api');
+            ->name('api.v1.apartments.list');
 
-        Route::patch('/update', operation(UpdateApartmentController::class))
+        Route::post('/update', operation(UpdateApartmentController::class))
             ->name('api.v1.apartments.update')
             ->middleware('auth:api');
     });
@@ -147,7 +145,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/list', operation(ListManagerController::class))
             ->name('api.v1.managers.list')
             ->middleware('auth:api');
-
+        //TODO: Пока не добавлять в SWAGGER
         Route::namespace('CHAT')->prefix('chats')->group(function () {
             Route::get('/read-without', operation(GetChatsWithoutManagerController::class))
                 ->name('api.v1.manager.chats.without')
@@ -165,11 +163,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
                 ->name('api.v1.manager.chats.send-message-to-session')
                 ->middleware('auth:api');
         });
+        // TODO: END
     });
     /// END
 
     /// FEED
     Route::namespace('FEED')->prefix('feeds')->group(function () {
+         // TODO: добавить в Swagger
         Route::post('/create', operation(CreateFeedController::class))
             ->name('api.v1.feeds.create')
             ->middleware('auth:api');
@@ -181,15 +181,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/get-name', operation(GetFeedNamesController::class))
             ->name('api.v1.feeds.get-name')
             ->middleware('auth:api');
-
+        // TODO: добавить в Swagger
         Route::post('/update', operation(UpdateFeedController::class))
             ->name('api.v1.feeds.update')
             ->middleware('auth:api');
-
-        Route::patch('/update-name', operation(UpdateFeedNamesController::class))
+        // TODO: добавить в Swagger
+        Route::post('/update-name', operation(UpdateFeedNamesController::class))
             ->name('api.v1.feeds.update-name')
             ->middleware('auth:api');
-
+        // TODO: добавить в Swagger
         Route::delete('/delete', operation(DeleteFeedController::class))
             ->name('api.v1.feeds.delete')
             ->middleware('auth:api');
@@ -248,6 +248,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.favorites.count');
 
         Route::group(['middleware' => ['web']], function () {
+            // TODO: добавить в Swagger
             Route::post('/switch-like', operation(SwitchLikeController::class))
                 ->name('api.v1.favorites.switch-like')
                 ->withoutMiddleware('api');
@@ -268,6 +269,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// Visited
     Route::namespace('VISITED')->prefix('visited')->group(function () {
         Route::group(['middleware' => 'auth'], function () {
+            // TODO: добавить в Swagger
             Route::post('/update', operation(UpdatePagesVisitedController::class))
                 ->name('api.v1.visited.update');
         });
@@ -275,14 +277,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 
     /// Visited
+    // TODO: Пока не добавлять в SWAGGER
     Route::namespace('CRM')->prefix('crm')->group(function () {
-        Route::patch('/reset-ads-agreement', operation(ResetAdsAgreementController::class))
+        Route::post('/reset-ads-agreement', operation(ResetAdsAgreementController::class))
             ->name('api.v1.crm.reset-ads-agreement');
 
-        Route::patch('/store', operation(StoreCrmController::class))
+        Route::post('/store', operation(StoreCrmController::class))
             ->name('api.v1.crm.store');
 
-        Route::patch('/store-without-name', operation(StoreWithoutNameController::class))
+        Route::post('/store-without-name', operation(StoreWithoutNameController::class))
             ->name('api.v1.crm.store-without-name');
     });
     /// END

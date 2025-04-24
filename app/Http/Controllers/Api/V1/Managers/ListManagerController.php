@@ -10,6 +10,7 @@ use App\Models\Manager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 class ListManagerController extends AbstractOperations
 {
@@ -21,6 +22,19 @@ class ListManagerController extends AbstractOperations
     }
 
     /**
+     * @OA\Get(
+     *       tags={"Manager"},
+     *       path="/api/v1/managers/list",
+     *       summary="получение списка менеджеров",
+     *       description="Возвращение JSON объекта",
+     *       security={{"bearerAuth":{}}},
+     *       @OA\Response(response=200, description="УСПЕХ!"),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found"
+     *       )
+     *  )
+     *
      * @param Request $request
      * @return JsonResponse
      */

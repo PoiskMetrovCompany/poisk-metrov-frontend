@@ -16,34 +16,27 @@ use OpenApi\Annotations as OA;
 class GetCurrentUserDataController extends AbstractOperations
 {
     /**
-     * @OA\Schema(
-     *      schema="User/GetCurrent",
-     *      @OA\Property(
-     *          property="status",
-     *          type="string"
-     *      ),
-     *  	@OA\Property(
-     *        property="error",
-     *        type="string"
-     *      )
-     * ),
-     *
      * @OA\Get(
-         * tags={"User"},
-         * path="/api/v1/users/get-current",
-         * summary="Получение информации о текущем авторизованном пользователе.",
-         * description="Возвращение JSON объекта",
-         * @OA\Response(
-             * response=200,
-             * description="УСПЕХ!",
-         * ),
-         * @OA\Response(
-             * response=404,
-             * description="Resource not found"
-         * )
+     *      tags={"User"},
+     *      path="/api/v1/users/get-current",
+     *      summary="Получение информации о текущем авторизованном пользователе.",
+     *      description="Возвращение JSON объекта",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Response(
+     *          response=200,
+     *          description="УСПЕХ!",
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Не авторизован"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource not found"
+     *      )
      * )
      *
-    * @param Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse
@@ -60,7 +53,7 @@ class GetCurrentUserDataController extends AbstractOperations
                 status: Response::HTTP_OK,
             );
         }
-        return new JsonResponse(data: [],status: Response::HTTP_OK);
+        return new JsonResponse(data: [], status: Response::HTTP_OK);
     }
 
     public function getEntityClass(): string
