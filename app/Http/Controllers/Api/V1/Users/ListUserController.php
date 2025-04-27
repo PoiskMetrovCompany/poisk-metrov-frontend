@@ -23,33 +23,47 @@ class ListUserController extends AbstractOperations
 
     /**
      * @OA\Get(
-     * tags={"User"},
-     * path="/api/v1/users/list",
-     * summary="получение списка пользователей (клиенты)",
-     * description="Возвращение JSON объекта",
-     *security={{"bearerAuth":{}}},
-     * @OA\Response(response=200, description="УСПЕХ!"),
-     *  @OA\Response(
-     *  response=404,
-     * description="Resource not found"
-     *  )
-     * )
-     *
-     * @OA\Get(
-     *  tags={"User"},
-     *  path="/api/v1/users/list?includes=UserFavoriteBuilding,",
-     *  summary="получение списка пользователей (клиенты)",
-     *  description="Возвращение JSON объекта",
+     *     tags={"User"},
+     *     path="/api/v1/users/list",
+     *     summary="Получение списка пользователей (клиенты)",
+     *     description="Возвращение JSON объекта с возможностью включения связанных данных через параметр includes",
      *     security={{"bearerAuth":{}}},
-     *  @OA\Response(
-     *  response=200,
-     *  description="УСПЕХ!",
-     *  ),
-     *  @OA\Response(
-     *  response=404,
-     *  description="Resource not found"
-     *  )
-     *  )
+     *     @OA\Parameter(
+     *         name="includes",
+     *         in="query",
+     *         description="Указывает, какие связанные данные нужно включить",
+     *         required=false,
+     *         style="form",
+     *         explode=true,
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="string",
+     *                 enum={
+     *                      "UserFavoriteBuilding",
+     *                      "CRMSyncRequiredForUser",
+     *                      "ResidentialComplexFeedSiteName",
+     *                      "DeletedFavoriteBuilding",
+     *                      "File",
+     *                      "ManagerChatMessage",
+     *                      "News",
+     *                      "VisitedPage",
+     *                      "UserFavoritePlan",
+     *                      "Manager",
+     *                      "Interaction"
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="УСПЕХ!",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource not found"
+     *     )
+     * )
      *
      * @param Request $request
      * @return JsonResponse

@@ -16,9 +16,23 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    /**
+     * @var array
+     */
     const RELATIONSHIP = [
         'UserFavoriteBuilding' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'CRMSyncRequiredForUser' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'ResidentialComplexFeedSiteName' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'DeletedFavoriteBuilding' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'File' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'ManagerChatMessage' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'News' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'VisitedPage' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'UserFavoritePlan' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'Manager' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
+        'Interaction' => ['main_table_value' => 'id', 'linked_table_value' => 'user_id'],
     ];
+
     /**
      * The attributes that are mass assignable.
      *

@@ -9,6 +9,11 @@ class Location extends Model
 {
     use HasFactory;
 
+    const RELATIONSHIP = [
+        'ResidentialComplex' => ['main_table_value' => 'id', 'linked_table_value' => 'location_id'],
+        'NmarketResidentialComplex' => ['main_table_value' => 'id', 'linked_table_value' => 'location_id'],
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
