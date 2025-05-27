@@ -1,0 +1,1898 @@
+{
+  "_ButtonsGrid-3639f438.js": {
+    "file": "assets/ButtonsGrid-3639f438.js",
+    "imports": [
+      "_CustomDropdownFilter-b5d48bec.js",
+      "_getDataFromOption-f8a05e9b.js"
+    ]
+  },
+  "_CRMForm-b29a7dfb.js": {
+    "file": "assets/CRMForm-b29a7dfb.js",
+    "imports": [
+      "_name-7cec568d.js"
+    ]
+  },
+  "_CustomDropdownFilter-b5d48bec.js": {
+    "file": "assets/CustomDropdownFilter-b5d48bec.js",
+    "imports": [
+      "_wasClickedOutside-18ded071.js",
+      "_getDataFromOption-f8a05e9b.js",
+      "_colors-10675ae3.js"
+    ]
+  },
+  "_FileDownloader-3e7d4732.js": {
+    "file": "assets/FileDownloader-3e7d4732.js",
+    "imports": [
+      "_axios-1779699b.js"
+    ]
+  },
+  "_KitchenFromToDropdownFilter-89fe7d8c.js": {
+    "file": "assets/KitchenFromToDropdownFilter-89fe7d8c.js",
+    "imports": [
+      "_ButtonsGrid-3639f438.js"
+    ]
+  },
+  "_SearchBar-837acfd5.js": {
+    "file": "assets/SearchBar-837acfd5.js",
+    "imports": [
+      "_CustomDropdownFilter-b5d48bec.js",
+      "_getDataFromOption-f8a05e9b.js",
+      "_wasClickedOutside-18ded071.js"
+    ]
+  },
+  "_TabsGrid-2aad9bf8.js": {
+    "file": "assets/TabsGrid-2aad9bf8.js"
+  },
+  "_axios-1779699b.js": {
+    "file": "assets/axios-1779699b.js"
+  },
+  "_colors-10675ae3.js": {
+    "file": "assets/colors-10675ae3.js"
+  },
+  "_cookies-2118fce7.js": {
+    "file": "assets/cookies-2118fce7.js"
+  },
+  "_gallery-53fa48c7.js": {
+    "file": "assets/gallery-53fa48c7.js"
+  },
+  "_getDataFromOption-f8a05e9b.js": {
+    "file": "assets/getDataFromOption-f8a05e9b.js"
+  },
+  "_isMobile-f1446475.js": {
+    "file": "assets/isMobile-f1446475.js"
+  },
+  "_loadCityMap-a5833feb.js": {
+    "file": "assets/loadCityMap-a5833feb.js",
+    "imports": [
+      "_sleep-9eff569f.js",
+      "_cookies-2118fce7.js"
+    ]
+  },
+  "_loadPlanCardButtons-079e20a2.js": {
+    "file": "assets/loadPlanCardButtons-079e20a2.js",
+    "imports": [
+      "_cookies-2118fce7.js",
+      "_axios-1779699b.js",
+      "_sharePageMenu-adc27c4b.js",
+      "resources/js/realEstate/chart.js"
+    ]
+  },
+  "_map-03f7a519.js": {
+    "file": "assets/map-03f7a519.js"
+  },
+  "_menu-135c7b1f.js": {
+    "file": "assets/menu-135c7b1f.js"
+  },
+  "_name-7cec568d.js": {
+    "file": "assets/name-7cec568d.js"
+  },
+  "_paginator-3d74c680.js": {
+    "file": "assets/paginator-3d74c680.js"
+  },
+  "_sharePageMenu-adc27c4b.js": {
+    "file": "assets/sharePageMenu-adc27c4b.js"
+  },
+  "_sleep-9eff569f.js": {
+    "file": "assets/sleep-9eff569f.js"
+  },
+  "_updateVisitedPages-7ad3c596.js": {
+    "file": "assets/updateVisitedPages-7ad3c596.js",
+    "imports": [
+      "_axios-1779699b.js",
+      "_cookies-2118fce7.js"
+    ]
+  },
+  "_wasClickedOutside-18ded071.js": {
+    "file": "assets/wasClickedOutside-18ded071.js"
+  },
+  "resources/assets/2gis.svg": {
+    "file": "assets/2gis-7023b753.svg",
+    "src": "resources/assets/2gis.svg"
+  },
+  "resources/assets/actions/action-close-2.svg": {
+    "file": "assets/action-close-2-855b199f.svg",
+    "src": "resources/assets/actions/action-close-2.svg"
+  },
+  "resources/assets/actions/action-close.svg": {
+    "file": "assets/action-close-40f7922d.svg",
+    "src": "resources/assets/actions/action-close.svg"
+  },
+  "resources/assets/actions/action-compare.svg": {
+    "file": "assets/action-compare-d02333d8.svg",
+    "src": "resources/assets/actions/action-compare.svg"
+  },
+  "resources/assets/actions/action-delete.svg": {
+    "file": "assets/action-delete-eded5dfe.svg",
+    "src": "resources/assets/actions/action-delete.svg"
+  },
+  "resources/assets/actions/action-download.svg": {
+    "file": "assets/action-download-1551d668.svg",
+    "src": "resources/assets/actions/action-download.svg"
+  },
+  "resources/assets/actions/action-like-filled.svg": {
+    "file": "assets/action-like-filled-2d86f037.svg",
+    "src": "resources/assets/actions/action-like-filled.svg"
+  },
+  "resources/assets/actions/action-like.svg": {
+    "file": "assets/action-like-4e3386ac.svg",
+    "src": "resources/assets/actions/action-like.svg"
+  },
+  "resources/assets/actions/action-minus.svg": {
+    "file": "assets/action-minus-27b32161.svg",
+    "src": "resources/assets/actions/action-minus.svg"
+  },
+  "resources/assets/actions/action-plus.svg": {
+    "file": "assets/action-plus-3fb15cc5.svg",
+    "src": "resources/assets/actions/action-plus.svg"
+  },
+  "resources/assets/actions/action-search.svg": {
+    "file": "assets/action-search-c0aead88.svg",
+    "src": "resources/assets/actions/action-search.svg"
+  },
+  "resources/assets/actions/action-share-grey.svg": {
+    "file": "assets/action-share-grey-45dde5d5.svg",
+    "src": "resources/assets/actions/action-share-grey.svg"
+  },
+  "resources/assets/actions/action-share-light.svg": {
+    "file": "assets/action-share-light-fb278492.svg",
+    "src": "resources/assets/actions/action-share-light.svg"
+  },
+  "resources/assets/actions/action-share-link.svg": {
+    "file": "assets/link-transparent-1e3e4e47.svg",
+    "src": "resources/assets/social-media/link-transparent.svg"
+  },
+  "resources/assets/agent/new-request.svg": {
+    "file": "assets/new-request-a298d5a1.svg",
+    "src": "resources/assets/agent/new-request.svg"
+  },
+  "resources/assets/amenity.svg": {
+    "file": "assets/amenity-91b8251d.svg",
+    "src": "resources/assets/amenity.svg"
+  },
+  "resources/assets/arrows/arrow-aside-down.svg": {
+    "file": "assets/arrow-aside-down-c1aa0003.svg",
+    "src": "resources/assets/arrows/arrow-aside-down.svg"
+  },
+  "resources/assets/arrows/arrow-aside-up.svg": {
+    "file": "assets/arrow-aside-up-34af2d37.svg",
+    "src": "resources/assets/arrows/arrow-aside-up.svg"
+  },
+  "resources/assets/arrows/arrow-chevron-down.svg": {
+    "file": "assets/arrow-chevron-down-1c7f31c9.svg",
+    "src": "resources/assets/arrows/arrow-chevron-down.svg"
+  },
+  "resources/assets/arrows/arrow-chevron-right.svg": {
+    "file": "assets/arrow-chevron-right-7e5791bc.svg",
+    "src": "resources/assets/arrows/arrow-chevron-right.svg"
+  },
+  "resources/assets/arrows/arrow-chevron-up.svg": {
+    "file": "assets/arrow-chevron-up-54da121a.svg",
+    "src": "resources/assets/arrows/arrow-chevron-up.svg"
+  },
+  "resources/assets/arrows/arrow-double.svg": {
+    "file": "assets/arrow-double-3cb0e9f3.svg",
+    "src": "resources/assets/arrows/arrow-double.svg"
+  },
+  "resources/assets/arrows/arrow-left.svg": {
+    "file": "assets/arrow-left-b66eb9a8.svg",
+    "src": "resources/assets/arrows/arrow-left.svg"
+  },
+  "resources/assets/arrows/arrow-right-white.svg": {
+    "file": "assets/arrow-right-white-87581605.svg",
+    "src": "resources/assets/arrows/arrow-right-white.svg"
+  },
+  "resources/assets/arrows/arrow-right.svg": {
+    "file": "assets/arrow-right-33c18559.svg",
+    "src": "resources/assets/arrows/arrow-right.svg"
+  },
+  "resources/assets/arrows/arrow.svg": {
+    "file": "assets/arrow-ac64f943.svg",
+    "src": "resources/assets/arrows/arrow.svg"
+  },
+  "resources/assets/banks/Alfa-Bank-1-1.svg": {
+    "file": "assets/Alfa-Bank-1-1-42833f8d.svg",
+    "src": "resources/assets/banks/Alfa-Bank-1-1.svg"
+  },
+  "resources/assets/banks/Alfa-Bank-1.svg": {
+    "file": "assets/Alfa-Bank-1-a4465d2a.svg",
+    "src": "resources/assets/banks/Alfa-Bank-1.svg"
+  },
+  "resources/assets/banks/Gazprombank-1-1.svg": {
+    "file": "assets/Gazprombank-1-1-1bdf44f4.svg",
+    "src": "resources/assets/banks/Gazprombank-1-1.svg"
+  },
+  "resources/assets/banks/Gazprombank-1.svg": {
+    "file": "assets/Gazprombank-1-74cbc53d.svg",
+    "src": "resources/assets/banks/Gazprombank-1.svg"
+  },
+  "resources/assets/banks/Sberbank_Logo_2020-1-1.svg": {
+    "file": "assets/Sberbank_Logo_2020-1-1-13367731.svg",
+    "src": "resources/assets/banks/Sberbank_Logo_2020-1-1.svg"
+  },
+  "resources/assets/banks/Sberbank_Logo_2020-1.svg": {
+    "file": "assets/Sberbank_Logo_2020-1-f063805f.svg",
+    "src": "resources/assets/banks/Sberbank_Logo_2020-1.svg"
+  },
+  "resources/assets/banks/VTB_Logo_2018-1-1.svg": {
+    "file": "assets/VTB_Logo_2018-1-1-25a5961c.svg",
+    "src": "resources/assets/banks/VTB_Logo_2018-1-1.svg"
+  },
+  "resources/assets/banks/VTB_Logo_2018-1.svg": {
+    "file": "assets/VTB_Logo_2018-1-1f922c08.svg",
+    "src": "resources/assets/banks/VTB_Logo_2018-1.svg"
+  },
+  "resources/assets/banks/dom-1.svg": {
+    "file": "assets/dom-1-649d199a.svg",
+    "src": "resources/assets/banks/dom-1.svg"
+  },
+  "resources/assets/banks/dom.svg": {
+    "file": "assets/dom-bd53709e.svg",
+    "src": "resources/assets/banks/dom.svg"
+  },
+  "resources/assets/banks/logo-1.svg": {
+    "file": "assets/logo-1-891bbd2a.svg",
+    "src": "resources/assets/banks/logo-1.svg"
+  },
+  "resources/assets/banks/logo-2.svg": {
+    "file": "assets/logo-2-c944a6c8.svg",
+    "src": "resources/assets/banks/logo-2.svg"
+  },
+  "resources/assets/banks/logo-3.svg": {
+    "file": "assets/logo-3-fe0c2455.svg",
+    "src": "resources/assets/banks/logo-3.svg"
+  },
+  "resources/assets/banks/logo-4.svg": {
+    "file": "assets/logo-4-62d68251.svg",
+    "src": "resources/assets/banks/logo-4.svg"
+  },
+  "resources/assets/banks/logo-5.svg": {
+    "file": "assets/logo-5-f50452f4.svg",
+    "src": "resources/assets/banks/logo-5.svg"
+  },
+  "resources/assets/banks/logo-6.svg": {
+    "file": "assets/logo-6-27605d37.svg",
+    "src": "resources/assets/banks/logo-6.svg"
+  },
+  "resources/assets/banks/logo-7.svg": {
+    "file": "assets/logo-7-aa405011.svg",
+    "src": "resources/assets/banks/logo-7.svg"
+  },
+  "resources/assets/banks/logo-8.svg": {
+    "file": "assets/logo-8-efc7ad7f.svg",
+    "src": "resources/assets/banks/logo-8.svg"
+  },
+  "resources/assets/banks/logo-9.svg": {
+    "file": "assets/logo-9-426e0e08.svg",
+    "src": "resources/assets/banks/logo-9.svg"
+  },
+  "resources/assets/banks/logo.svg": {
+    "file": "assets/logo-8047f03c.svg",
+    "src": "resources/assets/banks/logo.svg"
+  },
+  "resources/assets/base/arrow-tailless.svg": {
+    "file": "assets/arrow-tailless-61042aa1.svg",
+    "src": "resources/assets/base/arrow-tailless.svg"
+  },
+  "resources/assets/base/buildings.svg": {
+    "file": "assets/buildings-715daa8a.svg",
+    "src": "resources/assets/base/buildings.svg"
+  },
+  "resources/assets/base/burger.svg": {
+    "file": "assets/burger-7e769f1b.svg",
+    "src": "resources/assets/base/burger.svg"
+  },
+  "resources/assets/base/check.svg": {
+    "file": "assets/check-7d243328.svg",
+    "src": "resources/assets/base/check.svg"
+  },
+  "resources/assets/base/exit.svg": {
+    "file": "assets/exit-df6852b6.svg",
+    "src": "resources/assets/base/exit.svg"
+  },
+  "resources/assets/base/filters.svg": {
+    "file": "assets/filters-87ffd5c8.svg",
+    "src": "resources/assets/base/filters.svg"
+  },
+  "resources/assets/base/home.svg": {
+    "file": "assets/home-d56520b0.svg",
+    "src": "resources/assets/base/home.svg"
+  },
+  "resources/assets/base/more.svg": {
+    "file": "assets/more-2644d904.svg",
+    "src": "resources/assets/base/more.svg"
+  },
+  "resources/assets/base/profile.svg": {
+    "file": "assets/profile-9d94ed2d.svg",
+    "src": "resources/assets/base/profile.svg"
+  },
+  "resources/assets/base/settings.svg": {
+    "file": "assets/settings-5b352e33.svg",
+    "src": "resources/assets/base/settings.svg"
+  },
+  "resources/assets/building-develop.png": {
+    "file": "assets/building-develop-b1199509.png",
+    "src": "resources/assets/building-develop.png"
+  },
+  "resources/assets/car.svg": {
+    "file": "assets/car-866c1900.svg",
+    "src": "resources/assets/car.svg"
+  },
+  "resources/assets/chat/attachment.svg": {
+    "file": "assets/attachment-e449c217.svg",
+    "src": "resources/assets/chat/attachment.svg"
+  },
+  "resources/assets/chat/chat.svg": {
+    "file": "assets/chat-a433c17d.svg",
+    "src": "resources/assets/chat/chat.svg"
+  },
+  "resources/assets/chat/more.svg": {
+    "file": "assets/more-fc639510.svg",
+    "src": "resources/assets/chat/more.svg"
+  },
+  "resources/assets/checkbox-check.svg": {
+    "file": "assets/checkbox-check-a9fed086.svg",
+    "src": "resources/assets/checkbox-check.svg"
+  },
+  "resources/assets/compare-black.svg": {
+    "file": "assets/compare-black-edd302f8.svg",
+    "src": "resources/assets/compare-black.svg"
+  },
+  "resources/assets/content/content-bank.svg": {
+    "file": "assets/content-bank-2c3355e1.svg",
+    "src": "resources/assets/content/content-bank.svg"
+  },
+  "resources/assets/content/content-binoculars.svg": {
+    "file": "assets/content-binoculars-ec8f9627.svg",
+    "src": "resources/assets/content/content-binoculars.svg"
+  },
+  "resources/assets/content/content-book.svg": {
+    "file": "assets/content-book-a15a9a39.svg",
+    "src": "resources/assets/content/content-book.svg"
+  },
+  "resources/assets/content/content-building.svg": {
+    "file": "assets/content-building-dc057b2b.svg",
+    "src": "resources/assets/content/content-building.svg"
+  },
+  "resources/assets/content/content-chart.svg": {
+    "file": "assets/content-chart-afd6dca5.svg",
+    "src": "resources/assets/content/content-chart.svg"
+  },
+  "resources/assets/content/content-children.svg": {
+    "file": "assets/content-children-d78827bf.svg",
+    "src": "resources/assets/content/content-children.svg"
+  },
+  "resources/assets/content/content-discount.svg": {
+    "file": "assets/content-discount-ad994108.svg",
+    "src": "resources/assets/content/content-discount.svg"
+  },
+  "resources/assets/content/content-dumbbell.svg": {
+    "file": "assets/content-dumbbell-b98c2704.svg",
+    "src": "resources/assets/content/content-dumbbell.svg"
+  },
+  "resources/assets/content/content-error.svg": {
+    "file": "assets/content-error-376369e1.svg",
+    "src": "resources/assets/content/content-error.svg"
+  },
+  "resources/assets/content/content-excursion.svg": {
+    "file": "assets/content-excursion-b79d1685.svg",
+    "src": "resources/assets/content/content-excursion.svg"
+  },
+  "resources/assets/content/content-hospital.svg": {
+    "file": "assets/content-hospital-70a48f2e.svg",
+    "src": "resources/assets/content/content-hospital.svg"
+  },
+  "resources/assets/content/content-house.svg": {
+    "file": "assets/content-house-7a999c03.svg",
+    "src": "resources/assets/content/content-house.svg"
+  },
+  "resources/assets/content/content-like.svg": {
+    "file": "assets/content-like-a3414983.svg",
+    "src": "resources/assets/content/content-like.svg"
+  },
+  "resources/assets/content/content-location.svg": {
+    "file": "assets/content-location-ddce758f.svg",
+    "src": "resources/assets/content/content-location.svg"
+  },
+  "resources/assets/content/content-map.svg": {
+    "file": "assets/content-map-a52d9552.svg",
+    "src": "resources/assets/content/content-map.svg"
+  },
+  "resources/assets/content/content-metro.svg": {
+    "file": "assets/content-metro-8014a2cb.svg",
+    "src": "resources/assets/content/content-metro.svg"
+  },
+  "resources/assets/content/content-phone.svg": {
+    "file": "assets/content-phone-ec984ea8.svg",
+    "src": "resources/assets/content/content-phone.svg"
+  },
+  "resources/assets/content/content-plan.svg": {
+    "file": "assets/content-plan-f0c825ed.svg",
+    "src": "resources/assets/content/content-plan.svg"
+  },
+  "resources/assets/content/content-price-dynamic.svg": {
+    "file": "assets/content-price-dynamic-da9839a3.svg",
+    "src": "resources/assets/content/content-price-dynamic.svg"
+  },
+  "resources/assets/content/content-prices.svg": {
+    "file": "assets/content-prices-16fe565f.svg",
+    "src": "resources/assets/content/content-prices.svg"
+  },
+  "resources/assets/content/content-profile.svg": {
+    "file": "assets/content-profile-f44cf40f.svg",
+    "src": "resources/assets/content/content-profile.svg"
+  },
+  "resources/assets/content/content-shop.svg": {
+    "file": "assets/content-shop-94c6cc7f.svg",
+    "src": "resources/assets/content/content-shop.svg"
+  },
+  "resources/assets/content/content-smile.svg": {
+    "file": "assets/content-smile-37eb3bd0.svg",
+    "src": "resources/assets/content/content-smile.svg"
+  },
+  "resources/assets/content/content-table.svg": {
+    "file": "assets/content-table-7e94892e.svg",
+    "src": "resources/assets/content/content-table.svg"
+  },
+  "resources/assets/content/content-time.svg": {
+    "file": "assets/content-time-a29c7c2a.svg",
+    "src": "resources/assets/content/content-time.svg"
+  },
+  "resources/assets/content/content-tree.svg": {
+    "file": "assets/content-tree-df0eaa84.svg",
+    "src": "resources/assets/content/content-tree.svg"
+  },
+  "resources/assets/content/content-triangle.svg": {
+    "file": "assets/content-triangle-fc304fbc.svg",
+    "src": "resources/assets/content/content-triangle.svg"
+  },
+  "resources/assets/content/content-worker.svg": {
+    "file": "assets/content-worker-a0434d7e.svg",
+    "src": "resources/assets/content/content-worker.svg"
+  },
+  "resources/assets/download.svg": {
+    "file": "assets/download-96bb02fa.svg",
+    "src": "resources/assets/download.svg"
+  },
+  "resources/assets/employees/photos/abaturova-1.png": {
+    "file": "assets/abaturova-1-c3b93ff7.png",
+    "src": "resources/assets/employees/photos/abaturova-1.png"
+  },
+  "resources/assets/employees/photos/abaturova-2.png": {
+    "file": "assets/abaturova-2-b092b384.png",
+    "src": "resources/assets/employees/photos/abaturova-2.png"
+  },
+  "resources/assets/employees/photos/abdulgazin-1.png": {
+    "file": "assets/abdulgazin-1-d52a09c7.png",
+    "src": "resources/assets/employees/photos/abdulgazin-1.png"
+  },
+  "resources/assets/employees/photos/afonina-1.png": {
+    "file": "assets/afonina-1-ddf54c1b.png",
+    "src": "resources/assets/employees/photos/afonina-1.png"
+  },
+  "resources/assets/employees/photos/afonina-2.png": {
+    "file": "assets/afonina-2-8745dfc7.png",
+    "src": "resources/assets/employees/photos/afonina-2.png"
+  },
+  "resources/assets/employees/photos/ahmetgareev-1.png": {
+    "file": "assets/ahmetgareev-1-6c7e5ede.png",
+    "src": "resources/assets/employees/photos/ahmetgareev-1.png"
+  },
+  "resources/assets/employees/photos/alexeev-1.png": {
+    "file": "assets/alexeev-1-2fcea0ad.png",
+    "src": "resources/assets/employees/photos/alexeev-1.png"
+  },
+  "resources/assets/employees/photos/ashanina-1.png": {
+    "file": "assets/ashanina-1-a657d55e.png",
+    "src": "resources/assets/employees/photos/ashanina-1.png"
+  },
+  "resources/assets/employees/photos/ashanina-2.png": {
+    "file": "assets/ashanina-2-45e248d9.png",
+    "src": "resources/assets/employees/photos/ashanina-2.png"
+  },
+  "resources/assets/employees/photos/baeva-1.png": {
+    "file": "assets/baeva-1-f080db53.png",
+    "src": "resources/assets/employees/photos/baeva-1.png"
+  },
+  "resources/assets/employees/photos/baeva-2.png": {
+    "file": "assets/baeva-2-b74c7a3c.png",
+    "src": "resources/assets/employees/photos/baeva-2.png"
+  },
+  "resources/assets/employees/photos/baevaS-1.png": {
+    "file": "assets/baevaS-1-bfe5e4bb.png",
+    "src": "resources/assets/employees/photos/baevaS-1.png"
+  },
+  "resources/assets/employees/photos/baharev-1.png": {
+    "file": "assets/baharev-1-baee7880.png",
+    "src": "resources/assets/employees/photos/baharev-1.png"
+  },
+  "resources/assets/employees/photos/baklanova-1.png": {
+    "file": "assets/baklanova-1-a74f5261.png",
+    "src": "resources/assets/employees/photos/baklanova-1.png"
+  },
+  "resources/assets/employees/photos/bankova-1.png": {
+    "file": "assets/bankova-1-f42c9c49.png",
+    "src": "resources/assets/employees/photos/bankova-1.png"
+  },
+  "resources/assets/employees/photos/bankova-2.png": {
+    "file": "assets/bankova-2-2830e314.png",
+    "src": "resources/assets/employees/photos/bankova-2.png"
+  },
+  "resources/assets/employees/photos/barkalova-1.png": {
+    "file": "assets/barkalova-1-0e0c624f.png",
+    "src": "resources/assets/employees/photos/barkalova-1.png"
+  },
+  "resources/assets/employees/photos/barkalova-2.png": {
+    "file": "assets/barkalova-2-6b21b0a6.png",
+    "src": "resources/assets/employees/photos/barkalova-2.png"
+  },
+  "resources/assets/employees/photos/barkalovaA-1.png": {
+    "file": "assets/barkalovaA-1-7fa3cb32.png",
+    "src": "resources/assets/employees/photos/barkalovaA-1.png"
+  },
+  "resources/assets/employees/photos/barkalovaA-2.png": {
+    "file": "assets/barkalovaA-2-5379f8d7.png",
+    "src": "resources/assets/employees/photos/barkalovaA-2.png"
+  },
+  "resources/assets/employees/photos/belanova-1.png": {
+    "file": "assets/belanova-1-7b7cda9f.png",
+    "src": "resources/assets/employees/photos/belanova-1.png"
+  },
+  "resources/assets/employees/photos/belanova-2.png": {
+    "file": "assets/belanova-2-d72c6ca9.png",
+    "src": "resources/assets/employees/photos/belanova-2.png"
+  },
+  "resources/assets/employees/photos/bobyr-1.png": {
+    "file": "assets/bobyr-1-151e4b79.png",
+    "src": "resources/assets/employees/photos/bobyr-1.png"
+  },
+  "resources/assets/employees/photos/bobyr-2.png": {
+    "file": "assets/bobyr-2-270a519f.png",
+    "src": "resources/assets/employees/photos/bobyr-2.png"
+  },
+  "resources/assets/employees/photos/bondarenko-1.png": {
+    "file": "assets/bondarenko-1-fdda701e.png",
+    "src": "resources/assets/employees/photos/bondarenko-1.png"
+  },
+  "resources/assets/employees/photos/bulyjnaya-1.png": {
+    "file": "assets/bulyjnaya-1-0ac1365c.png",
+    "src": "resources/assets/employees/photos/bulyjnaya-1.png"
+  },
+  "resources/assets/employees/photos/bumajenko-1.png": {
+    "file": "assets/bumajenko-1-034bde47.png",
+    "src": "resources/assets/employees/photos/bumajenko-1.png"
+  },
+  "resources/assets/employees/photos/bystrushkina-1.png": {
+    "file": "assets/bystrushkina-1-e336d750.png",
+    "src": "resources/assets/employees/photos/bystrushkina-1.png"
+  },
+  "resources/assets/employees/photos/cheldieva-1.png": {
+    "file": "assets/cheldieva-1-52a000c0.png",
+    "src": "resources/assets/employees/photos/cheldieva-1.png"
+  },
+  "resources/assets/employees/photos/cheldieva-2.png": {
+    "file": "assets/cheldieva-2-93e8406c.png",
+    "src": "resources/assets/employees/photos/cheldieva-2.png"
+  },
+  "resources/assets/employees/photos/chelnokov-1.png": {
+    "file": "assets/chelnokov-1-3058e7f7.png",
+    "src": "resources/assets/employees/photos/chelnokov-1.png"
+  },
+  "resources/assets/employees/photos/chelnokov-2.png": {
+    "file": "assets/chelnokov-2-71a974f7.png",
+    "src": "resources/assets/employees/photos/chelnokov-2.png"
+  },
+  "resources/assets/employees/photos/chepurnaya-1.png": {
+    "file": "assets/chepurnaya-1-944bf636.png",
+    "src": "resources/assets/employees/photos/chepurnaya-1.png"
+  },
+  "resources/assets/employees/photos/danilova-1.png": {
+    "file": "assets/danilova-1-dfb2e11f.png",
+    "src": "resources/assets/employees/photos/danilova-1.png"
+  },
+  "resources/assets/employees/photos/davidenko-1.png": {
+    "file": "assets/davidenko-1-578973e3.png",
+    "src": "resources/assets/employees/photos/davidenko-1.png"
+  },
+  "resources/assets/employees/photos/dolozova-1.png": {
+    "file": "assets/dolozova-1-d245016c.png",
+    "src": "resources/assets/employees/photos/dolozova-1.png"
+  },
+  "resources/assets/employees/photos/domkovskaya-1.png": {
+    "file": "assets/domkovskaya-1-4e7e3b55.png",
+    "src": "resources/assets/employees/photos/domkovskaya-1.png"
+  },
+  "resources/assets/employees/photos/domkovskaya-2.png": {
+    "file": "assets/domkovskaya-2-95023018.png",
+    "src": "resources/assets/employees/photos/domkovskaya-2.png"
+  },
+  "resources/assets/employees/photos/doronina-1.png": {
+    "file": "assets/doronina-1-496d6283.png",
+    "src": "resources/assets/employees/photos/doronina-1.png"
+  },
+  "resources/assets/employees/photos/doronina-2.png": {
+    "file": "assets/doronina-2-0a4c3191.png",
+    "src": "resources/assets/employees/photos/doronina-2.png"
+  },
+  "resources/assets/employees/photos/dyachenkova-1.png": {
+    "file": "assets/dyachenkova-1-00ab9752.png",
+    "src": "resources/assets/employees/photos/dyachenkova-1.png"
+  },
+  "resources/assets/employees/photos/fokina-1.png": {
+    "file": "assets/fokina-1-e82451ed.png",
+    "src": "resources/assets/employees/photos/fokina-1.png"
+  },
+  "resources/assets/employees/photos/fokina-2.png": {
+    "file": "assets/fokina-2-9995aba0.png",
+    "src": "resources/assets/employees/photos/fokina-2.png"
+  },
+  "resources/assets/employees/photos/frolov-1.png": {
+    "file": "assets/frolov-1-9abcc3b3.png",
+    "src": "resources/assets/employees/photos/frolov-1.png"
+  },
+  "resources/assets/employees/photos/gavrish-1.png": {
+    "file": "assets/gavrish-1-afc10f7e.png",
+    "src": "resources/assets/employees/photos/gavrish-1.png"
+  },
+  "resources/assets/employees/photos/gavrish-2.png": {
+    "file": "assets/gavrish-2-1cb0a098.png",
+    "src": "resources/assets/employees/photos/gavrish-2.png"
+  },
+  "resources/assets/employees/photos/gerimovich-1.png": {
+    "file": "assets/gerimovich-1-7d44620d.png",
+    "src": "resources/assets/employees/photos/gerimovich-1.png"
+  },
+  "resources/assets/employees/photos/golofaeva-1.png": {
+    "file": "assets/golofaeva-1-b8dc1bc8.png",
+    "src": "resources/assets/employees/photos/golofaeva-1.png"
+  },
+  "resources/assets/employees/photos/grigorova-1.png": {
+    "file": "assets/grigorova-1-ca4eeba9.png",
+    "src": "resources/assets/employees/photos/grigorova-1.png"
+  },
+  "resources/assets/employees/photos/grohin-1.png": {
+    "file": "assets/grohin-1-3292f698.png",
+    "src": "resources/assets/employees/photos/grohin-1.png"
+  },
+  "resources/assets/employees/photos/grohin-2.png": {
+    "file": "assets/grohin-2-c952bfa3.png",
+    "src": "resources/assets/employees/photos/grohin-2.png"
+  },
+  "resources/assets/employees/photos/hamhoeva-1.png": {
+    "file": "assets/hamhoeva-1-866bf5f5.png",
+    "src": "resources/assets/employees/photos/hamhoeva-1.png"
+  },
+  "resources/assets/employees/photos/hohlyavin-1.png": {
+    "file": "assets/hohlyavin-1-c95cef4b.png",
+    "src": "resources/assets/employees/photos/hohlyavin-1.png"
+  },
+  "resources/assets/employees/photos/istomina-1.png": {
+    "file": "assets/istomina-1-bdc9feaa.png",
+    "src": "resources/assets/employees/photos/istomina-1.png"
+  },
+  "resources/assets/employees/photos/istomina-2.png": {
+    "file": "assets/istomina-2-35ec3327.png",
+    "src": "resources/assets/employees/photos/istomina-2.png"
+  },
+  "resources/assets/employees/photos/ivanova-1.png": {
+    "file": "assets/ivanova-1-ab33b702.png",
+    "src": "resources/assets/employees/photos/ivanova-1.png"
+  },
+  "resources/assets/employees/photos/kazura-1.png": {
+    "file": "assets/kazura-1-135081d3.png",
+    "src": "resources/assets/employees/photos/kazura-1.png"
+  },
+  "resources/assets/employees/photos/kazura-2.png": {
+    "file": "assets/kazura-2-aa0fa5d4.png",
+    "src": "resources/assets/employees/photos/kazura-2.png"
+  },
+  "resources/assets/employees/photos/kijakina-1.png": {
+    "file": "assets/kijakina-1-abb595ff.png",
+    "src": "resources/assets/employees/photos/kijakina-1.png"
+  },
+  "resources/assets/employees/photos/kochkin-1.png": {
+    "file": "assets/kochkin-1-e0d59bc8.png",
+    "src": "resources/assets/employees/photos/kochkin-1.png"
+  },
+  "resources/assets/employees/photos/kolokolova-1.png": {
+    "file": "assets/kolokolova-1-beb0e3b2.png",
+    "src": "resources/assets/employees/photos/kolokolova-1.png"
+  },
+  "resources/assets/employees/photos/kolokolova-2.png": {
+    "file": "assets/kolokolova-2-92ce1f1b.png",
+    "src": "resources/assets/employees/photos/kolokolova-2.png"
+  },
+  "resources/assets/employees/photos/korotkih-1.png": {
+    "file": "assets/korotkih-1-6f9f8a82.png",
+    "src": "resources/assets/employees/photos/korotkih-1.png"
+  },
+  "resources/assets/employees/photos/korotkih-2.png": {
+    "file": "assets/korotkih-2-c0ba7266.png",
+    "src": "resources/assets/employees/photos/korotkih-2.png"
+  },
+  "resources/assets/employees/photos/kovaleva-1.png": {
+    "file": "assets/kovaleva-1-d01a6ffd.png",
+    "src": "resources/assets/employees/photos/kovaleva-1.png"
+  },
+  "resources/assets/employees/photos/kovaleva-2.png": {
+    "file": "assets/kovaleva-2-bfb4f574.png",
+    "src": "resources/assets/employees/photos/kovaleva-2.png"
+  },
+  "resources/assets/employees/photos/kozlova-1.png": {
+    "file": "assets/kozlova-1-d25581e6.png",
+    "src": "resources/assets/employees/photos/kozlova-1.png"
+  },
+  "resources/assets/employees/photos/latonova-1.png": {
+    "file": "assets/latonova-1-6d21e50a.png",
+    "src": "resources/assets/employees/photos/latonova-1.png"
+  },
+  "resources/assets/employees/photos/latonova-2.png": {
+    "file": "assets/latonova-2-516c91af.png",
+    "src": "resources/assets/employees/photos/latonova-2.png"
+  },
+  "resources/assets/employees/photos/litvienko-1.png": {
+    "file": "assets/litvienko-1-077ec215.png",
+    "src": "resources/assets/employees/photos/litvienko-1.png"
+  },
+  "resources/assets/employees/photos/litvienko-2.png": {
+    "file": "assets/litvienko-2-e6180658.png",
+    "src": "resources/assets/employees/photos/litvienko-2.png"
+  },
+  "resources/assets/employees/photos/malikov-1.png": {
+    "file": "assets/malikov-1-d100c016.png",
+    "src": "resources/assets/employees/photos/malikov-1.png"
+  },
+  "resources/assets/employees/photos/malikova-1.png": {
+    "file": "assets/malikova-1-e7ad8e44.png",
+    "src": "resources/assets/employees/photos/malikova-1.png"
+  },
+  "resources/assets/employees/photos/mironov-1.png": {
+    "file": "assets/mironov-1-14604c99.png",
+    "src": "resources/assets/employees/photos/mironov-1.png"
+  },
+  "resources/assets/employees/photos/mironov-2.png": {
+    "file": "assets/mironov-2-8efe6d91.png",
+    "src": "resources/assets/employees/photos/mironov-2.png"
+  },
+  "resources/assets/employees/photos/nigai-1.png": {
+    "file": "assets/nigai-1-f136473e.png",
+    "src": "resources/assets/employees/photos/nigai-1.png"
+  },
+  "resources/assets/employees/photos/ostanina-1.png": {
+    "file": "assets/ostanina-1-9f600293.png",
+    "src": "resources/assets/employees/photos/ostanina-1.png"
+  },
+  "resources/assets/employees/photos/ovchinnikov-1.png": {
+    "file": "assets/ovchinnikov-1-9006a5f6.png",
+    "src": "resources/assets/employees/photos/ovchinnikov-1.png"
+  },
+  "resources/assets/employees/photos/parfenova-1.png": {
+    "file": "assets/parfenova-1-d63db818.png",
+    "src": "resources/assets/employees/photos/parfenova-1.png"
+  },
+  "resources/assets/employees/photos/parfenova-2.png": {
+    "file": "assets/parfenova-2-ee99b7fd.png",
+    "src": "resources/assets/employees/photos/parfenova-2.png"
+  },
+  "resources/assets/employees/photos/pecherskaya-1.png": {
+    "file": "assets/pecherskaya-1-b3e2fe24.png",
+    "src": "resources/assets/employees/photos/pecherskaya-1.png"
+  },
+  "resources/assets/employees/photos/pecherskaya-2.png": {
+    "file": "assets/pecherskaya-2-96fcd6b9.png",
+    "src": "resources/assets/employees/photos/pecherskaya-2.png"
+  },
+  "resources/assets/employees/photos/petrov-1.png": {
+    "file": "assets/petrov-1-8b136d06.png",
+    "src": "resources/assets/employees/photos/petrov-1.png"
+  },
+  "resources/assets/employees/photos/petrov-2.png": {
+    "file": "assets/petrov-2-c6879f92.png",
+    "src": "resources/assets/employees/photos/petrov-2.png"
+  },
+  "resources/assets/employees/photos/piankova-1.png": {
+    "file": "assets/piankova-1-37e25bfa.png",
+    "src": "resources/assets/employees/photos/piankova-1.png"
+  },
+  "resources/assets/employees/photos/piankova-2.png": {
+    "file": "assets/piankova-2-0040dbaa.png",
+    "src": "resources/assets/employees/photos/piankova-2.png"
+  },
+  "resources/assets/employees/photos/plachinta-1.png": {
+    "file": "assets/plachinta-1-734ddece.png",
+    "src": "resources/assets/employees/photos/plachinta-1.png"
+  },
+  "resources/assets/employees/photos/plachinta-2.png": {
+    "file": "assets/plachinta-2-ac17c42b.png",
+    "src": "resources/assets/employees/photos/plachinta-2.png"
+  },
+  "resources/assets/employees/photos/plushikova-1.png": {
+    "file": "assets/plushikova-1-38311313.png",
+    "src": "resources/assets/employees/photos/plushikova-1.png"
+  },
+  "resources/assets/employees/photos/podkorytova-1.png": {
+    "file": "assets/podkorytova-1-03c77d42.png",
+    "src": "resources/assets/employees/photos/podkorytova-1.png"
+  },
+  "resources/assets/employees/photos/podkorytova-2.png": {
+    "file": "assets/podkorytova-2-49954edc.png",
+    "src": "resources/assets/employees/photos/podkorytova-2.png"
+  },
+  "resources/assets/employees/photos/polikarpova-1.png": {
+    "file": "assets/polikarpova-1-76ff600e.png",
+    "src": "resources/assets/employees/photos/polikarpova-1.png"
+  },
+  "resources/assets/employees/photos/polikarpova-2.png": {
+    "file": "assets/polikarpova-2-50c2ce4a.png",
+    "src": "resources/assets/employees/photos/polikarpova-2.png"
+  },
+  "resources/assets/employees/photos/poltavskaiya-1.png": {
+    "file": "assets/poltavskaiya-1-9c62931b.png",
+    "src": "resources/assets/employees/photos/poltavskaiya-1.png"
+  },
+  "resources/assets/employees/photos/poltavskaya-2.png": {
+    "file": "assets/poltavskaya-2-10a22973.png",
+    "src": "resources/assets/employees/photos/poltavskaya-2.png"
+  },
+  "resources/assets/employees/photos/prokinov-1.png": {
+    "file": "assets/prokinov-1-eeed84c9.png",
+    "src": "resources/assets/employees/photos/prokinov-1.png"
+  },
+  "resources/assets/employees/photos/prokinov-2.png": {
+    "file": "assets/prokinov-2-59b27366.png",
+    "src": "resources/assets/employees/photos/prokinov-2.png"
+  },
+  "resources/assets/employees/photos/proshina-1.png": {
+    "file": "assets/proshina-1-d833f110.png",
+    "src": "resources/assets/employees/photos/proshina-1.png"
+  },
+  "resources/assets/employees/photos/pyregova-1.png": {
+    "file": "assets/pyregova-1-d63b2f51.png",
+    "src": "resources/assets/employees/photos/pyregova-1.png"
+  },
+  "resources/assets/employees/photos/selutina-1.png": {
+    "file": "assets/selutina-1-3cfc774d.png",
+    "src": "resources/assets/employees/photos/selutina-1.png"
+  },
+  "resources/assets/employees/photos/shabarchina-1.png": {
+    "file": "assets/shabarchina-1-b617f4e2.png",
+    "src": "resources/assets/employees/photos/shabarchina-1.png"
+  },
+  "resources/assets/employees/photos/shenk-1.png": {
+    "file": "assets/shenk-1-a25f8470.png",
+    "src": "resources/assets/employees/photos/shenk-1.png"
+  },
+  "resources/assets/employees/photos/shenk-2.png": {
+    "file": "assets/shenk-2-102d0321.png",
+    "src": "resources/assets/employees/photos/shenk-2.png"
+  },
+  "resources/assets/employees/photos/shishigina-1.png": {
+    "file": "assets/shishigina-1-98cc64ba.png",
+    "src": "resources/assets/employees/photos/shishigina-1.png"
+  },
+  "resources/assets/employees/photos/shishigina-2.png": {
+    "file": "assets/shishigina-2-5ea8eec7.png",
+    "src": "resources/assets/employees/photos/shishigina-2.png"
+  },
+  "resources/assets/employees/photos/shkolniyi-1.png": {
+    "file": "assets/shkolniyi-1-67be89bf.png",
+    "src": "resources/assets/employees/photos/shkolniyi-1.png"
+  },
+  "resources/assets/employees/photos/soloveva-1.png": {
+    "file": "assets/soloveva-1-a40c489a.png",
+    "src": "resources/assets/employees/photos/soloveva-1.png"
+  },
+  "resources/assets/employees/photos/starkov-1.png": {
+    "file": "assets/starkov-1-67b59d0a.png",
+    "src": "resources/assets/employees/photos/starkov-1.png"
+  },
+  "resources/assets/employees/photos/stavskii-1.png": {
+    "file": "assets/stavskii-1-55e28479.png",
+    "src": "resources/assets/employees/photos/stavskii-1.png"
+  },
+  "resources/assets/employees/photos/stavskii-2.png": {
+    "file": "assets/stavskii-2-15a5388e.png",
+    "src": "resources/assets/employees/photos/stavskii-2.png"
+  },
+  "resources/assets/employees/photos/stochenko-1.png": {
+    "file": "assets/stochenko-1-a420aaf9.png",
+    "src": "resources/assets/employees/photos/stochenko-1.png"
+  },
+  "resources/assets/employees/photos/sybotin-1.png": {
+    "file": "assets/sybotin-1-1b84d0bc.png",
+    "src": "resources/assets/employees/photos/sybotin-1.png"
+  },
+  "resources/assets/employees/photos/sybotina-1.png": {
+    "file": "assets/sybotina-1-910472b0.png",
+    "src": "resources/assets/employees/photos/sybotina-1.png"
+  },
+  "resources/assets/employees/photos/sybotina-2.png": {
+    "file": "assets/sybotina-2-99922868.png",
+    "src": "resources/assets/employees/photos/sybotina-2.png"
+  },
+  "resources/assets/employees/photos/syhostavskii-1.png": {
+    "file": "assets/syhostavskii-1-c8da001c.png",
+    "src": "resources/assets/employees/photos/syhostavskii-1.png"
+  },
+  "resources/assets/employees/photos/syhostavskii-2.png": {
+    "file": "assets/syhostavskii-2-d48b5024.png",
+    "src": "resources/assets/employees/photos/syhostavskii-2.png"
+  },
+  "resources/assets/employees/photos/synyakina-1.png": {
+    "file": "assets/synyakina-1-76d3b869.png",
+    "src": "resources/assets/employees/photos/synyakina-1.png"
+  },
+  "resources/assets/employees/photos/synyakina-2.png": {
+    "file": "assets/synyakina-2-c82b6a3f.png",
+    "src": "resources/assets/employees/photos/synyakina-2.png"
+  },
+  "resources/assets/employees/photos/tabolina-1.png": {
+    "file": "assets/tabolina-1-d2a0c91d.png",
+    "src": "resources/assets/employees/photos/tabolina-1.png"
+  },
+  "resources/assets/employees/photos/tolkacheva-1.png": {
+    "file": "assets/tolkacheva-1-07c807c3.png",
+    "src": "resources/assets/employees/photos/tolkacheva-1.png"
+  },
+  "resources/assets/employees/photos/tolstuhin-1.png": {
+    "file": "assets/tolstuhin-1-698fe015.png",
+    "src": "resources/assets/employees/photos/tolstuhin-1.png"
+  },
+  "resources/assets/employees/photos/tolstuhin-2.png": {
+    "file": "assets/tolstuhin-2-63930bd9.png",
+    "src": "resources/assets/employees/photos/tolstuhin-2.png"
+  },
+  "resources/assets/employees/photos/truhanova-1.png": {
+    "file": "assets/truhanova-1-ae27e43e.png",
+    "src": "resources/assets/employees/photos/truhanova-1.png"
+  },
+  "resources/assets/employees/photos/tugarinova-1.png": {
+    "file": "assets/tugarinova-1-6c7e4f60.png",
+    "src": "resources/assets/employees/photos/tugarinova-1.png"
+  },
+  "resources/assets/employees/photos/urban-1.png": {
+    "file": "assets/urban-1-3d3f37b1.png",
+    "src": "resources/assets/employees/photos/urban-1.png"
+  },
+  "resources/assets/employees/photos/velenskaya-1.png": {
+    "file": "assets/velenskaya-1-7244b9ab.png",
+    "src": "resources/assets/employees/photos/velenskaya-1.png"
+  },
+  "resources/assets/employees/photos/verner-1.png": {
+    "file": "assets/verner-1-9d1d2c79.png",
+    "src": "resources/assets/employees/photos/verner-1.png"
+  },
+  "resources/assets/employees/photos/zerkevich-1.png": {
+    "file": "assets/zerkevich-1-3c51221e.png",
+    "src": "resources/assets/employees/photos/zerkevich-1.png"
+  },
+  "resources/assets/estate-info/ceilings.svg": {
+    "file": "assets/ceilings-a6bba952.svg",
+    "src": "resources/assets/estate-info/ceilings.svg"
+  },
+  "resources/assets/estate-info/corpuses.svg": {
+    "file": "assets/corpuses-071ca35e.svg",
+    "src": "resources/assets/estate-info/corpuses.svg"
+  },
+  "resources/assets/estate-info/elevators.svg": {
+    "file": "assets/elevators-887441e8.svg",
+    "src": "resources/assets/estate-info/elevators.svg"
+  },
+  "resources/assets/estate-info/floors.svg": {
+    "file": "assets/floors-3731bcff.svg",
+    "src": "resources/assets/estate-info/floors.svg"
+  },
+  "resources/assets/estate-info/parking.svg": {
+    "file": "assets/parking-c45e1c32.svg",
+    "src": "resources/assets/estate-info/parking.svg"
+  },
+  "resources/assets/estate-info/walls.svg": {
+    "file": "assets/walls-93b1bb72.svg",
+    "src": "resources/assets/estate-info/walls.svg"
+  },
+  "resources/assets/like.svg": {
+    "file": "assets/like-d0e71595.svg",
+    "src": "resources/assets/like.svg"
+  },
+  "resources/assets/loader.png": {
+    "file": "assets/loader-6debc0f1.png",
+    "src": "resources/assets/loader.png"
+  },
+  "resources/assets/maincard.svg": {
+    "file": "assets/maincard-a79eee2a.svg",
+    "src": "resources/assets/maincard.svg"
+  },
+  "resources/assets/map.svg": {
+    "file": "assets/map-d125caca.svg",
+    "src": "resources/assets/map.svg"
+  },
+  "resources/assets/mapbg.png": {
+    "file": "assets/mapbg-4c4b4dc8.png",
+    "src": "resources/assets/mapbg.png"
+  },
+  "resources/assets/metro/metro-blue.svg": {
+    "file": "assets/metro-blue-06a5818e.svg",
+    "src": "resources/assets/metro/metro-blue.svg"
+  },
+  "resources/assets/metro/metro-green.svg": {
+    "file": "assets/metro-green-68c0918a.svg",
+    "src": "resources/assets/metro/metro-green.svg"
+  },
+  "resources/assets/metro/metro-orange.svg": {
+    "file": "assets/metro-orange-30a54d7a.svg",
+    "src": "resources/assets/metro/metro-orange.svg"
+  },
+  "resources/assets/metro/metro-red.svg": {
+    "file": "assets/metro-red-4566fc19.svg",
+    "src": "resources/assets/metro/metro-red.svg"
+  },
+  "resources/assets/metro/metro-viollet.svg": {
+    "file": "assets/metro-viollet-fcb6789b.svg",
+    "src": "resources/assets/metro/metro-viollet.svg"
+  },
+  "resources/assets/metro/metro-yellow.svg": {
+    "file": "assets/metro-yellow-af305e3b.svg",
+    "src": "resources/assets/metro/metro-yellow.svg"
+  },
+  "resources/assets/mortgage/calendar.svg": {
+    "file": "assets/calendar-5f7ff04a.svg",
+    "src": "resources/assets/mortgage/calendar.svg"
+  },
+  "resources/assets/mortgage/house.svg": {
+    "file": "assets/house-097b5649.svg",
+    "src": "resources/assets/mortgage/house.svg"
+  },
+  "resources/assets/mortgage/info.svg": {
+    "file": "assets/info-a260941f.svg",
+    "src": "resources/assets/mortgage/info.svg"
+  },
+  "resources/assets/mortgage/wallet.svg": {
+    "file": "assets/wallet-eb6ef623.svg",
+    "src": "resources/assets/mortgage/wallet.svg"
+  },
+  "resources/assets/navigation.svg": {
+    "file": "assets/navigation-98855a0d.svg",
+    "src": "resources/assets/navigation.svg"
+  },
+  "resources/assets/partners/novosibirsk/image-17-1.png": {
+    "file": "assets/image-17-1-33196e1b.png",
+    "src": "resources/assets/partners/novosibirsk/image-17-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-17.png": {
+    "file": "assets/image-17-8e002c5d.png",
+    "src": "resources/assets/partners/novosibirsk/image-17.png"
+  },
+  "resources/assets/partners/novosibirsk/image-18-1.png": {
+    "file": "assets/image-18-1-6434fd80.png",
+    "src": "resources/assets/partners/novosibirsk/image-18-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-18.png": {
+    "file": "assets/image-18-47fa4d2d.png",
+    "src": "resources/assets/partners/novosibirsk/image-18.png"
+  },
+  "resources/assets/partners/novosibirsk/image-19-1.png": {
+    "file": "assets/image-19-1-c74121e6.png",
+    "src": "resources/assets/partners/novosibirsk/image-19-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-19.png": {
+    "file": "assets/image-19-5879f9e9.png",
+    "src": "resources/assets/partners/novosibirsk/image-19.png"
+  },
+  "resources/assets/partners/novosibirsk/image-21-1.png": {
+    "file": "assets/image-21-1-6385edd1.png",
+    "src": "resources/assets/partners/novosibirsk/image-21-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-21.png": {
+    "file": "assets/image-21-b6559b93.png",
+    "src": "resources/assets/partners/novosibirsk/image-21.png"
+  },
+  "resources/assets/partners/novosibirsk/image-22-1.png": {
+    "file": "assets/image-22-1-03c48e85.png",
+    "src": "resources/assets/partners/novosibirsk/image-22-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-22.png": {
+    "file": "assets/image-22-0acaf542.png",
+    "src": "resources/assets/partners/novosibirsk/image-22.png"
+  },
+  "resources/assets/partners/novosibirsk/image-23-1.png": {
+    "file": "assets/image-23-1-c2115cea.png",
+    "src": "resources/assets/partners/novosibirsk/image-23-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-23.png": {
+    "file": "assets/image-23-dcb23e7f.png",
+    "src": "resources/assets/partners/novosibirsk/image-23.png"
+  },
+  "resources/assets/partners/novosibirsk/image-24-1.png": {
+    "file": "assets/image-24-1-643ec36d.png",
+    "src": "resources/assets/partners/novosibirsk/image-24-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-24.png": {
+    "file": "assets/image-24-7f10c068.png",
+    "src": "resources/assets/partners/novosibirsk/image-24.png"
+  },
+  "resources/assets/partners/novosibirsk/image-25-1.png": {
+    "file": "assets/image-25-1-2ff1104c.png",
+    "src": "resources/assets/partners/novosibirsk/image-25-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-25.png": {
+    "file": "assets/image-25-4a47cf69.png",
+    "src": "resources/assets/partners/novosibirsk/image-25.png"
+  },
+  "resources/assets/partners/novosibirsk/image-26-1.png": {
+    "file": "assets/image-26-1-a0d28f84.png",
+    "src": "resources/assets/partners/novosibirsk/image-26-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-26.png": {
+    "file": "assets/image-26-53bce7a5.png",
+    "src": "resources/assets/partners/novosibirsk/image-26.png"
+  },
+  "resources/assets/partners/novosibirsk/image-27-1.png": {
+    "file": "assets/image-27-1-70cce284.png",
+    "src": "resources/assets/partners/novosibirsk/image-27-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-27.png": {
+    "file": "assets/image-27-166ce420.png",
+    "src": "resources/assets/partners/novosibirsk/image-27.png"
+  },
+  "resources/assets/partners/novosibirsk/image-28-1.png": {
+    "file": "assets/image-28-1-6dfe66fe.png",
+    "src": "resources/assets/partners/novosibirsk/image-28-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-28.png": {
+    "file": "assets/image-28-4e7eca2b.png",
+    "src": "resources/assets/partners/novosibirsk/image-28.png"
+  },
+  "resources/assets/partners/novosibirsk/image-29-1.png": {
+    "file": "assets/image-29-1-75c482ad.png",
+    "src": "resources/assets/partners/novosibirsk/image-29-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-29.png": {
+    "file": "assets/image-29-c265488a.png",
+    "src": "resources/assets/partners/novosibirsk/image-29.png"
+  },
+  "resources/assets/partners/novosibirsk/image-30-1.png": {
+    "file": "assets/image-30-1-c01251d2.png",
+    "src": "resources/assets/partners/novosibirsk/image-30-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-30.png": {
+    "file": "assets/image-30-fddb654f.png",
+    "src": "resources/assets/partners/novosibirsk/image-30.png"
+  },
+  "resources/assets/partners/novosibirsk/image-31-1.png": {
+    "file": "assets/image-31-1-671078d5.png",
+    "src": "resources/assets/partners/novosibirsk/image-31-1.png"
+  },
+  "resources/assets/partners/novosibirsk/image-31.png": {
+    "file": "assets/image-31-c7c1c031.png",
+    "src": "resources/assets/partners/novosibirsk/image-31.png"
+  },
+  "resources/assets/partners/st-petersburg/image-32-1.png": {
+    "file": "assets/image-32-1-cbac5a71.png",
+    "src": "resources/assets/partners/st-petersburg/image-32-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-32.png": {
+    "file": "assets/image-32-cccc4200.png",
+    "src": "resources/assets/partners/st-petersburg/image-32.png"
+  },
+  "resources/assets/partners/st-petersburg/image-33-1.png": {
+    "file": "assets/image-33-1-9840a0e4.png",
+    "src": "resources/assets/partners/st-petersburg/image-33-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-33.png": {
+    "file": "assets/image-33-4ff14f0f.png",
+    "src": "resources/assets/partners/st-petersburg/image-33.png"
+  },
+  "resources/assets/partners/st-petersburg/image-34-1.png": {
+    "file": "assets/image-34-1-3d118124.png",
+    "src": "resources/assets/partners/st-petersburg/image-34-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-34.png": {
+    "file": "assets/image-34-e7b86069.png",
+    "src": "resources/assets/partners/st-petersburg/image-34.png"
+  },
+  "resources/assets/partners/st-petersburg/image-35-1.png": {
+    "file": "assets/image-35-1-c4d0558a.png",
+    "src": "resources/assets/partners/st-petersburg/image-35-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-35.png": {
+    "file": "assets/image-35-0f6654da.png",
+    "src": "resources/assets/partners/st-petersburg/image-35.png"
+  },
+  "resources/assets/partners/st-petersburg/image-36-1.png": {
+    "file": "assets/image-36-1-72c7b2d8.png",
+    "src": "resources/assets/partners/st-petersburg/image-36-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-36.png": {
+    "file": "assets/image-36-aa7dceaf.png",
+    "src": "resources/assets/partners/st-petersburg/image-36.png"
+  },
+  "resources/assets/partners/st-petersburg/image-37-1.png": {
+    "file": "assets/image-37-1-bd0687a0.png",
+    "src": "resources/assets/partners/st-petersburg/image-37-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-37.png": {
+    "file": "assets/image-37-5ec1dc65.png",
+    "src": "resources/assets/partners/st-petersburg/image-37.png"
+  },
+  "resources/assets/partners/st-petersburg/image-38-1.png": {
+    "file": "assets/image-38-1-70baf726.png",
+    "src": "resources/assets/partners/st-petersburg/image-38-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-38.png": {
+    "file": "assets/image-38-14bd6dc3.png",
+    "src": "resources/assets/partners/st-petersburg/image-38.png"
+  },
+  "resources/assets/partners/st-petersburg/image-39-1.png": {
+    "file": "assets/image-39-1-2670b9e4.png",
+    "src": "resources/assets/partners/st-petersburg/image-39-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-39.png": {
+    "file": "assets/image-39-c48b2a40.png",
+    "src": "resources/assets/partners/st-petersburg/image-39.png"
+  },
+  "resources/assets/partners/st-petersburg/image-40-1.png": {
+    "file": "assets/image-40-1-f42dc4a3.png",
+    "src": "resources/assets/partners/st-petersburg/image-40-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-40.png": {
+    "file": "assets/image-40-d692619f.png",
+    "src": "resources/assets/partners/st-petersburg/image-40.png"
+  },
+  "resources/assets/partners/st-petersburg/image-41-1.png": {
+    "file": "assets/image-41-1-5b7308c6.png",
+    "src": "resources/assets/partners/st-petersburg/image-41-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-41.png": {
+    "file": "assets/image-41-4b6d0530.png",
+    "src": "resources/assets/partners/st-petersburg/image-41.png"
+  },
+  "resources/assets/partners/st-petersburg/image-42-1.png": {
+    "file": "assets/image-42-1-ba4d67c9.png",
+    "src": "resources/assets/partners/st-petersburg/image-42-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-42.png": {
+    "file": "assets/image-42-2a15e215.png",
+    "src": "resources/assets/partners/st-petersburg/image-42.png"
+  },
+  "resources/assets/partners/st-petersburg/image-43-1.png": {
+    "file": "assets/image-43-1-4d857444.png",
+    "src": "resources/assets/partners/st-petersburg/image-43-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-43.png": {
+    "file": "assets/image-43-036adefc.png",
+    "src": "resources/assets/partners/st-petersburg/image-43.png"
+  },
+  "resources/assets/partners/st-petersburg/image-44-1.png": {
+    "file": "assets/image-44-1-021888ba.png",
+    "src": "resources/assets/partners/st-petersburg/image-44-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-44.png": {
+    "file": "assets/image-44-fe705ecf.png",
+    "src": "resources/assets/partners/st-petersburg/image-44.png"
+  },
+  "resources/assets/partners/st-petersburg/image-45-1.png": {
+    "file": "assets/image-45-1-9c5b5da2.png",
+    "src": "resources/assets/partners/st-petersburg/image-45-1.png"
+  },
+  "resources/assets/partners/st-petersburg/image-45.png": {
+    "file": "assets/image-45-7aee05ef.png",
+    "src": "resources/assets/partners/st-petersburg/image-45.png"
+  },
+  "resources/assets/pdf.svg": {
+    "file": "assets/pdf-21af4b95.svg",
+    "src": "resources/assets/pdf.svg"
+  },
+  "resources/assets/people.svg": {
+    "file": "assets/people-6afb0117.svg",
+    "src": "resources/assets/people.svg"
+  },
+  "resources/assets/pictures/koshurnicova.png": {
+    "file": "assets/koshurnicova-ed8b6d3e.png",
+    "src": "resources/assets/pictures/koshurnicova.png"
+  },
+  "resources/assets/pictures/kovalchuk.png": {
+    "file": "assets/kovalchuk-4603ba73.png",
+    "src": "resources/assets/pictures/kovalchuk.png"
+  },
+  "resources/assets/pictures/parfenovskaya.png": {
+    "file": "assets/parfenovskaya-6a5a37da.png",
+    "src": "resources/assets/pictures/parfenovskaya.png"
+  },
+  "resources/assets/pictures/placeholder-10.png": {
+    "file": "assets/placeholder-10-902a0076.png",
+    "src": "resources/assets/pictures/placeholder-10.png"
+  },
+  "resources/assets/place-orange.svg": {
+    "file": "assets/place-orange-e8da5345.svg",
+    "src": "resources/assets/place-orange.svg"
+  },
+  "resources/assets/place.svg": {
+    "file": "assets/place-6c4694c6.svg",
+    "src": "resources/assets/place.svg"
+  },
+  "resources/assets/reservations/file.svg": {
+    "file": "assets/file-b7c76808.svg",
+    "src": "resources/assets/reservations/file.svg"
+  },
+  "resources/assets/reservations/relevant.svg": {
+    "file": "assets/relevant-f86a0a98.svg",
+    "src": "resources/assets/reservations/relevant.svg"
+  },
+  "resources/assets/reservations/request.svg": {
+    "file": "assets/request-7dc73605.svg",
+    "src": "resources/assets/reservations/request.svg"
+  },
+  "resources/assets/reservations/running-out.svg": {
+    "file": "assets/running-out-581bb396.svg",
+    "src": "resources/assets/reservations/running-out.svg"
+  },
+  "resources/assets/restore.svg": {
+    "file": "assets/restore-35852ffb.svg",
+    "src": "resources/assets/restore.svg"
+  },
+  "resources/assets/search/search-builder.svg": {
+    "file": "assets/search-builder-18ea2e40.svg",
+    "src": "resources/assets/search/search-builder.svg"
+  },
+  "resources/assets/search/search-building.svg": {
+    "file": "assets/search-building-59fa67ad.svg",
+    "src": "resources/assets/search/search-building.svg"
+  },
+  "resources/assets/search/search-location.svg": {
+    "file": "assets/search-location-f7df52f6.svg",
+    "src": "resources/assets/search/search-location.svg"
+  },
+  "resources/assets/search/search-metro.svg": {
+    "file": "assets/search-metro-a1d8dad9.svg",
+    "src": "resources/assets/search/search-metro.svg"
+  },
+  "resources/assets/search/search-street.svg": {
+    "file": "assets/search-street-c7386ff3.svg",
+    "src": "resources/assets/search/search-street.svg"
+  },
+  "resources/assets/site-logo.svg": {
+    "file": "assets/site-logo-e75ee657.svg",
+    "src": "resources/assets/site-logo.svg"
+  },
+  "resources/assets/social-media/link-transparent.svg": {
+    "file": "assets/link-transparent-1e3e4e47.svg",
+    "src": "resources/assets/social-media/link-transparent.svg"
+  },
+  "resources/assets/social-media/phone.svg": {
+    "file": "assets/phone-f3401db1.svg",
+    "src": "resources/assets/social-media/phone.svg"
+  },
+  "resources/assets/social-media/telegram-transparent.svg": {
+    "file": "assets/telegram-transparent-f2db6ff9.svg",
+    "src": "resources/assets/social-media/telegram-transparent.svg"
+  },
+  "resources/assets/social-media/telegram.svg": {
+    "file": "assets/telegram-ed2dceec.svg",
+    "src": "resources/assets/social-media/telegram.svg"
+  },
+  "resources/assets/social-media/whatsapp-transparent.svg": {
+    "file": "assets/whatsapp-transparent-f805ac55.svg",
+    "src": "resources/assets/social-media/whatsapp-transparent.svg"
+  },
+  "resources/assets/social-media/whatsapp.svg": {
+    "file": "assets/whatsapp-cb267147.svg",
+    "src": "resources/assets/social-media/whatsapp.svg"
+  },
+  "resources/assets/sorting-icon.svg": {
+    "file": "assets/sorting-icon-ff88c818.svg",
+    "src": "resources/assets/sorting-icon.svg"
+  },
+  "resources/assets/space.svg": {
+    "file": "assets/space-4ab293aa.svg",
+    "src": "resources/assets/space.svg"
+  },
+  "resources/assets/trash.svg": {
+    "file": "assets/trash-46f58ca0.svg",
+    "src": "resources/assets/trash.svg"
+  },
+  "resources/assets/trusted/base.svg": {
+    "file": "assets/base-c73e7851.svg",
+    "src": "resources/assets/trusted/base.svg"
+  },
+  "resources/assets/trusted/hand.svg": {
+    "file": "assets/hand-312ce109.svg",
+    "src": "resources/assets/trusted/hand.svg"
+  },
+  "resources/assets/trusted/people.svg": {
+    "file": "assets/people-4bf1f3f1.svg",
+    "src": "resources/assets/trusted/people.svg"
+  },
+  "resources/assets/trusted/phone.svg": {
+    "file": "assets/phone-ff9dae9a.svg",
+    "src": "resources/assets/trusted/phone.svg"
+  },
+  "resources/assets/trusted/success.svg": {
+    "file": "assets/success-6ef10aab.svg",
+    "src": "resources/assets/trusted/success.svg"
+  },
+  "resources/assets/trusted/target.svg": {
+    "file": "assets/target-d076739c.svg",
+    "src": "resources/assets/trusted/target.svg"
+  },
+  "resources/assets/waves.svg": {
+    "file": "assets/waves-1fead750.svg",
+    "src": "resources/assets/waves.svg"
+  },
+  "resources/css/animation.override.css": {
+    "file": "assets/animation.override-2bfb7e32.css",
+    "isEntry": true,
+    "src": "resources/css/animation.override.css"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-30022866.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/css/card.override.css": {
+    "file": "assets/card.override-49157f36.css",
+    "isEntry": true,
+    "src": "resources/css/card.override.css"
+  },
+  "resources/css/swiper.override.css": {
+    "file": "assets/swiper.override-1091dcc7.css",
+    "isEntry": true,
+    "src": "resources/css/swiper.override.css"
+  },
+  "resources/fonts/OnestBlack1602-hint.ttf": {
+    "file": "assets/OnestBlack1602-hint-dfd3ce6b.ttf",
+    "src": "resources/fonts/OnestBlack1602-hint.ttf"
+  },
+  "resources/fonts/OnestBold1602-hint.ttf": {
+    "file": "assets/OnestBold1602-hint-dff9e349.ttf",
+    "src": "resources/fonts/OnestBold1602-hint.ttf"
+  },
+  "resources/fonts/OnestExtraBold1602-hint.ttf": {
+    "file": "assets/OnestExtraBold1602-hint-b7314a87.ttf",
+    "src": "resources/fonts/OnestExtraBold1602-hint.ttf"
+  },
+  "resources/fonts/OnestLight1602-hint.ttf": {
+    "file": "assets/OnestLight1602-hint-6f923d5f.ttf",
+    "src": "resources/fonts/OnestLight1602-hint.ttf"
+  },
+  "resources/fonts/OnestMedium1602-hint.ttf": {
+    "file": "assets/OnestMedium1602-hint-e1823570.ttf",
+    "src": "resources/fonts/OnestMedium1602-hint.ttf"
+  },
+  "resources/fonts/OnestRegular1602-hint.ttf": {
+    "file": "assets/OnestRegular1602-hint-c45db982.ttf",
+    "src": "resources/fonts/OnestRegular1602-hint.ttf"
+  },
+  "resources/fonts/OnestThin1602-hint.ttf": {
+    "file": "assets/OnestThin1602-hint-9ebd3702.ttf",
+    "src": "resources/fonts/OnestThin1602-hint.ttf"
+  },
+  "resources/js/aboutUs/aboutUs.js": {
+    "file": "assets/aboutUs-24ccb40e.js",
+    "imports": [
+      "_paginator-3d74c680.js",
+      "_TabsGrid-2aad9bf8.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/aboutUs/aboutUs.js"
+  },
+  "resources/js/agent/client-list.js": {
+    "file": "assets/client-list-0ad92769.js",
+    "isEntry": true,
+    "src": "resources/js/agent/client-list.js"
+  },
+  "resources/js/agent/client-register.js": {
+    "file": "assets/client-register-91e670d3.js",
+    "isEntry": true,
+    "src": "resources/js/agent/client-register.js"
+  },
+  "resources/js/agent/compilations.js": {
+    "file": "assets/compilations-e8fda520.js",
+    "isEntry": true,
+    "src": "resources/js/agent/compilations.js"
+  },
+  "resources/js/agent/home-page.js": {
+    "file": "assets/home-page-781a39ec.js",
+    "isEntry": true,
+    "src": "resources/js/agent/home-page.js"
+  },
+  "resources/js/agent/residential-complex-search.js": {
+    "file": "assets/residential-complex-search-b8e6c76f.js",
+    "imports": [
+      "_getDataFromOption-f8a05e9b.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/agent/residential-complex-search.js"
+  },
+  "resources/js/anchorLink.js": {
+    "file": "assets/anchorLink-8a791639.js",
+    "isEntry": true,
+    "src": "resources/js/anchorLink.js"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-7e771aa1.js",
+    "imports": [
+      "_axios-1779699b.js",
+      "_menu-135c7b1f.js",
+      "_wasClickedOutside-18ded071.js",
+      "_CRMForm-b29a7dfb.js",
+      "_FileDownloader-3e7d4732.js",
+      "_name-7cec568d.js",
+      "_loadCityMap-a5833feb.js",
+      "resources/js/simpleRange.min.js",
+      "_isMobile-f1446475.js",
+      "_map-03f7a519.js",
+      "_sleep-9eff569f.js",
+      "_cookies-2118fce7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/catalogueFilters/filters.js": {
+    "file": "assets/filters-aaa5e05c.js",
+    "imports": [
+      "_ButtonsGrid-3639f438.js",
+      "_SearchBar-837acfd5.js",
+      "_CustomDropdownFilter-b5d48bec.js",
+      "_KitchenFromToDropdownFilter-89fe7d8c.js",
+      "_axios-1779699b.js",
+      "_paginator-3d74c680.js",
+      "_loadCityMap-a5833feb.js",
+      "_sleep-9eff569f.js",
+      "_getDataFromOption-f8a05e9b.js",
+      "_wasClickedOutside-18ded071.js",
+      "_colors-10675ae3.js",
+      "_cookies-2118fce7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/catalogueFilters/filters.js"
+  },
+  "resources/js/chat/chatLoader.js": {
+    "file": "assets/chatLoader-b6b862a1.js",
+    "imports": [
+      "_isMobile-f1446475.js",
+      "_axios-1779699b.js",
+      "_CRMForm-b29a7dfb.js",
+      "_name-7cec568d.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/chat/chatLoader.js"
+  },
+  "resources/js/coordinateStorage.js": {
+    "file": "assets/coordinateStorage-be6b4173.js",
+    "imports": [
+      "_map-03f7a519.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/coordinateStorage.js"
+  },
+  "resources/js/favorites/favorites.js": {
+    "file": "assets/favorites-137eaeff.js",
+    "imports": [
+      "_axios-1779699b.js",
+      "_sharePageMenu-adc27c4b.js",
+      "_sleep-9eff569f.js",
+      "_cookies-2118fce7.js",
+      "_map-03f7a519.js",
+      "_loadPlanCardButtons-079e20a2.js",
+      "_gallery-53fa48c7.js",
+      "resources/js/realEstate/chart.js",
+      "_menu-135c7b1f.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/favorites/favorites.js"
+  },
+  "resources/js/gallery/aboutLoader.js": {
+    "file": "assets/aboutLoader-b5f89c3a.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/aboutLoader.js"
+  },
+  "resources/js/gallery/buildingProgress.js": {
+    "file": "assets/buildingProgress-b1015acb.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/buildingProgress.js"
+  },
+  "resources/js/gallery/galleryLoader.js": {
+    "file": "assets/galleryLoader-6fccbed4.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/galleryLoader.js"
+  },
+  "resources/js/gallery/homePageCardsGallery.js": {
+    "file": "assets/homePageCardsGallery-810ea45d.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/homePageCardsGallery.js"
+  },
+  "resources/js/gallery/newsGallery.js": {
+    "file": "assets/newsGallery-a3610c7d.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/newsGallery.js"
+  },
+  "resources/js/gallery/plansLoader.js": {
+    "file": "assets/plansLoader-a1e7e6f9.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/plansLoader.js"
+  },
+  "resources/js/gallery/renovationGallery.js": {
+    "file": "assets/renovationGallery-fbef2451.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/renovationGallery.js"
+  },
+  "resources/js/gallery/reviewsLoader.js": {
+    "file": "assets/reviewsLoader-b604d0fa.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/gallery/reviewsLoader.js"
+  },
+  "resources/js/homePage/apartmentSuggestions.js": {
+    "file": "assets/apartmentSuggestions-e6d80458.js",
+    "imports": [
+      "_gallery-53fa48c7.js",
+      "_loadPlanCardButtons-079e20a2.js",
+      "_cookies-2118fce7.js",
+      "_axios-1779699b.js",
+      "_sharePageMenu-adc27c4b.js",
+      "resources/js/realEstate/chart.js",
+      "_menu-135c7b1f.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/homePage/apartmentSuggestions.js"
+  },
+  "resources/js/homePage/homePageFilters.js": {
+    "file": "assets/homePageFilters-2ed7fbd2.js",
+    "imports": [
+      "_ButtonsGrid-3639f438.js",
+      "_SearchBar-837acfd5.js",
+      "_CustomDropdownFilter-b5d48bec.js",
+      "_getDataFromOption-f8a05e9b.js",
+      "_wasClickedOutside-18ded071.js",
+      "_colors-10675ae3.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/homePage/homePageFilters.js"
+  },
+  "resources/js/homePage/howWeWork.js": {
+    "file": "assets/howWeWork-f2c6f28d.js",
+    "imports": [
+      "_gallery-53fa48c7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/homePage/howWeWork.js"
+  },
+  "resources/js/homePage/mortgageTimer.js": {
+    "file": "assets/mortgageTimer-bac1d0de.js",
+    "imports": [
+      "_axios-1779699b.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/homePage/mortgageTimer.js"
+  },
+  "resources/js/infrastructure/loader.js": {
+    "file": "assets/loader-e7e0eb9f.js",
+    "imports": [
+      "_colors-10675ae3.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/infrastructure/loader.js"
+  },
+  "resources/js/mortgage/mortgageCalculatorLoader.js": {
+    "file": "assets/mortgageCalculatorLoader-7054f4b3.js",
+    "imports": [
+      "_axios-1779699b.js",
+      "_TabsGrid-2aad9bf8.js",
+      "_CustomDropdownFilter-b5d48bec.js",
+      "_wasClickedOutside-18ded071.js",
+      "_colors-10675ae3.js",
+      "_getDataFromOption-f8a05e9b.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/mortgage/mortgageCalculatorLoader.js"
+  },
+  "resources/js/news/newsLoader.js": {
+    "file": "assets/newsLoader-5b3ba722.js",
+    "imports": [
+      "_axios-1779699b.js",
+      "_paginator-3d74c680.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/news/newsLoader.js"
+  },
+  "resources/js/nonScrollPage/loadNonScrollPage.js": {
+    "file": "assets/loadNonScrollPage-6aff65a7.js",
+    "isEntry": true,
+    "src": "resources/js/nonScrollPage/loadNonScrollPage.js"
+  },
+  "resources/js/nonScrollPage/makeFooterShorter.js": {
+    "file": "assets/makeFooterShorter-fa83d294.js",
+    "isEntry": true,
+    "src": "resources/js/nonScrollPage/makeFooterShorter.js"
+  },
+  "resources/js/offices/loader.js": {
+    "file": "assets/loader-d69f8449.js",
+    "imports": [
+      "_colors-10675ae3.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/offices/loader.js"
+  },
+  "resources/js/pdfExport/loadPresentationMap.js": {
+    "file": "assets/loadPresentationMap-880ebf5d.js",
+    "isEntry": true,
+    "src": "resources/js/pdfExport/loadPresentationMap.js"
+  },
+  "resources/js/plan/plan.js": {
+    "file": "assets/plan-e49781cd.js",
+    "imports": [
+      "_updateVisitedPages-7ad3c596.js",
+      "_sharePageMenu-adc27c4b.js",
+      "_loadPlanCardButtons-079e20a2.js",
+      "_axios-1779699b.js",
+      "_cookies-2118fce7.js",
+      "resources/js/realEstate/chart.js",
+      "_menu-135c7b1f.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/plan/plan.js"
+  },
+  "resources/js/profile/profile.js": {
+    "file": "assets/profile-762921b8.js",
+    "imports": [
+      "_axios-1779699b.js",
+      "_name-7cec568d.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/profile/profile.js"
+  },
+  "resources/js/pusher.js": {
+    "file": "assets/pusher-989379e1.js",
+    "isEntry": true,
+    "src": "resources/js/pusher.js"
+  },
+  "resources/js/quiz/loader.js": {
+    "file": "assets/loader-e18dba2f.js",
+    "imports": [
+      "_CRMForm-b29a7dfb.js",
+      "_name-7cec568d.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/quiz/loader.js"
+  },
+  "resources/js/realEstate/apartmentCardDropdowns.js": {
+    "file": "assets/apartmentCardDropdowns-17a5c557.js",
+    "imports": [
+      "_paginator-3d74c680.js",
+      "_TabsGrid-2aad9bf8.js",
+      "_loadPlanCardButtons-079e20a2.js",
+      "_cookies-2118fce7.js",
+      "_axios-1779699b.js",
+      "_sharePageMenu-adc27c4b.js",
+      "resources/js/realEstate/chart.js",
+      "_menu-135c7b1f.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/realEstate/apartmentCardDropdowns.js"
+  },
+  "resources/js/realEstate/chart.js": {
+    "file": "assets/chart-43d2a988.js",
+    "imports": [
+      "_menu-135c7b1f.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/realEstate/chart.js"
+  },
+  "resources/js/realEstate/downloadPresentation.js": {
+    "file": "assets/downloadPresentation-b28c89e6.js",
+    "imports": [
+      "_FileDownloader-3e7d4732.js",
+      "_axios-1779699b.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/realEstate/downloadPresentation.js"
+  },
+  "resources/js/realEstate/filters.js": {
+    "file": "assets/filters-a231f066.js",
+    "imports": [
+      "_ButtonsGrid-3639f438.js",
+      "_CustomDropdownFilter-b5d48bec.js",
+      "_KitchenFromToDropdownFilter-89fe7d8c.js",
+      "_axios-1779699b.js",
+      "resources/js/realEstate/apartmentCardDropdowns.js",
+      "_getDataFromOption-f8a05e9b.js",
+      "_wasClickedOutside-18ded071.js",
+      "_colors-10675ae3.js",
+      "_paginator-3d74c680.js",
+      "_TabsGrid-2aad9bf8.js",
+      "_loadPlanCardButtons-079e20a2.js",
+      "_cookies-2118fce7.js",
+      "_sharePageMenu-adc27c4b.js",
+      "resources/js/realEstate/chart.js",
+      "_menu-135c7b1f.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/realEstate/filters.js"
+  },
+  "resources/js/realEstate/realEstate.js": {
+    "file": "assets/realEstate-b22e10fd.js",
+    "imports": [
+      "_updateVisitedPages-7ad3c596.js",
+      "_sharePageMenu-adc27c4b.js",
+      "_axios-1779699b.js",
+      "_cookies-2118fce7.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/realEstate/realEstate.js"
+  },
+  "resources/js/realEstate/showMore.js": {
+    "file": "assets/showMore-f5142a01.js",
+    "isEntry": true,
+    "src": "resources/js/realEstate/showMore.js"
+  },
+  "resources/js/reservation/index.js": {
+    "file": "assets/index-f75e3ae9.js",
+    "isEntry": true,
+    "src": "resources/js/reservation/index.js"
+  },
+  "resources/js/reservation/request.js": {
+    "file": "assets/request-1a99c14b.js",
+    "imports": [
+      "_axios-1779699b.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/reservation/request.js"
+  },
+  "resources/js/simpleRange.min.js": {
+    "file": "assets/simpleRange.min-49332416.js",
+    "isEntry": true,
+    "src": "resources/js/simpleRange.min.js"
+  },
+  "resources/scss/pdf-styles.scss": {
+    "file": "assets/pdf-styles-e3dbc77d.css",
+    "isEntry": true,
+    "src": "resources/scss/pdf-styles.scss"
+  },
+  "resources/scss/styles.scss": {
+    "file": "assets/styles-402c5a6b.css",
+    "isEntry": true,
+    "src": "resources/scss/styles.scss"
+  }
+}

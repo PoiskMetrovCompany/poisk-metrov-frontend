@@ -1,0 +1,1 @@
+import{a}from"./axios-1779699b.js";import{v as r}from"./name-7cec568d.js";function i(){const e=document.getElementById("profile-form");e&&e.addEventListener("submit",async t=>{if(t.preventDefault(),!r(e))return;let o=new FormData(t.target);await a.post("/api/update-profile",o),window.location.reload()})}document.addEventListener("DOMContentLoaded",()=>i());

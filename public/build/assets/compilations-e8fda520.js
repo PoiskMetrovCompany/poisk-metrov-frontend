@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("compilation-type-buttons");document.getElementById("agent-selection-dropdown"),document.getElementById("client-status-dropdown"),t.onStatusChanged=e=>{}});

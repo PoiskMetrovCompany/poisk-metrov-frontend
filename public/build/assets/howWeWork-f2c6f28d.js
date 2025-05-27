@@ -1,0 +1,1 @@
+import{G as s}from"./gallery-53fa48c7.js";document.addEventListener("DOMContentLoaded",()=>{const e="aboutus-gallery",o="aboutus-gallery-buttons",t=document.querySelector(".how-work-gallery.work-base-container"),r=Array.from(t.querySelectorAll(".how-work-gallery.work-title"));new s(e,o,l=>{r.forEach((a,n)=>a.style.display=l==n?"block":"none")},"orange",!0)});
