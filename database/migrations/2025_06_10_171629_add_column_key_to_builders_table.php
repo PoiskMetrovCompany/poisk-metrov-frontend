@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('apartments', function (Blueprint $table) {
-            $table->uuid('key', 255)->after('offer_id')->nullable();
+        Schema::table('builders', function (Blueprint $table) {
+            $table->uuid('key', 255)->after('id')->nullable();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('apartments', function (Blueprint $table) {
+        Schema::table('builders', function (Blueprint $table) {
             $table->dropColumn('key');
         });
     }

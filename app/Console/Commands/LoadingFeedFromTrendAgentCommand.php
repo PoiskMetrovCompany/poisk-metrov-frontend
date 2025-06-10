@@ -33,7 +33,7 @@ class LoadingFeedFromTrendAgentCommand extends Command
     private function setCity(string $city): void {
         Session::put('city', $city);
         switch ($city) {
-            case 'Санкт Питербург':
+            case 'Санкт-Питербург':
                 Session::put('cityEng','st-petersburg');
                 break;
         }

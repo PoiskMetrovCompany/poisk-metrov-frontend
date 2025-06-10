@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
+use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
@@ -34,6 +35,7 @@ use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use App\Repositories\ApartmentRepository;
 use App\Repositories\ComplexRepository;
+use App\Repositories\FeedRepository;
 use App\Repositories\InteractionRepository;
 use App\Repositories\ManagerRepository;
 use App\Repositories\ReservationRepository;
@@ -232,6 +234,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ResidentialComplexRepositoryInterface::class, ResidentialComplexRepository::class);
     }
 
+    final public function registerFeedRepository()
+    {
+        $this->app->singleton(FeedRepositoryInterface::class, FeedRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -268,6 +275,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerComplexRepository();
         $this->registerUserAdsAgreementRepository();
         $this->registerResidentialComplexRepository();
+        $this->registerFeedRepository();
     }
 
     /**

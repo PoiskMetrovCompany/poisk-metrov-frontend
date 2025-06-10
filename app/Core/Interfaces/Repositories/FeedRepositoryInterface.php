@@ -7,11 +7,7 @@ namespace App\Core\Interfaces\Repositories;
  */
 interface FeedRepositoryInterface
 {
-    /**
-     * @param string $feedKey
-     * @return array
-     */
-    public function getFeedApartmentsData(string $feedKey): array;
+    public function getFeedApartmentsData(string $feedKey);
 
     public function store(array $attributes);
 //    public function update(?array $attributes): ?array;

@@ -82,6 +82,7 @@ abstract class AbstractHandler implements HandlerInterface
     {
         $file = Storage::disk('local')->get("temp_trendagent/" . Session::get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDER->value);
         $data = json_decode($file, true);
+
         return $this->findByKeySearch($data, $builderKey);
     }
 
