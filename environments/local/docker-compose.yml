@@ -1,0 +1,26 @@
+version: "3.8"
+
+networks:
+    app:
+        driver: bridge
+        driver_opts:
+            com.docker.network.driver.mtu: "1450"
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.25.0.0/24
+
+services:
+    mongodb:
+        container_name: ${NAME}_mongodb
+        hostname: ${NAME}_mongodb
+        ports:
+            - ${MONGO_PORT}:27017
+        image: mongo:4.2.6-bionic
+        environment:
+            - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+        networks:
+            app:
+                ipv4_address: 172.25.0.10
