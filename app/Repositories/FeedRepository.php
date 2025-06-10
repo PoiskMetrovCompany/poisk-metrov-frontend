@@ -9,6 +9,7 @@ use App\Models\Location;
 use App\Models\ResidentialComplex;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -67,10 +68,10 @@ final class FeedRepository implements FeedRepositoryInterface
             'name'                  => $attributes['apartments']['block_name'],
             'builder'               => $attributes['builder']['name'],
             'description'           => $attributes['detail']['description'],
-            'latitude'              => $attributes['detail']['geometry'][0],
-            'longitude'             => $attributes['detail']['geometry'][1],
-            'location_id'           => (Location::where(['capital' => 'Санкт-Петербург', 'district' => $attributes['region']['name']])->first())->id,
-            'address'               => $attributes['detail']['address'],
+            'latitude'              => $attributes['detail']['geometry']['coordinates'][0] ?? null,
+            'longitude'             => $attributes['detail']['geometry']['coordinates'][1] ?? null,
+            'location_id'           => 41, //(Location::where(['capital' => 'Санкт-Петербург', 'district' => $attributes['region']['name']])->first())->id,
+            'address'               => $attributes['detail']['address'][0] ?? null,
             'metro_station'         => $attributes['subway'][0]['name'],
             'metro_time'            => $attributes['subway'][0]['distance_time'],
             'metro_type'            => null,
@@ -92,13 +93,13 @@ final class FeedRepository implements FeedRepositoryInterface
     public function dataBuilderFormatter(array $attributes)
     {
         return [
-            'construction' => $attributes['builder']['name'],
+            'construction' =>  $attributes['apartments']['block_name'],
             'builder' => Str::slug($attributes['builder']['name']),
-            'city' => Session::get('cityEng')
+            'city' => 'Питер'
         ];
     }
 
-    public function getFeedApartmentsData(string $feedKey): array
+    public function getFeedApartmentsData(string $feedKey)
     {
         $model = $this->apartmentModel::query();
         $model->where(['key' => $feedKey]);
@@ -107,23 +108,27 @@ final class FeedRepository implements FeedRepositoryInterface
 
     public function store(array $attributes)
     {
-        $modelApartment = $this->apartmentModel::query();
-        $modelApartment->updateOrCreate([
-            'key' => $attributes['apartments']['_id']],
-            [...$this->dataApartmentFormatter($attributes)]
+        $modelBuilder = $this->builderModel::query();
+        Log::info('$modelBuilder');
+        $modelBuilder->updateOrCreate(
+            ['key' => $attributes['builder']['_id']],
+            [...$this->dataBuilderFormatter($attributes)]
         );
 
-        $modelResidentialComplex = $this->residentialComplexModel::query();
-        $modelResidentialComplex->updateOrCreate([
-            'key' => $attributes['detail']['_id'],
-            ...$this->dataResidentialComplexFormatter($attributes)
-        ]);
 
-        $modelBuilder = $this->builderModel::query();
-        $modelBuilder->updateOrCreate([
-            'key' => $attributes['builder']['_id'],
-            ...$this->dataBuilderFormatter($attributes)
-        ]);
+        Log::info($this->dataResidentialComplexFormatter($attributes));
+
+        $modelResidentialComplex = $this->residentialComplexModel::query();
+        $modelResidentialComplex->updateOrCreate(
+            ['key' => $attributes['detail']['_id']],
+            [...$this->dataResidentialComplexFormatter($attributes)]
+        );
+
+        $modelApartment = $this->apartmentModel::query();
+        $modelApartment->updateOrCreate(
+            ['key' => $attributes['apartments']['_id']],
+            [...$this->dataApartmentFormatter($attributes)]
+        );
 
         return $modelApartment;
     }

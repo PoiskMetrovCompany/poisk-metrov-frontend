@@ -11,15 +11,15 @@ final class FeedBuilderService extends AbstractHandler
     {
         Log::info('FeedBuilderService');
         $data = [
-            'builder' => $this->readFeedBuilderFile(builderKey: $attributes['fileData']['block_builder']),
-            'detail' => $this->readFeedDetailFile(detailsBlockKey: $attributes['fileData']['block_id']),
-            'subway' => $this->readFeedSubwayFile(subway: $attributes['fileData']['block_subway']),
-            'building' => $this->readFeedBuildingFile(buildingKey: $attributes['fileData']['building_id']),
-            'buildingType' => $this->readFeedBuildingTypeFile(buildingTypeKey: $attributes['fileData']['building_type']),
-            'finishing' => $this->readFeedFinishingFile(finishingKey: $attributes['fileData']['finishing']),
-            'region'    => $this->readFeedRegionFile(regionKey: $attributes['fileData']['district']),
+            'builder' => $this->readFeedBuilderFile(builderKey: $attributes['apartments']['block_builder']),
+            'detail' => $this->readFeedDetailFile(detailsBlockKey: $attributes['apartments']['block_id']),
+            'subway' => $this->readFeedSubwayFile(subway: $attributes['apartments']['block_subway']),
+            'building' => $this->readFeedBuildingFile(buildingKey: $attributes['apartments']['building_id']),
+            'buildingType' => $this->readFeedBuildingTypeFile(buildingTypeKey: $attributes['apartments']['building_type']),
+            'finishing' => $this->readFeedFinishingFile(finishingKey: $attributes['apartments']['finishing']),
+            'region'    => $this->readFeedRegionFile(regionKey: $attributes['apartments']['block_district']),
         ];
-        $feedData = [...$attributes['feedData'], ...$data];
+        $feedData = [...$attributes, ...$data];
         return parent::handle($feedData);
     }
 }

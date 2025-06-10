@@ -12,9 +12,9 @@ final class FeedCheckHandlerService extends AbstractHandler
     public function handle(?array $attributes): ?array
     {
         $apartments = app(\App\Core\Interfaces\Repositories\FeedRepositoryInterface::class);
-        $feedData = [
-            'apartments' => $apartments->getFeedApartmentsData(feedKey: $attributes['_id']),
-        ];
-        return parent::handle(['feedData' => $feedData, 'fileData' => $attributes]);
+//        $feedData = [
+//            'apartments' => $apartments->getFeedApartmentsData(feedKey: $attributes['_id']),
+//        ];
+        return parent::handle(/*[ 'feedData' => $feedData,  'fileData' => $attributes]*/ ['apartments' => $attributes]);
     }
 }
