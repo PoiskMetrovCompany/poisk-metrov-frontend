@@ -36,6 +36,7 @@ class LoadingFeedFromTrendAgentCommand extends Command
             case 'Санкт-Питербург':
                 Session::put('cityEng','st-petersburg');
                 break;
+            // TODO: добавить остальныфе города таким же образом
         }
     }
 
@@ -44,6 +45,7 @@ class LoadingFeedFromTrendAgentCommand extends Command
      */
     public function handle()
     {
+        $this->setCity($this->argument('city'));
         $extractPath = storage_path('app/temp_trendagent/');
         $fileName = $this->argument('fileName');
         Session::put('fileName', $fileName);
@@ -108,5 +110,8 @@ class LoadingFeedFromTrendAgentCommand extends Command
         }
 
         Storage::disk('local')->deleteDirectory("temp_trendagent/" . Session::get('fileName'));
+        Session::remove('city');
+        Session::remove('cityEng');
+        Session::remove('fileName');
     }
 }

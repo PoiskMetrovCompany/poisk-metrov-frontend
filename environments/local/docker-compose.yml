@@ -24,3 +24,22 @@ services:
         networks:
             app:
                 ipv4_address: 172.25.0.10
+
+    rabbitmq:
+        container_name: ${NAME}_rabbitmq
+        hostname: ${NAME}_rabbitmq
+        environment:
+            - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+            - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+            - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
+        build:
+            context: .
+            dockerfile: rabbitmq.Dockerfile
+        ports:
+            - ${RABBITMQ_PORT_CLIENT}:5672
+            - ${RABBITMQ_PORT}:15672
+        volumes:
+            - ../conf/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+        networks:
+            app:
+                ipv4_address: 172.25.0.11

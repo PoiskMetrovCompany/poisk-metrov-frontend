@@ -51,6 +51,35 @@ return [
             'after_commit' => false,
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'host' => env('RABBITMQ_HOST', 'localhost'),
+            'port' => env('RABBITMQ_PORT', 5672),
+            'user' => env('RABBITMQ_USER', 'guest'),
+            'password' => env('RABBITMQ_PASSWORD', 'guest'),
+            'vhost' => env('RABBITMQ_VHOST', '/'),
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'retry_after' => 90,
+            'after_commit' => false,
+            'options' => [
+                'exchange' => [
+                    'name' => env('RABBITMQ_EXCHANGE_NAME', 'poisk-metrov_exchange'),
+                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+                    'type' => env('RABBITMQ_EXCHANGE_TYPE', 'topic'),//\Interop\Amqp\AmqpTopic::TYPE_TOPIC),
+                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
+                    'durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
+                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false)
+                ],
+                'queue' => [
+                    'name' => env('RABBITMQ_QUEUE', 'sport_experts_queue'),
+                    'declare' => env('RABBITMQ_QUEUE_DECLARE', true),
+                    'durable' => env('RABBITMQ_QUEUE_DURABLE', true),
+                    'exclusive' => env('RABBITMQ_QUEUE_EXCLUSIVE', false),
+                    'auto_delete' => env('RABBITMQ_QUEUE_AUTODELETE', false),
+                ],
+            ],
+        ],
+
         'sqs' => [
             'driver' => 'sqs',
             'key' => env('AWS_ACCESS_KEY_ID'),

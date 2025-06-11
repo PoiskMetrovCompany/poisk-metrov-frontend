@@ -20,6 +20,7 @@ class Apartment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'key',
         'offer_id',
         'complex_id',
         'apartment_type',
