@@ -6,6 +6,7 @@ use App\Http\Controllers\CatalogueViewController;
 use App\Http\Controllers\CurrentCityController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\Form\BookedOrderFormController;
+use App\Http\Controllers\Form\FeedFormController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Pages\ReservationController;
@@ -30,6 +31,15 @@ use Illuminate\Support\Facades\Log;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/// Reservations
+Route::namespace('ADMIN')->prefix('admin')->group(function () {
+    Route::view('/', 'admin.home');
+
+    Route::namespace('ADMIN_FORM')->prefix('form')->group(function() {
+        Route::post('/feed-upload', [FeedFormController::class, 'synchronizeFeed'])->name('admin.form.feed.synchronization');
+    });
+});
 
 /// Reservations
 Route::prefix('reservations')->group(function () {

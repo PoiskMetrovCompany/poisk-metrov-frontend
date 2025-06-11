@@ -46,11 +46,11 @@ class LoadingFeedFromTrendAgentCommand extends Command
     public function handle()
     {
         $this->setCity($this->argument('city'));
-        $extractPath = storage_path('app/temp_trendagent/');
+        $extractPath = storage_path('app/public/uploads');
         $fileName = $this->argument('fileName');
         Session::put('fileName', $fileName);
         $extension = $this->argument('extension');
-        $path = Storage::disk('local')->path("temp_trendagent/" . Session::get('fileName') . ".$extension");
+        $path = Storage::disk('local')->path("public/uploads" . Session::get('fileName') . ".$extension");
 
         $service = new FeedCheckHandlerService();
         $service->setNext(new FeedBuilderService())
@@ -109,7 +109,7 @@ class LoadingFeedFromTrendAgentCommand extends Command
             $service->handle($item);
         }
 
-        Storage::disk('local')->deleteDirectory("temp_trendagent/" . Session::get('fileName'));
+        Storage::disk('local')->deleteDirectory("public/uploads/" . Session::get('fileName'));
         Session::remove('city');
         Session::remove('cityEng');
         Session::remove('fileName');
