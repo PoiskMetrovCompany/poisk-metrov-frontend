@@ -2,7 +2,8 @@
     <div class="alert alert-outline">
         <form id="feedUploadForm" action="{{ route('admin.form.feed.synchronization')  }}" method="POST" enctype="multipart/form-data" class="mx-auto">
             @csrf
-            <input type="file" name="file" id="fileInput" class="d-none">
+            <input type="text" name="city" id="cityInput" value="Санкт-Питербург" class="d-none">
+            <input type="file" name="file" id="fileInput" class="d-none" accept=".zip,.rar,.7z,.tar,.gz,.bz2">
 
             <button type="button" id="uploadButton" class="btn btn-active">Загрузить данные</button>
             <div class="mt-2">
@@ -21,19 +22,20 @@
 
                 const formData = new FormData();
                 formData.append('file', file);
-
+                formData.append('city', document.getElementById('cityInput').value);
                 formData.append('_token', '{{ csrf_token() }}');
 
-                axios.post(document.getElementById('feedUploadForm').getAttribute('action'), formData, {
+                axios.post(document.getElementById('feedUploadForm').action, formData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
                 })
                     .then(response => {
-                        console.log(response.data);
+                        console.log('Файл успешно загружен:', response.data);
                     })
                     .catch(error => {
-                        console.error(error.response?.data || error);
+                        console.error('Ошибка при загрузке:', error.response?.data || error.message);
                     });
             });
         </script>

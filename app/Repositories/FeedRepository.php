@@ -117,12 +117,15 @@ final class FeedRepository implements FeedRepositoryInterface
 
     public function dataBuilderFormatter(array $attributes)
     {
-        return [
-            'key'           => $attributes['builder']['_id'],
-            'construction'  =>  $attributes['apartments']['block_name'],
-            'builder'       => $attributes['builder']['name'],
-            'city'          => Session::get('city'),
-        ];
+        try {
+            return [
+                'key'           => $attributes['builder']['_id'],
+                'construction'  =>  $attributes['apartments']['block_name'],
+                'builder'       => $attributes['builder']['name'],
+                'city'          => Session::get('city'),
+            ];
+        } catch (\ErrorException $e) {}
+
     }
 
     public function getFeedApartmentsData(string $feedKey)

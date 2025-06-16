@@ -21,6 +21,7 @@ class FeedSynchronizationQueue implements ShouldQueue
 
     public function handle(): void
     {
+
         Artisan::call(
         'app:loading-feed-from-trend-agent-command', [
             'city' => $this->city,

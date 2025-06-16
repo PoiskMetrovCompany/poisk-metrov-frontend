@@ -80,7 +80,7 @@ abstract class AbstractHandler implements HandlerInterface
      */
     public function readFeedBuilderFile(string $builderKey): ?array
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . Session::get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDER->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . Session::get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDER->value);
         $data = json_decode($file, true);
 
         return $this->findByKeySearch($data, $builderKey);
@@ -92,14 +92,14 @@ abstract class AbstractHandler implements HandlerInterface
      */
     public function readFeedDetailFile(string $detailsBlockKey): ?array
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BLOCKS->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BLOCKS->value);
         $data = json_decode($file, true);
         return $this->findByKeySearch($data, $detailsBlockKey);
     }
 
     public function readFeedSubwayFile(array $subway)
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::SUBWAYS->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::SUBWAYS->value);
         $data = json_decode($file, true);
 
         foreach ($subway as $item) {
@@ -114,28 +114,28 @@ abstract class AbstractHandler implements HandlerInterface
 
     public function readFeedBuildingFile(string $buildingKey)
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDINGS->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDINGS->value);
         $data = json_decode($file, true);
         return $this->findByKeySearch($data, $buildingKey);
     }
 
     public function readFeedBuildingTypeFile(string $buildingTypeKey)
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDING_TYPES->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::BUILDING_TYPES->value);
         $data = json_decode($file, true);
         return $this->findByKeySearch($data, $buildingTypeKey);
     }
 
     public function readFeedFinishingFile(string $finishingKey)
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::FINISHINGS->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::FINISHINGS->value);
         $data = json_decode($file, true);
         return $this->findByKeySearch($data, $finishingKey);
     }
 
     public function readFeedRegionFile(string $regionKey)
     {
-        $file = Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::REGIONS->value);
+        $file = Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::REGIONS->value);
         $data = json_decode($file, true);
         return $this->findByKeySearch($data, $regionKey);
     }

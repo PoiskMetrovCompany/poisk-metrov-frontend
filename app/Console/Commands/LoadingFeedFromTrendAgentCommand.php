@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Console\Commands;
-
 use App\Core\Common\FeedFromTrendAgentFileCoRConst;
 use App\Core\Common\FeedFromTrendAgentFileCoREnum;
 use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
@@ -12,6 +11,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use JsonMachine\JsonDecoder;
 use ZipArchive;
 
 class LoadingFeedFromTrendAgentCommand extends Command
@@ -45,12 +45,13 @@ class LoadingFeedFromTrendAgentCommand extends Command
      */
     public function handle()
     {
+        Log::info('LoadingFeedFromTrendAgentCommand');
         $this->setCity($this->argument('city'));
-        $extractPath = storage_path('app/public/uploads');
+        $extractPath = storage_path('app/public/temp-feed');
         $fileName = $this->argument('fileName');
         Session::put('fileName', $fileName);
         $extension = $this->argument('extension');
-        $path = Storage::disk('local')->path("public/uploads" . Session::get('fileName') . ".$extension");
+        $path = Storage::disk('local')->path("public/temp-feed/" . Session::get('fileName') . ".$extension");
 
         $service = new FeedCheckHandlerService();
         $service->setNext(new FeedBuilderService())
@@ -105,11 +106,12 @@ class LoadingFeedFromTrendAgentCommand extends Command
                 Log::debug("Не поддерживаемый формат архива: $extension");
         }
 
-        foreach (json_decode(Storage::disk('local')->get("temp_trendagent/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::APARTMENTS->value), true) as $item) {
+        foreach (json_decode(Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::APARTMENTS->value), true) as $item) {
             $service->handle($item);
+            unset($item);
         }
 
-        Storage::disk('local')->deleteDirectory("public/uploads/" . Session::get('fileName'));
+        Storage::disk('local')->deleteDirectory("public/temp-feed/" . Session::get('fileName'));
         Session::remove('city');
         Session::remove('cityEng');
         Session::remove('fileName');
