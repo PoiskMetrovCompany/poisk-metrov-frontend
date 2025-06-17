@@ -7,6 +7,7 @@ use App\Http\Controllers\CurrentCityController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\Form\BookedOrderFormController;
 use App\Http\Controllers\Form\FeedFormController;
+use App\Http\Controllers\Form\UserAdminController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Pages\ReservationController;
@@ -34,9 +35,12 @@ use Illuminate\Support\Facades\Log;
 
 /// Reservations
 Route::namespace('ADMIN')->prefix('admin')->group(function () {
-    Route::view('/', 'admin.home');
+    Route::view('/', 'admin.home')->middleware('access_admin')->name('admin.home');
+    Route::view('/login', 'admin.sign-in')->name('admin.login');
 
     Route::namespace('ADMIN_FORM')->prefix('form')->group(function() {
+        Route::post('/login', [UserAdminController::class, 'login'])->name('admin.form.login');
+        Route::get('/logout', [UserAdminController::class, 'logout'])->name('admin.form.logout');
         Route::post('/feed-upload', [FeedFormController::class, 'synchronizeFeed'])->name('admin.form.feed.synchronization');
     });
 });
