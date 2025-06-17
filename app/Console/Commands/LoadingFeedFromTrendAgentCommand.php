@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 use App\Core\Common\FeedFromTrendAgentFileCoRConst;
 use App\Core\Common\FeedFromTrendAgentFileCoREnum;
 use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
+use App\Models\Journal;
 use App\Services\Handlers\FeedBuilderService;
 use App\Services\Handlers\FeedCheckHandlerService;
 use App\Services\Handlers\SynchronizationFeedService;
@@ -11,6 +12,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use JsonMachine\JsonDecoder;
 use ZipArchive;
 
@@ -106,7 +108,18 @@ class LoadingFeedFromTrendAgentCommand extends Command
                 Log::debug("Не поддерживаемый формат архива: $extension");
         }
 
-        foreach (json_decode(Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::APARTMENTS->value), true) as $item) {
+        $feedData = json_decode(Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::APARTMENTS->value), true);
+        Session::push('feedDataLength', count($feedData));
+        Session::push('synchronizeKeySession', Str::uuid()->toString());
+
+        Journal::create([
+            'key' => Session::get('synchronizeKeySession'),
+            'type' => 'synchronizeFeed',
+            'status' => 'В обработке',
+            'details' => '{"name": ' . Session::get('fileName') . ', "found_objects": ' . Session::get('feedDataLength') . ', "loaded_objects": 0}',
+        ]);
+
+        foreach ($feedData as $item) {
             $service->handle($item);
             unset($item);
         }
