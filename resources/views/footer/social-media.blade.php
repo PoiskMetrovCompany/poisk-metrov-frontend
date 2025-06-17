@@ -8,8 +8,8 @@
         'link' => 'https://wa.me/79994484695',
         'text' => 'WhatsApp',
     ])
-    @include('footer.social-media-link', [
-        'link' => 'https://instagram.com/poisk_metrov',
-        'text' => 'Instagram',
-    ])
+{{--    @include('footer.social-media-link', [--}}
+{{--        'link' => 'https://instagram.com/poisk_metrov',--}}
+{{--        'text' => 'Instagram',--}}
+{{--    ])--}}
 </div>
