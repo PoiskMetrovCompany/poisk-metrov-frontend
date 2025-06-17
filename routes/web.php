@@ -10,6 +10,7 @@ use App\Http\Controllers\Form\FeedFormController;
 use App\Http\Controllers\Form\UserAdminController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Pages\AdminController;
 use App\Http\Controllers\Pages\ReservationController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\RealEstateController;
@@ -35,7 +36,8 @@ use Illuminate\Support\Facades\Log;
 
 /// Reservations
 Route::namespace('ADMIN')->prefix('admin')->group(function () {
-    Route::view('/', 'admin.home')->middleware('access_admin')->name('admin.home');
+//    Route::view('/', 'admin.home')->middleware('access_admin')->name('admin.home');
+    Route::get('/', [AdminController::class, 'index'])->middleware('access_admin')->name('admin.home');
     Route::view('/login', 'admin.sign-in')->name('admin.login');
 
     Route::namespace('ADMIN_FORM')->prefix('form')->group(function() {

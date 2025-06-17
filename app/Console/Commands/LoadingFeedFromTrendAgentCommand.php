@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Console\Commands;
+set_time_limit(0);
+
 use App\Core\Common\FeedFromTrendAgentFileCoRConst;
 use App\Core\Common\FeedFromTrendAgentFileCoREnum;
 use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
@@ -109,16 +111,18 @@ class LoadingFeedFromTrendAgentCommand extends Command
         }
 
         $feedData = json_decode(Storage::disk('local')->get("public/temp-feed/" . session()->get('fileName') . "/" . FeedFromTrendAgentFileCoREnum::APARTMENTS->value), true);
-        Session::push('feedDataLength', count($feedData));
-        Session::push('synchronizeKeySession', Str::uuid()->toString());
+        Session::put('feedDataLength', count($feedData));
+        Session::put('synchronizeKeySession', Str::uuid()->toString());
 
         Journal::create([
             'key' => Session::get('synchronizeKeySession'),
             'type' => 'synchronizeFeed',
             'status' => 'В обработке',
-            'details' => '{"name": ' . Session::get('fileName') . ', "found_objects": ' . Session::get('feedDataLength') . ', "loaded_objects": 0}',
+            'name' => Session::get('fileName'),
+            'found_objects' => (int)Session::get('feedDataLength'),
+            'loaded_objects' => 0,
         ]);
-
+        Log::info('do foreach');
         foreach ($feedData as $item) {
             $service->handle($item);
             unset($item);

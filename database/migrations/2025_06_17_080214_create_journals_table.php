@@ -16,7 +16,9 @@ return new class extends Migration
             $table->uuid('key');
             $table->enum('type', ['synchronizeFeed']);
             $table->enum('status', ['Загружено', 'Частично загружено', 'В обработке', 'Ошибка загрузки']);
-            $table->jsonb('details'); // {name: "XXXX.png", found_objects: 100, loaded_objects: 95}
+            $table->string('name', 255);
+            $table->integer('found_objects');
+            $table->integer('loaded_objects');
             $table->timestamps();
         });
     }

@@ -14,6 +14,8 @@ class Journal extends Model
         'key',
         'type',
         'status',
-        'details',
+        'name',
+        'found_objects',
+        'loaded_objects',
     ];
 }
