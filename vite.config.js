@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
     root: '.',
@@ -13,6 +14,8 @@ export default defineConfig({
                 'resources/css/swiper.override.css',
                 'resources/css/card.override.css',
                 'resources/css/animation.override.css',
+                'resources/css/admin/style.css',
+                'resources/css/admin/components/dropdown.css',
 
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
@@ -64,5 +67,18 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
     ],
+    resolve: {
+        alias: {
+            vue: 'vue/dist/vue.esm-bundler.js',
+        },
+    },
 });

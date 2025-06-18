@@ -14,5 +14,10 @@ class Builder extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['construction', 'builder', 'city'];
+    protected $fillable = [
+        'key',
+        'construction',
+        'builder',
+        'city'
+    ];
 }
