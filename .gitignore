@@ -26,3 +26,4 @@ yarn-error.log
 /.run
 /*.tar
 /*.sql
+tests/Unit/Support/Data/dump.sql

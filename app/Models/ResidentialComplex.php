@@ -39,6 +39,7 @@ class ResidentialComplex extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'key',
         'code',
         'old_code',
         'name',

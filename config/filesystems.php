@@ -44,6 +44,14 @@ return [
             'throw' => false,
         ],
 
+        'feed' => [
+            'driver' => 'local',
+            'root' => storage_path('app/temp_trendagent'),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'public_classic' => [
             'driver' => 'local',
             'root' => public_path(''),

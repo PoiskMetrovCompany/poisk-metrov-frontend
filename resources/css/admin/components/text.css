@@ -1,0 +1,11 @@
+p,
+span,
+a,
+div,
+button {
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Onest', sans-serif;
+    line-height: 140%;
+    letter-spacing: 0;
+}
