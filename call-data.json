@@ -1,0 +1,8 @@
+{
+    "flashCallURL": "https://zvonok.com/manager/cabapi_external/api/v1/phones/flashcall/",
+    "checkupURL": "https://zvonok.com/manager/cabapi_external/api/v1/phones/calls_by_phone/",
+    "callPhoneURL": "https://zvonok.com/manager/cabapi_external/api/v1/phones/calls_by_phone/",
+    "APIkey": "30f051fe86e238128a5660a4d0233111",
+    "campaignId": "1373871402"
+}
+
