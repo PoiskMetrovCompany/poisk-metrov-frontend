@@ -50,11 +50,14 @@ span{
     background-color: #EC7D3F;
     border-color: #EC7D3F;
 }
-.btn-default,
-.btn-default:hover {
+.btn-default {
     color: #494949;
     background-color: #E9E9E9;
     border-color: #E9E9E9;
+}
+.btn-default:hover {
+    transition: .5s;
+    background-color: #0000001A;
 }
 
 /* ========== TABLE ========== */
@@ -202,11 +205,16 @@ button.dropdown-custom:active {
     border-radius: 0em 1.2em 1.2em 0em !important;
 }
 /* ========== END ========== */
-.btn-drop, .btn-drop:hover, .btn-drop:active {
+.btn-drop, .btn-drop:active {
     padding: .8em;
     background-color: #F7DAD0!important;
     color: #D45F35!important;
     border-color: rgba(255, 255, 255, 0)!important;
+}
+
+.btn-drop:hover {
+    transition: .5s;
+    background-color: #f7dad0a3!important;
 }
 
 /* ========== CUSTOM MAGIN ========== */
@@ -269,4 +277,11 @@ form#admin-login-form button[type="submit"], form#admin-login-form button[type="
 
 .card {
     border-color: #eeeeee00;
+}
+#drop-journal{
+    fill: #C9C5C5;
+}
+#drop-journal:hover {
+    transition: .5s;
+    fill: #c9c5c5b0;
 }

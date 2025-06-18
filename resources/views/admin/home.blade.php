@@ -25,9 +25,21 @@
                     @include('admin.components.pagination', ['paginator' => $journals])
                 </div>
                 <div class="col-6 d-flex justify-content-end align-items-center">
-                    <button type="button" class="btn btn-default btn-drop">Удалить все данные</button>
+                    <form action="{{ route('admin.form.feed.destroy') }}" method="POST">
+                        @csrf
+                        <input type="hidden" id="hiddenSelectedCity" name="selectedCity" value="">
+                        <button type="submit" class="btn btn-default btn-drop">Удалить все данные</button>
+                    </form>
+
                 </div>
             </div>
         </div>
     </div>
+    <script type="module">
+        window.addEventListener('DOMContentLoaded', function () {
+            const savedCity = localStorage.getItem('selectedCity') || 'Новосибирск';
+            document.getElementById('selectedCity').textContent = savedCity;
+            document.getElementById('hiddenSelectedCity').value = savedCity;
+        });
+    </script>
 @endsection

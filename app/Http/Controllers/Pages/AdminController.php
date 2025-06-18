@@ -10,7 +10,23 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $journals = Journal::paginate(10);
+        if ($request->has('sortParam')) {
+            switch ($request->sortParam) {
+                case 'date_now':
+                    $journals = Journal::orderBy('created_at', 'desc')->paginate(10);
+                    break;
+                case 'date_old':
+                    $journals = Journal::orderBy('created_at', 'asc')->paginate(10);
+                    break;
+                case 'statuses':
+                    $journals = Journal::orderByRaw(
+                        "FIELD(status, 'Загружено', 'Частично загружено', 'В обработке', 'Ошибка загрузки')"
+                    )->paginate(10);
+                    break;
+            }
+        } else {
+            $journals = Journal::paginate(1);
+        }
 
         return view('admin.home', compact('journals'));
     }

@@ -2,7 +2,6 @@
     <div class="alert alert-outline">
         <form id="feedUploadForm" action="{{ route('admin.form.feed.synchronization')  }}" method="POST" enctype="multipart/form-data" class="mx-auto">
             @csrf
-            <input type="text" name="city" id="cityInput" value="Санкт-Питербург" class="d-none">
             <input type="file" name="file" id="fileInput" class="d-none" accept=".zip,.rar,.7z,.tar,.gz,.bz2">
 
             <button type="button" id="uploadButton" class="btn btn-active">Загрузить данные</button>
@@ -22,7 +21,7 @@
 
                 const formData = new FormData();
                 formData.append('file', file);
-                formData.append('city', document.getElementById('cityInput').value);
+                formData.append('city', localStorage.getItem('selectedCity'));
                 formData.append('_token', '{{ csrf_token() }}');
 
                 axios.post(document.getElementById('feedUploadForm').action, formData, {

@@ -11,10 +11,9 @@
         </span>
     </button>
     <ul class="col-2 dropdown-menu" id="dropdownMenu">
-        <li><a class="dropdown-item active" href="#">Сначала новые</a></li>
-        <li><a class="dropdown-item" href="#">Сначала старые</a></li>
-        <li><a class="dropdown-item" href="#">По статусу</a></li>
-        <li><a class="dropdown-item" href="#">По формату</a></li>
+        <li><a class="dropdown-item active" href="{{ route('admin.home', ['sortParam' => 'date_now']) }}">Сначала новые</a></li>
+        <li><a class="dropdown-item" href="{{ route('admin.home', ['sortParam' => 'date_old']) }}">Сначала старые</a></li>
+        <li><a class="dropdown-item" href="{{ route('admin.home', ['sortParam' => 'statuses']) }}">По статусу</a></li>
     </ul>
 </div>
 
@@ -35,13 +34,12 @@
     dropdownItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
-
             dropdownItems.forEach(i => i.classList.remove('active'));
             this.classList.add('active');
-
-            dropdownButtonText.textContent = this.textContent;
-
-            localStorage.setItem('selectedFilter', this.textContent);
+            const selectedText = this.textContent.trim();
+            dropdownButtonText.textContent = selectedText;
+            localStorage.setItem('selectedFilter', selectedText);
+            window.location.href = this.getAttribute('href');
         });
     });
 </script>

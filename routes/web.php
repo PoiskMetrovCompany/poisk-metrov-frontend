@@ -44,6 +44,8 @@ Route::namespace('ADMIN')->prefix('admin')->group(function () {
         Route::post('/login', [UserAdminController::class, 'login'])->name('admin.form.login');
         Route::get('/logout', [UserAdminController::class, 'logout'])->name('admin.form.logout');
         Route::post('/feed-upload', [FeedFormController::class, 'synchronizeFeed'])->name('admin.form.feed.synchronization');
+        Route::post('/feed-destroy', [FeedFormController::class, 'destroyFeedData'])->name('admin.form.feed.destroy');
+        Route::post('/journal-destroy', [FeedFormController::class, 'destroyJournal'])->name('admin.form.journal.destroy');
     });
 });
 

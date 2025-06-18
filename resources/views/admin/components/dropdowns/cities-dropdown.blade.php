@@ -13,21 +13,22 @@
     </button>
     <ul class="col-5 dropdown-menu">
         <li><a class="dropdown-item active" href="#" onclick="selectCity('Новосибирск')">Новосибирск</a></li>
-        <li><a class="dropdown-item" href="#" onclick="selectCity('Москва и МО')">Москва и МО</a></li>
         <li><a class="dropdown-item" href="#" onclick="selectCity('Санкт-Петербург')">Санкт-Петербург</a></li>
     </ul>
 </div>
 
-<script>
+<script type="module">
+    localStorage.setItem('selectedCity', 'Новосибирск');
+
     function selectCity(city) {
         document.getElementById('selectedCity').textContent = city;
+        document.getElementById('hiddenSelectedCity').value = city;
 
         document.querySelectorAll('.dropdown-item').forEach(item => {
             item.classList.remove('active');
         });
 
         event.target.classList.add('active');
-
         localStorage.setItem('selectedCity', city);
     }
 </script>

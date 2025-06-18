@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Form;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\FeedSynchronizationQueue;
+use App\Models\Apartment;
+use App\Models\Builder;
 use App\Models\Journal;
+use App\Models\ResidentialComplex;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -30,15 +33,9 @@ class FeedFormController extends Controller
                     'size'          => $fileData->getSize(),
                     'mime'          => $fileData->getMimeType(),
                 ];
-//                $journalModel = Journal::create($fileDetail);
                 $fileName = $fileData->getClientOriginalName();
                 $fileData->storeAs('temp-feed', $fileName, 'public');
 
-//                FeedSynchronizationQueue::dispatch(
-//                    city:       $request->input('city'),
-//                    fileName:   explode('.', $fileDetail['originalName'])[0],
-//                    extension:  $fileDetail['extension']
-//                );
                 Artisan::call(
                     'app:loading-feed-from-trend-agent-command', [
                     'city' => $request->input('city'),
@@ -48,5 +45,27 @@ class FeedFormController extends Controller
                 return response()->json([]);
             }
         }
+    }
+
+    public function destroyFeedData(Request $request)
+    {
+        $city = $request->input('city');
+        $builderIds = Builder::where('city', $city)->pluck('id');
+        $complexIds = ResidentialComplex::whereIn('builder', $builderIds)->pluck('id');
+
+        Apartment::whereIn('complex_id', $complexIds)
+            ->whereNotNull('key')
+            ->where('key', '<>', '')
+            ->where('feed_source', 'TrendAgent')
+            ->delete();
+
+        return redirect()->route('admin.home')->with('success', 'Данные успешно удалены');
+    }
+
+    public function destroyJournal(Request $request)
+    {
+        $journalId = $request->input('journalId');
+        Journal::where($journalId)->delete();
+        return redirect()->route('admin.home')->with('success', 'Данные успешно удалены');
     }
 }
