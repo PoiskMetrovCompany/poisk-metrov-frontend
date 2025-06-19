@@ -25,10 +25,12 @@
         "phenx/php-font-lib": "^0.5.6",
         "php-http/message-factory": "^1.1",
         "phpoffice/phpspreadsheet": "^1.29",
+        "promphp/prometheus_client_php": "^2.14",
         "pusher/pusher-php-server": "^7.2",
         "react/promise": "^2.3",
         "spatie/browsershot": "^3.61",
         "spatie/laravel-backup": "^8.8",
+        "spatie/laravel-prometheus": "^1.2",
         "symfony/dom-crawler": "^6.4"
     },
     "require-dev": {

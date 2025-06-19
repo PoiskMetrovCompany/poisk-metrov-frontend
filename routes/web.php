@@ -197,3 +197,6 @@ if (config('app.agent_pages_enabled')) {
         return redirect("/agent/search", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
     });
 }
+
+Route::get('/metrics', \App\Http\Controllers\MetricsController::class)
+    ->middleware('auth.basic');
