@@ -180,6 +180,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\VariablesProvider::class,
         App\Providers\RepositoryServiceProvider::class,
+
+        App\Providers\PrometheusServiceProvider::class,
     ])->toArray(),
 
     /*
