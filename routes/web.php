@@ -198,5 +198,5 @@ if (config('app.agent_pages_enabled')) {
     });
 }
 
-Route::get('/metrics', \App\Http\Controllers\MetricsController::class)
-    ->middleware('auth.basic');
+//Route::get('/metrics', \App\Http\Controllers\MetricsController::class)
+//    ->middleware('auth.basic');
