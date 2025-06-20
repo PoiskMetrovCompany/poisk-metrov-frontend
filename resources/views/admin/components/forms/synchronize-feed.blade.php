@@ -1,4 +1,4 @@
-<div class="mt-3">
+<div class="mt-3 p-0">
     <div class="alert alert-outline">
         <form id="feedUploadForm" action="{{ route('admin.form.feed.synchronization')  }}" method="POST" enctype="multipart/form-data" class="mx-auto">
             @csrf
@@ -9,6 +9,7 @@
                 <span>Допускается загрузка архивов</span>
             </div>
         </form>
+
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script type="module">
             document.getElementById('uploadButton').addEventListener('click', function () {

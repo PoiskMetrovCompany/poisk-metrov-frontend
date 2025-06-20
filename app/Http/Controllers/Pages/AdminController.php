@@ -25,7 +25,7 @@ class AdminController extends Controller
                     break;
             }
         } else {
-            $journals = Journal::paginate(1);
+            $journals = Journal::paginate(10);
         }
 
         return view('admin.home', compact('journals'));

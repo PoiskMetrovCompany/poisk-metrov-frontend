@@ -1,4 +1,4 @@
-<div class="dropdown">
+<div class="dropdown p-0">
     <button id="dropdownButton" class="col-2 btn dropdown-toggle dropdown-custom d-flex align-items-center justify-content-between" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <span>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

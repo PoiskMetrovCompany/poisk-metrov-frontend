@@ -26,6 +26,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 48px 0px 32px 0px;
+    border-radius: 16px;
 }
 span{
     color: #818181;
@@ -44,12 +45,17 @@ span{
     font-weight: 500;
 
 }
-.btn-active,
-.btn-active:hover {
+.btn-active{
     color: #fff;
     background-color: #EC7D3F;
     border-color: #EC7D3F;
 }
+.btn-active:hover {
+    transition: .5s;
+    background-color: #F4F4F1;
+    color: #181817;
+}
+
 .btn-default {
     color: #494949;
     background-color: #E9E9E9;
@@ -94,13 +100,23 @@ td div {
 /* ========== END ========== */
 
 /* ========== DROPDOWN ========== */
-.dropdown-custom {
+.dropdown-custom,
+.btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active{
     border-radius: 1em;
     background: white;
     padding: 1em;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    border-color: rgba(255, 255, 255, 0);
+}
+.dropdown-custom,
+#logout {
+    font-size: 14px;
 }
 
 button.dropdown-custom:hover {
@@ -140,6 +156,34 @@ button.dropdown-custom:active {
 .highlight {
     color: #f37321;
     font-weight: 600;
+}
+/* ========== END ========== */
+
+/* ========== TAG's ========== */
+.tag {
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    height: max-content;
+    padding: 6px 17px 6px 18px;
+}
+.tag-success {
+    background-color: #E4F8E4;
+    color: #0F8D13;
+}
+.tag-warning {
+    background-color: #F8F8E8;
+    color: #C5801F;
+}
+.tag-info {
+    background-color: #ECF6F8;
+    color: #2C8196;
+}
+.tag-error {
+    background-color: #FFEFE9;
+    color: #F04C1A;
 }
 /* ========== END ========== */
 
@@ -240,14 +284,15 @@ button.dropdown-custom:active {
 .input-container {
     position: relative;
     margin: 20px;
+    margin-bottom: 32px;
 }
 
 .input-container input {
     width: 100%;
-    padding: 16px 12px 12px;
+    padding: 18px 20px 18px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 12px;
+    border-radius: 16px;
     outline: none;
     box-sizing: border-box;
 }
@@ -276,7 +321,11 @@ form#admin-login-form button[type="submit"], form#admin-login-form button[type="
 /* ========== END ========== */
 
 .card {
+    padding: 48px !important;
     border-color: #eeeeee00;
+}
+.card span {
+    margin-bottom: 10px;
 }
 #drop-journal{
     fill: #C9C5C5;
@@ -284,4 +333,21 @@ form#admin-login-form button[type="submit"], form#admin-login-form button[type="
 #drop-journal:hover {
     transition: .5s;
     fill: #c9c5c5b0;
+}
+
+/* ========== FONT-SIZES ========== */
+.fs-24px {
+    font-size: 24px;
+}
+/* ========== END ========== */
+
+.w-14 {
+    width: 14%;
+}
+.w-18 {
+    width: 18%;
+}
+
+.p-0 {
+    padding: 0;
 }
