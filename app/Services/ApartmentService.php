@@ -79,11 +79,11 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
                 ->where('room_count', '>=', $mediumRoomCount - $roomCountRange)
                 ->where('room_count', '<=', $mediumRoomCount + $roomCountRange)
                 ->first();
-            Log::error('$recommendedApartment', $recommendedApartment->toArray());
+
             if ($recommendedApartment != null) {
                 $recommendations[] = $recommendedApartment;
+                Log::error('$recommendations', $recommendations->toArray());
             }
-
             if ($recommendations->count() >= $preferredRecommendationCount) {
                 break;
             }
@@ -101,13 +101,12 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
                 ->where('room_count', '<=', $mediumRoomCount + $roomCountRange)
                 ->whereNotIn('offer_id', $recommendations->pluck('offer_id'))
                 ->first();
-            Log::error('$recommendedApartment', $recommendedApartment->toArray());
-            Log::info($recommendedApartment->toArray());
             if ($recommendedApartment == null) {
                 continue;
             }
 
             $recommendations[] = $recommendedApartment;
+            Log::error('$recommendations', $recommendations->toArray());
         }
         Log::debug('$recommendations', $recommendations->toArray());
 
