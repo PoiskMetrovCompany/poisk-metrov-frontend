@@ -95,9 +95,8 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
             $recommendedApartment = $building->apartments
                 ->where('room_count', '>=', $mediumRoomCount - $roomCountRange)
                 ->where('room_count', '<=', $mediumRoomCount + $roomCountRange)
-                ->whereNotIn('offer_id', $recommendations->pluck('offer_id'));
-            Log::info($recommendedApartment->toSql());
-            $recommendedApartment->first();
+                ->whereNotIn('offer_id', $recommendations->pluck('offer_id'))
+                ->first();
             Log::info($recommendedApartment->toArray());
             if ($recommendedApartment == null) {
                 continue;
