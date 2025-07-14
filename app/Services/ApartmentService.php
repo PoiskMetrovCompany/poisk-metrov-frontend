@@ -67,7 +67,6 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
             $mediumArea = $visitedApartments->average('area');
             Log::error('$mediumArea', $mediumArea);
             $mediumRoomCount = floor($visitedApartments->average('room_count'));
-            Log::error('$mediumRoomCount', $mediumRoomCount);
         }
         Log::info('первый цикл');
         foreach ($preferredBuildings as $building) {
