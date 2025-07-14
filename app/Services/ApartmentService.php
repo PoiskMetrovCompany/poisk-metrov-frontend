@@ -45,7 +45,6 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
 //        } else {
 //            $visitedApartments->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
-        Log::info($visitedApartments->toArray());
         $visitedApartments->get();
         $mediumPrice = 10000000;
         $priceRange = 4000000;
