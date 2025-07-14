@@ -63,9 +63,13 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
             $roomCountRange = 1;
         } else {
             $mediumPrice = $visitedApartments->average('price');
+            Log::error('$mediumPrice', $mediumPrice);
             $mediumArea = $visitedApartments->average('area');
+            Log::error('$mediumArea', $mediumArea);
             $mediumRoomCount = floor($visitedApartments->average('room_count'));
+            Log::error('$mediumRoomCount', $mediumRoomCount);
         }
+        Log::info('первый цикл');
         foreach ($preferredBuildings as $building) {
             $recommendedApartment = $building->apartments
                 ->where('price', '>=', $mediumPrice - $priceRange)
@@ -75,7 +79,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
                 ->where('room_count', '>=', $mediumRoomCount - $roomCountRange)
                 ->where('room_count', '<=', $mediumRoomCount + $roomCountRange)
                 ->first();
-                Log::info($recommendedApartment->toArray());
+            Log::error('$recommendedApartment', $recommendedApartment->toArray());
             if ($recommendedApartment != null) {
                 $recommendations[] = $recommendedApartment;
             }
@@ -84,7 +88,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
                 break;
             }
         }
-
+        Log::info('второй цикл');
         for ($i = $recommendations->count(); $i < $preferredRecommendationCount; $i++) {
             $building = $bestOffers->shift()->first();
 
@@ -97,6 +101,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
                 ->where('room_count', '<=', $mediumRoomCount + $roomCountRange)
                 ->whereNotIn('offer_id', $recommendations->pluck('offer_id'))
                 ->first();
+            Log::error('$recommendedApartment', $recommendedApartment->toArray());
             Log::info($recommendedApartment->toArray());
             if ($recommendedApartment == null) {
                 continue;
