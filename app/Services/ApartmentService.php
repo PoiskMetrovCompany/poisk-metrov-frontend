@@ -35,15 +35,11 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
     public function getApartmentRecommendations(): Collection
     {
         $visitedPages = $this->visitedPagesService->getVisitedApartments();
-        Log::info($visitedPages);
         $preferredBuildings = $this->visitedPagesService->getVisitedBuildings();
-        Log::info($preferredBuildings);
         $recommendations = new Collection();
-        Log::info($recommendations);
         $visitedApartments = Apartment::whereIn('offer_id', $visitedPages);
 
         $visitedApartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
-        Log::info($visitedApartments);
         if (!Auth::user()) {
             $visitedApartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
 //        } else {
@@ -51,7 +47,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
         }
 
         $visitedApartments->get();
-        Log::info($visitedApartments);
+        Log::info('НУ ОК... МЫ ТУТ');
         $mediumPrice = 10000000;
         $priceRange = 4000000;
         $mediumArea = 60;
@@ -111,6 +107,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
 
             $recommendations[] = $recommendedApartment;
         }
+        Log::debug('$recommendations', $recommendations->toArray());
 
         return $recommendations;
     }
