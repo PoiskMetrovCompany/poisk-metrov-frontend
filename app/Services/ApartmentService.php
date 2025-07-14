@@ -82,7 +82,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
 
             if ($recommendedApartment != null) {
                 $recommendations[] = $recommendedApartment;
-                Log::error('$recommendations', $recommendations->toArray());
+                Log::error($recommendations);
             }
             if ($recommendations->count() >= $preferredRecommendationCount) {
                 break;
@@ -106,7 +106,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
             }
 
             $recommendations[] = $recommendedApartment;
-            Log::error('$recommendations', $recommendations->toArray());
+            Log::error($recommendations);
         }
         Log::debug('$recommendations', $recommendations->toArray());
 
