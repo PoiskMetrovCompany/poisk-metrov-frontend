@@ -66,7 +66,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
             $mediumArea = $visitedApartments->average('area');
             $mediumRoomCount = floor($visitedApartments->average('room_count'));
         }
-        Log::info('первый цикл');
+
         foreach ($preferredBuildings as $building) {
             $recommendedApartment = $building->apartments
                 ->where('price', '>=', $mediumPrice - $priceRange)
@@ -84,7 +84,7 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
                 break;
             }
         }
-        Log::info('второй цикл');
+
         for ($i = $recommendations->count(); $i < $preferredRecommendationCount; $i++) {
             $building = $bestOffers->shift()->first();
 
