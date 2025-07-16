@@ -22,6 +22,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.10/SmoothScroll.min.js"
             integrity="sha256-huW7yWl7tNfP7lGk46XE+Sp0nCotjzYodhVKlwaNeco=" crossOrigin="anonymous"></script>
 
+    <meta property="og:title" content="Поиск метров">
+    <meta property="og:description" content="Поиск метров  — бесплатный сервис бронирования новостроек">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://poisk-metrov.ru/">
+    <meta property="og:image" content="https://poisk-metrov.ru/meta/image.jpg ">
+
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
 
     @yield('preload-images')
