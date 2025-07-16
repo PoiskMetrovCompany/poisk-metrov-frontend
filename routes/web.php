@@ -130,17 +130,16 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 })->name('home');*/
 
 // TODO: в рамках задачи убрал редирект для ботов
-Route::get('/', function (Request $request) {
-    // Функция для определения, является ли запрос от бота
+Route::get('/{city}', function (Request $request, $city) {
     $isBot = preg_match('/bot|crawl|slurp|spider|yandex|search|sogou|bing|whatsapp|telegram|facebook|linkedin|slack|pinterest|tumblr|vk|discord|googlebot|duckduckbot|semrushbot|ahrefsbot|mj12bot/i', $request->userAgent());
 
     if ($isBot) {
-        return view('bot-preview');
+        $cityData = app()->get(CityService::class)->getUserCity();
+
+        return view('bot-preview', compact('cityData'));
     }
 
-    $city = app()->get(CityService::class)->getUserCity();
-    return redirect("/{$city}", 302)
-        ->header('Cache-Control', 'private, max-age=0, no-cache');
+    return redirect("/{$city}", 302)->header('Cache-Control', 'private, max-age=0, no-cache');
 });
 // END
 
