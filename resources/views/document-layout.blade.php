@@ -17,7 +17,7 @@
             "name":"Поиск метров",
             "potentialAction":{
                 "@type":"SearchAction",
-                "target":"https:\/\/tion.ru\/?s={search_term_string}",
+                "target":"https:\/\/poisk-metrov.ru\/?s={search_term_string}",
                 "query-input":"required name=search_term_string"
             }
         }
