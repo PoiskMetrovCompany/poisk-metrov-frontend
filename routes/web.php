@@ -129,20 +129,17 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 //    return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
 //})->name('home');
 
-// TODO: в рамках задачи убрал редирект для ботов
-Route::get('/{city}', function (Request $request, $city) {
-    $isBot = preg_match('/bot|crawl|slurp|spider|yandex|search|sogou|bing|whatsapp|telegram|facebook|linkedin|slack|pinterest|tumblr|vk|discord|googlebot|duckduckbot|semrushbot|ahrefsbot|mj12bot/i', $request->userAgent());
+Route::get('/', function () {
+    $city = app()->get(CityService::class)->getUserCity();
 
-    if ($isBot) {
-        $cityData = app()->get(CityService::class)->getUserCity();
-        return response()
-            ->view('bot-preview', compact('cityData'))
-            ->header('Cache-Control', 'public, max-age=86400');
+    if (request()->isBot()) {
+        return view('bot-preview', ['city' => $city]);
     }
 
-    return redirect("/{$city}", 302)->header('Cache-Control', 'private, max-age=0, no-cache');
-});
-// END
+    return redirect("/{$city}", 303)
+        ->header('Cache-Control', 'no-store, no-cache, must-revalidate');
+})->name('home');
+
 
 Route::get('/catalogue', function () {
     $city = app()->get(CityService::class)->getUserCity();
