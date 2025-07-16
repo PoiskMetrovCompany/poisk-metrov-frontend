@@ -28,7 +28,7 @@
     <meta property="og:locale" content="ru_RU">
     <meta property="og:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://poisk-metrov.ru/">
+    <meta property="og:url" content="{{ url()->full() }}">
     <meta property="og:image" content="https://poisk-metrov.ru/meta/image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
