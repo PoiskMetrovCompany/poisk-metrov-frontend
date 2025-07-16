@@ -28,20 +28,10 @@
     <meta property="og:locale" content="ru_RU">
     <meta property="og:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://poisk-metrov.ru/">
+    <meta property="og:url" content="{{ url()->full() }}">
     <meta property="og:image" content="https://poisk-metrov.ru/meta/image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-
-    <meta property="tg:title" content="Поиск метров">
-    <meta property="tg:site_name" content="Поиск метров">
-    <meta property="tg:locale" content="ru_RU">
-    <meta property="tg:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
-    <meta property="tg:type" content="website">
-    <meta property="tg:url" content="{{ url()->full() }} ">
-    <meta property="tg:image" content="https://poisk-metrov.ru/meta/image.jpg">
-    <meta property="tg:image:width" content="1200">
-    <meta property="tg:image:height" content="630">
 
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
 
