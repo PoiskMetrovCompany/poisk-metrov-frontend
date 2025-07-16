@@ -17,12 +17,7 @@
           "url": "https://poisk-metrov.ru",
           "description": "Поиск метров — бесплатный сервис бронирования новостроек",
           "logo": "https://poisk-metrov.ru/meta/image.jpg",
-          "telephone": "+7 (XXX) XXX-XX-XX",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Санкт-Петербург, Россия",
-          },
-          "image": "https://poisk-metrov.ru/meta/image.jpg",
+          "image": "https://poisk-metrov.ru/meta/image.jpg"
         }
     </script>
 
