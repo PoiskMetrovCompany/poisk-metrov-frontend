@@ -67,8 +67,10 @@ use App\Services\TextService;
 use App\Services\UserService;
 use App\Services\VisitedPagesService;
 use Arhitector\Yandex\Disk;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -301,5 +303,19 @@ class AppServiceProvider extends ServiceProvider
             'managerService' => app()->make(ManagersService::class),
             'preloadService' => app()->make(PreloadService::class)
         ]);
+
+        Request::macro('isBot', function() {
+            $userAgent = $this->header('User-Agent');
+
+            if (empty($userAgent)) {
+                return true;
+            }
+
+            $bots = [
+                'TelegramBot', 'WhatsApp',
+            ];
+
+            return Str::contains($userAgent, $bots);
+        });
     }
 }
