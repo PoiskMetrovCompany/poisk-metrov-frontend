@@ -15,18 +15,14 @@
           "@type": "RealEstateAgent",
           "name": "Поиск метров",
           "url": "https://poisk-metrov.ru",
-          "description": "Бесплатный сервис бронирования новостроек в Санкт-Петербурге и Новосибирске",
-          "logo": "https://poisk-metrov.ru/path/to/logo.png",
+          "description": "Поиск метров — бесплатный сервис бронирования новостроек",
+          "logo": "https://poisk-metrov.ru/meta/image.jpg",
           "telephone": "+7 (XXX) XXX-XX-XX",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Санкт-Петербург, Россия",
           },
           "image": "https://poisk-metrov.ru/meta/image.jpg",
-          "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          }
         }
     </script>
 
