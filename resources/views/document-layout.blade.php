@@ -33,7 +33,7 @@
     <meta property="og:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ $metaUrl }}">
-    <meta property="og:image" content="/meta/image.jpg?v=2">
+    <meta property="og:image" content="https://poisk-metrov.ru/meta/image.jpg?v=2">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
