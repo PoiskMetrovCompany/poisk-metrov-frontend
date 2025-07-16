@@ -29,9 +29,14 @@
     <meta property="og:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->full() }}">
-    <meta property="og:image" content="https://poisk-metrov.ru/meta/image.jpg">
+    <meta property="og:image" content="/meta/image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Поиск метров">
+    <meta name="twitter:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
+    <meta name="twitter:image" content="/meta/image.jpg">
 
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
 
