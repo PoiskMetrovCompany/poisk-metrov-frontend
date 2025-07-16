@@ -124,10 +124,25 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 
 
 //Impotant to place redirects at end of file
-Route::get('/', function () {
+/*Route::get('/', function () {
     $city = app()->get(CityService::class)->getUserCity();
     return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
-})->name('home');
+})->name('home');*/
+
+// TODO: в рамках задачи убрал редирект для ботов
+Route::get('/', function (Request $request) {
+    // Функция для определения, является ли запрос от бота
+    $isBot = preg_match('/bot|crawl|slurp|spider|yandex|search|sogou|bing|whatsapp|telegram|facebook|linkedin|slack|pinterest|tumblr|vk|discord|googlebot|duckduckbot|semrushbot|ahrefsbot|mj12bot/i', $request->userAgent());
+
+    if ($isBot) {
+        return view('bot-preview');
+    }
+
+    $city = app()->get(CityService::class)->getUserCity();
+    return redirect("/{$city}", 302)
+        ->header('Cache-Control', 'private, max-age=0, no-cache');
+});
+// END
 
 Route::get('/catalogue', function () {
     $city = app()->get(CityService::class)->getUserCity();
