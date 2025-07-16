@@ -33,7 +33,7 @@
     <meta property="og:description" content="Поиск метров — бесплатный сервис бронирования новостроек">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ $metaUrl }}">
-    <meta property="og:image" content="/meta/image.jpg">
+    <meta property="og:image" content="/meta/image.jpg?v=2">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
@@ -43,6 +43,8 @@
     <meta name="twitter:image" content="/meta/image.jpg">
 
     <meta name="yandex-verification" content="e02510a91b55c5d2" />
+
+    <link rel="canonical" href="{{ url()->current() }}">
 
     @yield('preload-images')
     @vite([
