@@ -124,10 +124,10 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 
 
 //Impotant to place redirects at end of file
-/*Route::get('/', function () {
-    $city = app()->get(CityService::class)->getUserCity();
-    return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
-})->name('home');*/
+//Route::get('/', function () {
+//    $city = app()->get(CityService::class)->getUserCity();
+//    return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
+//})->name('home');
 
 // TODO: в рамках задачи убрал редирект для ботов
 Route::get('/{city}', function (Request $request, $city) {
@@ -135,8 +135,9 @@ Route::get('/{city}', function (Request $request, $city) {
 
     if ($isBot) {
         $cityData = app()->get(CityService::class)->getUserCity();
-
-        return view('bot-preview', compact('cityData'));
+        return response()
+            ->view('bot-preview', compact('cityData'))
+            ->header('Cache-Control', 'public, max-age=86400');
     }
 
     return redirect("/{$city}", 302)->header('Cache-Control', 'private, max-age=0, no-cache');
