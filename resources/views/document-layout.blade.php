@@ -11,13 +11,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="application/ld+json">
         {
-          "@context": "https://schema.org",
-          "@type": "RealEstateAgent",
-          "name": "Поиск метров",
-          "url": "https://poisk-metrov.ru",
-          "description": "Поиск метров — бесплатный сервис бронирования новостроек",
-          "logo": "https://poisk-metrov.ru/meta/image.jpg",
-          "image": "https://poisk-metrov.ru/meta/image.jpg"
+            "@context":"https://schema.org",
+            "@type":"WebSite",
+            "url":"{{ $metaUrl }}",
+            "name":"Поиск метров",
+            "potentialAction":{
+                "@type":"SearchAction",
+                "target":"https:\/\/tion.ru\/?s={search_term_string}",
+                "query-input":"required name=search_term_string"
+            }
         }
     </script>
 
