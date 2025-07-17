@@ -184,6 +184,7 @@ Route::get("/{city}", function ($city) {
         $bots = [
             'TelegramBot',
             'WhatsApp',
+            'Android',
             'facebookexternalhit',
             'LinkedInBot',
             'Twitterbot',
