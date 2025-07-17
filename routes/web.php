@@ -35,6 +35,24 @@ use Illuminate\Support\Str;
 |
 */
 
+if (!function_exists('isBotRequest')) {
+    function isBotRequest() {
+        $userAgent = request()->header('User-Agent', '');
+        Log::info($userAgent);
+
+        if (empty($userAgent)) return true;
+
+        $bots = [
+            'TelegramBot',
+            'WhatsApp',
+            'Bot',
+        ];
+
+        return Str::contains($userAgent, $bots);
+    }
+}
+
+
 /// Reservations
 Route::namespace('ADMIN')->prefix('admin')->group(function () {
 //    Route::view('/', 'admin.home')->middleware('access_admin')->name('admin.home');
@@ -131,7 +149,10 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 //})->name('home');
 
 Route::get('/', function () {
+
     $city = app()->get(CityService::class)->getUserCity();
+
+    if (isBotRequest()) return view('bot-preview', ['city' => $city, 'metaUrl' => url()->full()]);
 
     $userAgent = \request()->header('User-Agent');
 
@@ -175,31 +196,13 @@ Route::get('/catalogue', function () {
 });
 
 Route::get("/{city}", function ($city) {
-    function isBotRequest() {
-        $userAgent = request()->header('User-Agent', '');
-        Log::info($userAgent);
 
-        if (empty($userAgent)) return true;
+    if (isBotRequest()) return view('bot-preview', ['city' => $city, 'metaUrl' => url()->full()]);
 
-        $bots = [
-            'TelegramBot',
-            'WhatsApp',
-            'Bot',
-        ];
-
-        return Str::contains($userAgent, $bots);
-    }
     if (config('app.agent_pages_enabled')) {
         if ($city === 'agent') {
             return view('agent.home');
         }
-    }
-
-    if (isBotRequest()) {
-        return view('bot-preview', [
-            'city' => $city,
-            'metaUrl' => url()->full(),
-        ]);
     }
 
     if (in_array($city, app()->get(CityService::class)->possibleCityCodes)) {
