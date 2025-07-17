@@ -175,11 +175,12 @@ Route::get('/catalogue', function () {
 });
 
 Route::get("/{city}", function ($city) {
-    $userAgent = \request()->header('User-Agent');
+    function isBotRequest() {
+        $userAgent = request()->header('User-Agent', '');
+        Log::info($userAgent);
 
-    if (empty($userAgent)) {
-        $isBot = true;
-    } else {
+        if (empty($userAgent)) return true;
+
         $bots = [
             'TelegramBot',
             'WhatsApp',
@@ -191,31 +192,20 @@ Route::get("/{city}", function ($city) {
             'YandexBot',
             'Bot',
         ];
-        $isBot = Str::contains($userAgent, $bots);
-    }
 
-    $bots = [
-        'TelegramBot',
-        'WhatsApp',
-        'facebookexternalhit',
-        'LinkedInBot',
-        'Twitterbot',
-        'Discordbot',
-        'Googlebot',
-        'YandexBot',
-        'Bot',
-    ];
-
-    if ($isBot) {
-        return view('bot-preview', [
-            'city' => $city,
-            'metaUrl' => url()->full(),
-        ]);
+        return Str::contains($userAgent, $bots);
     }
     if (config('app.agent_pages_enabled')) {
         if ($city === 'agent') {
             return view('agent.home');
         }
+    }
+
+    if (isBotRequest()) {
+        return view('bot-preview', [
+            'city' => $city,
+            'metaUrl' => url()->full(),
+        ]);
     }
 
     if (in_array($city, app()->get(CityService::class)->possibleCityCodes)) {
