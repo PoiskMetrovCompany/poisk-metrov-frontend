@@ -78,13 +78,16 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'mongodb' => [
+        'pm-log' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGO_URL'),
-            'database' => env('MONGO_DATABASE'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
+            'host' => env('DB_MONGO_HOST'),
+            'port' => env('DB_MONGO_PORT'),
+            'database' => env('DB_MONGO_DATABASE'),
+            'username' => env('DB_MONGO_USERNAME'),
+            'password' => env('DB_MONGO_PASSWORD'),
+            'options' => [
+
+            ],
         ],
 
         'sqlsrv' => [

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MaritalStatus>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MaritalStatuses>
  */
-class MaritalStatusFactory extends Factory
+class MaritalStatusesFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class MaritalStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'key' => $this->faker->uuid(),
+            'title' => $this->faker->text(255),
         ];
     }
 }

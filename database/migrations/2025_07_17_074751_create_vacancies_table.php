@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidate_profiles', function (Blueprint $table) {
-            $table->comment('Таблица: анкет кандидатов');
+        Schema::create('vacancies', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignUuid('vacancies_key');
-            $table->foreignUuid('marital_statuses_key');
             $table->uuid('key');
-            $table->string('title', 255);
+            $table->string('title');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('deleted_at')
+                ->nullable();
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidate_profiles');
+        Schema::dropIfExists('vacancies');
     }
 };

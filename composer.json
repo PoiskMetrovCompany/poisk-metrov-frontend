@@ -17,6 +17,7 @@
         "guzzlehttp/guzzle": "^7.8",
         "halaxa/json-machine": "^1.2",
         "jason-guru/laravel-make-repository": "^0.0.3",
+        "jenssegers/mongodb": "^5.4",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",

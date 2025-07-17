@@ -13,17 +13,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('marital_statuses', function (Blueprint $table) {
-            $table->comment('Таблица: семейного положения');
             $table->id('id');
             $table->uuid('key');
             $table->enum('title', [
                 MaritalStatusesEnum::REGISERED_MARRIAGE->value,
                 MaritalStatusesEnum::NOT_REGISERED_MARRIAGE->value,
                 MaritalStatusesEnum::NOT_MARRIAGE->value,
-            ])->default(MaritalStatusesEnum::REGISERED_MARRIAGE->value);
+            ])->default(MaritalStatusesEnum::NOT_MARRIAGE->value);
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('deleted_at')
+                ->nullable();
         });
     }
 

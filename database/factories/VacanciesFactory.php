@@ -17,7 +17,8 @@ class VacanciesFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'key' => $this->faker->uuid(),
+            'title' => $this->faker->text(255),
         ];
     }
 }
