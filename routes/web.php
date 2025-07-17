@@ -133,7 +133,25 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 Route::get('/', function () {
     $city = app()->get(CityService::class)->getUserCity();
 
-    if (request()->isBot()) {
+    $userAgent = \request()->header('User-Agent');
+
+    if (empty($userAgent)) {
+        return true;
+    }
+
+    $bots = [
+        'TelegramBot',
+        'WhatsApp',
+        'facebookexternalhit',
+        'LinkedInBot',
+        'Twitterbot',
+        'Discordbot',
+        'Googlebot',
+        'YandexBot',
+        'Bot',
+    ];
+
+    if (Str::contains($userAgent, $bots)) {
         return view('bot-preview', [
             'city' => $city,
             'metaUrl' => url()->full(),
@@ -160,7 +178,20 @@ Route::get("/{city}", function ($city) {
     $userAgent = \request()->header('User-Agent');
 
     if (empty($userAgent)) {
-        return true;
+        $isBot = true;
+    } else {
+        $bots = [
+            'TelegramBot',
+            'WhatsApp',
+            'facebookexternalhit',
+            'LinkedInBot',
+            'Twitterbot',
+            'Discordbot',
+            'Googlebot',
+            'YandexBot',
+            'Bot',
+        ];
+        $isBot = Str::contains($userAgent, $bots);
     }
 
     $bots = [
@@ -175,7 +206,7 @@ Route::get("/{city}", function ($city) {
         'Bot',
     ];
 
-    if (Str::contains($userAgent, $bots)) {
+    if ($isBot) {
         return view('bot-preview', [
             'city' => $city,
             'metaUrl' => url()->full(),
