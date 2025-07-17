@@ -22,6 +22,7 @@ use App\Services\CityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,7 +157,25 @@ Route::get('/catalogue', function () {
 });
 
 Route::get("/{city}", function ($city) {
-    if (request()->isBot()) {
+    $userAgent = \request()->header('User-Agent');
+
+    if (empty($userAgent)) {
+        return true;
+    }
+
+    $bots = [
+        'TelegramBot',
+        'WhatsApp',
+        'facebookexternalhit',
+        'LinkedInBot',
+        'Twitterbot',
+        'Discordbot',
+        'Googlebot',
+        'YandexBot',
+        'Bot',
+    ];
+
+    if (Str::contains($userAgent, $bots)) {
         return view('bot-preview', [
             'city' => $city,
             'metaUrl' => url()->full(),
