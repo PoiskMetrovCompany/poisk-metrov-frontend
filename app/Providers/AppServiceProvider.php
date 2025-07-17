@@ -67,7 +67,7 @@ use App\Services\TextService;
 use App\Services\UserService;
 use App\Services\VisitedPagesService;
 use Arhitector\Yandex\Disk;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
