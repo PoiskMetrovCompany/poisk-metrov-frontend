@@ -156,6 +156,12 @@ Route::get('/catalogue', function () {
 });
 
 Route::get("/{city}", function ($city) {
+    if (request()->isBot()) {
+        return view('bot-preview', [
+            'city' => $city,
+            'metaUrl' => url()->full(),
+        ]);
+    }
     if (config('app.agent_pages_enabled')) {
         if ($city === 'agent') {
             return view('agent.home');
