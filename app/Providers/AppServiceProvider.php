@@ -312,7 +312,15 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $bots = [
-                'TelegramBot', 'WhatsApp',
+                'TelegramBot',
+                'WhatsApp',
+                'facebookexternalhit',
+                'LinkedInBot',
+                'Twitterbot',
+                'Discordbot',
+                'Googlebot',
+                'YandexBot',
+                'Bot',
             ];
 
             return Str::contains($userAgent, $bots);

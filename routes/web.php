@@ -133,11 +133,13 @@ Route::get('/', function () {
     $city = app()->get(CityService::class)->getUserCity();
 
     if (request()->isBot()) {
-        return view('bot-preview', ['city' => $city]);
+        return view('bot-preview', [
+            'city' => $city,
+            'metaUrl' => url()->full(),
+        ]);
     }
 
-    return redirect("/{$city}", 303)
-        ->header('Cache-Control', 'no-store, no-cache, must-revalidate');
+    return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
 })->name('home');
 
 
