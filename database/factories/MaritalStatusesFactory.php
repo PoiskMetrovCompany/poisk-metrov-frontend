@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Core\Common\MaritalStatusesEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,11 @@ class MaritalStatusesFactory extends Factory
     {
         return [
             'key' => $this->faker->uuid(),
-            'title' => $this->faker->text(255),
+            'title' => $this->faker->randomElement([
+                MaritalStatusesEnum::REGISERED_MARRIAGE->value,
+                MaritalStatusesEnum::NOT_REGISERED_MARRIAGE->value,
+                MaritalStatusesEnum::NOT_MARRIAGE->value,
+            ]),
         ];
     }
 }

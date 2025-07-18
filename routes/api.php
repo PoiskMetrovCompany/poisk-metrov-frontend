@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\Api\V1\Account\AccountAuthorizationController;
 use App\Http\Controllers\Api\V1\CbrController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
@@ -105,5 +106,12 @@ Route::namespace('V1')->prefix('v1')->group(function () {
        Route::get('actual-date', [CbrController::class, 'actualDate']);
    });
    /// END
+
+    /// Cbr
+    Route::prefix('account')->group(function () {
+        Route::post('set-code', [AccountAuthorizationController::class, 'setCode']);
+        Route::post('auth', [AccountAuthorizationController::class, 'index']);
+    });
+    /// END
 });
 /// END
