@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/css/admin/style.css',
                 'resources/css/admin/components/dropdown.css',
 
+
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',
                 'resources/js/app.js',
@@ -63,6 +64,7 @@ export default defineConfig({
                 'resources/js/reservation/request.js',
                 'resources/js/coordinateStorage.js',
                 'resources/js/anchorLink.js',
+
 
             ],
             refresh: true,

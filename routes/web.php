@@ -49,6 +49,10 @@ Route::namespace('ADMIN')->prefix('admin')->group(function () {
     });
 });
 
+Route::namespace('PROFILE_CANDIDATES')->prefix('profile-candidates')->group(function () {
+    Route::get('/', [ReservationController::class, 'indexPage']); // TODO:  ЭТО ДОЛЖНА БЫТЬ СТР. С ФОРМОЙ
+});
+
 /// Reservations
 Route::prefix('reservations')->group(function () {
     Route::get('/{id}', [ReservationController::class, 'indexPage']);
