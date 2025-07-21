@@ -11,6 +11,7 @@ use App\Http\Controllers\Form\UserAdminController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Pages\AdminController;
+use App\Http\Controllers\Pages\ProfileCandidatesController;
 use App\Http\Controllers\Pages\ReservationController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\RealEstateController;
@@ -34,6 +35,10 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
+Route::namespace('PROFILE_CANDIDATES')->prefix('profile-candidates')->group(function () {
+    Route::get('/', [ProfileCandidatesController::class, 'index']); // TODO:  ЭТО ДОЛЖНА БЫТЬ СТР. С ФОРМОЙ
+});
+
 /// Reservations
 Route::namespace('ADMIN')->prefix('admin')->group(function () {
 //    Route::view('/', 'admin.home')->middleware('access_admin')->name('admin.home');
@@ -49,9 +54,6 @@ Route::namespace('ADMIN')->prefix('admin')->group(function () {
     });
 });
 
-Route::namespace('PROFILE_CANDIDATES')->prefix('profile-candidates')->group(function () {
-    Route::get('/', [ReservationController::class, 'indexPage']); // TODO:  ЭТО ДОЛЖНА БЫТЬ СТР. С ФОРМОЙ
-});
 
 /// Reservations
 Route::prefix('reservations')->group(function () {
