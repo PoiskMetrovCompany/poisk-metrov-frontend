@@ -18,7 +18,7 @@ class Account extends Model
         'key',
         'role',
         'phone',
-        'code'
+        'secret',
     ];
 
     /**

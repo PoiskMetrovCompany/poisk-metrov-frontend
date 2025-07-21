@@ -47,4 +47,12 @@ class CandidateProfiles extends Model
      * @var string[]
      */
     protected $dates = ['deleted_at'];
+
+    public function vacancy() {
+        return $this->belongsTo(Vacancies::class, 'vacancies_key', 'key');
+    }
+
+    public function maritalStatus() {
+        return $this->belongsTo(MaritalStatuses::class, 'marital_statuses_key', 'key');
+    }
 }

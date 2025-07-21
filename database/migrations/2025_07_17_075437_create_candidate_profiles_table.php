@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('first_name', 255);
             $table->string('last_name', 255);
             $table->string('middle_name', 255);
-            $table->string('reason_for_changing_surnames')->default(null);
+            $table->string('reason_for_changing_surnames')->nullable()->default(null);
             $table->date('birth_date');
             $table->string('country_birth', 255);
             $table->string('city_birth', 255);
@@ -41,13 +41,13 @@ return new class extends Migration
             $table->string('permanent_registration_address', 255);
             $table->string('temporary_registration_address', 255);
             $table->string('actual_residence_address', 255);
-            $table->jsonb('family_partner');
-            $table->jsonb('adult_family_members');
-            $table->jsonb('adult_children');
-            $table->boolean('serviceman');
+            $table->jsonb('family_partner')->nullable();
+            $table->jsonb('adult_family_members')->nullable();
+            $table->jsonb('adult_children')->nullable();
+            $table->boolean('serviceman')->default(false);
             $table->string('law_breaker', 255);
             $table->string('legal_entity', 255);
-            $table->boolean('is_data_processing');
+            $table->boolean('is_data_processing')->default(false);
             $table->text('comment');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');

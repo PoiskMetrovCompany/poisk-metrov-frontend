@@ -21,10 +21,9 @@ class VacancyListController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $repository = $this->vacancyRepository->list([]);
-        $dataCollection = new VacancyCollection($repository);
 
         return new JsonResponse(
-            data: $dataCollection->response,
+            data: $repository,
             status: Response::HTTP_OK
         );
     }

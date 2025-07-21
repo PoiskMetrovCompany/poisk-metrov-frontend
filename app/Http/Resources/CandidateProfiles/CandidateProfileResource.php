@@ -9,12 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CandidateProfileResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    public function toArray(Request $request)
     {
         return [
             'id' => $this->id,
@@ -45,9 +40,9 @@ class CandidateProfileResource extends JsonResource
             'permanent_registration_address' => $this->permanent_registration_address,
             'temporary_registration_address' => $this->temporary_registration_address,
             'actual_residence_address' => $this->actual_residence_address,
-            'family_partner' => $this->family_partner,
-            'adult_family_members' => $this->adult_family_members,
-            'adult_children' => $this->adult_children,
+            'family_partner' => json_decode($this->family_partner, true),
+            'adult_family_members' => json_decode($this->adult_family_members, true),
+            'adult_children' => json_decode($this->adult_children, true),
             'serviceman' => $this->serviceman,
             'law_breaker' => $this->law_breaker,
             'legal_entity' => $this->legal_entity,

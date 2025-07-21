@@ -6,6 +6,7 @@ use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CandidateProfiles\CandidateProfileCollection;
 use App\Http\Resources\CandidateProfiles\CandidateProfileResource;
+use App\Models\CandidateProfiles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,9 +22,8 @@ class CandidateProfileListController extends Controller
 
     public function __invoke(Request $request)
     {
-        $candidateProfile = $this->candidateProfilesRepository->list([]);
+        $candidateProfile = CandidateProfiles::all()->reverse();
         $dataCollection = new CandidateProfileCollection($candidateProfile);
-
         return new JsonResponse(
             data: [
                 'response' => true,

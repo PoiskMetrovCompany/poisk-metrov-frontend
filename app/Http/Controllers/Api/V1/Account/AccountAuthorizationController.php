@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AccountAuthorizationController extends Controller
 {
@@ -24,19 +26,11 @@ class AccountAuthorizationController extends Controller
     public function index(AccountLoginRequest $request)
     {
         $attributes = $request->validated();
-        $account = [];
-
-        $model = $this->account::where(['phone' => $attributes['phone']])->get();
-        if ($model->isEmpty()) {
-            if ($attributes['code']) $attributes['code'] = Hash::make($attributes['code']);
-            if ($attributes['password']) $attributes['password'] = Hash::make($attributes['password']);
-            $model->create($attributes);
-            $this->index($request);
-        }
+        $model = $this->account::where(['phone' => $attributes['phone']])->first();
 
         if (
-            $attributes->code && Hash::check($attributes['code'], $model->code) ||
-            $attributes->password && Hash::check($attributes['password'], $model->password)
+            key_exists('code', $attributes) && Hash::check($attributes['code'], $model->secret) ||
+            key_exists('password', $attributes) && Hash::check($attributes['password'], $model->secret)
         ) {
             $account = $this->account::createBearerToken($model);
         }
@@ -44,7 +38,10 @@ class AccountAuthorizationController extends Controller
         return new JsonResponse(
             data: [
                 'request' => true,
-                'attributes' => AccountResource::make($account),
+                'attributes' => [
+                    'user' => AccountResource::make($model),
+                    'access_token' => $account,
+                ],
             ],
             status: Response::HTTP_CREATED
         );
@@ -53,11 +50,15 @@ class AccountAuthorizationController extends Controller
     public function setCode(AccountSetCodeRequest $request)
     {
         $attributes = $request->validated();
-        $model = $this->account::where(['phone' => $attributes['phone']])->get();
-        if ($model) {
+        if (empty($this->account::where(['phone' => $attributes['phone']])->first())) {
+            $attributes['key'] = Str::uuid()->toString();
+            $this->account::create($attributes);
+            return $this->setCode($request);
+        } else {
             // TODO: генерация и отправка кода
             $code = '000000';
-            $model->update(['code' => $code]);
+            $model = $this->account::where(['phone' => $attributes['phone']])->first();
+            $model->update(['secret' => Hash::make($code)]);
         }
         return new JsonResponse(
             data: [

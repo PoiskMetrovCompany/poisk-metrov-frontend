@@ -21,10 +21,13 @@ class CandidateProfilesFactory extends Factory
      */
     public function definition(): array
     {
+        $vacancies = \App\Models\Vacancies::all();
+        $marital_statuses = \App\Models\MaritalStatuses::all();
+
         return [
             'key' => $this->faker->uuid(),
-            'vacancies_key' => \App\Models\Vacancies::factory(),
-            'marital_statuses_key' => \App\Models\MaritalStatuses::factory(),
+            'vacancies_key' => $vacancies->random()->key,
+            'marital_statuses_key' => $marital_statuses->random()->key,
             'status' => $this->faker->randomElement([
                 CandidateProfileStatusesEnum::NEW->value,
                 CandidateProfileStatusesEnum::VERIFIED->value,

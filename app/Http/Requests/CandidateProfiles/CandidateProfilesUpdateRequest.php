@@ -22,7 +22,7 @@ class CandidateProfilesUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'key' => ['required'],
+            'key' => ['required', 'exists:candidate_profiles,key'],
             'vacancies_key' => ['required'],
             'marital_statuses_key' => ['required'],
             'status' => ['required'],
@@ -46,10 +46,10 @@ class CandidateProfilesUpdateRequest extends FormRequest
             'family_partner' => ['required'],
             'adult_family_members' => ['required'],
             'adult_children' => ['required'],
-            'serviceman' => ['required', 'boolean'],
+            'serviceman' => ['nullable', 'boolean'],
             'law_breaker' => ['required', 'string', 'max:255'],
             'legal_entity' => ['required', 'string', 'max:255'],
-            'is_data_processing' => ['required', 'boolean'],
+            'is_data_processing' => ['nullable', 'boolean'],
             'comment' => ['required', 'string'],
         ];
     }

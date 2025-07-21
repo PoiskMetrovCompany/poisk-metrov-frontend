@@ -2,7 +2,13 @@
 
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\Api\V1\Account\AccountAuthorizationController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileUpdateController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\MaritalStatuses\MaritalStatusListController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FavoritesController;
@@ -107,10 +113,31 @@ Route::namespace('V1')->prefix('v1')->group(function () {
    });
    /// END
 
-    /// Cbr
+    /// ACCOUNT
     Route::prefix('account')->group(function () {
         Route::post('set-code', [AccountAuthorizationController::class, 'setCode']);
         Route::post('auth', [AccountAuthorizationController::class, 'index']);
+    });
+    /// END
+
+    /// VACANCY
+    Route::prefix('vacancy')->group(function () {
+        Route::get('/', [VacancyListController::class, '__invoke']);
+    });
+    /// END
+
+    /// MARITAL_STATUSES
+    Route::prefix('marital-statuses')->group(function () {
+        Route::get('/', [MaritalStatusListController::class, '__invoke']);
+    });
+    /// END
+
+    /// CANDIDATES
+    Route::prefix('candidates')->group(function () {
+        Route::get('/', [CandidateProfileListController::class, '__invoke']);
+        Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
+        Route::get('/read', [CandidateProfileReadController::class, '__invoke']);
+        Route::put('/update', [CandidateProfileUpdateController::class, '__invoke']);
     });
     /// END
 });
