@@ -1,0 +1,1114 @@
+    /* ==============================================
+    БАЗОВЫЕ СТИЛИ И ТИПОГРАФИЯ
+    ============================================== */
+
+    /* Шрифты */
+    @font-face {
+        font-family: "Onest";
+        src: url("/fonts/Onest/Onest-VariableFont_wght.ttf");
+    }
+
+    /* HTML и Body */
+    html {
+        font-family: 'Onest';
+        font-size: 16px;
+    }
+
+    body {
+        margin: 0;
+        background: rgba(244, 244, 241, 1);
+        padding-bottom: 3rem; /* 48px */
+    }
+
+    /* Базовая типография */
+    h1, p {
+        margin: 0.625rem 0; /* 10px */
+    }
+
+    /* ==============================================
+    LAYOUT СТРУКТУРА
+    ============================================== */
+
+    /* Header */
+    header {
+        display: flex;
+        justify-content: center;
+        margin-top: 3rem; /* 48px */
+        margin-bottom: 3rem; /* 48px */
+    }
+
+    #nonTextImg{
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Section */
+    section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        min-height: calc(100vh - 5.625rem); /* 90px */
+    }
+
+    /* Article */
+    article {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 3rem; /* 48px */
+    }
+
+    article h1 {
+        font-weight: 500;
+        font-size: 1.5rem; /* 24px */
+    }
+
+    article p {
+        font-weight: 400;
+        color: #818181;
+        font-size: 1.125rem; /* 18px */
+    }
+
+    /* ==============================================
+    КАРТОЧКИ И КОНТЕЙНЕРЫ
+    ============================================== */
+
+    /* Основная карточка */
+    .center-card {
+        width: 21rem; /* 336px */
+        padding: 1.5rem 3rem 0; /* 24px 48px 0 */
+        height: 27.25rem; /* 436px */
+        background-color: rgba(255, 255, 255, 1);
+        border-radius: 2rem; /* 32px */
+        text-align: center;
+        position: relative;
+    }
+
+    .center-card.big {
+        width: 50%;
+        height: auto;
+        min-height: auto;
+        padding-bottom: 1.5rem; /* 24px */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Типография карточек */
+    .center-card h1 {
+        font-weight: 500;
+        font-size: 1.5rem; /* 24px */
+    }
+
+    .center-card p {
+        font-size: 1rem; /* 16px */
+        font-weight: 400;
+        line-height: 1.5;
+        color: rgba(129, 129, 129, 1);
+    }
+
+    /* ==============================================
+    ФОРМЫ И ПОЛЯ ВВОДА
+    ============================================== */
+
+    /* Основная форма */
+    form {
+        position: relative;
+        margin-top: 3.75rem; /* 60px */
+    }
+
+    /* Ряды формы */
+    .formRow {
+        width: 100%;
+        margin-top: 1.875rem; /* 30px */
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .formRow.justify-space-between {
+        justify-content: space-between;
+    }
+
+    .formRow.justify-space-around {
+        justify-content: space-around;
+    }
+
+    .formRow.justify-flex-start {
+        justify-content: flex-start;
+    }
+
+    /* Заголовки в формах */
+    .formRow h1 {
+        font-weight: 500;
+        font-size: 1.5rem; /* 24px */
+        line-height: 1.3;
+    }
+
+    .formRow h3 {
+        width: 100%;
+        font-weight: 500;
+        text-align: center;
+        margin: 0;
+    }
+
+    .formRow h4 {
+        width: 100%;
+        margin: 0;
+        font-weight: 400;
+        text-align: center;
+        color: #818181;
+        margin-top: 1.25rem; /* 20px */
+        font-size: 1.125rem; /* 18px */
+    }
+
+    /* Контейнеры для ввода */
+    .input-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .input-container.big {
+        width: auto;
+    }
+
+    /* ==============================================
+    ПОЛЯ ВВОДА
+    ============================================== */
+
+    /* Основные поля ввода */
+    .formInput {
+        width: 19.25rem; /* 308px */
+        height: 4rem; /* 64px */
+        border-radius: 1rem; /* 16px */
+        border: 1.5px solid rgba(210, 210, 210, 1);
+        padding-left: 0.875rem; /* 14px */
+        font-weight: 400;
+        font-size: 1rem; /* 16px */
+        line-height: 1.5;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .formInput:focus {
+        outline: none;
+    }
+
+    .formInput.big {
+        width: 100%;
+    }
+
+    /* Лейблы для полей */
+    .formLabel {
+        font-weight: 400;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.5;
+        position: absolute;
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 1);
+        top: -0.6875rem; /* -10.5px */
+        left: 0.5rem; /* 8px */
+        padding: 0 0.3125rem; /* 0 5px */
+    }
+
+    /* ==============================================
+    КНОПКИ
+    ============================================== */
+
+    /* Основные кнопки формы */
+    .formBtn {
+        margin-top: 1.25rem; /* 20px */
+        width: 21rem; /* 336px */
+        height: 4rem; /* 64px */
+        border: none;
+        border-radius: 2.5rem; /* 40px */
+        font-size: 1rem; /* 16px */
+        transition: background ease-in-out 0.3s;
+        cursor: pointer;
+    }
+
+    .btn-inactive {
+        background: #E4E4E4;
+        color: rgba(129, 129, 129, 1);
+    }
+
+    .btn-active {
+        background: #EC7D3F;
+        color: #F4F4F1;
+    }
+
+    /* Большие кнопки формы */
+    .bigFormButton {
+        width: 100%;
+        display: flex;
+        height: 4rem; /* 64px */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border: 1.5px solid #E4621980;
+        border-radius: 1rem; /* 16px */
+        background: none;
+        color: #EC7D3F;
+        font-size: 1rem; /* 16px */
+        font-weight: 500;
+        gap: 0.5rem; /* 8px */
+        cursor: pointer;
+    }
+
+    .bigFormButton svg {
+        width: 1rem; /* 16px */
+        height: 1rem; /* 16px */
+    }
+
+    /* Кнопки фильтра */
+    .filterButton {
+        color: #494949;
+        font-weight: 400;
+        line-height: 1.5;
+        padding: 0.5rem 1rem; /* 8px 16px */
+        font-size: 1.125rem; /* 18px */
+        margin: 1.25rem; /* 20px */
+        border-radius: 1.5rem; /* 24px */
+        border: none;
+        background: #F4F4F1;
+        cursor: pointer;
+    }
+
+    .filterButton.active {
+        background: #EC7D3F;
+        color: #FFFFFF;
+    }
+
+    #filterRow button:first-of-type,
+    #filterRow button:last-of-type {
+        margin-left: 0;
+    }
+
+    /* Специальные кнопки */
+    .aButton {
+        font-size: 0.875rem; /* 14px */
+        font-weight: 500;
+        line-height: 1.5;
+        color: #EC7D3F;
+        background: none;
+        border: none;
+        text-align: left;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    #filters {
+        border: none;
+        background: #EC7D3F1A;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: #EC7D3F;
+        font-size: 1rem; /* 16px */
+        width: 8.75rem; /* 140px */
+        height: 1.3125rem; /* 21px */
+        padding: 0.84375rem; /* 13.5px */
+        border-radius: 0.75rem; /* 12px */
+        height: 100%;
+    }
+
+    /* ==============================================
+    ЧЕКБОКСЫ И РАДИОКНОПКИ
+    ============================================== */
+
+    /* Кастомные чекбоксы */
+    .custom-checkbox {
+        position: relative;
+        display: inline-block;
+        margin-top: 0.125rem; /* 2px */
+        margin-left: 0.4375rem; /* 7px */
+        cursor: pointer;
+    }
+
+    .custom-checkbox input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .custom-checkbox .checkmark {
+        position: relative;
+        display: inline-block;
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        background: #ffffff;
+        border: 2px solid #ddd;
+        border-radius: 0.375rem; /* 6px */
+        transition: all 0.5s ease-in-out;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-checkbox:hover .checkmark {
+        border-color: #EC7D3F;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+        background: #EC7D3F;
+    }
+
+    .custom-checkbox .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 0.375rem; /* 6px */
+        top: 0.125rem; /* 2px */
+        width: 0.375rem; /* 6px */
+        height: 0.625rem; /* 10px */
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Кастомные радиокнопки */
+    .custom-radio {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem; /* 8px */
+        margin-top: 0.125rem; /* 2px */
+        margin-left: 0.4375rem; /* 7px */
+        cursor: pointer;
+        font-size: 1.125rem; /* 18px */
+    }
+
+    .custom-radio input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .custom-radio .radiomark {
+        position: relative;
+        display: inline-block;
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        background: #ffffff;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+    }
+
+    .custom-radio:hover .radiomark {
+        border-color: #EC7D3F;
+    }
+
+    .custom-radio input[type="radio"]:checked ~ .radiomark {
+        background: #ffffff;
+        border: 2px solid #EC7D3F;
+    }
+
+    .custom-radio .radiomark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 50%;
+        top: 50%;
+        width: 0.75rem; /* 12px */
+        height: 0.75rem; /* 12px */
+        background: #EC7D3F;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .custom-radio input[type="radio"]:checked ~ .radiomark:after {
+        display: block;
+    }
+
+    /* Строки с чекбоксами */
+    .checkboxRow {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 0.75rem; /* 12px */
+        max-width: 25rem; /* 400px */
+        font-family: Arial, sans-serif;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.4;
+        margin-top: 1.25rem; /* 20px */
+    }
+
+    .checkboxRow input[type="checkbox"] {
+        margin: 0;
+        margin-top: 0.125rem; /* 2px */
+        flex-shrink: 0;
+        width: 1rem; /* 16px */
+        height: 1rem; /* 16px */
+        cursor: pointer;
+        margin-left: 0.4375rem; /* 7px */
+    }
+
+    .checkboxRow label {
+        cursor: pointer;
+        color: #333;
+        text-align: left;
+    }
+
+    .checkboxRow label span {
+        color: #ff6b35;
+        font-weight: normal;
+    }
+
+    /* Лейблы для радио и чекбоксов */
+    input[type="radio"] + label {
+        font-weight: 400;
+        font-size: 1.125rem; /* 18px */
+        margin-right: 1.875rem; /* 30px */
+    }
+
+    input[type="checkbox"] + label {
+        font-weight: 400;
+        font-size: 1.125rem; /* 18px */
+        margin-right: 1.875rem; /* 30px */
+    }
+
+    /* ==============================================
+    ТАБЛИЦЫ
+    ============================================== */
+
+    /* Таблицы ввода */
+    .inputTable {
+        width: 100%;
+        border-spacing: 0;
+        height: 13.5rem; /* 216px */
+        border-radius: 1rem; /* 16px */
+        border: 1px solid #D2D2D2;
+        position: relative;
+        margin-top: 1.25rem; /* 20px */
+    }
+
+    .inputTable tr {
+        margin: 0;
+        padding: 0;
+        border-spacing: 0;
+    }
+
+    .inputTable td {
+        border: 1px solid #D2D2D2;
+        padding: 0.625rem; /* 10px */
+    }
+
+    .inputTable tr:first-child td {
+        border-top-left-radius: 1rem; /* 16px */
+        border-top-right-radius: 1rem; /* 16px */
+    }
+
+    .inputTable tr:last-child td:first-child {
+        border-bottom-left-radius: 1rem; /* 16px */
+    }
+
+    .inputTable tr:last-child td:last-child {
+        border-bottom-right-radius: 1rem; /* 16px */
+    }
+
+    .inputTable td input {
+        width: 100%;
+        padding: 0;
+        border: none;
+        height: 100%;
+        box-sizing: border-box;
+        font-size: 1.125rem; /* 18px */
+    }
+
+    .inputTable td input:focus {
+        outline: none;
+    }
+
+    /* Лейблы таблиц */
+    .tableLabel {
+        position: absolute;
+        z-index: 3;
+        top: -0.6875rem; /* -11px */
+        left: 0.5rem; /* 8px */
+        font-weight: 400;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.5;
+        background-color: rgba(255, 255, 255, 1);
+        padding: 0 0.3125rem; /* 0 5px */
+        transform: translateY(0);
+    }
+
+    /* Контейнеры таблиц */
+    .table-container {
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 1;
+        max-height: 13.5rem; /* 216px */
+        overflow: hidden;
+        margin-bottom: 0;
+        padding-bottom: 1.25rem; /* 20px */
+    }
+
+    .table-container[style*="opacity: 0"] {
+        margin-bottom: 0 !important;
+        transform: translateY(-1.25rem); /* -20px */
+    }
+
+    /* ==============================================
+    КАСТОМНЫЙ SELECT
+    ============================================== */
+
+    .custom-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .custom-select select {
+        display: none;
+    }
+
+    .select-selected {
+        width: 100%;
+        height: 4rem; /* 64px */
+        border-radius: 1rem; /* 16px */
+        border: 1.5px solid rgba(210, 210, 210, 1);
+        padding: 0 0.875rem; /* 0 14px */
+        font-weight: 400;
+        font-size: 1rem; /* 16px */
+        line-height: 4rem; /* 64px */
+        color: #333;
+        background-color: white;
+        cursor: pointer;
+        box-sizing: border-box;
+        position: relative;
+        transition: border-color 0.3s ease;
+    }
+
+    .select-selected:after {
+        position: absolute;
+        content: "";
+        top: 1.25rem; /* 20px */
+        right: 1rem; /* 16px */
+        width: 0.625rem; /* 10px */
+        height: 0.625rem; /* 10px */
+        border: solid #818181;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .select-selected.select-arrow-active:after {
+        transform: rotate(-135deg);
+        top: 1.25rem; /* 20px */
+    }
+
+    .select-items {
+        position: absolute;
+        background-color: white;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        border-radius: 1rem; /* 16px */
+        border: 1.5px solid rgba(210, 210, 210, 1);
+        margin-top: 0.5rem; /* 8px */
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-height: 18.75rem; /* 300px */
+        overflow-y: auto;
+    }
+
+    .select-items div {
+        padding: 0.75rem 1rem; /* 12px 16px */
+        cursor: pointer;
+        font-size: 1rem; /* 16px */
+        color: #333;
+        transition: background-color 0.3s ease;
+    }
+
+    .select-items div:hover {
+        background-color: rgba(236, 125, 63, 0.1);
+    }
+
+    .select-hide {
+        display: none;
+    }
+
+    .same-as-selected {
+        background-color: rgba(236, 125, 63, 0.1);
+        color: #EC7D3F;
+    }
+
+    .select-label {
+        position: absolute;
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 1);
+        top: -0.6875rem; /* -10.5px */
+        left: 0.5rem; /* 8px */
+        padding: 0 0.3125rem; /* 0 5px */
+        font-weight: 400;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.5;
+    }
+
+    /* ==============================================
+    КАЛЕНДАРЬ
+    ============================================== */
+
+    .calendar-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1.25rem; /* 20px */
+        margin-top: 1.875rem; /* 30px */
+    }
+
+    .calendar-wrapper {
+        flex: 1;
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        font-weight: 500;
+        font-size: 1.125rem; /* 18px */
+        color: #181817;
+        margin-bottom: 0.9375rem; /* 15px */
+        padding: 0 0.625rem; /* 0 10px */
+    }
+
+    .calendar-header .month-year {
+        flex: 1;
+        text-align: center;
+    }
+
+    .nav-arrow {
+        cursor: pointer;
+        font-size: 1.25rem; /* 20px */
+        color: #494949;
+        user-select: none;
+        padding: 0.3125rem; /* 5px */
+        border-radius: 50%;
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-arrow:hover {
+        background-color: rgba(236, 125, 63, 0.1);
+    }
+
+    .calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .calendar th {
+        font-weight: 400;
+        font-size: 1rem; /* 16px */
+        color: #818181;
+        padding: 0.625rem 0; /* 10px 0 */
+        text-align: center;
+    }
+
+    .calendar td {
+        font-weight: 200;
+        font-size: 1rem; /* 16px */
+        color: #9E9E9E;
+        line-height: 1.5;
+        text-align: center;
+        position: relative;
+        cursor: pointer;
+        height: 1.875rem; /* 30px */
+    }
+
+    .calendar tr {
+        margin-bottom: 0.625rem; /* 10px */
+        margin-top: 0.625rem; /* 10px */
+    }
+
+    .start-date-bg {
+        background: linear-gradient(to left, rgba(236, 125, 63, 0.1) 0 50%, #ffffff 50%);
+    }
+
+    .end-date-bg {
+        background: linear-gradient(to right, rgba(236, 125, 63, 0.1) 0 50%, #ffffff 50%);
+    }
+
+    .calendar td .day-number {
+        display: inline-block;
+        width: 1.875rem; /* 30px */
+        line-height: 1.875rem; /* 30px */
+        position: relative;
+        z-index: 1;
+    }
+
+    .calendar td.in-range {
+        background-color: rgba(236, 125, 63, 0.1);
+    }
+
+    .calendar td.start-date::after,
+    .calendar td.end-date::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 1.875rem; /* 30px */
+        height: 1.875rem; /* 30px */
+        background-color: #EC7D3F;
+        border-radius: 50%;
+        z-index: 0;
+    }
+
+    .calendar td.start-date .day-number,
+    .calendar td.end-date .day-number,
+    .calendar td.start-date,
+    .calendar td.end-date {
+        color: white;
+    }
+
+    .calendar td:empty {
+        cursor: default;
+    }
+
+    .calendar td {
+        position: relative;
+        z-index: 1;
+    }
+
+    .calendar td::after {
+        z-index: -1;
+    }
+
+    /* ==============================================
+    АНИМАЦИИ И ПЕРЕХОДЫ
+    ============================================== */
+
+    /* Анимируемые блоки */
+    .toggle-block {
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 15000px;
+        opacity: 1;
+        transform: translateY(0);
+        margin-bottom: 0;
+    }
+
+    .toggle-block.hidden {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-1.25rem); /* -20px */
+        margin-bottom: 0;
+    }
+
+    .toggle-block .formRow {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toggle-block.hidden .formRow {
+        transform: translateY(-0.9375rem); /* -15px */
+        opacity: 0;
+    }
+
+    .toggle-block .formInput {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toggle-block.hidden .formInput {
+        transform: translateY(-0.625rem); /* -10px */
+    }
+
+    /* Иконка галочки */
+    .checkmark-icon {
+        position: absolute;
+        right: 1.25rem; /* 20px */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.5rem; /* 24px */
+        height: 1.5rem; /* 24px */
+        display: none;
+        z-index: 3;
+    }
+
+    .checkmark-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: #EC7D3F;
+    }
+
+    /* ==============================================
+    УТИЛИТАРНЫЕ КЛАССЫ
+    ============================================== */
+
+    /* Размеры */
+    .w-49 {
+        width: 49% !important;
+    }
+
+    .w-60 {
+        width: 60%;
+    }
+
+    /* Направление flex */
+    .flex-direction-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Позиционирование */
+    .position-absolute {
+        position: absolute !important;
+    }
+
+    /* Специальные отступы */
+    .calendar-spacing {
+        margin-top: 625rem; /* 10000px */
+        margin-bottom: 625rem; /* 10000px */
+    }
+
+    /* Ссылка для смены номера */
+    #changeNumber {
+        position: absolute;
+        bottom: 4.6875rem; /* 75px */
+        left: 50%;
+        transform: translateX(-50%);
+        text-decoration: none;
+        color: #818181;
+    }
+    .candidatesTable {
+        margin-top: 1.875rem;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border-radius: 1rem; 
+        overflow: hidden;
+    }
+
+    .candidatesTable th {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: #818181;
+        text-align: left;
+        padding: 0.625rem; 
+    }
+
+    .candidatesTable tr {
+        border-bottom: 1px solid rgba(228, 228, 228, 1);
+    }
+
+    .candidatesTable td {
+        font-weight: 400;
+        line-height: 1.4;
+        color: #494949;
+        padding: 0.625rem;
+    }
+
+    .candidatesTable tbody {
+        background: rgba(255, 255, 255, 1);
+    }
+
+
+    .candidatesTable tbody tr:first-child td:first-child {
+        border-top-left-radius: 1rem; 
+    }
+
+    .candidatesTable tbody tr:first-child td:last-child {
+        border-top-right-radius: 1rem; 
+    }
+
+
+    .candidatesTable tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 1rem; 
+    }
+
+    .candidatesTable tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 1rem; 
+    }
+
+
+    .candidatesTable tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .candidatesTable button {
+        display: inline-flex;
+        width: 2.5rem;
+        height: 2.5rem;
+        justify-content: center;
+        align-items: center;
+        background-color: none;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .candidatesTable button img {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    #downloadBtn {
+        background: #EC7D3F1A;
+    }
+
+    #radactBtn {
+        margin-right: 10px;
+    }
+
+    .candidatesTable p {
+        width: fit-content;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 8px;
+        border-radius: 24px;
+    }
+
+    #new {
+        color: #C5801F;
+        background: #F8F8E8;
+    }
+    #checked{
+        color: rgba(15, 141, 19, 1);
+        background: rgba(228, 248, 228, 1);
+    }
+    #needRevision{
+        color: rgba(44, 129, 150, 1);
+        background: rgba(236, 246, 248, 1);
+    }
+    #rejected{
+        color: rgba(240, 76, 26, 1);
+        background: rgba(255, 239, 233, 1);
+    }
+    .hidden{
+        display: none;
+    }
+    .left-side {
+        display: inline-flex;
+        width: 600px;
+        justify-content: space-between;
+    }
+
+    .navBtn {
+        width: 149px;
+        height: 42px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .inactive {
+        color: rgba(158, 158, 158, 1);
+        cursor: default;
+    }
+
+    .pagination {
+        display: flex;
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    .paginationBtn {
+        height: 42px;
+        width: 42px;
+        margin: 0;
+        padding: 0;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 0;
+    }
+
+
+    .paginationBtn:first-child {
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+    }
+
+
+    .paginationBtn:last-child {
+        border-top-right-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+
+
+    .paginationBtn:not(:first-child) {
+        border-left: none;
+    }
+
+    .paginationBtn.active {
+        background: rgba(236, 125, 63, 1); 
+        color: white;
+        border-color: rgba(236, 125, 63, 1);
+    }
+    /* Контейнер для группы кнопок скачивания */
+    .download-button-group {
+        position: relative;
+        display: flex;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Основная кнопка скачивания */
+    .download-btn.primary {
+        background: rgba(236, 125, 63, 1);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 25px 0 0 25px;
+        transition: background-color 0.2s ease;
+        min-width: 100px;
+        text-align: center;
+    }
+
+
+    /* Кнопка dropdown с форматом */
+    .download-btn.dropdown-toggle {
+        background: rgba(236, 125, 63, 1);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 0 25px 25px 0;
+        border-left: 2px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s ease;
+        position: relative;
+    }
+    #city{
+        margin: 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.5;
+        color: rgba(73, 73, 73, 1);
+        display: flex;
+        align-items: center;
+        margin-left: 3rem;
+    }
+    #city span{
+        color: rgba(236, 125, 63, 1);
+        margin-left: 0.5rem;
+    }

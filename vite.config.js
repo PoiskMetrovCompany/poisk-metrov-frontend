@@ -16,7 +16,7 @@ export default defineConfig({
                 'resources/css/animation.override.css',
                 'resources/css/admin/style.css',
                 'resources/css/admin/components/dropdown.css',
-
+                'resources/css/candidatesProfiles/index.css',
 
                 'resources/scss/styles.scss',
                 'resources/scss/pdf-styles.scss',

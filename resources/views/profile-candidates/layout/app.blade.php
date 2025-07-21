@@ -1,13 +1,28 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация кандидата</title>
+    
+    <script src="https://unpkg.com/imask"></script>
+    @vite('resources/css/candidatesProfiles/index.css')
 </head>
 <body>
-    @yield('content')
+    
+    <header>
+        <img src="../img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров">
+    </header>
+
+    <main>
+        <section>
+                @yield("content")
+        </section>
+    </main>
+
+<script>
+
+</script>
+
 </body>
 </html>
