@@ -27,4 +27,9 @@ final class MaritalStatusesRepository implements MaritalStatusesRepositoryInterf
     {
 
     }
+
+    public function getType(): string
+    {
+        return $this->model::class;
+    }
 }

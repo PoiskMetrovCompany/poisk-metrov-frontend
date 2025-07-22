@@ -26,4 +26,9 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
     {
 
     }
+
+    public function getType(): string
+    {
+        return $this->model::class;
+    }
 }

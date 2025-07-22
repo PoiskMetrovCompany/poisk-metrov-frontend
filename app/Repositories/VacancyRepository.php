@@ -26,4 +26,9 @@ final class VacancyRepository implements VacancyRepositoryInterface
     {
 
     }
+
+    public function getType(): string
+    {
+        return $this->model::class;
+    }
 }

@@ -9,6 +9,7 @@ use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
 use App\Core\Interfaces\Repositories\MaritalStatusesRepositoryInterface;
+use App\Core\Interfaces\Repositories\RelatedDataRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
@@ -43,6 +44,7 @@ use App\Repositories\FeedRepository;
 use App\Repositories\InteractionRepository;
 use App\Repositories\ManagerRepository;
 use App\Repositories\MaritalStatusesRepository;
+use App\Repositories\RelatedDataRepository;
 use App\Repositories\ReservationRepository;
 use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\UserAdsAgreementRepository;
@@ -260,6 +262,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CandidateProfilesRepositoryInterface::class, CandidateProfilesRepository::class);
     }
 
+    final public function registerRelatedDataRepository()
+    {
+        $this->app->singleton(RelatedDataRepositoryInterface::class, RelatedDataRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -300,6 +307,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerVacancyRepository();
         $this->registerMaritalStatusesRepository();
         $this->registerCandidateProfilesRepository();
+        $this->registerRelatedDataRepository();
     }
 
     /**

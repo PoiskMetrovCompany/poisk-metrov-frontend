@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileUpdateController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\Export\ExportToPDFFormatController;
 use App\Http\Controllers\Api\V1\Export\ExportToXlsxFormatController;
 use App\Http\Controllers\Api\V1\MaritalStatuses\MaritalStatusListController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
@@ -145,6 +146,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// EXPORT
     Route::prefix('export')->group(function () {
         Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke']);
+        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke']);
     });
     /// END
 });
