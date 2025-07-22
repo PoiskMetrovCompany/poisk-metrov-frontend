@@ -20,16 +20,17 @@ class CandidateProfileListController extends Controller
 
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): JsonResponse
     {
-        $candidateProfile = CandidateProfiles::all()->reverse();
-        $dataCollection = new CandidateProfileCollection($candidateProfile);
-        return new JsonResponse(
-            data: [
-                'response' => true,
-                'attributes' => $dataCollection->resource,
-            ],
-            status: Response::HTTP_OK
-        );
+        $candidateProfiles = CandidateProfiles::query()
+            ->latest()
+            ->paginate($request->get('per_page', 8));
+
+        $dataCollection = new CandidateProfileCollection($candidateProfiles);
+
+        return new JsonResponse([
+            'response' => true,
+            'attributes' => $dataCollection->response()->getData(true),
+        ], Response::HTTP_OK);
     }
 }
