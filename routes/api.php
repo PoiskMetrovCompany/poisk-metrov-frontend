@@ -151,5 +151,11 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         /// END
     });
     /// END
+
+    /// NOTIFICATION
+    Route::prefix('notification')->group(function () {
+        Route::get('/new-candidates', [ExportToXlsxFormatController::class, '__invoke']);
+    });
+    /// END
 });
 /// END

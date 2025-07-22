@@ -9,6 +9,7 @@ use App\Http\Resources\CandidateProfiles\CandidateProfileResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CandidateProfileStoreController extends Controller
@@ -25,6 +26,16 @@ class CandidateProfileStoreController extends Controller
         $attributes = $request->validated();
         $attributes['key'] = Str::uuid()->toString();
         $candidateProfile = $this->candidateProfilesRepository->store($attributes);
+
+        // TODO: использовать фоновый процесс!!!
+        DB::connection('mongodb')
+            ->table('candidate_profiles_has')
+            ->insert([
+                'profile_key' => $attributes['key'],
+                'title' => 'Новая анкета',
+                'meta_attributes' => $attributes,
+            ]);
+
         $dataCollection = new CandidateProfileResource($candidateProfile);
 
         return new JsonResponse(
