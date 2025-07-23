@@ -29,8 +29,8 @@ class AccountAuthorizationController extends Controller
         $model = $this->account::where(['phone' => $attributes['phone']])->first();
 
         if (
-            key_exists('code', $attributes) && Hash::check($attributes['code'], $model->secret) ||
-            key_exists('password', $attributes) && Hash::check($attributes['password'], $model->secret)
+            (key_exists('phone', $attributes) && key_exists('code', $attributes) && Hash::check($attributes['code'], $model->secret)) ||
+            (key_exists('email', $attributes) && key_exists('password', $attributes) && Hash::check($attributes['password'], $model->secret))
         ) {
             $account = $this->account::createBearerToken($model);
         }

@@ -21,6 +21,7 @@ return new class extends Migration
                 RoleEnum::Candidate->value,
             ]);
             $table->string('phone')->unique();
+            $table->string('email')->unique();
             $table->string('secret')->nullable();
             $table->timestamp('created_at');
             $table->timestamp('updated_at');

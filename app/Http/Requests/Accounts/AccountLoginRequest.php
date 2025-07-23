@@ -22,9 +22,10 @@ class AccountLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string',],
-            'code' => ['nullable'],
-            'password' => ['nullable'],
+            'phone' => ['nullable', 'string',],
+            'email' => ['nullable', 'string',],
+            'code' => ['nullable', 'string',],
+            'password' => ['nullable', 'string',],
         ];
     }
 }
