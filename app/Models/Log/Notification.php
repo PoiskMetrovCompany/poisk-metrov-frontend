@@ -2,7 +2,7 @@
 
 namespace App\Models\Log;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use MongoDB\Laravel\Facades\DB;
 
 class Notification extends Model

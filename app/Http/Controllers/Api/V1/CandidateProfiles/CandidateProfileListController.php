@@ -9,7 +9,25 @@ use App\Models\CandidateProfiles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Get(
+ *       tags={"CandidateProfiles"},
+ *       path="/api/v1/candidates/",
+ *       summary="получение списка анкет",
+ *       description="Возвращение JSON объекта",
+ *       security={{"bearerAuth":{}}},
+ *       @OA\Response(response=200, description="УСПЕХ!"),
+ *       @OA\Response(
+ *           response=404,
+ *           description="Resource not found"
+ *       )
+ *  )
+ *
+ * @param Request $request
+ * @return JsonResponse
+ */
 class CandidateProfileListController extends Controller
 {
     public function __construct(

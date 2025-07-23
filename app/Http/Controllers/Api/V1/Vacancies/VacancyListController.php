@@ -8,7 +8,24 @@ use App\Http\Resources\Vacancies\VacancyCollection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Get(
+ *       tags={"Vacancy"},
+ *       path="/api/v1/vacancy/",
+ *       summary="получение списка вакансий",
+ *       description="Возвращение JSON объекта",
+ *       @OA\Response(response=200, description="УСПЕХ!"),
+ *       @OA\Response(
+ *           response=404,
+ *           description="Resource not found"
+ *       )
+ *  )
+ *
+ * @param Request $request
+ * @return JsonResponse
+ */
 class VacancyListController extends Controller
 {
     public function __construct(
@@ -23,7 +40,10 @@ class VacancyListController extends Controller
         $repository = $this->vacancyRepository->list([]);
 
         return new JsonResponse(
-            data: $repository,
+            data: [
+                'response' => true,
+                'attributes' => $repository
+            ],
             status: Response::HTTP_OK
         );
     }

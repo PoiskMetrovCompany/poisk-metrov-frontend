@@ -22,7 +22,6 @@ class CandidateProfilesStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'key' => ['required'],
             'vacancies_key' => ['required'],
             'marital_statuses_key' => ['required'],
             'status' => ['required'],

@@ -2,7 +2,7 @@
 
 namespace App\Models\Log;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use MongoDB\Laravel\Facades\DB;
 
 class FeedLoadingLog extends Model
@@ -42,10 +42,6 @@ class FeedLoadingLog extends Model
     }
 
     public function read(array $attributes)
-    {
-
-    }
-    public function destroy(Model $entity)
     {
 
     }

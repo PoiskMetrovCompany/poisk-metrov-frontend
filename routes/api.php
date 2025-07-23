@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\Api\V1\Account\AccountAuthorizationController;
+use App\Http\Controllers\Api\V1\Account\AccountSetCodeController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
@@ -119,8 +120,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// ACCOUNT
     Route::prefix('account')->group(function () {
-        Route::post('set-code', [AccountAuthorizationController::class, 'setCode']);
-        Route::post('auth', [AccountAuthorizationController::class, 'index']);
+        Route::post('set-code', [AccountSetCodeController::class, '__invoke']);
+        Route::post('auth', [AccountAuthorizationController::class, '__invoke']);
     });
     /// END
 
@@ -138,15 +139,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// CANDIDATES
     Route::prefix('candidates')->group(function () {
-        Route::get('/', [CandidateProfileListController::class, '__invoke']);
+        Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
         Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
-        Route::get('/read', [CandidateProfileReadController::class, '__invoke']);
-        Route::put('/update', [CandidateProfileUpdateController::class, '__invoke']);
+        Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::put('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
     });
     /// END
 
     /// EXPORT
-    Route::prefix('export')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('export')->group(function () {
         /// NOTE: эти маршруты могуп принимать гет параметр "keys"
         Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke']);
         Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke']);
@@ -156,13 +157,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// NOTIFICATION
     Route::prefix('notification')->group(function () {
-        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']);
+        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke'])->middleware('auth:sanctum');
     });
     /// END
 
     /// EVENT
     Route::prefix('event')->group(function () {
-        Route::get('/view-profile', [SetEventViewProfileController::class, '__invoke']);
+        Route::get('/view-profile', [SetEventViewProfileController::class, '__invoke'])->middleware('auth:sanctum');
     });
     /// END
 });

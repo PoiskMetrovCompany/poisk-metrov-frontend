@@ -13,6 +13,7 @@
         "bangnokia/laravel-backup-telegram": "^1.1",
         "barryvdh/laravel-dompdf": "^2.2",
         "beyondcode/laravel-websockets": "^1.14",
+        "darkaonline/l5-swagger": "^8.6",
         "google/apiclient": "^2.16",
         "guzzlehttp/guzzle": "^7.8",
         "halaxa/json-machine": "^1.2",
