@@ -6,10 +6,9 @@ use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateProfiles\CandidateProfilesStoreRequest;
 use App\Http\Resources\CandidateProfiles\CandidateProfileResource;
+use App\Jobs\SetChangesCandidatesQuestionnaireQueue;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CandidateProfileStoreController extends Controller
@@ -27,14 +26,7 @@ class CandidateProfileStoreController extends Controller
         $attributes['key'] = Str::uuid()->toString();
         $candidateProfile = $this->candidateProfilesRepository->store($attributes);
 
-        // TODO: использовать фоновый процесс!!!
-        DB::connection('mongodb')
-            ->table('candidate_profiles_has')
-            ->insert([
-                'profile_key' => $attributes['key'],
-                'title' => 'Новая анкета',
-                'meta_attributes' => $attributes,
-            ]);
+        SetChangesCandidatesQuestionnaireQueue::dispatch($candidateProfile);
 
         $dataCollection = new CandidateProfileResource($candidateProfile);
 

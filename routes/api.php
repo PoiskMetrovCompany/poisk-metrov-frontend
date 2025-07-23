@@ -7,9 +7,11 @@ use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileUpdateController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\Event\SetEventViewProfileController;
 use App\Http\Controllers\Api\V1\Export\ExportToPDFFormatController;
 use App\Http\Controllers\Api\V1\Export\ExportToXlsxFormatController;
 use App\Http\Controllers\Api\V1\MaritalStatuses\MaritalStatusListController;
+use App\Http\Controllers\Api\V1\Notification\NewCandidatesController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
@@ -154,7 +156,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// NOTIFICATION
     Route::prefix('notification')->group(function () {
-        Route::get('/new-candidates', [ExportToXlsxFormatController::class, '__invoke']);
+        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']);
+    });
+    /// END
+
+    /// EVENT
+    Route::prefix('event')->group(function () {
+        Route::get('/view-profile', [SetEventViewProfileController::class, '__invoke']);
     });
     /// END
 });

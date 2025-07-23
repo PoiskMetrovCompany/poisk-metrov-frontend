@@ -11,9 +11,10 @@ class NewCandidatesController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $attributes = DB::connection('mongodb')
+        $attributes = DB::connection('pm-log')
             ->table('candidate_profiles_has')
             ->select()
+            ->where('is_visible', '=', false)
             ->limit(10)
             ->get();
         return new JsonResponse(
