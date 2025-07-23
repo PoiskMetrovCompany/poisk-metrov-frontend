@@ -1,7 +1,19 @@
 <?php
 
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\Api\V1\Account\AccountAuthorizationController;
+use App\Http\Controllers\Api\V1\Account\AccountSetCodeController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileUpdateController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\Event\SetEventViewProfileController;
+use App\Http\Controllers\Api\V1\Export\ExportToPDFFormatController;
+use App\Http\Controllers\Api\V1\Export\ExportToXlsxFormatController;
+use App\Http\Controllers\Api\V1\MaritalStatuses\MaritalStatusListController;
+use App\Http\Controllers\Api\V1\Notification\NewCandidatesController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FavoritesController;
@@ -105,5 +117,54 @@ Route::namespace('V1')->prefix('v1')->group(function () {
        Route::get('actual-date', [CbrController::class, 'actualDate']);
    });
    /// END
+
+    /// ACCOUNT
+    Route::prefix('account')->group(function () {
+        Route::post('set-code', [AccountSetCodeController::class, '__invoke']);
+        Route::post('auth', [AccountAuthorizationController::class, '__invoke']);
+    });
+    /// END
+
+    /// VACANCY
+    Route::prefix('vacancy')->group(function () {
+        Route::get('/', [VacancyListController::class, '__invoke']);
+    });
+    /// END
+
+    /// MARITAL_STATUSES
+    Route::prefix('marital-statuses')->group(function () {
+        Route::get('/', [MaritalStatusListController::class, '__invoke']);
+    });
+    /// END
+
+    /// CANDIDATES
+    Route::prefix('candidates')->group(function () {
+        Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
+        Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::put('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
+    });
+    /// END
+
+    /// EXPORT
+    Route::middleware('auth:sanctum')->prefix('export')->group(function () {
+        /// NOTE: эти маршруты могуп принимать гет параметр "keys"
+        Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke']);
+        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke']);
+        /// END
+    });
+    /// END
+
+    /// NOTIFICATION
+    Route::prefix('notification')->group(function () {
+        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke'])->middleware('auth:sanctum');
+    });
+    /// END
+
+    /// EVENT
+    Route::prefix('event')->group(function () {
+        Route::get('/view-profile', [SetEventViewProfileController::class, '__invoke'])->middleware('auth:sanctum');
+    });
+    /// END
 });
 /// END

@@ -45,6 +45,10 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'accounts',
+        ],
     ],
 
     /*
@@ -69,6 +73,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'accounts' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Account::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

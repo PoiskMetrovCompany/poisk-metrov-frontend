@@ -3,14 +3,18 @@
 namespace App\Providers;
 
 use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
+use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
 use App\Core\Interfaces\Repositories\InteractionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ManagerRepositoryInterface;
+use App\Core\Interfaces\Repositories\MaritalStatusesRepositoryInterface;
+use App\Core\Interfaces\Repositories\RelatedDataRepositoryInterface;
 use App\Core\Interfaces\Repositories\ReservationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
+use App\Core\Interfaces\Repositories\VacancyRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
@@ -34,14 +38,18 @@ use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
 use App\Repositories\ApartmentRepository;
+use App\Repositories\CandidateProfilesRepository;
 use App\Repositories\ComplexRepository;
 use App\Repositories\FeedRepository;
 use App\Repositories\InteractionRepository;
 use App\Repositories\ManagerRepository;
+use App\Repositories\MaritalStatusesRepository;
+use App\Repositories\RelatedDataRepository;
 use App\Repositories\ReservationRepository;
 use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\UserAdsAgreementRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\VacancyRepository;
 use App\Services\AdsAgreementService;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
@@ -241,6 +249,26 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(FeedRepositoryInterface::class, FeedRepository::class);
     }
 
+    final public function registerVacancyRepository()
+    {
+        $this->app->singleton(VacancyRepositoryInterface::class, VacancyRepository::class);
+    }
+
+    final public function registerMaritalStatusesRepository()
+    {
+        $this->app->singleton(MaritalStatusesRepositoryInterface::class, MaritalStatusesRepository::class);
+    }
+
+    final public function registerCandidateProfilesRepository()
+    {
+        $this->app->singleton(CandidateProfilesRepositoryInterface::class, CandidateProfilesRepository::class);
+    }
+
+    final public function registerRelatedDataRepository()
+    {
+        $this->app->singleton(RelatedDataRepositoryInterface::class, RelatedDataRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -278,6 +306,10 @@ class AppServiceProvider extends ServiceProvider
         $this->registerUserAdsAgreementRepository();
         $this->registerResidentialComplexRepository();
         $this->registerFeedRepository();
+        $this->registerVacancyRepository();
+        $this->registerMaritalStatusesRepository();
+        $this->registerCandidateProfilesRepository();
+        $this->registerRelatedDataRepository();
     }
 
     /**
