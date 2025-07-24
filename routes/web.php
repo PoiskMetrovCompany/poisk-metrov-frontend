@@ -35,8 +35,26 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
+
 Route::namespace('PROFILE_CANDIDATES')->prefix('profile-candidates')->group(function () {
-    Route::get('/', [ProfileCandidatesController::class, 'index']); // TODO:  ЭТО ДОЛЖНА БЫТЬ СТР. С ФОРМОЙ
+    Route::view('/', 'profile-candidates.login')->name('profile-candidates.login');
+    Route::view('/profile', 'profile-candidates.profile')->name('profile-candidates.profile');
+
+    Route::namespace('PROFILE_CANDIDATES_form')->prefix('form')->group(function () {
+
+    });
+
+    /// SECURITY
+    Route::namespace('SECURITY')->prefix('security')->group(function () {
+        Route::get('/settings', [ProfileCandidatesController::class, 'settings'])->name('profile-candidates.settings');
+        Route::get('/', [ProfileCandidatesController::class, 'index'])->name('profile-candidates.index');
+        Route::get('/{key}', [ProfileCandidatesController::class, 'show'])->name('profile-candidates.show');
+
+        Route::namespace('SECURITY_FORM')->prefix('form')->group(function () {
+
+        });
+    });
+    /// END
 });
 
 /// Reservations
@@ -203,4 +221,3 @@ if (config('app.agent_pages_enabled')) {
         return redirect("/agent/search", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
     });
 }
-

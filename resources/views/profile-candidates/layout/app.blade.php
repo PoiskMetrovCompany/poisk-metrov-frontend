@@ -3,26 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация кандидата</title>
-
+    <title>Регистрация безопасника</title>
     <script src="https://unpkg.com/imask"></script>
-    @vite('resources/css/candidatesProfiles/index.css')
+    @vite('resources/css/candidatesProfiles/style.css')
 </head>
 <body>
-
-    <header>
-        <img src="../img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров">
-    </header>
-
+    @include('profile-candidates.layout.header')
     <main>
-        <section>
-            @yield("content")
-        </section>
+        @yield("content")
     </main>
-
-<script>
-
-</script>
-
 </body>
 </html>
