@@ -9,5 +9,6 @@ class AuthorizationCall extends Model
 {
     use HasFactory;
 
+
     protected $fillable = ['phone', 'pincode', 'call_id'];
 }

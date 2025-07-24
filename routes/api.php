@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\Api\V1\Account\AuthenticationAccountController;
 use App\Http\Controllers\Api\V1\Account\AuthorizationAccountController;
 use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
@@ -43,21 +42,10 @@ use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateUserController;
 use App\Http\Controllers\Api\V1\Visited\UpdatePagesVisitedController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\CRMController;
-use App\Http\Controllers\FavoritesController;
-use App\Http\Controllers\FeedController;
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\ManagerChatController;
-use App\Http\Controllers\ManagersController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PhoneController;
-use App\Http\Controllers\RealEstateController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TelegramSurveyController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\VisitedPagesController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 if (!function_exists('operation')) {

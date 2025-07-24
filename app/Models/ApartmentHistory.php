@@ -11,6 +11,13 @@ class ApartmentHistory extends Model
     use HasFactory;
 
     /**
+     * @var array
+     */
+    const RELATIONSHIP = [
+        'Apartment' => ['main_table_value' => 'apartment_id', 'linked_table_value' => 'id'],
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
