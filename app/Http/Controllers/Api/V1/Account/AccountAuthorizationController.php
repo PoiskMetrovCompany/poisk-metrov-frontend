@@ -61,7 +61,9 @@ class AccountAuthorizationController extends Controller
     public function __invoke(AccountLoginRequest $request)
     {
         $attributes = $request->validated();
-        $model = $this->account::where(['phone' => $attributes['phone']])->first();
+        $model = key_exists('phone', $attributes) 
+            ? $this->account::where(['phone' => $attributes['phone']])->first() 
+            : $this->account::where(['email' => $attributes['email']])->first();
 
         if (
             (key_exists('phone', $attributes) && key_exists('code', $attributes) && Hash::check($attributes['code'], $model->secret)) ||

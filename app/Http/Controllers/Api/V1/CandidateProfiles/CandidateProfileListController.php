@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Get(
@@ -39,6 +40,7 @@ class CandidateProfileListController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
+        Log::info($request);
         $candidateProfiles = CandidateProfiles::query();
 
         if ($statuses = $request->input('candidate_statuses')) {

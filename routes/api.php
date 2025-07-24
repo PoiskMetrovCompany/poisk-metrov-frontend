@@ -14,6 +14,10 @@ use App\Http\Controllers\Api\V1\Export\ExportToXlsxFormatController;
 use App\Http\Controllers\Api\V1\MaritalStatuses\MaritalStatusListController;
 use App\Http\Controllers\Api\V1\Notification\NewCandidatesController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyStoreController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyReadController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyUpdateController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyDestroyController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FavoritesController;
@@ -128,7 +132,12 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// VACANCY
     Route::prefix('vacancy')->group(function () {
         Route::get('/', [VacancyListController::class, '__invoke']);
+        Route::post('/store', [VacancyStoreController::class, '__invoke']);
+        Route::get('/read', [VacancyReadController::class, '__invoke']);
+        Route::post('/update', [VacancyUpdateController::class, '__invoke']);
+        Route::delete('/destroy', [VacancyDestroyController::class, '__invoke']);
     });
+    /// END
     /// END
 
     /// MARITAL_STATUSES
@@ -142,7 +151,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
         Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
         Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::put('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
     });
     /// END
 

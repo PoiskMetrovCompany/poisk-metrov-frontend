@@ -114,7 +114,7 @@ class CandidateProfileStoreController extends Controller
         $attributes['key'] = Str::uuid()->toString();
         $candidateProfile = $this->candidateProfilesRepository->store($attributes);
 
-        SetChangesCandidatesQuestionnaireQueue::dispatch($candidateProfile);
+        // SetChangesCandidatesQuestionnaireQueue::dispatch($candidateProfile);
 
         $dataCollection = new CandidateProfileResource($candidateProfile);
 

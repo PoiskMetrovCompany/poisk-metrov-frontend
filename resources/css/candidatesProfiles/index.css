@@ -918,6 +918,10 @@
         width: 60%!important;
     }
 
+    .w-80{
+        width: 80% !important;
+    }
+
     /* Направление flex */
     .flex-direction-column {
         display: flex;
@@ -1178,7 +1182,7 @@
     }
 
     #notifBtn:hover img{
-        content: url("../img/ringHover.png");
+        content: url("img/ ringHover.png");
     }
     #exitBtn img{
         width: 16px;

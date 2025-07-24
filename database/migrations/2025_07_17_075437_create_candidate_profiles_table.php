@@ -48,7 +48,7 @@ return new class extends Migration
             $table->string('law_breaker', 255);
             $table->string('legal_entity', 255);
             $table->boolean('is_data_processing')->default(false);
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
             $table->timestamp('deleted_at')
