@@ -22,7 +22,7 @@ trait RelationshipResponderTrait
                 $modelClass = "App\Models\\" . $relationshipName;
                 $mainTableValue = $entity::RELATIONSHIP[$relationshipName]['main_table_value'];
                 $linkedTableValue = $entity::RELATIONSHIP[$relationshipName]['linked_table_value'];
-                $mainTableValueData = $entity::query()->pluck($mainTableValue)->toArray();
+//                $mainTableValueData = $entity::query()->pluck($mainTableValue)->toArray();
                 $relatedData = $modelClass::where($linkedTableValue, $searchData)->get();
 
                 $includes[] = [
