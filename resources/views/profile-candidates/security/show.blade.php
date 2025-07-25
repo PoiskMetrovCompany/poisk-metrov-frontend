@@ -146,14 +146,14 @@
         };
 
         console.log('=== ДЕТАЛИ ЗАПРОСА ===');
-        console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
+        console.log('URL:', '/api/v1/candidates/update');
         console.log('Метод:', 'POST');
         console.log('Заголовки:', headers);
         console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
 
         console.log('=== ОТПРАВКА ЗАПРОСА ===');
 
-        const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+        const response = await fetch('/api/v1/candidates/update', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(requestData)
@@ -264,12 +264,12 @@
         };
 
         console.log('=== ДЕТАЛИ ЗАПРОСА КОММЕНТАРИЯ ===');
-        console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
+        console.log('URL:', '/api/v1/candidates/update');
         console.log('Метод:', 'POST');
         console.log('Заголовки:', headers);
         console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
 
-        const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+        const response = await fetch('/api/v1/candidates/update', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(requestData)

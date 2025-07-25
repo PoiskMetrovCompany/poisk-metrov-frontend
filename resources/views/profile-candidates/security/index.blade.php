@@ -196,14 +196,14 @@
             };
 
             console.log('=== ДЕТАЛИ ЗАПРОСА ===');
-            console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
+            console.log('URL:', '/api/v1/candidates/update');
             console.log('Метод:', 'POST');
             console.log('Заголовки:', headers);
             console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
 
             console.log('=== ОТПРАВКА ЗАПРОСА ===');
 
-            const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+            const response = await fetch('/api/v1/candidates/update', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(requestData)
@@ -308,12 +308,12 @@
             };
 
             console.log('=== ДЕТАЛИ ЗАПРОСА КОММЕНТАРИЯ ===');
-            console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
+            console.log('URL:', '/api/v1/candidates/update');
             console.log('Метод:', 'POST');
             console.log('Заголовки:', headers);
             console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
 
-            const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+            const response = await fetch('/api/v1/candidates/update', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(requestData)
@@ -704,7 +704,7 @@
         const token = getAccessToken();
         if (!token) {
             // Редирект на страницу авторизации
-            window.location.href = 'http://127.0.0.1:8000/profile-candidates/security/login';
+            window.location.href = '/profile-candidates/security/login';
             return;
         }
         setIsAuthorized(true);
@@ -798,7 +798,7 @@
             }
 
             const endpoint = selectedFormat === '.pdf' ? 'pdf-format' : 'xlsx-format';
-            let url = `http://127.0.0.1:8000/api/v1/export/${endpoint}`;
+            let url = `/api/v1/export/${endpoint}`;
 
             if (selectedKeys.length > 0) {
                 const keysParam = selectedKeys.join(',');
@@ -873,7 +873,7 @@
                 throw new Error('Токен авторизации не найден');
             }
 
-            let url = `http://127.0.0.1:8000/api/v1/candidates/?page=${page}`;
+            let url = `/api/v1/candidates/?page=${page}`;
 
             // Если есть активные фильтры и нужно их использовать
             if (useFilters && activeFilters) {
