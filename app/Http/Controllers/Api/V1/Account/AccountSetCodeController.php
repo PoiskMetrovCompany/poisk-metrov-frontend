@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Account;
 
+use App\Core\Common\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Accounts\AccountSetCodeRequest;
 use App\Http\Resources\AccountResource;
@@ -62,6 +63,7 @@ class AccountSetCodeController extends Controller
         $attributes = $request->validated();
         if (empty($this->account::where(['phone' => $attributes['phone']])->first())) {
             $attributes['key'] = Str::uuid()->toString();
+            $attributes['role'] = RoleEnum::Candidate;
             $this->account::create($attributes);
             return $this->setCode($request);
         } else {
