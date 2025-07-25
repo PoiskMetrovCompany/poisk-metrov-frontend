@@ -24,475 +24,475 @@
 
 
         // Компонент регистрации кандидата
-        // function CandidateRegForm() {
-        //     const [isCodeMode, setIsCodeMode] = useState(false);
-        //     const [isPhoneValidated, setIsPhoneValidated] = useState(false);
-        //     const [phoneValue, setPhoneValue] = useState('');
-        //     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-        //     const [showCheckmark, setShowCheckmark] = useState(false);
-        //     const [isLoading, setIsLoading] = useState(false);
-        //     const [isAuthLoading, setIsAuthLoading] = useState(false);
-        //     const [error, setError] = useState('');
-        //     const [userAttributes, setUserAttributes] = useState(null);
-        //     const [isAuthenticated, setIsAuthenticated] = useState(false);
-        //     const [authResult, setAuthResult] = useState(null);
+        function CandidateRegForm() {
+            const [isCodeMode, setIsCodeMode] = useState(false);
+            const [isPhoneValidated, setIsPhoneValidated] = useState(false);
+            const [phoneValue, setPhoneValue] = useState('');
+            const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+            const [showCheckmark, setShowCheckmark] = useState(false);
+            const [isLoading, setIsLoading] = useState(false);
+            const [isAuthLoading, setIsAuthLoading] = useState(false);
+            const [error, setError] = useState('');
+            const [userAttributes, setUserAttributes] = useState(null);
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [authResult, setAuthResult] = useState(null);
             
-        //     const phoneInputRef = useRef(null);
-        //     const currentMaskRef = useRef(null);
+            const phoneInputRef = useRef(null);
+            const currentMaskRef = useRef(null);
 
-        //     useEffect(() => {
-        //         if (phoneInputRef.current && !isCodeMode) {
-        //             const maskOptions = {
-        //                 mask: '+{7}(000) 000-00-00'
-        //             };
-        //             currentMaskRef.current = IMask(phoneInputRef.current, maskOptions);
-        //         }
+            useEffect(() => {
+                if (phoneInputRef.current && !isCodeMode) {
+                    const maskOptions = {
+                        mask: '+{7}(000) 000-00-00'
+                    };
+                    currentMaskRef.current = IMask(phoneInputRef.current, maskOptions);
+                }
 
-        //         return () => {
-        //             if (currentMaskRef.current) {
-        //                 currentMaskRef.current.destroy();
-        //             }
-        //         };
-        //     }, [isCodeMode]);
+                return () => {
+                    if (currentMaskRef.current) {
+                        currentMaskRef.current.destroy();
+                    }
+                };
+            }, [isCodeMode]);
 
-        //     useEffect(() => {
-        //         if (phoneInputRef.current && isCodeMode) {
-        //             if (currentMaskRef.current) {
-        //                 currentMaskRef.current.destroy();
-        //             }
-        //             const maskOptions = {
-        //                 mask: ' 0 0 0 0 0 0 ',
-        //                 lazy: false,
-        //                 placeholderChar: " _ "
-        //             };
-        //             currentMaskRef.current = IMask(phoneInputRef.current, maskOptions);
-        //             phoneInputRef.current.focus();
-        //         }
-        //     }, [isCodeMode]);
+            useEffect(() => {
+                if (phoneInputRef.current && isCodeMode) {
+                    if (currentMaskRef.current) {
+                        currentMaskRef.current.destroy();
+                    }
+                    const maskOptions = {
+                        mask: ' 0 0 0 0 0 0 ',
+                        lazy: false,
+                        placeholderChar: " _ "
+                    };
+                    currentMaskRef.current = IMask(phoneInputRef.current, maskOptions);
+                    phoneInputRef.current.focus();
+                }
+            }, [isCodeMode]);
 
-        //     const checkButtonState = () => {
-        //         if (!isCodeMode) {
-        //             const isPhoneValid = phoneValue.length >= 17;
-        //             return isPhoneValid && isCheckboxChecked && !isLoading;
-        //         }
-        //         return false;
-        //     };
+            const checkButtonState = () => {
+                if (!isCodeMode) {
+                    const isPhoneValid = phoneValue.length >= 17;
+                    return isPhoneValid && isCheckboxChecked && !isLoading;
+                }
+                return false;
+            };
 
-        //     const checkCode = (value) => {
-        //         const enteredCode = value.replace(/\s/g, '').replace(/_/g, '');
-        //         if (enteredCode.length === 6) {
-        //             setShowCheckmark(true);
-        //             console.log('Код введен полностью!');
-        //         } else {
-        //             setShowCheckmark(false);
-        //         }
-        //     };
+            const checkCode = (value) => {
+                const enteredCode = value.replace(/\s/g, '').replace(/_/g, '');
+                if (enteredCode.length === 6) {
+                    setShowCheckmark(true);
+                    console.log('Код введен полностью!');
+                } else {
+                    setShowCheckmark(false);
+                }
+            };
 
-        //     const handleInputChange = (e) => {
-        //         const value = e.target.value;
-        //         console.log('handleInputChange вызван с значением:', value);
-        //         console.log('isCodeMode:', isCodeMode);
-        //         setPhoneValue(value);
+            const handleInputChange = (e) => {
+                const value = e.target.value;
+                console.log('handleInputChange вызван с значением:', value);
+                console.log('isCodeMode:', isCodeMode);
+                setPhoneValue(value);
                 
-        //         // Очищаем ошибку при изменении значения
-        //         if (error) {
-        //             setError('');
-        //         }
+                // Очищаем ошибку при изменении значения
+                if (error) {
+                    setError('');
+                }
                 
-        //         if (isCodeMode) {
-        //             checkCode(value);
-        //         }
-        //     };
+                if (isCodeMode) {
+                    checkCode(value);
+                }
+            };
 
-        //     const handleCheckboxChange = (e) => {
-        //         setIsCheckboxChecked(e.target.checked);
-        //         // Очищаем ошибку при изменении чекбокса
-        //         if (error) {
-        //             setError('');
-        //         }
-        //     };
+            const handleCheckboxChange = (e) => {
+                setIsCheckboxChecked(e.target.checked);
+                // Очищаем ошибку при изменении чекбокса
+                if (error) {
+                    setError('');
+                }
+            };
 
-        //     // Функция для отправки запроса на получение кода
-        //     const sendCodeRequest = async (phone) => {
-        //         try {
-        //             setIsLoading(true);
-        //             setError('');
+            // Функция для отправки запроса на получение кода
+            const sendCodeRequest = async (phone) => {
+                try {
+                    setIsLoading(true);
+                    setError('');
                     
-        //             // Отправляем запрос на сервер
-        //             const response = await axios.post('/api/v1/account/set-code', {
-        //                 phone: phone
-        //             }, {
-        //                 headers: {
-        //                     'Content-Type': 'application/json'
-        //                 }
-        //             });
+                    // Отправляем запрос на сервер
+                    const response = await axios.post('/api/v1/account/set-code', {
+                        phone: phone
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-        //             // Проверяем успешность запроса
-        //             if (response.data.request) {
-        //                 setUserAttributes(response.data.attributes);
-        //                 console.log('Код отправлен успешно:', response.data);
-        //                 return true;
-        //             } else {
-        //                 setError('Ошибка при отправке кода');
-        //                 return false;
-        //             }
-        //         } catch (error) {
-        //             console.error('Ошибка при отправке запроса:', error);
+                    // Проверяем успешность запроса
+                    if (response.data.request) {
+                        setUserAttributes(response.data.attributes);
+                        console.log('Код отправлен успешно:', response.data);
+                        return true;
+                    } else {
+                        setError('Ошибка при отправке кода');
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Ошибка при отправке запроса:', error);
                     
-        //             if (error.response) {
-        //                 // Сервер ответил с кодом ошибки
-        //                 if (error.response.status === 404) {
-        //                     setError('Пользователь не найден');
-        //                 } else {
-        //                     setError(error.response.data?.error || 'Ошибка сервера');
-        //                 }
-        //             } else if (error.request) {
-        //                 // Запрос был отправлен, но ответа не получено
-        //                 setError('Ошибка соединения с сервером');
-        //             } else {
-        //                 // Ошибка при настройке запроса
-        //                 setError('Ошибка при отправке запроса');
-        //             }
-        //             return false;
-        //         } finally {
-        //             setIsLoading(false);
-        //         }
-        //     };
+                    if (error.response) {
+                        // Сервер ответил с кодом ошибки
+                        if (error.response.status === 404) {
+                            setError('Пользователь не найден');
+                        } else {
+                            setError(error.response.data?.error || 'Ошибка сервера');
+                        }
+                    } else if (error.request) {
+                        // Запрос был отправлен, но ответа не получено
+                        setError('Ошибка соединения с сервером');
+                    } else {
+                        // Ошибка при настройке запроса
+                        setError('Ошибка при отправке запроса');
+                    }
+                    return false;
+                } finally {
+                    setIsLoading(false);
+                }
+            };
 
-        //     // Функция для отправки запроса на аутентификацию
-        //     const sendAuthRequest = async () => {
-        //         console.log('sendAuthRequest вызвана');
-        //         try {
-        //             setIsAuthLoading(true);
-        //             setError('');
+            // Функция для отправки запроса на аутентификацию
+            const sendAuthRequest = async () => {
+                console.log('sendAuthRequest вызвана');
+                try {
+                    setIsAuthLoading(true);
+                    setError('');
                     
-        //             // Получаем введенный код из значения инпута или маски
-        //             let enteredCode = phoneValue;
+                    // Получаем введенный код из значения инпута или маски
+                    let enteredCode = phoneValue;
                     
-        //             // Если используется маска, попробуем получить значение из нее
-        //             if (currentMaskRef.current && currentMaskRef.current.unmaskedValue) {
-        //                 enteredCode = currentMaskRef.current.unmaskedValue;
-        //                 console.log('Код из маски:', enteredCode);
-        //             } else {
-        //                 // Убираем пробелы и подчеркивания из обычного значения
-        //                 enteredCode = phoneValue.replace(/\s/g, '').replace(/_/g, '');
-        //                 console.log('Код из phoneValue:', enteredCode);
-        //             }
+                    // Если используется маска, попробуем получить значение из нее
+                    if (currentMaskRef.current && currentMaskRef.current.unmaskedValue) {
+                        enteredCode = currentMaskRef.current.unmaskedValue;
+                        console.log('Код из маски:', enteredCode);
+                    } else {
+                        // Убираем пробелы и подчеркивания из обычного значения
+                        enteredCode = phoneValue.replace(/\s/g, '').replace(/_/g, '');
+                        console.log('Код из phoneValue:', enteredCode);
+                    }
                     
-        //             console.log('Финальный введенный код:', enteredCode);
+                    console.log('Финальный введенный код:', enteredCode);
                     
-        //             // Если код не введен, показываем ошибку
-        //             if (enteredCode.length === 0) {
-        //                 console.log('Код не введен');
-        //                 setError('Введите код из СМС');
-        //                 return false;
-        //             }
+                    // Если код не введен, показываем ошибку
+                    if (enteredCode.length === 0) {
+                        console.log('Код не введен');
+                        setError('Введите код из СМС');
+                        return false;
+                    }
 
-        //             // Получаем номер телефона из userAttributes
-        //             const phoneToAuth = userAttributes?.phone;
-        //             console.log('Номер для аутентификации:', phoneToAuth);
-        //             if (!phoneToAuth) {
-        //                 console.log('Номер телефона не найден');
-        //                 setError('Ошибка: номер телефона не найден');
-        //                 return false;
-        //             }
+                    // Получаем номер телефона из userAttributes
+                    const phoneToAuth = userAttributes?.phone;
+                    console.log('Номер для аутентификации:', phoneToAuth);
+                    if (!phoneToAuth) {
+                        console.log('Номер телефона не найден');
+                        setError('Ошибка: номер телефона не найден');
+                        return false;
+                    }
 
-        //             console.log('Отправляем запрос на аутентификацию...');
-        //             // Отправляем запрос на аутентификацию
-        //             const response = await axios.post('/api/v1/account/auth', {
-        //                 phone: phoneToAuth,
-        //                 code: enteredCode
-        //             }, {
-        //                 headers: {
-        //                     'Content-Type': 'application/json'
-        //                 }
-        //             });
+                    console.log('Отправляем запрос на аутентификацию...');
+                    // Отправляем запрос на аутентификацию
+                    const response = await axios.post('/api/v1/account/auth', {
+                        phone: phoneToAuth,
+                        code: enteredCode
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-        //             console.log('Ответ сервера:', response.data);
-        //             // Проверяем успешность запроса
-        //             if (response.data.request && response.data.attributes) {
-        //                 setAuthResult(response.data.attributes);
-        //                 setIsAuthenticated(true);
-        //                 console.log('Аутентификация успешна:', response.data);
+                    console.log('Ответ сервера:', response.data);
+                    // Проверяем успешность запроса
+                    if (response.data.request && response.data.attributes) {
+                        setAuthResult(response.data.attributes);
+                        setIsAuthenticated(true);
+                        console.log('Аутентификация успешна:', response.data);
                         
-        //                 // Сохраняем токен в cookie
-        //                 if (response.data.attributes.access_token) {
-        //                     // Устанавливаем cookie с токеном на 30 дней
-        //                     const expirationDate = new Date();
-        //                     expirationDate.setTime(expirationDate.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 дней
-        //                     document.cookie = `access_token=${response.data.attributes.access_token}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict`;
-        //                     console.log('Токен сохранен в cookie:', response.data.attributes.access_token);
-        //                 }
+                        // Сохраняем токен в cookie
+                        if (response.data.attributes.access_token) {
+                            // Устанавливаем cookie с токеном на 30 дней
+                            const expirationDate = new Date();
+                            expirationDate.setTime(expirationDate.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 дней
+                            document.cookie = `access_token=${response.data.attributes.access_token}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict`;
+                            console.log('Токен сохранен в cookie:', response.data.attributes.access_token);
+                        }
                         
-        //                 return true;
-        //             } else {
-        //                 console.log('Ошибка в ответе сервера');
-        //                 setError('Ошибка при аутентификации');
-        //                 return false;
-        //             }
-        //         } catch (error) {
-        //             console.error('Ошибка при аутентификации:', error);
+                        return true;
+                    } else {
+                        console.log('Ошибка в ответе сервера');
+                        setError('Ошибка при аутентификации');
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Ошибка при аутентификации:', error);
                     
-        //             if (error.response) {
-        //                 // Сервер ответил с кодом ошибки
-        //                 console.log('Ошибка ответа сервера:', error.response.status, error.response.data);
-        //                 if (error.response.status === 401) {
-        //                     setError('Неверный код');
-        //                 } else if (error.response.status === 404) {
-        //                     setError('Пользователь не найден');
-        //                 } else {
-        //                     setError(error.response.data?.error || 'Ошибка сервера');
-        //                 }
-        //             } else if (error.request) {
-        //                 // Запрос был отправлен, но ответа не получено
-        //                 console.log('Ошибка запроса:', error.request);
-        //                 setError('Ошибка соединения с сервером');
-        //             } else {
-        //                 // Ошибка при настройке запроса
-        //                 console.log('Ошибка настройки:', error.message);
-        //                 setError('Ошибка при отправке запроса');
-        //             }
-        //             return false;
-        //         } finally {
-        //             console.log('Завершение sendAuthRequest');
-        //             setIsAuthLoading(false);
-        //         }
-        //     };
+                    if (error.response) {
+                        // Сервер ответил с кодом ошибки
+                        console.log('Ошибка ответа сервера:', error.response.status, error.response.data);
+                        if (error.response.status === 401) {
+                            setError('Неверный код');
+                        } else if (error.response.status === 404) {
+                            setError('Пользователь не найден');
+                        } else {
+                            setError(error.response.data?.error || 'Ошибка сервера');
+                        }
+                    } else if (error.request) {
+                        // Запрос был отправлен, но ответа не получено
+                        console.log('Ошибка запроса:', error.request);
+                        setError('Ошибка соединения с сервером');
+                    } else {
+                        // Ошибка при настройке запроса
+                        console.log('Ошибка настройки:', error.message);
+                        setError('Ошибка при отправке запроса');
+                    }
+                    return false;
+                } finally {
+                    console.log('Завершение sendAuthRequest');
+                    setIsAuthLoading(false);
+                }
+            };
 
-        //     const handleGetCodeClick = async (e) => {
-        //         e.preventDefault();
+            const handleGetCodeClick = async (e) => {
+                e.preventDefault();
                 
-        //         if (!isCodeMode) {
-        //             // Первичная отправка кода
-        //             const success = await sendCodeRequest(phoneValue);
+                if (!isCodeMode) {
+                    // Первичная отправка кода
+                    const success = await sendCodeRequest(phoneValue);
                     
-        //             if (success) {
-        //                 setIsCodeMode(true);
-        //                 setPhoneValue('');
-        //                 setShowCheckmark(false);
-        //             }
-        //         } else {
-        //             // Повторная отправка кода
-        //             // Получаем сохраненный номер телефона из userAttributes
-        //             const phoneToResend = userAttributes?.phone || phoneValue;
-        //             const success = await sendCodeRequest(phoneToResend);
+                    if (success) {
+                        setIsCodeMode(true);
+                        setPhoneValue('');
+                        setShowCheckmark(false);
+                    }
+                } else {
+                    // Повторная отправка кода
+                    // Получаем сохраненный номер телефона из userAttributes
+                    const phoneToResend = userAttributes?.phone || phoneValue;
+                    const success = await sendCodeRequest(phoneToResend);
                     
-        //             if (success) {
-        //                 setPhoneValue('');
-        //                 setShowCheckmark(false);
-        //             }
-        //         }
-        //     };
+                    if (success) {
+                        setPhoneValue('');
+                        setShowCheckmark(false);
+                    }
+                }
+            };
 
-        //     const handleSendCodeClick = async (e) => {
-        //         e.preventDefault();
-        //         console.log('Кнопка "Отправить код" нажата');
-        //         console.log('Текущее значение phoneValue:', phoneValue);
-        //         console.log('userAttributes:', userAttributes);
-        //         await sendAuthRequest();
-        //     };
+            const handleSendCodeClick = async (e) => {
+                e.preventDefault();
+                console.log('Кнопка "Отправить код" нажата');
+                console.log('Текущее значение phoneValue:', phoneValue);
+                console.log('userAttributes:', userAttributes);
+                await sendAuthRequest();
+            };
 
-        //     const handleChangeNumber = (e) => {
-        //         e.preventDefault();
+            const handleChangeNumber = (e) => {
+                e.preventDefault();
                 
-        //         setIsCodeMode(false);
-        //         setPhoneValue('');
-        //         setShowCheckmark(false);
-        //         setError('');
-        //         setUserAttributes(null);
-        //         setIsAuthenticated(false);
-        //         setAuthResult(null);
+                setIsCodeMode(false);
+                setPhoneValue('');
+                setShowCheckmark(false);
+                setError('');
+                setUserAttributes(null);
+                setIsAuthenticated(false);
+                setAuthResult(null);
                 
-        //         setTimeout(() => {
-        //             if (phoneInputRef.current) {
-        //                 phoneInputRef.current.focus();
-        //             }
-        //         }, 0);
-        //     };
+                setTimeout(() => {
+                    if (phoneInputRef.current) {
+                        phoneInputRef.current.focus();
+                    }
+                }, 0);
+            };
 
-        //     const getButtonText = () => {
-        //         if (isLoading) {
-        //             return "Отправка...";
-        //         }
-        //         return isCodeMode ? "Получить код повторно" : "Получить код";
-        //     };
+            const getButtonText = () => {
+                if (isLoading) {
+                    return "Отправка...";
+                }
+                return isCodeMode ? "Получить код повторно" : "Получить код";
+            };
 
-        //     const getButtonClass = () => {
-        //         if (isLoading) {
-        //             return "formBtn btn-inactive";
-        //         }
-        //         if (!isCodeMode) {
-        //             return checkButtonState() ? "formBtn btn-active" : "formBtn btn-inactive";
-        //         }
-        //         return "formBtn btn-active";
-        //     };
+            const getButtonClass = () => {
+                if (isLoading) {
+                    return "formBtn btn-inactive";
+                }
+                if (!isCodeMode) {
+                    return checkButtonState() ? "formBtn btn-active" : "formBtn btn-inactive";
+                }
+                return "formBtn btn-active";
+            };
 
-        //     const isButtonDisabled = () => {
-        //         if (isLoading) return true;
-        //         if (!isCodeMode) return !checkButtonState();
-        //         return false;
-        //     };
+            const isButtonDisabled = () => {
+                if (isLoading) return true;
+                if (!isCodeMode) return !checkButtonState();
+                return false;
+            };
 
-        //     const getSendCodeButtonClass = () => {
-        //         if (isAuthLoading) {
-        //             return "formBtn btn-inactive";
-        //         }
-        //         return "formBtn btn-active";
-        //     };
+            const getSendCodeButtonClass = () => {
+                if (isAuthLoading) {
+                    return "formBtn btn-inactive";
+                }
+                return "formBtn btn-active";
+            };
 
-        //     const isSendCodeButtonDisabled = () => {
-        //         return isAuthLoading;
-        //     };
+            const isSendCodeButtonDisabled = () => {
+                return isAuthLoading;
+            };
 
-        //     // Если пользователь аутентифицирован, показываем результат
-        //     if (isAuthenticated && authResult) {
-        //         return (
-        //             <>
-        //                 <header>
-        //                     <img src="img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
-        //                 </header>
+            // Если пользователь аутентифицирован, показываем результат
+            if (isAuthenticated && authResult) {
+                return (
+                    <>
+                        <header>
+                            <img src="img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
+                        </header>
 
-        //                 <main>
-        //                     <section>
-        //                         <div className="center-card">
-        //                             <h1>Аутентификация успешна!</h1>
-        //                             <p>Добро пожаловать в систему</p>
+                        <main>
+                            <section>
+                                <div className="center-card">
+                                    <h1>Аутентификация успешна!</h1>
+                                    <p>Добро пожаловать в систему</p>
                                     
-        //                             <div>
-        //                                 <strong>Информация о пользователе:</strong><br />
-        //                                 ID: {authResult.user.id}<br />
-        //                                 Роль: {authResult.user.role}<br />
-        //                                 Телефон: {authResult.user.phone}<br />
-        //                                 Токен: {authResult.access_token.substring(0, 20)}...
-        //                             </div>
+                                    <div>
+                                        <strong>Информация о пользователе:</strong><br />
+                                        ID: {authResult.user.id}<br />
+                                        Роль: {authResult.user.role}<br />
+                                        Телефон: {authResult.user.phone}<br />
+                                        Токен: {authResult.access_token.substring(0, 20)}...
+                                    </div>
                                     
-        //                             <button 
-        //                                 className="formBtn btn-active"
-        //                                 onClick={handleChangeNumber}
-        //                                 style={ {marginTop: '20px'} }
-        //                             >
-        //                                 Выйти
-        //                             </button>
-        //                         </div>
-        //                     </section>
-        //                 </main>
-        //             </>
-        //         );
-        //     }
+                                    <button 
+                                        className="formBtn btn-active"
+                                        onClick={handleChangeNumber}
+                                        style={ {marginTop: '20px'} }
+                                    >
+                                        Выйти
+                                    </button>
+                                </div>
+                            </section>
+                        </main>
+                    </>
+                );
+            }
 
-        //     return (
-        //         <>
-        //             <header>
-        //                 <img src="img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
-        //             </header>
+            return (
+                <>
+                    <header>
+                        <img src="img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
+                    </header>
 
-        //             <main>
-        //                 <section>
-        //                     <div className="center-card">
-        //                         <h1>Регистрация кандидата</h1>
-        //                         <p>Введите номер телефона, чтобы авторизоваться в системе и получить доступ к анкете кандидата</p>
+                    <main>
+                        <section>
+                            <div className="center-card">
+                                <h1>Регистрация кандидата</h1>
+                                <p>Введите номер телефона, чтобы авторизоваться в системе и получить доступ к анкете кандидата</p>
 
-        //                         <form action="#">
-        //                             <div className="input-container">
-        //                                 <label htmlFor="phoneNumber" id="formLabel" className="formLabel">
-        //                                     {isCodeMode ? "Код из СМС" : "Телефон"}
-        //                                 </label>
-        //                                 <input 
-        //                                     type="tel" 
-        //                                     name="phoneNumber" 
-        //                                     id="phoneNumber" 
-        //                                     className="formInput" 
-        //                                     placeholder={isCodeMode ? "Введите код из СМС" : "Введите номер"}
-        //                                     value={phoneValue}
-        //                                     onChange={handleInputChange}
-        //                                     ref={phoneInputRef}
-        //                                     disabled={isLoading || isAuthLoading}
-        //                                 />
-        //                                 {showCheckmark && (
-        //                                     <div className="checkmark-icon" id="checkmarkIcon">
-        //                                         <svg viewBox="0 0 24 24">
-        //                                             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-        //                                         </svg>
-        //                                     </div>
-        //                                 )}
-        //                             </div>
+                                <form action="#">
+                                    <div className="input-container">
+                                        <label htmlFor="phoneNumber" id="formLabel" className="formLabel">
+                                            {isCodeMode ? "Код из СМС" : "Телефон"}
+                                        </label>
+                                        <input 
+                                            type="tel" 
+                                            name="phoneNumber" 
+                                            id="phoneNumber" 
+                                            className="formInput" 
+                                            placeholder={isCodeMode ? "Введите код из СМС" : "Введите номер"}
+                                            value={phoneValue}
+                                            onChange={handleInputChange}
+                                            ref={phoneInputRef}
+                                            disabled={isLoading || isAuthLoading}
+                                        />
+                                        {showCheckmark && (
+                                            <div className="checkmark-icon" id="checkmarkIcon">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </div>
 
-        //                             {/* Отображение ошибки */}
-        //                             {error && (
-        //                                 <div className="error-message">
-        //                                     {error}
-        //                                 </div>
-        //                             )}
+                                    {/* Отображение ошибки */}
+                                    {error && (
+                                        <div className="error-message">
+                                            {error}
+                                        </div>
+                                    )}
 
-        //                             <button 
-        //                                 id="getCodeBtn" 
-        //                                 className={getButtonClass()}
-        //                                 disabled={isButtonDisabled()}
-        //                                 onClick={handleGetCodeClick}
-        //                             >
-        //                                 {getButtonText()}
-        //                             </button><br />
+                                    <button 
+                                        id="getCodeBtn" 
+                                        className={getButtonClass()}
+                                        disabled={isButtonDisabled()}
+                                        onClick={handleGetCodeClick}
+                                    >
+                                        {getButtonText()}
+                                    </button><br />
                                     
-        //                             {/* Кнопка отправки кода - показывается только в режиме ввода кода */}
-        //                             {isCodeMode && (
-        //                                 <button 
-        //                                     id="sendCodeBtn" 
-        //                                     className={getSendCodeButtonClass()}
-        //                                     disabled={isSendCodeButtonDisabled()}
-        //                                     onClick={handleSendCodeClick}
-        //                                     style={ {marginTop: '10px'} }
-        //                                 >
-        //                                     {isAuthLoading ? "Отправка..." : "Отправить код"}
-        //                                 </button>
-        //                             )}
+                                    {/* Кнопка отправки кода - показывается только в режиме ввода кода */}
+                                    {isCodeMode && (
+                                        <button 
+                                            id="sendCodeBtn" 
+                                            className={getSendCodeButtonClass()}
+                                            disabled={isSendCodeButtonDisabled()}
+                                            onClick={handleSendCodeClick}
+                                            style={ {marginTop: '10px'} }
+                                        >
+                                            {isAuthLoading ? "Отправка..." : "Отправить код"}
+                                        </button>
+                                    )}
                                     
-        //                             <div 
-        //                                 className="checkboxRow" 
-        //                                 id="checkboxRow"
-        //                                 style={ {display: isCodeMode ? 'none' : 'flex'} }
-        //                             >
-        //                                 <label className="custom-checkbox" htmlFor="personalData">
-        //                                     <input 
-        //                                         type="checkbox" 
-        //                                         name="personalData" 
-        //                                         id="personalData"
-        //                                         checked={isCheckboxChecked}
-        //                                         onChange={handleCheckboxChange}
-        //                                         disabled={isLoading || isAuthLoading}
-        //                                     />
-        //                                     <span className="checkmark"></span>
-        //                                 </label>
-        //                                 <label htmlFor="personalData">
-        //                                     Я даю согласие на обработку <span>своих персональных данных</span>
-        //                                 </label>
-        //                             </div>
-        //                         </form>
+                                    <div 
+                                        className="checkboxRow" 
+                                        id="checkboxRow"
+                                        style={ {display: isCodeMode ? 'none' : 'flex'} }
+                                    >
+                                        <label className="custom-checkbox" htmlFor="personalData">
+                                            <input 
+                                                type="checkbox" 
+                                                name="personalData" 
+                                                id="personalData"
+                                                checked={isCheckboxChecked}
+                                                onChange={handleCheckboxChange}
+                                                disabled={isLoading || isAuthLoading}
+                                            />
+                                            <span className="checkmark"></span>
+                                        </label>
+                                        <label htmlFor="personalData">
+                                            Я даю согласие на обработку <span>своих персональных данных</span>
+                                        </label>
+                                    </div>
+                                </form>
                                 
-        //                         {isCodeMode && (
-        //                             <a 
-        //                                 href="#" 
-        //                                 id="changeNumber"
-        //                                 onClick={handleChangeNumber}
-        //                             >
-        //                                 Изменить номер
-        //                             </a>
-        //                         )}
+                                {isCodeMode && (
+                                    <a 
+                                        href="#" 
+                                        id="changeNumber"
+                                        onClick={handleChangeNumber}
+                                    >
+                                        Изменить номер
+                                    </a>
+                                )}
 
-        //                         {/* Отладочная информация (можно убрать в продакшене) */}
-        //                         {userAttributes && !isAuthenticated && (
-        //                             <div style={ {marginTop: '20px', fontSize: '12px', color: '#666'} }>
-        //                                 <strong>Отладка (получение кода):</strong><br />
-        //                                 ID: {userAttributes.id}<br />
-        //                                 Роль: {userAttributes.role}<br />
-        //                                 Телефон: {userAttributes.phone}
-        //                             </div>
-        //                         )}
-        //                     </div>
-        //                 </section>
-        //             </main>
-        //         </>
-        //     );
-        // }
+                                {/* Отладочная информация (можно убрать в продакшене) */}
+                                {userAttributes && !isAuthenticated && (
+                                    <div style={ {marginTop: '20px', fontSize: '12px', color: '#666'} }>
+                                        <strong>Отладка (получение кода):</strong><br />
+                                        ID: {userAttributes.id}<br />
+                                        Роль: {userAttributes.role}<br />
+                                        Телефон: {userAttributes.phone}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    </main>
+                </>
+            );
+        }
 
 
 
@@ -765,6 +765,88 @@ function CandidateForm() {
     // Функция для обновления данных формы
     const handleFormDataChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    // Функция для генерации случайных данных
+    const generateRandomData = () => {
+        const names = ['Иванов Иван Иванович', 'Петрова Мария Сергеевна', 'Сидоров Алексей Николаевич', 'Козлова Анна Владимировна', 'Морозов Дмитрий Александрович'];
+        const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань'];
+        const countries = ['Россия', 'Казахстан', 'Беларусь', 'Украина'];
+        const emails = ['example@gmail.com', 'test@yandex.ru', 'user@mail.ru', 'demo@example.com'];
+        const reasons = ['Замужество', 'Развод', 'Личные причины', 'По семейным обстоятельствам'];
+        
+        const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const getRandomDate = () => {
+            const start = new Date(1970, 0, 1);
+            const end = new Date(2005, 11, 31);
+            const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+        };
+        const getRandomPhone = () => `+7(${Math.floor(Math.random() * 900 + 100)})${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 90 + 10)}-${Math.floor(Math.random() * 90 + 10)}`;
+        const getRandomINN = () => Math.floor(Math.random() * 900000000000 + 100000000000).toString();
+        const getRandomPassport = () => `${Math.floor(Math.random() * 9000 + 1000)} ${Math.floor(Math.random() * 900000 + 100000)}`;
+
+        // Случайно выбираем вакансию и семейное положение
+        if (vacancyOptions.length > 0) {
+            setSelectedVacancy(getRandomItem(vacancyOptions));
+        }
+        
+        const maritalOptions = maritalStatusApiOptions.length > 0 ? maritalStatusApiOptions : [
+            'Не женат/Не замужем',
+            'Женат/Замужем',
+            'В разводе',
+            'Вдовец/Вдова',
+            'Гражданский брак'
+        ];
+        setSelectedMaritalStatus(getRandomItem(maritalOptions));
+
+        // Заполняем основные поля
+        const randomData = {
+            FIO: getRandomItem(names),
+            reasonOfChange: getRandomItem(reasons),
+            birthDate: getRandomDate(),
+            birthPlace: `${getRandomItem(countries)}, ${getRandomItem(cities)}`,
+            mobileNumber: getRandomPhone(),
+            domesticNumber: `${Math.floor(Math.random() * 900 + 100)} ${Math.floor(Math.random() * 900 + 100)}`,
+            email: getRandomItem(emails),
+            INN: getRandomINN(),
+            passwordSeriaNumber: getRandomPassport(),
+            dateOfIssue: getRandomDate(),
+            issuedBy: 'ОФУМС России по городу Москве',
+            adressOfPermanentReg: `г. ${getRandomItem(cities)}, ул. Ленина, д. ${Math.floor(Math.random() * 100 + 1)}`,
+            adressOfTemporaryReg: `г. ${getRandomItem(cities)}, ул. Советская, д. ${Math.floor(Math.random() * 100 + 1)}`,
+            adressOfFactialLiving: `г. ${getRandomItem(cities)}, ул. Пушкина, д. ${Math.floor(Math.random() * 100 + 1)}`,
+            FIOSuprug: getRandomItem(names),
+            whyPrisoner: 'Административное нарушение',
+            LegalEntity: 'ООО "Тестовая компания" - IT услуги'
+        };
+
+        // Заполняем данные детей
+        if (haveChildren) {
+            randomData.FIOChildren1 = getRandomItem(names);
+            randomData.dateOfBirthChildren1 = getRandomDate();
+            randomData.phoneNumberChildren1 = getRandomPhone();
+            randomData.placeOfStudyChildren1 = 'МГУ им. Ломоносова';
+            randomData.placeOfLivingChildren1 = `г. ${getRandomItem(cities)}, ул. Студенческая, д. ${Math.floor(Math.random() * 100 + 1)}`;
+        }
+
+        // Заполняем данные родственников
+        if (haveFamilyMembers) {
+            randomData.FIORelative1 = `Отец - ${getRandomItem(names)}`;
+            randomData.dateOfBirthRelative1 = getRandomDate();
+            randomData.phoneNumberRelative1 = getRandomPhone();
+            randomData.placeOfStudyRelative1 = 'ПАО "Газпром"';
+            randomData.placeOfLivingRelative1 = `г. ${getRandomItem(cities)}, ул. Семейная, д. ${Math.floor(Math.random() * 100 + 1)}`;
+        }
+
+        setFormData(randomData);
+        setPersonalDataChecked(true);
+        
+        // Случайно устанавливаем состояния
+        setSurnameChanged(Math.random() > 0.5);
+        setCriminalResponsibility(Math.random() > 0.8);
+        setLegalEntity(Math.random() > 0.7);
+        setMilitaryDuty(Math.random() > 0.3);
     };
 
     // Функция для получения токена из cookie
@@ -1132,7 +1214,7 @@ function CandidateForm() {
                 law_breaker: criminalResponsibility ? (rawFormData.whyPrisoner || 'Да') : 'Нет',
                 legal_entity: legalEntity ? (rawFormData.LegalEntity || 'Да') : 'Нет',
                 is_data_processing: personalDataChecked,
-                comment: ''
+                comment: 'Коммент'
             };
 
             console.log('Отправляемые данные:', apiData);
@@ -1219,6 +1301,34 @@ function CandidateForm() {
             <main>
                 <section>
                     <div className="center-card big">
+                        {/* Кнопка автозаполнения для отладки */}
+                        <div className="formRow" style={{marginBottom: '20px', backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px', border: '2px dashed #6c757d'}}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <div>
+                                    <h4 style={{ margin: '0 0 5px 0', color: '#6c757d' }}>🛠️ Режим отладки</h4>
+                                    <p style={{ margin: 0, fontSize: '14px', color: '#6c757d' }}>Автоматически заполнить форму случайными данными для тестирования</p>
+                                </div>
+                                <button 
+                                    onClick={generateRandomData}
+                                    style={{
+                                        backgroundColor: '#007bff',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '10px 20px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                        fontWeight: 'bold',
+                                        transition: 'background-color 0.3s'
+                                    }}
+                                    onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+                                    onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+                                >
+                                    🎲 Заполнить случайными данными
+                                </button>
+                            </div>
+                        </div>
+
                         <h1>Общие сведения</h1>
                         <p>Мы не передаём эти данные третьим лицам и используем их только для целей адаптации и сопровождения кандидатов</p>
 
@@ -2129,11 +2239,11 @@ function CandidateForm() {
             );
         }
 
-        // CandidatesTable Component
-function CandidatesTable({ onFiltersClick, onRowClick }) {
+function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef }) {
     const [candidates, setCandidates] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [selectedKeys, setSelectedKeys] = useState([]); // Массив для хранения выбранных ключей
     const [pagination, setPagination] = useState({
         current_page: 1,
         last_page: 1,
@@ -2145,6 +2255,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
 
     const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
     const [selectedFormat, setSelectedFormat] = useState('.xlsx');
+    const [downloadLoading, setDownloadLoading] = useState(false); // Состояние загрузки для кнопки скачивания
 
     // Функция для получения токена из cookie
     const getAccessToken = () => {
@@ -2157,6 +2268,119 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
     const getCsrfToken = () => {
         const metaTag = document.querySelector('meta[name="csrf-token"]');
         return metaTag ? metaTag.getAttribute('content') : null;
+    };
+
+    // Функция для обработки изменения чекбокса
+    const handleCheckboxChange = (vacancyKey, isChecked) => {
+        setSelectedKeys(prev => {
+            if (isChecked) {
+                // Добавляем ключ, если его еще нет в массиве
+                return prev.includes(vacancyKey) ? prev : [...prev, vacancyKey];
+            } else {
+                // Удаляем ключ из массива
+                return prev.filter(key => key !== vacancyKey);
+            }
+        });
+    };
+
+    // Функция для обработки "Выбрать всех"
+    const handleSelectAll = () => {
+        const allVacancyKeys = candidates.map(candidate => candidate.vacancyKey);
+        const allSelected = allVacancyKeys.every(key => selectedKeys.includes(key));
+        
+        if (allSelected) {
+            // Если все выбраны, снимаем все
+            setSelectedKeys(prev => prev.filter(key => !allVacancyKeys.includes(key)));
+        } else {
+            // Если не все выбраны, выбираем все
+            setSelectedKeys(prev => {
+                const newKeys = allVacancyKeys.filter(key => !prev.includes(key));
+                return [...prev, ...newKeys];
+            });
+        }
+    };
+
+    // Функция для скачивания файлов
+    const handleDownload = async () => {
+        setDownloadLoading(true);
+        
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                throw new Error('Токен авторизации не найден');
+            }
+
+            // Определяем URL в зависимости от выбранного формата
+            const endpoint = selectedFormat === '.pdf' ? 'pdf-format' : 'xlsx-format';
+            let url = `http://127.0.0.1:8000/api/v1/export/${endpoint}`;
+            
+            // Добавляем параметр keys только если есть выбранные ключи
+            if (selectedKeys.length > 0) {
+                const keysParam = selectedKeys.join(',');
+                url += `?keys=${encodeURIComponent(keysParam)}`;
+            }
+
+            const headers = {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+
+            // Добавляем CSRF токен если доступен
+            const csrfToken = getCsrfToken();
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+            }
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: headers
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Неавторизован. Пожалуйста, войдите в систему');
+                } else if (response.status === 403) {
+                    throw new Error('Доступ запрещен');
+                } else if (response.status === 404) {
+                    throw new Error('Файл не найден или некорректные ключи');
+                } else {
+                    throw new Error(`Ошибка сервера: ${response.status}`);
+                }
+            }
+
+            // Получаем blob данные
+            const blob = await response.blob();
+            
+            // Создаем ссылку для скачивания
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            
+            // Устанавливаем имя файла
+            const fileName = selectedKeys.length > 0 
+                ? `candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`
+                : `all_candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`;
+            link.download = fileName;
+            
+            // Добавляем ссылку в DOM, кликаем и удаляем
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Освобождаем память
+            window.URL.revokeObjectURL(downloadUrl);
+            
+            const exportMessage = selectedKeys.length > 0 
+                ? `Успешно скачано ${selectedKeys.length} анкет в формате ${selectedFormat}`
+                : `Успешно скачаны все анкеты в формате ${selectedFormat}`;
+            console.log(exportMessage);
+            
+        } catch (err) {
+            console.error('Ошибка при скачивании:', err);
+            alert(`Ошибка при скачивании: ${err.message}`);
+        } finally {
+            setDownloadLoading(false);
+        }
     };
 
     // Функция для загрузки кандидатов
@@ -2205,7 +2429,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                     id: candidate.id,
                     name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
                     datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
-                    vacancy: candidate.vacancy?.attributes?.name || 'Не указана',
+                    vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
                     status: candidate.status || 'Не определен',
                     statusID: getStatusId(candidate.status),
                     hasVacancyComment: candidate.comment,
@@ -2278,7 +2502,9 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
         }
         
         // Передаем vacancyKey вместо всего объекта candidate
-        onRowClick(candidate.vacancyKey);
+        if (onRowClick) {
+            onRowClick(candidate.vacancyKey);
+        }
     };
 
     // Функция для обработки смены страницы
@@ -2314,6 +2540,11 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
     useEffect(() => {
         fetchCandidates();
     }, []);
+
+    // Для отладки - логируем изменения выбранных ключей
+    useEffect(() => {
+        console.log('Выбранные ключи:', selectedKeys);
+    }, [selectedKeys]);
 
     const handleFormatDropdownToggle = (e) => {
         e.stopPropagation();
@@ -2386,9 +2617,14 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
             <div className="formRow justify-space-between w-80">
                 <div className="flex-direction-column">
                     <h1>Кандидаты</h1>
-                    <button className="aButton" id="checkAll">Выбрать всех</button>
+                    <button className="aButton" id="checkAll" onClick={handleSelectAll}>
+                        {candidates.length > 0 && candidates.every(c => selectedKeys.includes(c.vacancyKey)) 
+                            ? 'Снять выбор со всех' 
+                            : 'Выбрать всех'}
+                    </button>
                 </div>
                 <button 
+                    ref={filtersButtonRef}
                     id="filters" 
                     aria-label="Нажмите, чтобы открыть фильтры"
                     onClick={onFiltersClick}
@@ -2425,7 +2661,13 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                 >
                                     <td>
                                         <label className="custom-checkbox" htmlFor={`personalData${candidate.id}`}>
-                                            <input type="checkbox" name="personalData" id={`personalData${candidate.id}`} />
+                                            <input 
+                                                type="checkbox" 
+                                                name="personalData" 
+                                                id={`personalData${candidate.id}`}
+                                                checked={selectedKeys.includes(candidate.vacancyKey)}
+                                                onChange={(e) => handleCheckboxChange(candidate.vacancyKey, e.target.checked)}
+                                            />
                                             <span className="checkmark"></span>
                                         </label>
                                     </td>
@@ -2440,6 +2682,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                             <button 
                                                 id={`radactBtn${candidate.id}`}
                                                 onClick={(e) => e.stopPropagation()}
+                                                title = {candidate.hasVacancyComment }
                                             >
                                                 <img src="img/pen.png" alt="Редактировать анкету" />
                                             </button>
@@ -2488,15 +2731,22 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                             </button>
                         </div>
                         <div className="download-button-group right-side">
-                            <button className="download-btn primary">Скачать</button>
+                            <button 
+                                className="download-btn primary"
+                                onClick={handleDownload}
+                                disabled={downloadLoading}
+                            >
+                                {downloadLoading ? 'Скачивание...' : 'Скачать'}
+                            </button>
                             <button 
                                 className="download-btn dropdown-toggle"
                                 onClick={handleFormatDropdownToggle}
+                                disabled={downloadLoading}
                             >
                                 <span className="format-text">{selectedFormat}</span>
-                                        <svg className="chevron-down" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
+                                <svg className="chevron-down" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
                             </button>
                             <div className={`file-formats-card ${isFormatDropdownOpen ? '' : 'hide'}`}>
                                 <div className="format-item" onClick={() => handleFormatSelect('.xlsx')}>.xlsx</div>
@@ -2511,7 +2761,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
 }
 
         // FiltersCalendar Component
- function FiltersCalendar({ isOpen, onClose, filtersButtonRef }) {
+function FiltersCalendar({ isOpen, onClose, filtersButtonRef }) {
     const [selectedFilters, setSelectedFilters] = useState({
         status: [],
         vacancy: [],
@@ -2969,10 +3219,10 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                     name: monthNames[monthIndex],
                     dateStr,
                     year,
-                    isSelected: isDateSelected(dateStr),
-                    isInRange: isDateInRange(dateStr),
-                    isStartDate: isStartDate(dateStr),
-                    isEndDate: isEndDate(dateStr)
+                    isSelected: isMonthSelected(year, monthIndex),
+                    isInRange: isMonthInRange(year, monthIndex),
+                    isStartDate: isMonthStartDate(year, monthIndex),
+                    isEndDate: isMonthEndDate(year, monthIndex)
                 });
             }
             months.push(row);
@@ -2994,10 +3244,10 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                 row.push({
                     year: yearIndex,
                     dateStr,
-                    isSelected: isDateSelected(dateStr),
-                    isInRange: isDateInRange(dateStr),
-                    isStartDate: isStartDate(dateStr),
-                    isEndDate: isEndDate(dateStr)
+                    isSelected: isYearSelected(yearIndex),
+                    isInRange: isYearInRange(yearIndex),
+                    isStartDate: isYearStartDate(yearIndex),
+                    isEndDate: isYearEndDate(yearIndex)
                 });
             }
             years.push(row);
@@ -3027,6 +3277,58 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
         if (!startDate || !endDate) return false;
         const date = new Date(dateStr);
         return endDate.getTime() === date.getTime();
+    };
+
+    // Функции для проверки состояния месяцев
+    const isMonthSelected = (year, monthIndex) => {
+        if (!startDate) return false;
+        const monthDate = new Date(year, monthIndex, 1);
+        return (startDate && startDate.getTime() === monthDate.getTime()) || 
+               (endDate && endDate.getTime() === monthDate.getTime());
+    };
+
+    const isMonthInRange = (year, monthIndex) => {
+        if (!startDate || !endDate) return false;
+        const monthDate = new Date(year, monthIndex, 1);
+        return monthDate > startDate && monthDate < endDate;
+    };
+
+    const isMonthStartDate = (year, monthIndex) => {
+        if (!startDate) return false;
+        const monthDate = new Date(year, monthIndex, 1);
+        return startDate.getTime() === monthDate.getTime();
+    };
+
+    const isMonthEndDate = (year, monthIndex) => {
+        if (!startDate || !endDate) return false;
+        const monthDate = new Date(year, monthIndex, 1);
+        return endDate.getTime() === monthDate.getTime();
+    };
+
+    // Функции для проверки состояния годов
+    const isYearSelected = (year) => {
+        if (!startDate) return false;
+        const yearDate = new Date(year, 0, 1);
+        return (startDate && startDate.getTime() === yearDate.getTime()) || 
+               (endDate && endDate.getTime() === yearDate.getTime());
+    };
+
+    const isYearInRange = (year) => {
+        if (!startDate || !endDate) return false;
+        const yearDate = new Date(year, 0, 1);
+        return yearDate > startDate && yearDate < endDate;
+    };
+
+    const isYearStartDate = (year) => {
+        if (!startDate) return false;
+        const yearDate = new Date(year, 0, 1);
+        return startDate.getTime() === yearDate.getTime();
+    };
+
+    const isYearEndDate = (year) => {
+        if (!startDate || !endDate) return false;
+        const yearDate = new Date(year, 0, 1);
+        return endDate.getTime() === yearDate.getTime();
     };
 
     useEffect(() => {
@@ -3146,7 +3448,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                                             (day.isEndDate && startDate) ? 'end-date-bg' : ''
                                                         ].filter(Boolean).join(' ') : ''}
                                                         onClick={day ? () => handleDateClick(day.dateStr, day.year, day.month, day.day) : undefined}
-                                                        style={{cursor: day ? 'pointer' : 'default'}}
+                                                        style={{cursor: day ? 'pointer' : 'default', position: 'relative'}}
                                                     >
                                                         {day && <span className="day-number">{day.day}</span>}
                                                     </td>
@@ -3169,7 +3471,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                                             (month.isEndDate && startDate) ? 'end-date-bg' : ''
                                                         ].filter(Boolean).join(' ')}
                                                         onClick={() => handleDateClick(month.dateStr, month.year, month.month)}
-                                                        style={{cursor: 'pointer'}}
+                                                        style={{cursor: 'pointer', position: 'relative'}}
                                                     >
                                                         {month.name}
                                                     </td>
@@ -3192,7 +3494,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                                             (year.isEndDate && startDate) ? 'end-date-bg' : ''
                                                         ].filter(Boolean).join(' ')}
                                                         onClick={() => handleDateClick(year.dateStr, year.year)}
-                                                        style={{cursor: 'pointer'}}
+                                                        style={{cursor: 'pointer', position: 'relative'}}
                                                     >
                                                         {year.year}
                                                     </td>
@@ -3254,7 +3556,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                                             (day.isEndDate && startDate) ? 'end-date-bg' : ''
                                                         ].filter(Boolean).join(' ') : ''}
                                                         onClick={day ? () => handleDateClick(day.dateStr, day.year, day.month, day.day) : undefined}
-                                                        style={{cursor: day ? 'pointer' : 'default'}}
+                                                        style={{cursor: day ? 'pointer' : 'default', position: 'relative'}}
                                                     >
                                                         {day && <span className="day-number">{day.day}</span>}
                                                     </td>
@@ -3277,7 +3579,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                                             (month.isEndDate && startDate) ? 'end-date-bg' : ''
                                                         ].filter(Boolean).join(' ')}
                                                         onClick={() => handleDateClick(month.dateStr, month.year, month.month)}
-                                                        style={{cursor: 'pointer'}}
+                                                        style={{cursor: 'pointer', position: 'relative'}}
                                                     >
                                                         {month.name}
                                                     </td>
@@ -3300,7 +3602,7 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                                                             (year.isEndDate && startDate) ? 'end-date-bg' : ''
                                                         ].filter(Boolean).join(' ')}
                                                         onClick={() => handleDateClick(year.dateStr, year.year)}
-                                                        style={{cursor: 'pointer'}}
+                                                        style={{cursor: 'pointer', position: 'relative'}}
                                                     >
                                                         {year.year}
                                                     </td>
@@ -3509,6 +3811,10 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                         cursor: not-allowed;
                     }
                     
+                    .calendar td {
+                        position: relative;
+                    }
+                    
                     ${currentRangeType === 'dates' ? `
                         .calendar td.start-date::after,
                         .calendar td.end-date::after {
@@ -3534,10 +3840,16 @@ function CandidatesTable({ onFiltersClick, onRowClick }) {
                             width: 62px;
                             height: 32px;
                             background-color: #EC7D3F;
-                            border-radius: 28px;
+                            border-radius: 16px;
                             z-index: -1;
                         }
                     `}
+                    
+                    .calendar td .day-number,
+                    .calendar td {
+                        position: relative;
+                        z-index: 1;
+                    }
                 `
             }} />
         </>
@@ -4654,64 +4966,39 @@ function CandidatesSettings() {
         </>
     );
 }
+        // Main App Component
  function App() {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [currentView, setCurrentView] = useState('table'); // 'table' или 'form'
-    const [selectedCandidate, setSelectedCandidate] = useState(null);
     const filtersButtonRef = useRef(null);
-
+    
     const handleFiltersClick = () => {
-        console.log('Кнопка фильтры нажата'); // Для отладки
         setIsCalendarOpen(true);
     };
-
+    
     const handleCalendarClose = () => {
-        console.log('Закрытие календаря'); // Для отладки
         setIsCalendarOpen(false);
     };
-
-    // Функция для обработки клика по строке таблицы
-    const handleRowClick = (vacancyKey) => {
-        setSelectedCandidate(vacancyKey);
-        setCurrentView('form');
-    };
-
-    // Функция для возврата к таблице
-    const handleBackToTable = () => {
-        setCurrentView('table');
-        setSelectedCandidate(null);
-    };
-
+    
     return (
         <>
-            {currentView === 'table' ? (
-                <>
-                    <Header />
-                    <CandidatesTable 
-                        onFiltersClick={handleFiltersClick} 
-                        onRowClick={handleRowClick}
-                        filtersButtonRef={filtersButtonRef}
-                    />
-                    <FiltersCalendar 
-                        isOpen={isCalendarOpen}
-                        onClose={handleCalendarClose}
-                        filtersButtonRef={filtersButtonRef}
-                    />
-                </>
-            ) : currentView === 'form' ? (
-                <ShowForm 
-                    vacancyKey={selectedCandidate} 
-                    onBackToTable={handleBackToTable}
+            <Header />
+            <main>
+                <CandidatesTable 
+                    onFiltersClick={handleFiltersClick} 
+                    filtersButtonRef={filtersButtonRef}
                 />
-            ) : (
-                <CandidatesSettings />
-            )}
+                <FiltersCalendar
+                    isOpen={isCalendarOpen}
+                    onClose={handleCalendarClose}
+                    filtersButtonRef={filtersButtonRef}
+                />
+            </main>
         </>
     );
 }
 
-// Монтируем главное приложение
-ReactDOM.render(React.createElement(App), document.getElementById('root'));
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
         <?php echo '@endverbatim'; ?>
     </script>
 </body>
