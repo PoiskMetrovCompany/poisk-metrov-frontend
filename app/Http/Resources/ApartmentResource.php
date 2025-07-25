@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\ApartmentHistory;
+use App\Core\Abstracts\AbstractResource;
+use App\Models\Apartment;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\TextFormatters\PriceTextFormatter;
 
-class ApartmentResource extends JsonResource
+class ApartmentResource extends AbstractResource
 {
     /**
      * Transform the resource into an array.
@@ -94,7 +94,8 @@ class ApartmentResource extends JsonResource
             'lastChanges' => $apartmentHistory['lastChanges'],
             'metaTags' => json_decode($this->meta),
             'head_title' => $head_title,
-            'h1' => $h1
+            'h1' => $h1,
+            ...self::relationshipListOperation(Apartment::class, $this->id, $request->all(), Apartment::RELATIONSHIP),
         ];
     }
 }
