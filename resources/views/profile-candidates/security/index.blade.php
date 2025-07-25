@@ -20,6 +20,12 @@
 
 
     function Header() {
+        const handleLogout = () => {
+
+                document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                
+                window.location.reload();
+            };
         return (
             <header>
                 <div className="formRow justify-space-between w-80">
@@ -37,13 +43,13 @@
                     </div>
                     <div style={{display: 'flex', justifyContent: 'space-between', minWidth: '250px'}}>
                         <button id="notifBtn"><img src="/img/ring.png" alt="Уведомлений нет" /></button>
-                        <button id="exitBtn">Выйти из ЛК <img src="/img/arowRight.png" alt="Стрелочка вправо" /></button>
+                        <button id="exitBtn" onClick={handleLogout}>Выйти из ЛК <img src="/img/arowRight.png" alt="Стрелочка вправо" /></button>
                     </div>
                 </div>
             </header>
         );
     }
-    function ShowForm({ vacancyKey }) { // Добавляем prop vacancyKey
+    function ShowForm({ vacancyKey, setSelectedVacancyKey }) {
         const [isSelectOpen, setIsSelectOpen] = useState(false);
         const [selectedOption, setSelectedOption] = useState({
             value: 'new',
@@ -335,7 +341,7 @@
                         </div>
                         <div style={{display: 'flex', justifyContent: 'space-between', minWidth: '250px'}}>
                             <button id="notifBtn"><img src="/img/ring.png" alt="Уведомлений нет" /></button>
-                            <button id="exitBtn">Выйти из ЛК <img src="/img/arowRight.png" alt="Стрелочка вправо" /></button>
+                            <button id="exitBtn" onClick={handleLogout}>Выйти из ЛК <img src="/img/arowRight.png" alt="Стрелочка вправо" /></button>
                         </div>
                     </div>
                 </header>
@@ -380,7 +386,10 @@
                                     <button id="addComment" onClick={handleAddComment}>Оставить коментарий</button>
                                 </div>
                             </div>
-                            <p style={{position: 'absolute', top: '-2.7rem', left: '0', display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer'}}>
+                            <p 
+                                style={{position: 'absolute', top: '-2.7rem', left: '0', display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer'}}
+                                onClick={() => setSelectedVacancyKey(null)}
+                            >
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6.5 3L2 7.5L6.5 12M2.5 7.5H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
@@ -621,378 +630,433 @@
             </>
         );
     }
-    function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef }) {
-        const [candidates, setCandidates] = useState([]);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState('');
-        const [selectedKeys, setSelectedKeys] = useState([]); // Массив для хранения выбранных ключей
-        const [pagination, setPagination] = useState({
-            current_page: 1,
-            last_page: 1,
-            total: 0,
-            per_page: 8,
-            from: 0,
-            to: 0
-        });
+   function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filteredData, activeFilters, onFiltersReset }) {
+       const [candidates, setCandidates] = useState([]);
+       const [loading, setLoading] = useState(true);
+       const [error, setError] = useState('');
+       const [selectedKeys, setSelectedKeys] = useState([]);
+       const [pagination, setPagination] = useState({
+           current_page: 1,
+           last_page: 1,
+           total: 0,
+           per_page: 8,
+           from: 0,
+           to: 0
+       });
 
-        const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
-        const [selectedFormat, setSelectedFormat] = useState('.xlsx');
-        const [downloadLoading, setDownloadLoading] = useState(false); // Состояние загрузки для кнопки скачивания
+       const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
+       const [selectedFormat, setSelectedFormat] = useState('.xlsx');
+       const [downloadLoading, setDownloadLoading] = useState(false);
 
-        // Функция для получения токена из cookie
-        const getAccessToken = () => {
-            const cookies = document.cookie.split(';');
-            const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
-            return tokenCookie ? tokenCookie.split('=')[1] : null;
-        };
+       const getAccessToken = () => {
+           const cookies = document.cookie.split(';');
+           const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
+           return tokenCookie ? tokenCookie.split('=')[1] : null;
+       };
 
-        // Функция для получения CSRF токена (если необходимо)
-        const getCsrfToken = () => {
-            const metaTag = document.querySelector('meta[name="csrf-token"]');
-            return metaTag ? metaTag.getAttribute('content') : null;
-        };
+       const getCsrfToken = () => {
+           const metaTag = document.querySelector('meta[name="csrf-token"]');
+           return metaTag ? metaTag.getAttribute('content') : null;
+       };
 
-        // Функция для обработки изменения чекбокса
-        const handleCheckboxChange = (vacancyKey, isChecked) => {
-            setSelectedKeys(prev => {
-                if (isChecked) {
-                    // Добавляем ключ, если его еще нет в массиве
-                    return prev.includes(vacancyKey) ? prev : [...prev, vacancyKey];
-                } else {
-                    // Удаляем ключ из массива
-                    return prev.filter(key => key !== vacancyKey);
-                }
-            });
-        };
+       // Добавить вспомогательные функции для фильтров
+       const formatApiDateRange = (startDate, endDate, type) => {
+           if (!startDate || !endDate) return null;
 
-        // Функция для обработки "Выбрать всех"
-        const handleSelectAll = () => {
-            const allVacancyKeys = candidates.map(candidate => candidate.vacancyKey);
-            const allSelected = allVacancyKeys.every(key => selectedKeys.includes(key));
+           const formatDate = (date, rangeType) => {
+               const year = date.getFullYear();
+               const month = String(date.getMonth() + 1).padStart(2, '0');
+               const day = String(date.getDate()).padStart(2, '0');
 
-            if (allSelected) {
-                // Если все выбраны, снимаем все
-                setSelectedKeys(prev => prev.filter(key => !allVacancyKeys.includes(key)));
-            } else {
-                // Если не все выбраны, выбираем все
-                setSelectedKeys(prev => {
-                    const newKeys = allVacancyKeys.filter(key => !prev.includes(key));
-                    return [...prev, ...newKeys];
-                });
-            }
-        };
+               switch (rangeType) {
+                   case 'years':
+                       return year.toString();
+                   case 'months':
+                       return `${month}.${year}`;
+                   case 'dates':
+                       return `${day}.${month}.${year}`;
+                   default:
+                       return '';
+               }
+           };
 
-        // Функция для скачивания файлов
-        const handleDownload = async () => {
-            setDownloadLoading(true);
+           const start = formatDate(startDate, type);
+           const end = formatDate(endDate, type);
 
-            try {
-                const token = getAccessToken();
-                if (!token) {
-                    throw new Error('Токен авторизации не найден');
-                }
+           return `${start},${end}`;
+       };
 
-                // Определяем URL в зависимости от выбранного формата
-                const endpoint = selectedFormat === '.pdf' ? 'pdf-format' : 'xlsx-format';
-                let url = `http://127.0.0.1:8000/api/v1/export/${endpoint}`;
-
-                // Добавляем параметр keys только если есть выбранные ключи
-                if (selectedKeys.length > 0) {
-                    const keysParam = selectedKeys.join(',');
-                    url += `?keys=${encodeURIComponent(keysParam)}`;
-                }
-
-                const headers = {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                };
-
-                // Добавляем CSRF токен если доступен
-                const csrfToken = getCsrfToken();
-                if (csrfToken) {
-                    headers['X-CSRF-TOKEN'] = csrfToken;
-                }
-
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: headers
-                });
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error('Неавторизован. Пожалуйста, войдите в систему');
-                    } else if (response.status === 403) {
-                        throw new Error('Доступ запрещен');
-                    } else if (response.status === 404) {
-                        throw new Error('Файл не найден или некорректные ключи');
-                    } else {
-                        throw new Error(`Ошибка сервера: ${response.status}`);
-                    }
-                }
-
-                // Получаем blob данные
-                const blob = await response.blob();
-
-                // Создаем ссылку для скачивания
-                const downloadUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = downloadUrl;
-
-                // Устанавливаем имя файла
-                const fileName = selectedKeys.length > 0
-                    ? `candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`
-                    : `all_candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`;
-                link.download = fileName;
-
-                // Добавляем ссылку в DOM, кликаем и удаляем
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                // Освобождаем память
-                window.URL.revokeObjectURL(downloadUrl);
-
-                const exportMessage = selectedKeys.length > 0
-                    ? `Успешно скачано ${selectedKeys.length} анкет в формате ${selectedFormat}`
-                    : `Успешно скачаны все анкеты в формате ${selectedFormat}`;
-                console.log(exportMessage);
-
-            } catch (err) {
-                console.error('Ошибка при скачивании:', err);
-                alert(`Ошибка при скачивании: ${err.message}`);
-            } finally {
-                setDownloadLoading(false);
-            }
-        };
-
-        // Функция для загрузки кандидатов
-        const fetchCandidates = async (page = 1) => {
-            setLoading(true);
-            setError('');
-
-            try {
-                const token = getAccessToken();
-                if (!token) {
-                    throw new Error('Токен авторизации не найден');
-                }
-
-                const headers = {
-                    'accept': '*/*',
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                };
-
-                // Добавляем CSRF токен если доступен
-                const csrfToken = getCsrfToken();
-                if (csrfToken) {
-                    headers['X-CSRF-TOKEN'] = csrfToken;
-                }
-
-                const response = await fetch(`http://127.0.0.1:8000/api/v1/candidates/?page=${page}`, {
-                    method: 'GET',
-                    headers: headers
-                });
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error('Неавторизован. Пожалуйста, войдите в систему');
-                    } else if (response.status === 403) {
-                        throw new Error('Доступ запрещен');
-                    } else {
-                        throw new Error(`Ошибка сервера: ${response.status}`);
-                    }
-                }
-
-                const data = await response.json();
-
-                if (data.response && data.attributes) {
-                    // Преобразуем данные из API в формат для таблицы
-                    const transformedCandidates = data.attributes.data.map(candidate => ({
-                        id: candidate.id,
-                        name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
-                        datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
-                        vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
-                        status: candidate.status || 'Не определен',
-                        statusID: getStatusId(candidate.status),
-                        hasVacancyComment: candidate.comment,
-                        vacancyKey: candidate.key,
-                        // Добавляем все данные кандидата для передачи в форму
-                        fullData: candidate
-                    }));
-
-                    setCandidates(transformedCandidates);
-                    setPagination({
-                        current_page: data.attributes.current_page,
-                        last_page: data.attributes.last_page,
-                        total: data.attributes.total,
-                        per_page: data.attributes.per_page,
-                        from: data.attributes.from,
-                        to: data.attributes.to
-                    });
-                } else {
-                    throw new Error('Неверный формат ответа сервера');
-                }
-            } catch (err) {
-                console.error('Ошибка при загрузке кандидатов:', err);
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        // Функция для форматирования даты и времени
-        const formatDateTime = (dateString) => {
-            if (!dateString) return 'Не указано';
-
-            try {
-                const date = new Date(dateString);
-                const day = date.getDate().toString().padStart(2, '0');
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const year = date.getFullYear();
-                const hours = date.getHours().toString().padStart(2, '0');
-                const minutes = date.getMinutes().toString().padStart(2, '0');
-
-                return `${day}.${month}.${year} ${hours}:${minutes}`;
-            } catch (err) {
-                return 'Неверная дата';
-            }
-        };
-
-        // Функция для получения ID статуса
-        const getStatusId = (status) => {
-            switch (status) {
-                case 'Новая анкета':
-                    return 'new';
-                case 'Проверен':
-                    return 'checked';
-                case 'Нужна доработка':
-                    return 'needRevision';
-                case 'Отклонен':
-                    return 'rejected';
-                default:
-                    return 'unknown';
-            }
-        };
-
-        // Функция для обработки клика по строке
-        const handleRowClick = (candidate, event) => {
-            // Проверяем, что клик не был по checkbox или кнопкам
-            if (event.target.type === 'checkbox' ||
-                event.target.closest('button') ||
-                event.target.closest('label')) {
-                return;
-            }
-
-            // Передаем vacancyKey вместо всего объекта candidate
-            if (onRowClick) {
-                onRowClick(candidate.vacancyKey);
-            }
-        };
-
-        // Функция для обработки смены страницы
-        const handlePageChange = (page) => {
-            if (page >= 1 && page <= pagination.last_page && page !== pagination.current_page) {
-                fetchCandidates(page);
-            }
-        };
-
-        // Функция для генерации номеров страниц для пагинации
-        const generatePageNumbers = () => {
-            const { current_page, last_page } = pagination;
-            const pages = [];
-
-            if (last_page <= 5) {
-                for (let i = 1; i <= last_page; i++) {
-                    pages.push(i);
-                }
-            } else {
-                if (current_page <= 3) {
-                    pages.push(1, 2, 3, '...', last_page);
-                } else if (current_page >= last_page - 2) {
-                    pages.push(1, '...', last_page - 2, last_page - 1, last_page);
-                } else {
-                    pages.push(1, '...', current_page - 1, current_page, current_page + 1, '...', last_page);
-                }
-            }
-
-            return pages;
-        };
-
-        // Загружаем данные при монтировании компонента
-        useEffect(() => {
-            fetchCandidates();
-        }, []);
-
-        // Для отладки - логируем изменения выбранных ключей
-        useEffect(() => {
-            console.log('Выбранные ключи:', selectedKeys);
-        }, [selectedKeys]);
-
-        const handleFormatDropdownToggle = (e) => {
-            e.stopPropagation();
-            setIsFormatDropdownOpen(!isFormatDropdownOpen);
-        };
-
-        const handleFormatSelect = (format) => {
-            setSelectedFormat(format);
-            setIsFormatDropdownOpen(false);
-        };
-
-        useEffect(() => {
-            const handleClickOutside = (e) => {
-                if (isFormatDropdownOpen && !e.target.closest('.download-button-group')) {
-                    setIsFormatDropdownOpen(false);
-                }
+      const getStatusApiValues = (statusValues) => {
+            const statusMapping = {
+                'showAll': null,
+                'Новая анкета': 'Новая анкета',
+                'checked': 'Проверено',
+                'Нужна доработка': 'Нужна доработка',
+                'rejected': 'Отклонен'
             };
 
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => document.removeEventListener('mousedown', handleClickOutside);
-        }, [isFormatDropdownOpen]);
+            return statusValues
+                .filter(status => status !== 'showAll' && statusMapping[status]) // ✅ Добавлена точка
+                .map(status => statusMapping[status]);
+        };
 
-        // Показываем загрузку
-        if (loading) {
-            return (
-                <section style={{flexWrap: 'wrap', minHeight: 'auto'}}>
-                    <div className="formRow justify-space-between w-80">
-                        <div className="flex-direction-column">
-                            <h1>Кандидаты</h1>
-                            <p>Загрузка данных...</p>
-                        </div>
-                    </div>
-                </section>
-            );
-        }
+       const getVacancyApiValues = (vacancyValues, vacancyOptions) => {
+           if (vacancyValues.includes('showAll')) {
+               return [];
+           }
 
-        // Показываем ошибку
-        if (error) {
-            return (
-                <section style={{flexWrap: 'wrap', minHeight: 'auto'}}>
-                    <div className="formRow justify-space-between w-80">
-                        <div className="flex-direction-column">
-                            <h1>Кандидаты</h1>
-                            <div style={{
-                            color: '#d32f2f',
-                            fontSize: '14px',
-                            marginTop: '10px',
-                            padding: '8px',
-                            backgroundColor: '#ffebee',
-                            border: '1px solid #ffcdd2',
-                            borderRadius: '4px'
-                        }}>
-                                Ошибка: {error}
-                            </div>
-                            <button
-                                className="aButton"
-                                onClick={() => fetchCandidates()}
-                                style={{marginTop: '10px'}}
-                            >
-                                Повторить попытку
-                            </button>
-                        </div>
-                    </div>
-                </section>
-            );
-        }
+           return vacancyValues
+               .map(vacancyId => {
+                   const vacancy = vacancyOptions.find(option => option.value === vacancyId);
+                   return vacancy ? vacancy.title : null;
+               })
+               .filter(Boolean);
+       };
+
+       const handleCheckboxChange = (vacancyKey, isChecked) => {
+           setSelectedKeys(prev => {
+               if (isChecked) {
+                   return prev.includes(vacancyKey) ? prev : [...prev, vacancyKey];
+               } else {
+                   return prev.filter(key => key !== vacancyKey);
+               }
+           });
+       };
+
+       const handleSelectAll = () => {
+           const allVacancyKeys = candidates.map(candidate => candidate.vacancyKey);
+           const allSelected = allVacancyKeys.every(key => selectedKeys.includes(key));
+
+           if (allSelected) {
+               setSelectedKeys(prev => prev.filter(key => !allVacancyKeys.includes(key)));
+           } else {
+               setSelectedKeys(prev => {
+                   const newKeys = allVacancyKeys.filter(key => !prev.includes(key));
+                   return [...prev, ...newKeys];
+               });
+           }
+       };
+
+       const handleDownload = async () => {
+           setDownloadLoading(true);
+
+           try {
+               const token = getAccessToken();
+               if (!token) {
+                   throw new Error('Токен авторизации не найден');
+               }
+
+               const endpoint = selectedFormat === '.pdf' ? 'pdf-format' : 'xlsx-format';
+               let url = `http://127.0.0.1:8000/api/v1/export/${endpoint}`;
+
+               if (selectedKeys.length > 0) {
+                   const keysParam = selectedKeys.join(',');
+                   url += `?keys=${encodeURIComponent(keysParam)}`;
+               }
+
+               const headers = {
+                   'accept': 'application/json',
+                   'Authorization': `Bearer ${token}`
+               };
+
+               const csrfToken = getCsrfToken();
+               if (csrfToken) {
+                   headers['X-CSRF-TOKEN'] = csrfToken;
+               }
+
+               const response = await fetch(url, {
+                   method: 'GET',
+                   headers: headers
+               });
+
+               if (!response.ok) {
+                   if (response.status === 401) {
+                       throw new Error('Неавторизован. Пожалуйста, войдите в систему');
+                   } else if (response.status === 403) {
+                       throw new Error('Доступ запрещен');
+                   } else if (response.status === 404) {
+                       throw new Error('Файл не найден или некорректные ключи');
+                   } else {
+                       throw new Error(`Ошибка сервера: ${response.status}`);
+                   }
+               }
+
+               const blob = await response.blob();
+
+               const downloadUrl = window.URL.createObjectURL(blob);
+               const link = document.createElement('a');
+               link.href = downloadUrl;
+
+               const fileName = selectedKeys.length > 0
+                   ? `candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`
+                   : `all_candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`;
+               link.download = fileName;
+
+               document.body.appendChild(link);
+               link.click();
+               document.body.removeChild(link);
+
+               window.URL.revokeObjectURL(downloadUrl);
+
+               const exportMessage = selectedKeys.length > 0
+                   ? `Успешно скачано ${selectedKeys.length} анкет в формате ${selectedFormat}`
+                   : `Успешно скачаны все анкеты в формате ${selectedFormat}`;
+               console.log(exportMessage);
+
+           } catch (err) {
+               console.error('Ошибка при скачивании:', err);
+               alert(`Ошибка при скачивании: ${err.message}`);
+           } finally {
+               setDownloadLoading(false);
+           }
+       };
+
+       // Изменить функцию fetchCandidates для поддержки фильтров
+       const fetchCandidates = async (page = 1, useFilters = false) => {
+           setLoading(true);
+           setError('');
+
+           try {
+               const token = getAccessToken();
+               if (!token) {
+                   throw new Error('Токен авторизации не найден');
+               }
+
+               let url = `http://127.0.0.1:8000/api/v1/candidates/?page=${page}`;
+               
+               // Если есть активные фильтры и нужно их использовать
+               if (useFilters && activeFilters) {
+                   const queryParams = [];
+                   
+                   // Добавляем параметры фильтров
+                   if (activeFilters.dateRange.start && activeFilters.dateRange.end) {
+                       const dateRange = formatApiDateRange(
+                           activeFilters.dateRange.start,
+                           activeFilters.dateRange.end,
+                           activeFilters.dateRange.type
+                       );
+                       if (dateRange) {
+                           switch (activeFilters.dateRange.type) {
+                               case 'years':
+                                   queryParams.push(`year_range=${dateRange}`);
+                                   break;
+                               case 'months':
+                                   queryParams.push(`month_range=${dateRange}`);
+                                   break;
+                               case 'dates':
+                                   queryParams.push(`date_range=${dateRange}`);
+                                   break;
+                           }
+                       }
+                   }
+                   
+                   const statusValues = getStatusApiValues(activeFilters.status);
+                   if (statusValues.length > 0) {
+                       queryParams.push(`candidate_statuses=${statusValues.join(',')}`);
+                   }
+                   
+                   // Для вакансий понадобится доступ к vacancyOptions, но пока можем пропустить
+                   // const vacancyValues = getVacancyApiValues(activeFilters.vacancy, vacancyOptions);
+                   // if (vacancyValues.length > 0) {
+                   //     queryParams.push(`vacancy_title=${vacancyValues.join(',')}`);
+                   // }
+                   
+                   if (queryParams.length > 0) {
+                       url += `&${queryParams.join('&')}`;
+                   }
+               }
+
+               const headers = {
+                   'accept': '*/*',
+                   'Authorization': `Bearer ${token}`,
+                   'Content-Type': 'application/json'
+               };
+
+               const csrfToken = getCsrfToken();
+               if (csrfToken) {
+                   headers['X-CSRF-TOKEN'] = csrfToken;
+               }
+
+               const response = await fetch(url, {
+                   method: 'GET',
+                   headers: headers
+               });
+
+               if (!response.ok) {
+                   if (response.status === 401) {
+                       throw new Error('Неавторизован. Пожалуйста, войдите в систему');
+                   } else if (response.status === 403) {
+                       throw new Error('Доступ запрещен');
+                   } else {
+                       throw new Error(`Ошибка сервера: ${response.status}`);
+                   }
+               }
+
+               const data = await response.json();
+
+               if (data.response && data.attributes) {
+                   const transformedCandidates = data.attributes.data.map(candidate => ({
+                       id: candidate.id,
+                       name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
+                       datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
+                       vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
+                       status: candidate.status || 'Не определен',
+                       statusID: getStatusId(candidate.status),
+                       hasVacancyComment: candidate.comment,
+                       vacancyKey: candidate.key,
+                       fullData: candidate
+                   }));
+
+                   setCandidates(transformedCandidates);
+                   setPagination({
+                       current_page: data.attributes.current_page,
+                       last_page: data.attributes.last_page,
+                       total: data.attributes.total,
+                       per_page: data.attributes.per_page,
+                       from: data.attributes.from,
+                       to: data.attributes.to
+                   });
+               } else {
+                   throw new Error('Неверный формат ответа сервера');
+               }
+           } catch (err) {
+               console.error('Ошибка при загрузке кандидатов:', err);
+               setError(err.message);
+           } finally {
+               setLoading(false);
+           }
+       };
+
+       const formatDateTime = (dateString) => {
+           if (!dateString) return 'Не указано';
+
+           try {
+               const date = new Date(dateString);
+               const day = date.getDate().toString().padStart(2, '0');
+               const month = (date.getMonth() + 1).toString().padStart(2, '0');
+               const year = date.getFullYear();
+               const hours = date.getHours().toString().padStart(2, '0');
+               const minutes = date.getMinutes().toString().padStart(2, '0');
+
+               return `${day}.${month}.${year} ${hours}:${minutes}`;
+           } catch (err) {
+               return 'Неверная дата';
+           }
+       };
+
+       const getStatusId = (status) => {
+           switch (status) {
+               case 'Новая анкета':
+                   return 'new';
+               case 'Проверен':
+                   return 'checked';
+               case 'Нужна доработка':
+                   return 'needRevision';
+               case 'Отклонен':
+                   return 'rejected';
+               default:
+                   return 'unknown';
+           }
+       };
+
+       const handleRowClick = (candidate, event) => {
+           if (event.target.type === 'checkbox' ||
+               event.target.closest('button') ||
+               event.target.closest('label')) {
+               return;
+           }
+
+           if (onRowClick) {
+               onRowClick(candidate.vacancyKey);
+           }
+       };
+
+       // Изменить обработчик смены страницы
+       const handlePageChange = (page) => {
+           if (page >= 1 && page <= pagination.last_page && page !== pagination.current_page) {
+               // Если есть активные фильтры, используем их при пагинации
+               fetchCandidates(page, activeFilters !== null);
+           }
+       };
+
+       const generatePageNumbers = () => {
+           const { current_page, last_page } = pagination;
+           const pages = [];
+
+           if (last_page <= 5) {
+               for (let i = 1; i <= last_page; i++) {
+                   pages.push(i);
+               }
+           } else {
+               if (current_page <= 3) {
+                   pages.push(1, 2, 3, '...', last_page);
+               } else if (current_page >= last_page - 2) {
+                   pages.push(1, '...', last_page - 2, last_page - 1, last_page);
+               } else {
+                   pages.push(1, '...', current_page - 1, current_page, current_page + 1, '...', last_page);
+               }
+           }
+
+           return pages;
+       };
+
+       // Добавить useEffect для обработки фильтрованных данных
+       useEffect(() => {
+           if (filteredData && filteredData.attributes) {
+               const transformedCandidates = filteredData.attributes.data.map(candidate => ({
+                   id: candidate.id,
+                   name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
+                   datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
+                   vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
+                   status: candidate.status || 'Не определен',
+                   statusID: getStatusId(candidate.status),
+                   hasVacancyComment: candidate.comment,
+                   vacancyKey: candidate.key,
+                   fullData: candidate
+               }));
+
+               setCandidates(transformedCandidates);
+               setPagination({
+                   current_page: filteredData.attributes.current_page || 1,
+                   last_page: filteredData.attributes.last_page || 1,
+                   total: filteredData.attributes.total || transformedCandidates.length,
+                   per_page: filteredData.attributes.per_page || 8,
+                   from: filteredData.attributes.from || 1,
+                   to: filteredData.attributes.to || transformedCandidates.length
+               });
+           }
+       }, [filteredData]);
+
+       useEffect(() => {
+           if (!filteredData) {
+               fetchCandidates();
+           }
+       }, [filteredData]);
+
+       useEffect(() => {
+           console.log('Выбранные ключи:', selectedKeys);
+       }, [selectedKeys]);
+
+       const handleFormatDropdownToggle = (e) => {
+           e.stopPropagation();
+           setIsFormatDropdownOpen(!isFormatDropdownOpen);
+       };
+
+       const handleFormatSelect = (format) => {
+           setSelectedFormat(format);
+           setIsFormatDropdownOpen(false);
+       };
+
+       useEffect(() => {
+           const handleClickOutside = (e) => {
+               if (isFormatDropdownOpen && !e.target.closest('.download-button-group')) {
+                   setIsFormatDropdownOpen(false);
+               }
+           };
+
+           document.addEventListener('mousedown', handleClickOutside);
+           return () => document.removeEventListener('mousedown', handleClickOutside);
+       }, [isFormatDropdownOpen]);
 
         return (
             <section style={{flexWrap: 'wrap', minHeight: 'auto'}}>
@@ -1063,6 +1127,7 @@
                                         {candidate.hasVacancyComment && (
                                             <button
                                                 id={`radactBtn${candidate.id}`}
+                                                className = {"redactBtn"}
                                                 onClick={(e) => e.stopPropagation()}
                                                 title = {candidate.hasVacancyComment }
                                             >
@@ -1143,601 +1208,582 @@
     }
 
     // FiltersCalendar Component
-    function FiltersCalendar({ isOpen, onClose, filtersButtonRef }) {
-        const [selectedFilters, setSelectedFilters] = useState({
-            status: [],
-            vacancy: [],
-            dateRange: {
-                type: 'dates',
-                start: null,
-                end: null
-            }
-        });
-
-        const [startDate, setStartDate] = useState(null);
-        const [endDate, setEndDate] = useState(null);
-        const [currentRangeType, setCurrentRangeType] = useState('dates');
-        const [calendar1Date, setCalendar1Date] = useState(new Date(2022, 8, 1));
-        const [calendar2Date, setCalendar2Date] = useState(new Date(2024, 8, 1));
-        const [isCustomSelectOpen, setIsCustomSelectOpen] = useState(false);
-
-        // Новые состояния для загрузки данных вакансий
-        const [vacancyOptions, setVacancyOptions] = useState([]);
-        const [isLoadingVacancies, setIsLoadingVacancies] = useState(true);
-        const [vacancyError, setVacancyError] = useState('');
-
-        const monthNames = [
-            'Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь',
-            'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'
-        ];
-
-        const [isLoadingCandidates, setIsLoadingCandidates] = useState(false);
-        const [candidatesError, setCandidatesError] = useState('');
-        const [candidatesData, setCandidatesData] = useState(null);
-
-        // Исправленная функция для форматирования параметров запроса
-        const formatApiDateRange = (startDate, endDate, type) => {
-            if (!startDate || !endDate) return null;
-
-            const formatDate = (date, rangeType) => {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-
-                switch (rangeType) {
-                    case 'years':
-                        return year.toString();
-                    case 'months':
-                        return `${month}.${year}`;
-                    case 'dates':
-                        return `${day}.${month}.${year}`;
-                    default:
-                        return '';
-                }
-            };
-
-            const start = formatDate(startDate, type);
-            const end = formatDate(endDate, type);
-
-            return `${start},${end}`;
-        };
-
-        // Функция для получения названий статусов для API
-        const getStatusApiValues = (statusValues) => {
-            const statusMapping = {
-                'showAll': null, // Не передаем в API
-                'newForm': 'Новая анкета',
-                'checked': 'Проверено',
-                'needRevision': 'Нужна доработка',
-                'rejected': 'Отклонен'
-            };
-
-            return statusValues
-                .filter(status => status !== 'showAll' && statusMapping[status])
-                .map(status => statusMapping[status]);
-        };
-
-        // Исправленная функция для получения названий вакансий для API
-        const getVacancyApiValues = (vacancyValues) => {
-            if (vacancyValues.includes('showAll')) {
-                return []; // Если выбран "Показать все", не передаем параметр
-            }
-
-            return vacancyValues
-                .map(vacancyId => {
-                    const vacancy = vacancyOptions.find(option => option.value === vacancyId);
-                    return vacancy ? vacancy.title : null; // Используем title вместо text
-                })
-                .filter(Boolean);
-        };
-
-        const calendarPanelRef = useRef(null);
-
-        // Статус фильтры остаются хардкодом (так как это состояния заявок)
-        const statusFilters = [
-            {value: 'showAll', text: 'Показать все'},
-            {value: 'newForm', text: 'Новая анкета'},
-            {value: 'checked', text: 'Проверен'},
-            {value: 'needRevision', text: 'Нужна доработка'},
-            {value: 'rejected', text: 'Отклонен'}
-        ];
-
-        // Функция для получения токена из cookie
-        const getAccessTokenFromCookie = () => {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [name, value] = cookie.trim().split('=');
-                if (name === 'access_token') {
-                    return value;
-                }
-            }
-            return null;
-        };
-
-        // Исправленная функция для загрузки вакансий из API
-        const loadVacancies = async () => {
-            try {
-                setIsLoadingVacancies(true);
-                setVacancyError('');
-
-                const accessToken = getAccessTokenFromCookie();
-
-                if (!accessToken) {
-                    setVacancyError('Токен доступа не найден');
-                    return;
-                }
-
-                const response = await fetch('/api/v1/vacancy/', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-
-                const data = await response.json();
-
-                if (data.response && data.attributes) {
-                    // Формируем массив для фильтров вакансий с сохранением title
-                    const vacancies = [
-                        {value: 'showAll', text: 'Показать все', title: null},
-                        ...data.attributes.map(vacancy => ({
-                            value: vacancy.id.toString(), // используем ID как value
-                            text: vacancy.title, // для отображения
-                            title: vacancy.title // для API запросов
-                        }))
-                    ];
-                    setVacancyOptions(vacancies);
-                    console.log('Вакансии загружены для фильтров:', vacancies);
-                } else {
-                    setVacancyError('Ошибка при получении данных вакансий');
-                }
-            } catch (error) {
-                console.error('Ошибка при загрузке вакансий:', error);
-
-                if (error.response) {
-                    if (error.response.status === 401) {
-                        setVacancyError('Ошибка авторизации. Пожалуйста, войдите в систему заново.');
-                    } else if (error.response.status === 403) {
-                        setVacancyError('Нет доступа к данным вакансий');
-                    } else {
-                        setVacancyError(error.response.data?.error || 'Ошибка сервера при загрузке вакансий');
-                    }
-                } else {
-                    setVacancyError('Ошибка при загрузке вакансий');
-                }
-            } finally {
-                setIsLoadingVacancies(false);
-            }
-        };
-
-        // Загружаем вакансии при монтировании компонента
-        useEffect(() => {
-            loadVacancies();
-        }, []);
-
-        const handleCustomSelectToggle = (e) => {
-            e.stopPropagation();
-            setIsCustomSelectOpen(!isCustomSelectOpen);
-        };
-
-        const handleRangeTypeSelect = (type) => {
-            setCurrentRangeType(type);
-            setStartDate(null);
-            setEndDate(null);
-            setIsCustomSelectOpen(false);
-        };
-
-        const handleFilterToggle = (filter, value) => {
-            setSelectedFilters(prev => {
-                const newFilters = { ...prev };
-                if (filter === 'status' || filter === 'vacancy') {
-                    if (newFilters[filter].includes(value)) {
-                        newFilters[filter] = newFilters[filter].filter(v => v !== value);
-                    } else {
-                        newFilters[filter] = [...newFilters[filter], value];
-                    }
-                }
-                return newFilters;
-            });
-        };
-
-        const handleCalendarNavigation = (calendar, direction) => {
-            if (calendar === 1) {
-                const newDate = new Date(calendar1Date);
-                if (currentRangeType === 'dates') {
-                    newDate.setMonth(newDate.getMonth() + direction);
-                } else if (currentRangeType === 'months') {
-                    newDate.setFullYear(newDate.getFullYear() + direction);
-                }
-                setCalendar1Date(newDate);
-            } else {
-                const newDate = new Date(calendar2Date);
-                if (currentRangeType === 'dates') {
-                    newDate.setMonth(newDate.getMonth() + direction);
-                } else if (currentRangeType === 'months') {
-                    newDate.setFullYear(newDate.getFullYear() + direction);
-                }
-                setCalendar2Date(newDate);
-            }
-        };
-
-        const handleDateClick = (dateStr, year, month, day) => {
-            const selectedDate = new Date(dateStr);
-
-            if (currentRangeType === 'dates') {
-                if (startDate && startDate.getTime() === selectedDate.getTime()) {
-                    setStartDate(null);
-                    setEndDate(null);
-                } else if (!startDate || (startDate && endDate)) {
-                    setStartDate(selectedDate);
-                    setEndDate(null);
-                } else if (selectedDate < startDate) {
-                    setEndDate(startDate);
-                    setStartDate(selectedDate);
-                } else {
-                    setEndDate(selectedDate);
-                }
-            } else if (currentRangeType === 'months') {
-                const selectedMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-                if (startDate && startDate.getTime() === selectedMonth.getTime()) {
-                    setStartDate(null);
-                    setEndDate(null);
-                } else if (!startDate || (startDate && endDate)) {
-                    setStartDate(selectedMonth);
-                    setEndDate(null);
-                } else if (selectedMonth < startDate) {
-                    setEndDate(startDate);
-                    setStartDate(selectedMonth);
-                } else {
-                    setEndDate(selectedMonth);
-                }
-            } else if (currentRangeType === 'years') {
-                const selectedYear = new Date(selectedDate.getFullYear(), 0, 1);
-                if (startDate && startDate.getTime() === selectedYear.getTime()) {
-                    setStartDate(null);
-                    setEndDate(null);
-                } else if (!startDate || (startDate && endDate)) {
-                    setStartDate(selectedYear);
-                    setEndDate(null);
-                } else if (selectedYear < startDate) {
-                    setEndDate(startDate);
-                    setStartDate(selectedYear);
-                } else {
-                    setEndDate(selectedYear);
-                }
-            }
-        };
-
-        // Исправленная функция handleApplyFilters
-        const handleApplyFilters = async () => {
-            try {
-                setIsLoadingCandidates(true);
-                setCandidatesError('');
-
-                const updatedFilters = {
-                    ...selectedFilters,
-                    dateRange: {
-                        type: currentRangeType,
-                        start: startDate ? new Date(startDate) : null,
-                        end: endDate ? new Date(endDate) : null
-                    }
-                };
-
-                // Формируем параметры для API запроса
-                const queryParams = [];
-
-                // Добавляем диапазон дат в зависимости от типа
-                if (updatedFilters.dateRange.start && updatedFilters.dateRange.end) {
-                    const dateRange = formatApiDateRange(
-                        updatedFilters.dateRange.start,
-                        updatedFilters.dateRange.end,
-                        updatedFilters.dateRange.type
-                    );
-
-                    if (dateRange) {
-                        switch (updatedFilters.dateRange.type) {
-                            case 'years':
-                                queryParams.push(`year_range=${dateRange}`);
-                                break;
-                            case 'months':
-                                queryParams.push(`month_range=${dateRange}`);
-                                break;
-                            case 'dates':
-                                queryParams.push(`date_range=${dateRange}`);
-                                break;
-                        }
-                    }
-                }
-
-                // Добавляем статусы кандидатов
-                const statusValues = getStatusApiValues(updatedFilters.status);
-                if (statusValues.length > 0) {
-                    queryParams.push(`candidate_statuses=${statusValues.join(',')}`);
-                }
-
-                // Добавляем названия вакансий
-                const vacancyValues = getVacancyApiValues(updatedFilters.vacancy);
-                if (vacancyValues.length > 0) {
-                    queryParams.push(`vacancy_title=${vacancyValues.join(',')}`);
-                }
-
-                // Формируем query string с правильными разделителями
-                const queryString = queryParams.join('&');
-
-                // Логируем параметры запроса
-                console.log('=== ФИЛЬТРЫ КАЛЕНДАРЯ ===');
-                console.log('Применяемые фильтры:', {
-                    dateRange: updatedFilters.dateRange,
-                    status: updatedFilters.status,
-                    vacancy: updatedFilters.vacancy
-                });
-                console.log('Параметры API запроса:', queryString);
-                console.log('Полный URL запроса:', `/api/v1/candidate-profiles${queryString ? '?' + queryString : ''}`);
-
-                // Получаем токен доступа
-                const accessToken = getAccessTokenFromCookie();
-
-                if (!accessToken) {
-                    throw new Error('Токен доступа не найден');
-                }
-
-                // Выполняем API запрос
-                const apiUrl = `/api/v1/candidate-profiles${queryString ? '?' + queryString : ''}`;
-                console.log('Отправляем запрос на:', apiUrl);
-
-                const response = await fetch(apiUrl, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-
-                console.log('Статус ответа:', response.status);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Полученные данные кандидатов:', data);
-
-                // Сохраняем данные
-                setCandidatesData(data);
-
-                // Здесь можно передать данные в родительский компонент или CandidatesTable
-                // Например, через пропс onFiltersApply:
-                // if (onFiltersApply) {
-                //     onFiltersApply(data, updatedFilters);
-                // }
-
-                console.log('Фильтры успешно применены, данные загружены');
-                onClose();
-
-            } catch (error) {
-                console.error('Ошибка при применении фильтров:', error);
-
-                let errorMessage = 'Ошибка при загрузке данных кандидатов';
-
-                if (error.message.includes('404')) {
-                    errorMessage = 'API endpoint не найден';
-                } else if (error.message.includes('401')) {
-                    errorMessage = 'Ошибка авторизации. Пожалуйста, войдите в систему заново.';
-                } else if (error.message.includes('403')) {
-                    errorMessage = 'Нет доступа к данным кандидатов';
-                } else if (error.message.includes('500')) {
-                    errorMessage = 'Ошибка сервера';
-                } else if (error.message === 'Токен доступа не найден') {
-                    errorMessage = error.message;
-                }
-
-                setCandidatesError(errorMessage);
-                console.log('Ошибка обработана:', errorMessage);
-
-            } finally {
-                setIsLoadingCandidates(false);
-            }
-        };
-
-        const formatDateForUrl = (date, type) => {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            if (type === 'dates') return `${year}-${month}-${day}`;
-            if (type === 'months') return `${year}-${month}`;
-            if (type === 'years') return `${year}`;
-            return '';
-        };
-
-        const generateCalendar = (year, month) => {
-            const firstDay = new Date(year, month, 1).getDay();
-            const startDayIndex = firstDay === 0 ? 6 : firstDay - 1;
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const calendar = [];
-            let date = 1;
-
-            for (let i = 0; i < 6; i++) {
-                const week = [];
-                let isRowEmpty = true;
-
-                for (let j = 0; j < 7; j++) {
-                    if ((i === 0 && j < startDayIndex) || date > daysInMonth) {
-                        week.push(null);
-                    } else {
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
-                        week.push({
-                            day: date,
-                            dateStr,
-                            year,
-                            month,
-                            isSelected: isDateSelected(dateStr),
-                            isInRange: isDateInRange(dateStr),
-                            isStartDate: isStartDate(dateStr),
-                            isEndDate: isEndDate(dateStr)
-                        });
-                        date++;
-                        isRowEmpty = false;
-                    }
-                }
-
-                if (!isRowEmpty || i === 0) {
-                    calendar.push(week);
-                }
-                if (date > daysInMonth) break;
-            }
-
-            return calendar;
-        };
-
-        const generateMonthsCalendar = (year) => {
-            const months = [];
-            for (let i = 0; i < 3; i++) {
-                const row = [];
-                for (let j = 0; j < 4; j++) {
-                    const monthIndex = i * 4 + j;
-                    if (monthIndex >= 12) break;
-                    const dateStr = `${year}-${String(monthIndex + 1).padStart(2, '0')}-01`;
-                    row.push({
-                        month: monthIndex,
-                        name: monthNames[monthIndex],
-                        dateStr,
-                        year,
-                        isSelected: isMonthSelected(year, monthIndex),
-                        isInRange: isMonthInRange(year, monthIndex),
-                        isStartDate: isMonthStartDate(year, monthIndex),
-                        isEndDate: isMonthEndDate(year, monthIndex)
-                    });
-                }
-                months.push(row);
-            }
-            return months;
-        };
-
-        const generateYearsCalendar = () => {
-            const startYear = 2020;
-            const endYear = 2025;
-            const years = [];
-
-            for (let i = 0; i < Math.ceil((endYear - startYear + 1) / 3); i++) {
-                const row = [];
-                for (let j = 0; j < 3; j++) {
-                    const yearIndex = startYear + i * 3 + j;
-                    if (yearIndex > endYear) break;
-                    const dateStr = `${yearIndex}-01-01`;
-                    row.push({
-                        year: yearIndex,
-                        dateStr,
-                        isSelected: isYearSelected(yearIndex),
-                        isInRange: isYearInRange(yearIndex),
-                        isStartDate: isYearStartDate(yearIndex),
-                        isEndDate: isYearEndDate(yearIndex)
-                    });
-                }
-                years.push(row);
-            }
-            return years;
-        };
-
-        const isDateSelected = (dateStr) => {
-            if (!startDate) return false;
-            const date = new Date(dateStr);
-            return startDate.getTime() === date.getTime() || (endDate && endDate.getTime() === date.getTime());
-        };
-
-        const isDateInRange = (dateStr) => {
-            if (!startDate || !endDate) return false;
-            const date = new Date(dateStr);
-            return date > startDate && date < endDate;
-        };
-
-        const isStartDate = (dateStr) => {
-            if (!startDate) return false;
-            const date = new Date(dateStr);
-            return startDate.getTime() === date.getTime();
-        };
-
-        const isEndDate = (dateStr) => {
-            if (!startDate || !endDate) return false;
-            const date = new Date(dateStr);
-            return endDate.getTime() === date.getTime();
-        };
-
-        // Функции для проверки состояния месяцев
-        const isMonthSelected = (year, monthIndex) => {
-            if (!startDate) return false;
-            const monthDate = new Date(year, monthIndex, 1);
-            return (startDate && startDate.getTime() === monthDate.getTime()) ||
-                (endDate && endDate.getTime() === monthDate.getTime());
-        };
-
-        const isMonthInRange = (year, monthIndex) => {
-            if (!startDate || !endDate) return false;
-            const monthDate = new Date(year, monthIndex, 1);
-            return monthDate > startDate && monthDate < endDate;
-        };
-
-        const isMonthStartDate = (year, monthIndex) => {
-            if (!startDate) return false;
-            const monthDate = new Date(year, monthIndex, 1);
-            return startDate.getTime() === monthDate.getTime();
-        };
-
-        const isMonthEndDate = (year, monthIndex) => {
-            if (!startDate || !endDate) return false;
-            const monthDate = new Date(year, monthIndex, 1);
-            return endDate.getTime() === monthDate.getTime();
-        };
-
-        // Функции для проверки состояния годов
-        const isYearSelected = (year) => {
-            if (!startDate) return false;
-            const yearDate = new Date(year, 0, 1);
-            return (startDate && startDate.getTime() === yearDate.getTime()) ||
-                (endDate && endDate.getTime() === yearDate.getTime());
-        };
-
-        const isYearInRange = (year) => {
-            if (!startDate || !endDate) return false;
-            const yearDate = new Date(year, 0, 1);
-            return yearDate > startDate && yearDate < endDate;
-        };
-
-        const isYearStartDate = (year) => {
-            if (!startDate) return false;
-            const yearDate = new Date(year, 0, 1);
-            return startDate.getTime() === yearDate.getTime();
-        };
-
-        const isYearEndDate = (year) => {
-            if (!startDate || !endDate) return false;
-            const yearDate = new Date(year, 0, 1);
-            return endDate.getTime() === yearDate.getTime();
-        };
-
-        useEffect(() => {
-            const handleClickOutside = (e) => {
-                if (isCustomSelectOpen && !e.target.closest('.custom-select')) {
-                    setIsCustomSelectOpen(false);
-                }
-                if (isOpen && calendarPanelRef.current && !calendarPanelRef.current.contains(e.target) && filtersButtonRef.current && !filtersButtonRef.current.contains(e.target)) {
-                    onClose();
-                }
-            };
-
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => document.removeEventListener('mousedown', handleClickOutside);
-        }, [isCustomSelectOpen, isOpen, onClose]);
-
-        useEffect(() => {
-            if (isOpen) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-
-            return () => {
-                document.body.style.overflow = '';
-            };
-        }, [isOpen]);
+   function FiltersCalendar({ isOpen, onClose, filtersButtonRef, onFiltersApply }) {
+       const [selectedFilters, setSelectedFilters] = useState({
+           status: [],
+           vacancy: [],
+           dateRange: {
+               type: 'dates',
+               start: null,
+               end: null
+           }
+       });
+
+       const [startDate, setStartDate] = useState(null);
+       const [endDate, setEndDate] = useState(null);
+       const [currentRangeType, setCurrentRangeType] = useState('dates');
+       const [calendar1Date, setCalendar1Date] = useState(new Date(2022, 8, 1));
+       const [calendar2Date, setCalendar2Date] = useState(new Date(2024, 8, 1));
+       const [isCustomSelectOpen, setIsCustomSelectOpen] = useState(false);
+
+       const [vacancyOptions, setVacancyOptions] = useState([]);
+       const [isLoadingVacancies, setIsLoadingVacancies] = useState(true);
+       const [vacancyError, setVacancyError] = useState('');
+
+       const monthNames = [
+           'Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь',
+           'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'
+       ];
+
+       const [isLoadingCandidates, setIsLoadingCandidates] = useState(false);
+       const [candidatesError, setCandidatesError] = useState('');
+       const [candidatesData, setCandidatesData] = useState(null);
+
+       const formatApiDateRange = (startDate, endDate, type) => {
+           if (!startDate || !endDate) return null;
+
+           const formatDate = (date, rangeType) => {
+               const year = date.getFullYear();
+               const month = String(date.getMonth() + 1).padStart(2, '0');
+               const day = String(date.getDate()).padStart(2, '0');
+
+               switch (rangeType) {
+                   case 'years':
+                       return year.toString();
+                   case 'months':
+                       return `${month}.${year}`;
+                   case 'dates':
+                       return `${day}.${month}.${year}`;
+                   default:
+                       return '';
+               }
+           };
+
+           const start = formatDate(startDate, type);
+           const end = formatDate(endDate, type);
+
+           return `${start},${end}`;
+       };
+
+       const getStatusApiValues = (statusValues) => {
+           const statusMapping = {
+               'showAll': null,
+               'Новая анкета': 'Новая анкета',
+               'Проверен': 'Проверен',
+               'Нужна доработка': 'Нужна доработка',
+               'rejected': 'Отклонен'
+           };
+
+           return statusValues
+               filter(status => status !== 'showAll' && statusMapping[status])
+               .map(status => statusMapping[status]);
+       };
+
+       const getVacancyApiValues = (vacancyValues) => {
+           if (vacancyValues.includes('showAll')) {
+               return [];
+           }
+
+           return vacancyValues
+               .map(vacancyId => {
+                   const vacancy = vacancyOptions.find(option => option.value === vacancyId);
+                   return vacancy ? vacancy.title : null;
+               })
+               .filter(Boolean);
+       };
+
+       const calendarPanelRef = useRef(null);
+
+       const statusFilters = [
+           {value: 'showAll', text: 'Показать все'},
+           {value: 'Новая анкета', text: 'Новая анкета'},
+           {value: 'Проверен', text: 'Проверен'},
+           {value: 'Нужна доработка', text: 'Нужна доработка'},
+           {value: 'Отклонен', text: 'Отклонен'}
+       ];
+
+       const getAccessTokenFromCookie = () => {
+           const cookies = document.cookie.split(';');
+           for (let cookie of cookies) {
+               const [name, value] = cookie.trim().split('=');
+               if (name === 'access_token') {
+                   return value;
+               }
+           }
+           return null;
+       };
+
+       const loadVacancies = async () => {
+           try {
+               setIsLoadingVacancies(true);
+               setVacancyError('');
+
+               const accessToken = getAccessTokenFromCookie();
+
+               if (!accessToken) {
+                   setVacancyError('Токен доступа не найден');
+                   return;
+               }
+
+               const response = await fetch('/api/v1/vacancy/', {
+                   headers: {
+                       'Content-Type': 'application/json',
+                       'Authorization': `Bearer ${accessToken}`
+                   }
+               });
+
+               const data = await response.json();
+
+               if (data.response && data.attributes) {
+                   const vacancies = [
+                       {value: 'showAll', text: 'Показать все', title: null},
+                       ...data.attributes.map(vacancy => ({
+                           value: vacancy.id.toString(),
+                           text: vacancy.title,
+                           title: vacancy.title
+                       }))
+                   ];
+                   setVacancyOptions(vacancies);
+                   console.log('Вакансии загружены для фильтров:', vacancies);
+               } else {
+                   setVacancyError('Ошибка при получении данных вакансий');
+               }
+           } catch (error) {
+               console.error('Ошибка при загрузке вакансий:', error);
+
+               if (error.response) {
+                   if (error.response.status === 401) {
+                       setVacancyError('Ошибка авторизации. Пожалуйста, войдите в систему заново.');
+                   } else if (error.response.status === 403) {
+                       setVacancyError('Нет доступа к данным вакансий');
+                   } else {
+                       setVacancyError(error.response.data?.error || 'Ошибка сервера при загрузке вакансий');
+                   }
+               } else {
+                   setVacancyError('Ошибка при загрузке вакансий');
+               }
+           } finally {
+               setIsLoadingVacancies(false);
+           }
+       };
+
+       useEffect(() => {
+           loadVacancies();
+       }, []);
+
+       const handleCustomSelectToggle = (e) => {
+           e.stopPropagation();
+           setIsCustomSelectOpen(!isCustomSelectOpen);
+       };
+
+       const handleRangeTypeSelect = (type) => {
+           setCurrentRangeType(type);
+           setStartDate(null);
+           setEndDate(null);
+           setIsCustomSelectOpen(false);
+       };
+
+       const handleFilterToggle = (filter, value) => {
+           setSelectedFilters(prev => {
+               const newFilters = { ...prev };
+               if (filter === 'status' || filter === 'vacancy') {
+                   if (newFilters[filter].includes(value)) {
+                       newFilters[filter] = newFilters[filter].filter(v => v !== value);
+                   } else {
+                       newFilters[filter] = [...newFilters[filter], value];
+                   }
+               }
+               return newFilters;
+           });
+       };
+
+       const handleCalendarNavigation = (calendar, direction) => {
+           if (calendar === 1) {
+               const newDate = new Date(calendar1Date);
+               if (currentRangeType === 'dates') {
+                   newDate.setMonth(newDate.getMonth() + direction);
+               } else if (currentRangeType === 'months') {
+                   newDate.setFullYear(newDate.getFullYear() + direction);
+               }
+               setCalendar1Date(newDate);
+           } else {
+               const newDate = new Date(calendar2Date);
+               if (currentRangeType === 'dates') {
+                   newDate.setMonth(newDate.getMonth() + direction);
+               } else if (currentRangeType === 'months') {
+                   newDate.setFullYear(newDate.getFullYear() + direction);
+               }
+               setCalendar2Date(newDate);
+           }
+       };
+
+       const handleDateClick = (dateStr, year, month, day) => {
+           const selectedDate = new Date(dateStr);
+
+           if (currentRangeType === 'dates') {
+               if (startDate && startDate.getTime() === selectedDate.getTime()) {
+                   setStartDate(null);
+                   setEndDate(null);
+               } else if (!startDate || (startDate && endDate)) {
+                   setStartDate(selectedDate);
+                   setEndDate(null);
+               } else if (selectedDate < startDate) {
+                   setEndDate(startDate);
+                   setStartDate(selectedDate);
+               } else {
+                   setEndDate(selectedDate);
+               }
+           } else if (currentRangeType === 'months') {
+               const selectedMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+               if (startDate && startDate.getTime() === selectedMonth.getTime()) {
+                   setStartDate(null);
+                   setEndDate(null);
+               } else if (!startDate || (startDate && endDate)) {
+                   setStartDate(selectedMonth);
+                   setEndDate(null);
+               } else if (selectedMonth < startDate) {
+                   setEndDate(startDate);
+                   setStartDate(selectedMonth);
+               } else {
+                   setEndDate(selectedMonth);
+               }
+           } else if (currentRangeType === 'years') {
+               const selectedYear = new Date(selectedDate.getFullYear(), 0, 1);
+               if (startDate && startDate.getTime() === selectedYear.getTime()) {
+                   setStartDate(null);
+                   setEndDate(null);
+               } else if (!startDate || (startDate && endDate)) {
+                   setStartDate(selectedYear);
+                   setEndDate(null);
+               } else if (selectedYear < startDate) {
+                   setEndDate(startDate);
+                   setStartDate(selectedYear);
+               } else {
+                   setEndDate(selectedYear);
+               }
+           }
+       };
+
+       // Изменить функцию handleApplyFilters
+       const handleApplyFilters = async () => {
+           try {
+               setIsLoadingCandidates(true);
+               setCandidatesError('');
+
+               const updatedFilters = {
+                   ...selectedFilters,
+                   dateRange: {
+                       type: currentRangeType,
+                       start: startDate ? new Date(startDate) : null,
+                       end: endDate ? new Date(endDate) : null
+                   }
+               };
+
+               const queryParams = [];
+
+               if (updatedFilters.dateRange.start && updatedFilters.dateRange.end) {
+                   const dateRange = formatApiDateRange(
+                       updatedFilters.dateRange.start,
+                       updatedFilters.dateRange.end,
+                       updatedFilters.dateRange.type
+                   );
+
+                   if (dateRange) {
+                       switch (updatedFilters.dateRange.type) {
+                           case 'years':
+                               queryParams.push(`year_range=${dateRange}`);
+                               break;
+                           case 'months':
+                               queryParams.push(`month_range=${dateRange}`);
+                               break;
+                           case 'dates':
+                               queryParams.push(`date_range=${dateRange}`);
+                               break;
+                       }
+                   }
+               }
+
+               const statusValues = getStatusApiValues(updatedFilters.status);
+               if (statusValues.length > 0) {
+                   queryParams.push(`candidate_statuses=${statusValues.join(',')}`);
+               }
+
+               const vacancyValues = getVacancyApiValues(updatedFilters.vacancy);
+               if (vacancyValues.length > 0) {
+                   queryParams.push(`vacancy_title=${vacancyValues.join(',')}`);
+               }
+
+               const queryString = queryParams.join('&');
+
+               console.log('=== ФИЛЬТРЫ КАЛЕНДАРЯ ===');
+               console.log('Применяемые фильтры:', {
+                   dateRange: updatedFilters.dateRange,
+                   status: updatedFilters.status,
+                   vacancy: updatedFilters.vacancy
+               });
+               console.log('Параметры API запроса:', queryString);
+               console.log('Полный URL запроса:', `/api/v1/candidates${queryString ? '?' + queryString : ''}`);
+
+               const accessToken = getAccessTokenFromCookie();
+
+               if (!accessToken) {
+                   throw new Error('Токен доступа не найден');
+               }
+
+               const apiUrl = `/api/v1/candidates${queryString ? '?' + queryString : ''}`;
+               console.log('Отправляем запрос на:', apiUrl);
+
+               const response = await fetch(apiUrl, {
+                   headers: {
+                       'Content-Type': 'application/json',
+                       'Authorization': `Bearer ${accessToken}`
+                   }
+               });
+
+               console.log('Статус ответа:', response.status);
+
+               if (!response.ok) {
+                   throw new Error(`HTTP error! status: ${response.status}`);
+               }
+
+               const data = await response.json();
+               console.log('Полученные данные кандидатов:', data);
+
+               setCandidatesData(data);
+
+               // Передаем данные в родительский компонент
+               if (onFiltersApply) {
+                   onFiltersApply(data, updatedFilters);
+               }
+
+               console.log('Фильтры успешно применены, данные загружены');
+
+           } catch (error) {
+               console.error('Ошибка при применении фильтров:', error);
+
+               let errorMessage = 'Ошибка при загрузке данных кандидатов';
+
+               if (error.message.includes('404')) {
+                   errorMessage = 'API endpoint не найден';
+               } else if (error.message.includes('401')) {
+                   errorMessage = 'Ошибка авторизации. Пожалуйста, войдите в систему заново.';
+               } else if (error.message.includes('403')) {
+                   errorMessage = 'Нет доступа к данным кандидатов';
+               } else if (error.message.includes('500')) {
+                   errorMessage = 'Ошибка сервера';
+               } else if (error.message === 'Токен доступа не найден') {
+                   errorMessage = error.message;
+               }
+
+               setCandidatesError(errorMessage);
+               console.log('Ошибка обработана:', errorMessage);
+
+           } finally {
+               setIsLoadingCandidates(false);
+           }
+       };
+
+       // Остальные функции календаря остаются без изменений...
+       const formatDateForUrl = (date, type) => {
+           const year = date.getFullYear();
+           const month = String(date.getMonth() + 1).padStart(2, '0');
+           const day = String(date.getDate()).padStart(2, '0');
+           if (type === 'dates') return `${year}-${month}-${day}`;
+           if (type === 'months') return `${year}-${month}`;
+           if (type === 'years') return `${year}`;
+           return '';
+       };
+
+       const generateCalendar = (year, month) => {
+           const firstDay = new Date(year, month, 1).getDay();
+           const startDayIndex = firstDay === 0 ? 6 : firstDay - 1;
+           const daysInMonth = new Date(year, month + 1, 0).getDate();
+           const calendar = [];
+           let date = 1;
+
+           for (let i = 0; i < 6; i++) {
+               const week = [];
+               let isRowEmpty = true;
+
+               for (let j = 0; j < 7; j++) {
+                   if ((i === 0 && j < startDayIndex) || date > daysInMonth) {
+                       week.push(null);
+                   } else {
+                       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                       week.push({
+                           day: date,
+                           dateStr,
+                           year,
+                           month,
+                           isSelected: isDateSelected(dateStr),
+                           isInRange: isDateInRange(dateStr),
+                           isStartDate: isStartDate(dateStr),
+                           isEndDate: isEndDate(dateStr)
+                       });
+                       date++;
+                       isRowEmpty = false;
+                   }
+               }
+
+               if (!isRowEmpty || i === 0) {
+                   calendar.push(week);
+               }
+               if (date > daysInMonth) break;
+           }
+
+           return calendar;
+       };
+
+       const generateMonthsCalendar = (year) => {
+           const months = [];
+           for (let i = 0; i < 3; i++) {
+               const row = [];
+               for (let j = 0; j < 4; j++) {
+                   const monthIndex = i * 4 + j;
+                   if (monthIndex >= 12) break;
+                   const dateStr = `${year}-${String(monthIndex + 1).padStart(2, '0')}-01`;
+                   row.push({
+                       month: monthIndex,
+                       name: monthNames[monthIndex],
+                       dateStr,
+                       year,
+                       isSelected: isMonthSelected(year, monthIndex),
+                       isInRange: isMonthInRange(year, monthIndex),
+                       isStartDate: isMonthStartDate(year, monthIndex),
+                       isEndDate: isMonthEndDate(year, monthIndex)
+                   });
+               }
+               months.push(row);
+           }
+           return months;
+       };
+
+       const generateYearsCalendar = () => {
+           const startYear = 2020;
+           const endYear = 2025;
+           const years = [];
+
+           for (let i = 0; i < Math.ceil((endYear - startYear + 1) / 3); i++) {
+               const row = [];
+               for (let j = 0; j < 3; j++) {
+                   const yearIndex = startYear + i * 3 + j;
+                   if (yearIndex > endYear) break;
+                   const dateStr = `${yearIndex}-01-01`;
+                   row.push({
+                       year: yearIndex,
+                       dateStr,
+                       isSelected: isYearSelected(yearIndex),
+                       isInRange: isYearInRange(yearIndex),
+                       isStartDate: isYearStartDate(yearIndex),
+                       isEndDate: isYearEndDate(yearIndex)
+                   });
+               }
+               years.push(row);
+           }
+           return years;
+       };
+
+       const isDateSelected = (dateStr) => {
+           if (!startDate) return false;
+           const date = new Date(dateStr);
+           return startDate.getTime() === date.getTime() || (endDate && endDate.getTime() === date.getTime());
+       };
+
+       const isDateInRange = (dateStr) => {
+           if (!startDate || !endDate) return false;
+           const date = new Date(dateStr);
+           return date > startDate && date < endDate;
+       };
+
+       const isStartDate = (dateStr) => {
+           if (!startDate) return false;
+           const date = new Date(dateStr);
+           return startDate.getTime() === date.getTime();
+       };
+
+       const isEndDate = (dateStr) => {
+           if (!startDate || !endDate) return false;
+           const date = new Date(dateStr);
+           return endDate.getTime() === date.getTime();
+       };
+
+       const isMonthSelected = (year, monthIndex) => {
+           if (!startDate) return false;
+           const monthDate = new Date(year, monthIndex, 1);
+           return (startDate && startDate.getTime() === monthDate.getTime()) ||
+               (endDate && endDate.getTime() === monthDate.getTime());
+       };
+
+       const isMonthInRange = (year, monthIndex) => {
+           if (!startDate || !endDate) return false;
+           const monthDate = new Date(year, monthIndex, 1);
+           return monthDate > startDate && monthDate < endDate;
+       };
+
+       const isMonthStartDate = (year, monthIndex) => {
+           if (!startDate) return false;
+           const monthDate = new Date(year, monthIndex, 1);
+           return startDate.getTime() === monthDate.getTime();
+       };
+
+       const isMonthEndDate = (year, monthIndex) => {
+           if (!startDate || !endDate) return false;
+           const monthDate = new Date(year, monthIndex, 1);
+           return endDate.getTime() === monthDate.getTime();
+       };
+
+       const isYearSelected = (year) => {
+           if (!startDate) return false;
+           const yearDate = new Date(year, 0, 1);
+           return (startDate && startDate.getTime() === yearDate.getTime()) ||
+               (endDate && endDate.getTime() === yearDate.getTime());
+       };
+
+       const isYearInRange = (year) => {
+           if (!startDate || !endDate) return false;
+           const yearDate = new Date(year, 0, 1);
+           return yearDate > startDate && yearDate < endDate;
+       };
+
+       const isYearStartDate = (year) => {
+           if (!startDate) return false;
+           const yearDate = new Date(year, 0, 1);
+           return startDate.getTime() === yearDate.getTime();
+       };
+
+       const isYearEndDate = (year) => {
+           if (!startDate || !endDate) return false;
+           const yearDate = new Date(year, 0, 1);
+           return endDate.getTime() === yearDate.getTime();
+       };
+
+       useEffect(() => {
+           const handleClickOutside = (e) => {
+               if (isCustomSelectOpen && !e.target.closest('.custom-select')) {
+                   setIsCustomSelectOpen(false);
+               }
+               if (isOpen && calendarPanelRef.current && !calendarPanelRef.current.contains(e.target) && filtersButtonRef.current && !filtersButtonRef.current.contains(e.target)) {
+                   onClose();
+               }
+           };
+
+           document.addEventListener('mousedown', handleClickOutside);
+           return () => document.removeEventListener('mousedown', handleClickOutside);
+       }, [isCustomSelectOpen, isOpen, onClose]);
+
+       useEffect(() => {
+           if (isOpen) {
+               document.body.style.overflow = 'hidden';
+           } else {
+               document.body.style.overflow = '';
+           }
+
+           return () => {
+               document.body.style.overflow = '';
+           };
+       }, [isOpen]);
+
+
 
         return (
             <>
@@ -2239,59 +2285,81 @@
     }
 
     function App() {
-        const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-        const [selectedVacancyKey, setSelectedVacancyKey] = useState(null); // Состояние для выбранного кандидата
-        const filtersButtonRef = useRef(null);
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const [selectedVacancyKey, setSelectedVacancyKey] = useState(null);
+    
+    // Добавляем недостающие состояния для фильтров
+    const [filteredData, setFilteredData] = useState(null);
+    const [activeFilters, setActiveFilters] = useState(null);
+    
+    const filtersButtonRef = useRef(null);
 
-        const handleFiltersClick = () => {
-            setIsCalendarOpen(true);
-        };
+    const handleFiltersClick = () => {
+        setIsCalendarOpen(true);
+    };
 
-        const handleCalendarClose = () => {
-            setIsCalendarOpen(false);
-        };
+    const handleCalendarClose = () => {
+        setIsCalendarOpen(false);
+    };
 
-        // Обработчик клика по строке кандидата
-        const handleRowClick = (vacancyKey) => {
-            setSelectedVacancyKey(vacancyKey);
-        };
+    // Обработчик клика по строке кандидата
+    const handleRowClick = (vacancyKey) => {
+        setSelectedVacancyKey(vacancyKey);
+    };
 
-        // Обработчик возврата к списку кандидатов
-        const handleBackToList = () => {
-            setSelectedVacancyKey(null);
-        };
+    // Обработчик возврата к списку кандидатов
+    const handleBackToList = () => {
+        setSelectedVacancyKey(null);
+    };
 
-        return (
-            <>
-                {/* Показываем Header только когда не открыта форма кандидата */}
-                {!selectedVacancyKey && <Header />}
+    // Обработчик применения фильтров
+    const handleFiltersApply = (data, filters) => {
+        setFilteredData(data);
+        setActiveFilters(filters);
+        setIsCalendarOpen(false); // Закрываем панель фильтров после применения
+    };
 
-                <main>
-                    {selectedVacancyKey ? (
-                        // Показываем форму кандидата, если выбран кандидат
-                        <ShowForm
-                            vacancyKey={selectedVacancyKey}
-                            onBackToList={handleBackToList}
+    // Обработчик сброса фильтров
+    const handleFiltersReset = () => {
+        setFilteredData(null);
+        setActiveFilters(null);
+    };
+
+    return (
+        <>
+            {/* Показываем Header только когда не открыта форма кандидата */}
+            {!selectedVacancyKey && <Header />}
+
+            <main>
+                {selectedVacancyKey ? (
+                    // Показываем форму кандидата, если выбран кандидат
+                    <ShowForm
+                        vacancyKey={selectedVacancyKey}
+                        setSelectedVacancyKey={setSelectedVacancyKey}
+                    />
+                ) : (
+                    // Показываем таблицу кандидатов, если кандидат не выбран
+                    <>
+                        <CandidatesTable
+                            onFiltersClick={handleFiltersClick}
+                            onRowClick={handleRowClick}
+                            filtersButtonRef={filtersButtonRef}
+                            filteredData={filteredData}
+                            activeFilters={activeFilters}
+                            onFiltersReset={handleFiltersReset}
                         />
-                    ) : (
-                        // Показываем таблицу кандидатов, если кандидат не выбран
-                        <>
-                            <CandidatesTable
-                                onFiltersClick={handleFiltersClick}
-                                onRowClick={handleRowClick}
-                                filtersButtonRef={filtersButtonRef}
-                            />
-                            <FiltersCalendar
-                                isOpen={isCalendarOpen}
-                                onClose={handleCalendarClose}
-                                filtersButtonRef={filtersButtonRef}
-                            />
-                        </>
-                    )}
-                </main>
-            </>
-        );
-    }
+                        <FiltersCalendar
+                            isOpen={isCalendarOpen}
+                            onClose={handleCalendarClose}
+                            filtersButtonRef={filtersButtonRef}
+                            onFiltersApply={handleFiltersApply}
+                        />
+                    </>
+                )}
+            </main>
+        </>
+    );
+}
 
     // Монтируем главное приложение
     ReactDOM.render(React.createElement(App), document.getElementById('root'));

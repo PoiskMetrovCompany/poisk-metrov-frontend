@@ -18,11 +18,55 @@
     <?php echo '@verbatim'; ?>
     const { useState, useEffect, useRef } = React;
 
+    // Функция для расширенного логирования
+    const log = (message, data = null, level = 'info') => {
+        const timestamp = new Date().toLocaleTimeString();
+        const prefix = `[${timestamp}] [${level.toUpperCase()}]`;
+        
+        if (data) {
+            console.log(`${prefix} ${message}`, data);
+        } else {
+            console.log(`${prefix} ${message}`);
+        }
+    };
 
-    // Компонент регистрации кандидата
+    // Отдельный компонент таймера
+    function Timer({ timeLeft, onTimerEnd, isActive }) {
+        const [time, setTime] = useState(timeLeft);
+
+        useEffect(() => {
+            if (!isActive) return;
+
+            if (time <= 0) {
+                log('Таймер завершен, вызываем onTimerEnd');
+                onTimerEnd();
+                return;
+            }
+
+            const timer = setTimeout(() => {
+                setTime(time - 1);
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        }, [time, isActive, onTimerEnd]);
+
+        useEffect(() => {
+            log(`Таймер обновлен на ${timeLeft} секунд`);
+            setTime(timeLeft);
+        }, [timeLeft]);
+
+        if (!isActive || time <= 0) return null;
+
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        return <span>{timeString}</span>;
+    }
+
+    // Главный компонент регистрации кандидата
     function CandidateRegForm() {
         const [isCodeMode, setIsCodeMode] = useState(false);
-        const [isPhoneValidated, setIsPhoneValidated] = useState(false);
         const [phoneValue, setPhoneValue] = useState('');
         const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
         const [showCheckmark, setShowCheckmark] = useState(false);
@@ -32,12 +76,17 @@
         const [userAttributes, setUserAttributes] = useState(null);
         const [isAuthenticated, setIsAuthenticated] = useState(false);
         const [authResult, setAuthResult] = useState(null);
-
+        const [timerActive, setTimerActive] = useState(false);
+        const [timeLeft, setTimeLeft] = useState(60);
+        
         const phoneInputRef = useRef(null);
         const currentMaskRef = useRef(null);
+        const codeSubmitTimeoutRef = useRef(null);
 
+        // Инициализация маски для телефона
         useEffect(() => {
             if (phoneInputRef.current && !isCodeMode) {
+                log('Инициализация маски для телефона');
                 const maskOptions = {
                     mask: '+{7}(000) 000-00-00'
                 };
@@ -46,13 +95,16 @@
 
             return () => {
                 if (currentMaskRef.current) {
+                    log('Уничтожение маски телефона');
                     currentMaskRef.current.destroy();
                 }
             };
         }, [isCodeMode]);
 
+        // Инициализация маски для кода
         useEffect(() => {
             if (phoneInputRef.current && isCodeMode) {
+                log('Инициализация маски для кода подтверждения');
                 if (currentMaskRef.current) {
                     currentMaskRef.current.destroy();
                 }
@@ -62,47 +114,133 @@
                     placeholderChar: " _ "
                 };
                 currentMaskRef.current = IMask(phoneInputRef.current, maskOptions);
+                
                 phoneInputRef.current.focus();
+                log('Фокус установлен на поле ввода кода');
+                
+                // Дополнительная проверка фокуса через 100мс
+                setTimeout(() => {
+                    if (phoneInputRef.current === document.activeElement) {
+                        log('✅ Фокус подтвержден на поле кода');
+                    } else {
+                        log('❌ Фокус НЕ на поле кода, устанавливаем повторно');
+                        phoneInputRef.current.focus();
+                    }
+                }, 100);
             }
         }, [isCodeMode]);
 
         const checkButtonState = () => {
             if (!isCodeMode) {
                 const isPhoneValid = phoneValue.length >= 17;
+                log(`Проверка состояния кнопки: телефон валиден=${isPhoneValid}, чекбокс=${isCheckboxChecked}, загрузка=${isLoading}`);
                 return isPhoneValid && isCheckboxChecked && !isLoading;
             }
             return false;
         };
 
+        // Новая функция для проверки кода и установки таймера
+        const checkCodeAndSetTimer = (value) => {
+            log('🔢 checkCodeAndSetTimer вызвана', { value });
+            
+            const enteredCode = value.replace(/\s/g, '').replace(/_/g, '');
+            log(`Проверка кода: исходное значение="${value}", очищенный код="${enteredCode}", длина=${enteredCode.length}`);
+            
+            if (enteredCode.length === 6) {
+                log('✓ Код введен полностью (6 символов)!', { code: enteredCode });
+                setShowCheckmark(true);
+                
+                // Если код полный, отправляем сразу без таймера
+                log('🚀 Код полный, отправляем немедленно без ожидания!');
+                
+                // Очищаем таймер если он есть
+                if (codeSubmitTimeoutRef.current) {
+                    log('⏰ Очищаем таймер - код полный');
+                    clearTimeout(codeSubmitTimeoutRef.current);
+                    codeSubmitTimeoutRef.current = null;
+                }
+                
+                // Отправляем сразу
+                setTimeout(() => {
+                    log('✅ Отправляем полный код сразу');
+                    sendAuthRequest();
+                }, 100); // Небольшая задержка для обновления UI
+                
+            } else {
+                log(`⏳ Код неполный (${enteredCode.length}/6 символов)`, { code: enteredCode });
+                setShowCheckmark(false);
+                
+                // Очищаем предыдущий таймер автоотправки
+                if (codeSubmitTimeoutRef.current) {
+                    log('⏰ Очищаем предыдущий таймер автоотправки');
+                    clearTimeout(codeSubmitTimeoutRef.current);
+                    codeSubmitTimeoutRef.current = null;
+                }
+
+                // Устанавливаем новый таймер на 2 секунды только для неполного кода
+                if (enteredCode.length > 0) {
+                    log('⏰ Устанавливаем новый таймер автоотправки на 2 секунды');
+                    codeSubmitTimeoutRef.current = setTimeout(() => {
+                        log('🚀 ТАЙМЕР СРАБОТАЛ! Начинаем автоотправку неполного кода');
+                        const currentCode = value.replace(/\s/g, '').replace(/_/g, '');
+                        log('Неполный код для автоотправки', { 
+                            originalValue: value, 
+                            cleanedCode: currentCode, 
+                            codeLength: currentCode.length 
+                        });
+                        
+                        log('✅ Отправляем неполный код после паузы');
+                        sendAuthRequest();
+                    }, 2000);
+
+                    log('⏰ Таймер установлен, ID:', codeSubmitTimeoutRef.current);
+                } else {
+                    log('⏰ Код пустой, таймер не устанавливаем');
+                }
+            }
+        };
+
         const checkCode = (value) => {
             const enteredCode = value.replace(/\s/g, '').replace(/_/g, '');
+            log(`Проверка кода: исходное значение="${value}", очищенный код="${enteredCode}", длина=${enteredCode.length}`);
+            
             if (enteredCode.length === 6) {
+                log('✓ Код введен полностью (6 символов)!', { code: enteredCode });
                 setShowCheckmark(true);
-                console.log('Код введен полностью!');
+                return true;
             } else {
+                log(`⏳ Код неполный (${enteredCode.length}/6 символов)`, { code: enteredCode });
                 setShowCheckmark(false);
+                return false;
             }
         };
 
         const handleInputChange = (e) => {
             const value = e.target.value;
-            console.log('handleInputChange вызван с значением:', value);
-            console.log('isCodeMode:', isCodeMode);
+            log('=== НАЧАЛО handleInputChange ===');
+            log('Новое значение в поле ввода', { value, isCodeMode });
+            
+            // Всегда обновляем состояние
             setPhoneValue(value);
 
             // Очищаем ошибку при изменении значения
             if (error) {
+                log('Очищаем предыдущую ошибку');
                 setError('');
             }
 
+            // В режиме кода обрабатываем автоотправку
             if (isCodeMode) {
-                checkCode(value);
+                log('🔢 Режим ввода кода активен, запускаем checkCodeAndSetTimer');
+                checkCodeAndSetTimer(value);
             }
+            
+            log('=== КОНЕЦ handleInputChange ===');
         };
 
         const handleCheckboxChange = (e) => {
+            log('Изменение состояния чекбокса', { checked: e.target.checked });
             setIsCheckboxChecked(e.target.checked);
-            // Очищаем ошибку при изменении чекбокса
             if (error) {
                 setError('');
             }
@@ -111,10 +249,10 @@
         // Функция для отправки запроса на получение кода
         const sendCodeRequest = async (phone) => {
             try {
+                log('📤 Начинаем отправку запроса на получение кода', { phone });
                 setIsLoading(true);
                 setError('');
 
-                // Отправляем запрос на сервер
                 const response = await axios.post('/api/v1/account/set-code', {
                     phone: phone
                 }, {
@@ -123,78 +261,101 @@
                     }
                 });
 
-                // Проверяем успешность запроса
+                log('📥 Получен ответ от сервера', response.data);
+
                 if (response.data.request) {
                     setUserAttributes(response.data.attributes);
-                    console.log('Код отправлен успешно:', response.data);
+                    log('✅ Код отправлен успешно', response.data);
                     return true;
                 } else {
+                    log('❌ Ошибка: request=false в ответе сервера');
                     setError('Ошибка при отправке кода');
                     return false;
                 }
             } catch (error) {
-                console.error('Ошибка при отправке запроса:', error);
+                log('❌ Ошибка при отправке запроса на код', error, 'error');
 
                 if (error.response) {
-                    // Сервер ответил с кодом ошибки
+                    log('Детали ошибки ответа сервера', {
+                        status: error.response.status,
+                        data: error.response.data
+                    }, 'error');
+                    
                     if (error.response.status === 404) {
                         setError('Пользователь не найден');
                     } else {
                         setError(error.response.data?.error || 'Ошибка сервера');
                     }
                 } else if (error.request) {
-                    // Запрос был отправлен, но ответа не получено
+                    log('Ошибка запроса (нет ответа от сервера)', error.request, 'error');
                     setError('Ошибка соединения с сервером');
                 } else {
-                    // Ошибка при настройке запроса
+                    log('Общая ошибка запроса', error.message, 'error');
                     setError('Ошибка при отправке запроса');
                 }
                 return false;
             } finally {
                 setIsLoading(false);
+                log('Завершена отправка запроса на код');
             }
         };
 
         // Функция для отправки запроса на аутентификацию
         const sendAuthRequest = async () => {
-            console.log('sendAuthRequest вызвана');
+            log('🔐 === НАЧАЛО АУТЕНТИФИКАЦИИ ===');
+            
+            // Очищаем таймер автоотправки если он есть
+            if (codeSubmitTimeoutRef.current) {
+                log('⏰ Очищаем активный таймер автоотправки');
+                clearTimeout(codeSubmitTimeoutRef.current);
+                codeSubmitTimeoutRef.current = null;
+            }
+
             try {
                 setIsAuthLoading(true);
                 setError('');
 
-                // Получаем введенный код из значения инпута или маски
                 let enteredCode = phoneValue;
+                log('Исходное значение кода из поля', { phoneValue });
 
-                // Если используется маска, попробуем получить значение из нее
                 if (currentMaskRef.current && currentMaskRef.current.unmaskedValue) {
                     enteredCode = currentMaskRef.current.unmaskedValue;
-                    console.log('Код из маски:', enteredCode);
+                    log('Получен код из маски', { 
+                        maskedValue: phoneValue,
+                        unmaskedValue: enteredCode 
+                    });
                 } else {
-                    // Убираем пробелы и подчеркивания из обычного значения
                     enteredCode = phoneValue.replace(/\s/g, '').replace(/_/g, '');
-                    console.log('Код из phoneValue:', enteredCode);
+                    log('Код очищен вручную', { 
+                        original: phoneValue,
+                        cleaned: enteredCode 
+                    });
                 }
 
-                console.log('Финальный введенный код:', enteredCode);
+                log('🔑 Финальный код для отправки', { 
+                    code: enteredCode, 
+                    length: enteredCode.length 
+                });
 
-                // Если код не введен, показываем ошибку
                 if (enteredCode.length === 0) {
-                    console.log('Код не введен');
+                    log('❌ Код пустой, прерываем аутентификацию');
                     setError('Введите код из СМС');
                     return false;
                 }
 
-                // Получаем номер телефона из userAttributes
                 const phoneToAuth = userAttributes?.phone;
-                console.log('Номер для аутентификации:', phoneToAuth);
                 if (!phoneToAuth) {
-                    console.log('Номер телефона не найден');
+                    log('❌ Номер телефона не найден в userAttributes', userAttributes);
                     setError('Ошибка: номер телефона не найден');
                     return false;
                 }
 
-                console.log('Отправляем запрос на аутентификацию...');
-                // Отправляем запрос на аутентификацию
+                log('📤 Отправляем запрос на аутентификацию', {
+                    phone: phoneToAuth,
+                    code: enteredCode,
+                    codeLength: enteredCode.length
+                });
+
                 const response = await axios.post('/api/v1/account/auth', {
                     phone: phoneToAuth,
                     code: enteredCode
@@ -204,93 +365,125 @@
                     }
                 });
 
-                console.log('Ответ сервера:', response.data);
-                // Проверяем успешность запроса
+                log('📥 Ответ сервера на аутентификацию', response.data);
+                
                 if (response.data.request && response.data.attributes) {
-                    setAuthResult(response.data.attributes);
-                    setIsAuthenticated(true);
-                    console.log('Аутентификация успешна:', response.data);
+                    log('✅ Аутентификация успешна - выполняем немедленный редирект!', response.data);
 
-                    // Сохраняем токен в cookie
                     if (response.data.attributes.access_token) {
-                        // Устанавливаем cookie с токеном на 30 дней
                         const expirationDate = new Date();
-                        expirationDate.setTime(expirationDate.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 дней
+                        expirationDate.setTime(expirationDate.getTime() + (30 * 24 * 60 * 60 * 1000));
                         document.cookie = `access_token=${response.data.attributes.access_token}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict`;
-                        console.log('Токен сохранен в cookie:', response.data.attributes.access_token);
-                        window.location.href = response.data.attributes.user.role === "candidate" ? '/profile-candidates/' : '/profile-candidates/security/'
+                        
+                        log('🍪 Токен сохранен в cookie', { 
+                            token: response.data.attributes.access_token.substring(0, 20) + '...',
+                            expires: expirationDate.toUTCString()
+                        });
+                        
+                        const redirectUrl = response.data.attributes.user.role === "candidate" ? '/profile-candidates/' : '/profile-candidates/security/';
+                        log('🔀 Немедленное перенаправление на', { 
+                            role: response.data.attributes.user.role,
+                            url: redirectUrl 
+                        });
+                        
+                        // Немедленное перенаправление без показа экрана успеха
+                        window.location.href = redirectUrl;
+                        return true;
                     }
 
                     return true;
                 } else {
-                    console.log('Ошибка в ответе сервера');
+                    log('❌ Неуспешная аутентификация', {
+                        request: response.data.request,
+                        hasAttributes: !!response.data.attributes
+                    });
                     setError('Ошибка при аутентификации');
                     return false;
                 }
             } catch (error) {
-                console.error('Ошибка при аутентификации:', error);
+                log('❌ Ошибка при аутентификации', error, 'error');
 
                 if (error.response) {
-                    // Сервер ответил с кодом ошибки
-                    console.log('Ошибка ответа сервера:', error.response.status, error.response.data);
+                    log('Детали ошибки аутентификации', {
+                        status: error.response.status,
+                        data: error.response.data
+                    }, 'error');
+                    
                     if (error.response.status === 401) {
                         setError('Неверный код');
+                        log('🚫 Неверный код подтверждения');
                     } else if (error.response.status === 404) {
                         setError('Пользователь не найден');
+                        log('🚫 Пользователь не найден');
                     } else {
                         setError(error.response.data?.error || 'Ошибка сервера');
                     }
                 } else if (error.request) {
-                    // Запрос был отправлен, но ответа не получено
-                    console.log('Ошибка запроса:', error.request);
+                    log('Ошибка соединения при аутентификации', error.request, 'error');
                     setError('Ошибка соединения с сервером');
                 } else {
-                    // Ошибка при настройке запроса
-                    console.log('Ошибка настройки:', error.message);
+                    log('Общая ошибка аутентификации', error.message, 'error');
                     setError('Ошибка при отправке запроса');
                 }
                 return false;
             } finally {
-                console.log('Завершение sendAuthRequest');
                 setIsAuthLoading(false);
+                log('🔐 === КОНЕЦ АУТЕНТИФИКАЦИИ ===');
             }
+        };
+
+        const startTimer = () => {
+            log('⏰ Запуск таймера на 60 секунд');
+            setTimeLeft(60);
+            setTimerActive(true);
+        };
+
+        const handleTimerEnd = () => {
+            log('⏰ Таймер завершен');
+            setTimerActive(false);
         };
 
         const handleGetCodeClick = async (e) => {
             e.preventDefault();
+            log('🖱️ Клик по кнопке получения кода', { isCodeMode });
 
             if (!isCodeMode) {
-                // Первичная отправка кода
+                log('📱 Первичная отправка кода на номер', { phone: phoneValue });
                 const success = await sendCodeRequest(phoneValue);
 
                 if (success) {
+                    log('✅ Переход в режим ввода кода');
                     setIsCodeMode(true);
                     setPhoneValue('');
                     setShowCheckmark(false);
+                    startTimer();
                 }
             } else {
-                // Повторная отправка кода
-                // Получаем сохраненный номер телефона из userAttributes
+                log('🔄 Повторная отправка кода');
                 const phoneToResend = userAttributes?.phone || phoneValue;
+                log('Номер для повторной отправки', { phoneToResend });
+                
                 const success = await sendCodeRequest(phoneToResend);
 
                 if (success) {
+                    log('✅ Код повторно отправлен');
                     setPhoneValue('');
                     setShowCheckmark(false);
+                    startTimer();
                 }
             }
         };
 
-        const handleSendCodeClick = async (e) => {
-            e.preventDefault();
-            console.log('Кнопка "Отправить код" нажата');
-            console.log('Текущее значение phoneValue:', phoneValue);
-            console.log('userAttributes:', userAttributes);
-            await sendAuthRequest();
-        };
-
         const handleChangeNumber = (e) => {
             e.preventDefault();
+            log('🔄 Смена номера телефона');
+
+            // Очищаем таймер автоотправки
+            if (codeSubmitTimeoutRef.current) {
+                log('⏰ Очищаем таймер автоотправки при смене номера');
+                clearTimeout(codeSubmitTimeoutRef.current);
+                codeSubmitTimeoutRef.current = null;
+            }
 
             setIsCodeMode(false);
             setPhoneValue('');
@@ -299,19 +492,43 @@
             setUserAttributes(null);
             setIsAuthenticated(false);
             setAuthResult(null);
+            setTimerActive(false);
 
             setTimeout(() => {
                 if (phoneInputRef.current) {
                     phoneInputRef.current.focus();
+                    log('Фокус установлен на поле телефона');
                 }
             }, 0);
         };
+
+        // Очистка таймеров при размонтировании компонента
+        useEffect(() => {
+            return () => {
+                if (codeSubmitTimeoutRef.current) {
+                    log('🧹 Очистка таймера при размонтировании компонента');
+                    clearTimeout(codeSubmitTimeoutRef.current);
+                }
+            };
+        }, []);
 
         const getButtonText = () => {
             if (isLoading) {
                 return "Отправка...";
             }
-            return isCodeMode ? "Получить код повторно" : "Получить код";
+            if (!isCodeMode) {
+                return "Получить код";
+            }
+            
+            return timerActive ? (
+                <>
+                    Получить код повторно <Timer 
+                        timeLeft={timeLeft} 
+                        onTimerEnd={handleTimerEnd} 
+                        isActive={timerActive} 
+                    />
+                </>
+            ) : "Получить код повторно";
         };
 
         const getButtonClass = () => {
@@ -321,61 +538,19 @@
             if (!isCodeMode) {
                 return checkButtonState() ? "formBtn btn-active" : "formBtn btn-inactive";
             }
-            return "formBtn btn-active";
+            // В режиме кода кнопка активна только если таймер не идет
+            return !timerActive ? "formBtn btn-active" : "formBtn btn-inactive";
         };
 
         const isButtonDisabled = () => {
             if (isLoading) return true;
             if (!isCodeMode) return !checkButtonState();
-            return false;
+            // В режиме кода кнопка заблокирована пока идет таймер
+            return timerActive;
         };
 
-        const getSendCodeButtonClass = () => {
-            if (isAuthLoading) {
-                return "formBtn btn-inactive";
-            }
-            return "formBtn btn-active";
-        };
-
-        const isSendCodeButtonDisabled = () => {
-            return isAuthLoading;
-        };
-
-        // Если пользователь аутентифицирован, показываем результат
-        if (isAuthenticated && authResult) {
-            return (
-                <>
-                    <header>
-                        <img src="/img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
-                    </header>
-
-                    <main>
-                        <section>
-                            <div className="center-card">
-                                <h1>Аутентификация успешна!</h1>
-                                <p>Добро пожаловать в систему</p>
-
-                                <div>
-                                    <strong>Информация о пользователе:</strong><br />
-                                    ID: {authResult.user.id}<br />
-                                    Роль: {authResult.user.role}<br />
-                                    Телефон: {authResult.user.phone}<br />
-                                    Токен: {authResult.access_token.substring(0, 20)}...
-                                </div>
-
-                                <button
-                                    className="formBtn btn-active"
-                                    onClick={handleChangeNumber}
-                                    style={ {marginTop: '20px'} }
-                                >
-                                    Выйти
-                                </button>
-                            </div>
-                        </section>
-                    </main>
-                </>
-            );
-        }
+        // Убираем проверку на аутентификацию - сразу редиректим
+        // if (isAuthenticated && authResult) { ... } - блок удален
 
         return (
             <>
@@ -402,6 +577,29 @@
                                         placeholder={isCodeMode ? "Введите код из СМС" : "Введите номер"}
                                         value={phoneValue}
                                         onChange={handleInputChange}
+                                        onInput={(e) => {
+                                            // Дополнительный обработчик для режима кода
+                                            log('📝 onInput событие', { 
+                                                value: e.target.value, 
+                                                isCodeMode 
+                                            });
+                                            
+                                            if (isCodeMode) {
+                                                log('🔢 onInput в режиме кода - дублируем обработку');
+                                                // Дублируем обработку для режима кода
+                                                const value = e.target.value;
+                                                setPhoneValue(value);
+                                                checkCodeAndSetTimer(value);
+                                            }
+                                        }}
+                                        onKeyUp={(e) => {
+                                            // Отслеживаем отпускание клавиш
+                                            log('⌨️ onKeyUp событие', { 
+                                                key: e.key, 
+                                                value: e.target.value,
+                                                isCodeMode 
+                                            });
+                                        }}
                                         ref={phoneInputRef}
                                         disabled={isLoading || isAuthLoading}
                                     />
@@ -414,7 +612,6 @@
                                     )}
                                 </div>
 
-                                {/* Отображение ошибки */}
                                 {error && (
                                     <div className="error-message">
                                         {error}
@@ -430,23 +627,10 @@
                                     {getButtonText()}
                                 </button><br />
 
-                                {/* Кнопка отправки кода - показывается только в режиме ввода кода */}
-                                {isCodeMode && (
-                                    <button
-                                        id="sendCodeBtn"
-                                        className={getSendCodeButtonClass()}
-                                        disabled={isSendCodeButtonDisabled()}
-                                        onClick={handleSendCodeClick}
-                                        style={ {marginTop: '10px'} }
-                                    >
-                                        {isAuthLoading ? "Отправка..." : "Отправить код"}
-                                    </button>
-                                )}
-
                                 <div
                                     className="checkboxRow"
                                     id="checkboxRow"
-                                    style={ {display: isCodeMode ? 'none' : 'flex'} }
+                                    style={{display: isCodeMode ? 'none' : 'flex'}}
                                 >
                                     <label className="custom-checkbox" htmlFor="personalData">
                                         <input
@@ -466,23 +650,17 @@
                             </form>
 
                             {isCodeMode && (
-                                <a
-                                    href="#"
-                                    id="changeNumber"
-                                    onClick={handleChangeNumber}
-                                >
-                                    Изменить номер
-                                </a>
-                            )}
-
-                            {/* Отладочная информация (можно убрать в продакшене) */}
-                            {userAttributes && !isAuthenticated && (
-                                <div style={ {marginTop: '20px', fontSize: '12px', color: '#666'} }>
-                                    <strong>Отладка (получение кода):</strong><br />
-                                    ID: {userAttributes.id}<br />
-                                    Роль: {userAttributes.role}<br />
-                                    Телефон: {userAttributes.phone}
-                                </div>
+                                <>
+                                    <a
+                                        href="#"
+                                        id="changeNumber"
+                                        onClick={handleChangeNumber}
+                                    >
+                                        Изменить номер
+                                    </a>
+                                    <p style={{fontSize: '14px', color: '#666', marginTop: '10px'}}>
+                                    </p>
+                                </>
                             )}
                         </div>
                     </section>
@@ -490,7 +668,6 @@
             </>
         );
     }
-
 
     function App() {
         const [isCalendarOpen, setIsCalendarOpen] = useState(false);
