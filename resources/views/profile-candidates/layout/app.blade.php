@@ -13,7 +13,7 @@
 <body>
     <div id="root"></div>
 
-    
+
 
     <script type="text/babel">
         @verbatim
@@ -25,7 +25,7 @@
             const [phoneValue, setPhoneValue] = useState('');
             const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
             const [showCheckmark, setShowCheckmark] = useState(false);
-            
+
             const phoneInputRef = useRef(null);
             const currentMaskRef = useRef(null);
             const timerIntervalRef = useRef(null);
@@ -81,7 +81,7 @@
             const handleInputChange = (e) => {
                 const value = e.target.value;
                 setPhoneValue(value);
-                
+
                 if (isCodeMode) {
                     checkCode(value);
                 }
@@ -93,7 +93,7 @@
 
             const startTimer = () => {
                 setTimeLeft(60);
-                
+
                 if (timerIntervalRef.current) {
                     clearInterval(timerIntervalRef.current);
                 }
@@ -111,7 +111,7 @@
 
             const handleGetCodeClick = (e) => {
                 e.preventDefault();
-                
+
                 if (!isCodeMode) {
                     startTimer();
                     setIsCodeMode(true);
@@ -126,16 +126,16 @@
 
             const handleChangeNumber = (e) => {
                 e.preventDefault();
-                
+
                 setIsCodeMode(false);
-                
+
                 if (timerIntervalRef.current) {
                     clearInterval(timerIntervalRef.current);
                 }
-                
+
                 setPhoneValue('');
                 setShowCheckmark(false);
-                
+
                 setTimeout(() => {
                     if (phoneInputRef.current) {
                         phoneInputRef.current.focus();
@@ -172,7 +172,7 @@
             return (
                 <>
                     <header>
-                        <img src="img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
+                        <img src="/img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
                     </header>
 
                     <main>
@@ -186,11 +186,11 @@
                                         <label htmlFor="phoneNumber" id="formLabel" className="formLabel">
                                             {isCodeMode ? "Код из СМС" : "Телефон"}
                                         </label>
-                                        <input 
-                                            type="tel" 
-                                            name="phoneNumber" 
-                                            id="phoneNumber" 
-                                            className="formInput" 
+                                        <input
+                                            type="tel"
+                                            name="phoneNumber"
+                                            id="phoneNumber"
+                                            className="formInput"
                                             placeholder={isCodeMode ? "Введите код из СМС" : "Введите номер"}
                                             value={phoneValue}
                                             onChange={handleInputChange}
@@ -205,24 +205,24 @@
                                         )}
                                     </div>
 
-                                    <button 
-                                        id="getCodeBtn" 
+                                    <button
+                                        id="getCodeBtn"
                                         className={getButtonClass()}
                                         disabled={isButtonDisabled()}
                                         onClick={handleGetCodeClick}
                                     >
                                         {getButtonText()}
                                     </button><br />
-                                    
-                                    <div 
-                                        className="checkboxRow" 
+
+                                    <div
+                                        className="checkboxRow"
                                         id="checkboxRow"
-                                        // 
+                                        //
                                     >
                                         <label className="custom-checkbox" htmlFor="personalData">
-                                            <input 
-                                                type="checkbox" 
-                                                name="personalData" 
+                                            <input
+                                                type="checkbox"
+                                                name="personalData"
                                                 id="personalData"
                                                 checked={isCheckboxChecked}
                                                 onChange={handleCheckboxChange}
@@ -234,10 +234,10 @@
                                         </label>
                                     </div>
                                 </form>
-                                
-                                <a 
-                                    href="#" 
-                                    
+
+                                <a
+                                    href="#"
+
                                     id="changeNumber"
                                     onClick={handleChangeNumber}
                                 >
@@ -297,7 +297,7 @@
                 };
 
                 window.addEventListener('popstate', handlePopState);
-                
+
                 // Устанавливаем начальную страницу по URL
                 const initialPath = window.location.pathname;
                 if (initialPath === '/security') {

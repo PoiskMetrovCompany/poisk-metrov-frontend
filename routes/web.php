@@ -47,13 +47,13 @@ Route::namespace('PROFILE_CANDIDATES')->prefix('profile-candidates')->group(func
 
     Route::namespace('SECURITY')->prefix('security')->group(function () {
         Route::get('/login', function() {
-            return view('profile-candidates.security-login');
+            return view('profile-candidates.security.login');
         });
         Route::get('/', function() {
-            return view('profile-candidates.security');
+            return view('profile-candidates.security.index');
         });
         Route::get('/settings', function() {
-            return view('profile-candidates.settings');
+            return view('profile-candidates.security.settings');
         });
     });
 

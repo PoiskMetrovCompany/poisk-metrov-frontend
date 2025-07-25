@@ -20,7 +20,7 @@
         padding-bottom: 3rem; /* 48px */
     }
 
-    
+
 
     /* Базовая типография */
     h1, p {
@@ -58,7 +58,7 @@
         justify-content: center;
         align-items: center;
         width: 100vw;
-        min-height: calc(100vh - 5.625rem); 
+        min-height: calc(100vh - 5.625rem);
         position: relative;
     }
 
@@ -262,8 +262,8 @@
         cursor: pointer;
     }
     .formBtn.small{
-        width: 181px; 
-        height: 56px; 
+        width: 181px;
+        height: 56px;
         margin-right: 1rem;
     }
 
@@ -952,7 +952,7 @@
         margin-top: 1.875rem;
         border-collapse: collapse;
         border-spacing: 0;
-        border-radius: 1rem; 
+        border-radius: 1rem;
         overflow: hidden;
     }
 
@@ -962,7 +962,7 @@
         line-height: 1.4;
         color: #818181;
         text-align: left;
-        padding: 0.625rem; 
+        padding: 0.625rem;
     }
 
     .candidatesTable tr {
@@ -982,20 +982,20 @@
 
 
     .candidatesTable tbody tr:first-child td:first-child {
-        border-top-left-radius: 1rem; 
+        border-top-left-radius: 1rem;
     }
 
     .candidatesTable tbody tr:first-child td:last-child {
-        border-top-right-radius: 1rem; 
+        border-top-right-radius: 1rem;
     }
 
 
     .candidatesTable tbody tr:last-child td:first-child {
-        border-bottom-left-radius: 1rem; 
+        border-bottom-left-radius: 1rem;
     }
 
     .candidatesTable tbody tr:last-child td:last-child {
-        border-bottom-right-radius: 1rem; 
+        border-bottom-right-radius: 1rem;
     }
 
 
@@ -1110,7 +1110,7 @@
     }
 
     .paginationBtn.active {
-        background: rgba(236, 125, 63, 1); 
+        background: rgba(236, 125, 63, 1);
         color: white;
         border-color: rgba(236, 125, 63, 1);
     }
@@ -1182,7 +1182,7 @@
     }
 
     #notifBtn:hover img{
-        content: url("img/ ringHover.png");
+        content: url("/img/ ringHover.png");
     }
     #exitBtn img{
         width: 16px;
@@ -1223,7 +1223,7 @@
         color: rgba(73, 73, 73, 1);
         padding-left: 1rem;
         align-items: center;
-        height: 40px;            
+        height: 40px;
         border-bottom: 1px solid #e5e5e5;
         cursor: pointer;
         transition: background 0.2s ease;
@@ -1234,7 +1234,7 @@
 
     .format-item:last-child {
         border-bottom: none;
-    } 
+    }
     .calendar-filter-panel {
         position: fixed;
         top: 0;
@@ -1260,7 +1260,7 @@
         font-size: 32px;
         cursor: pointer;
         z-index: 10;
-    } 
+    }
     .roleItem{
         color: rgba(236, 125, 63, 1);
         background: rgba(236, 125, 63, 0.1);
@@ -1281,19 +1281,19 @@
     }
     .fixedMenu {
     position: fixed;
-    right: 0; 
+    right: 0;
     top: 60%;
     transform: translateY(-50%);
     z-index: 100;
-    right: calc((100vw - 50%) / 2 - 22rem); 
+    right: calc((100vw - 50%) / 2 - 22rem);
     }
     .navArea {
         display: flex;
         flex-direction: column;
-        gap: 1rem; 
-        padding: 1.5rem; 
+        gap: 1rem;
+        padding: 1.5rem;
         background: rgba(255, 255, 255, 1);
-        border-radius: 1rem; 
+        border-radius: 1rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(210, 210, 210, 0.3);
         min-width: 200px;
@@ -1302,8 +1302,8 @@
     .navArea a {
         display: flex;
         align-items: center;
-        padding: 0.75rem 1rem; 
-        font-size: 0.875rem; 
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
         font-weight: 400;
         color: rgba(24, 24, 23, 1);
         text-decoration: none;
@@ -1430,4 +1430,3 @@
 
 
 
- 
