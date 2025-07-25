@@ -1477,32 +1477,28 @@
                             )}
 
                             {submitSuccess && (
-                                    <div 
-                                        className="modal-overlay"
-                                        onClick={(e) => {
-                                            if (e.target.className === 'modal-overlay') {
-                                                setSubmitSuccess(false);
-                                            }
-                                        }}
-                                    >
-                                        <div className="success-modal">
-                                            <div className="successMarker" style={{margin: '0 auto 20px auto'}}>
-                                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" strokeWidth="2"/>
-                                                    <polyline points="12,20 17,25 28,14" stroke="#4caf50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                                                </svg>
-                                            </div>
-                                            <h1>Анкета успешно отправлена</h1>
-                                            <p>Мы успешно получили вашу анкету</p>
-                                            <button 
-                                                className="formBtn btn-active"
-                                                onClick={() => setSubmitSuccess(false)}
-                                            >
-                                                Закрыть
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
+                                <div class="center-card" style = "max-height: 364px">
+                                <div style="margin-top: 0;" class = "formRow justify-center">
+                                <div class = "successMarker">
+                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" stroke-width="2"/>
+                                <polyline points="12,20 17,25 28,14" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                </svg>
+                                </div>
+                                </div>
+                                <div class = "formRow justify-center">
+                                <h1>Анкета успешно отправлена</h1>
+                                </div>
+                                <div class = "formRow justify-center">
+                                <p>Мы успешно получили вашу анкету</p>
+                                </div>
+                                <div class = "formRow justify-center">
+                                <button id="closeNotification" class="formBtn btn-active">
+                                Закрыть
+                                </button>
+                                </div>
+                                </div>
+                            )}
                         </div>
                     </section>
                 </main>
