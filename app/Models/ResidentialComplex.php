@@ -34,6 +34,23 @@ class ResidentialComplex extends Model
     use HasFactory;
 
     /**
+     * @var array
+     */
+    const RELATIONSHIP = [
+        'Amenity' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
+        'Apartment' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
+        'BestOffer' => ['main_table_value' => 'code', 'linked_table_value' => 'complex_code'],
+        'BuildingProcess' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
+        'Doc' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
+        'Gallery' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
+        'ResidentialComplex' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
+        'ResidentialComplexCategoryPivot' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
+        'SpriteImagePosition' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
+        'UserFavoriteBuilding' => ['main_table_value' => 'code', 'linked_table_value' => 'complex_code'],
+        'Location' => ['main_table_value' => 'location_id', 'linked_table_value' => 'code'],
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

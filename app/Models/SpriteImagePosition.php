@@ -9,6 +9,13 @@ class SpriteImagePosition extends Model
 {
     use HasFactory;
 
+    /**
+     * @var array
+     */
+    const RELATIONSHIP = [
+        'ResidentialComplex' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
+    ];
+
     protected $fillable = [
         'building_id',
         'filepath',

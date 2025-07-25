@@ -10,6 +10,13 @@ class ResidentialComplexApartmentSpecifics extends Model
 {
     use HasFactory;
 
+    /**
+     * @var array
+     */
+    const RELATIONSHIP = [
+        'ResidentialComplex' => ['main_table_value' => 'building_id', 'linked_table_value' => 'id'],
+    ];
+
     protected $fillable = [
         'building_id',
         'starting_price',

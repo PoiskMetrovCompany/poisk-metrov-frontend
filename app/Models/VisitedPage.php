@@ -11,6 +11,13 @@ class VisitedPage extends Model
 {
     use HasFactory;
 
+    /**
+     * @var array
+     */
+    const RELATIONSHIP = [
+        'User' => ['main_table_value' => 'user_id', 'linked_table_value' => 'id'],
+    ];
+
     protected $fillable = ['user_id', 'page', 'code'];
 
     public static function createForCurrentUser(string $page, string $code)

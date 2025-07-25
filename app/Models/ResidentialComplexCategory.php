@@ -10,6 +10,13 @@ class ResidentialComplexCategory extends Model
 {
     use HasFactory;
 
+    /**
+     * @var array
+     */
+    const RELATIONSHIP = [
+        'ResidentialComplexCategoryPivot' => ['main_table_value' => 'category_id', 'linked_table_value' => 'id'],
+    ];
+
     protected $fillable = ['category_name'];
 
     public function residentialComplexes(): BelongsToMany
