@@ -1181,9 +1181,9 @@
         border-radius: 16px;
     }
 
-    #notifBtn:hover img{
-        content: url("/img/ ringHover.png");
-    }
+    /*#notifBtn:hover img{*/
+    /*    content: url("/img/ ringHover.png");*/
+    /*}*/
     #exitBtn img{
         width: 16px;
         height: 16px;

@@ -23,7 +23,7 @@
         const handleLogout = () => {
 
                 document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                
+
                 window.location.reload();
             };
         return (
@@ -38,8 +38,8 @@
                         </h5>
                     </div>
                     <div className="w-80" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px'}}>
-                        <span className="active">Кандидаты</span>
-                        <span>Настройки</span>
+                        <a  href="/profile-candidates/security/" className="active">Кандидаты</a>
+                        <a href="/profile-candidates/security/settings">Настройки</a>
                     </div>
                     <div style={{display: 'flex', justifyContent: 'space-between', minWidth: '250px'}}>
                         <button id="notifBtn"><img src="/img/ring.png" alt="Уведомлений нет" /></button>
@@ -386,7 +386,7 @@
                                     <button id="addComment" onClick={handleAddComment}>Оставить коментарий</button>
                                 </div>
                             </div>
-                            <p 
+                            <p
                                 style={{position: 'absolute', top: '-2.7rem', left: '0', display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer'}}
                                 onClick={() => setSelectedVacancyKey(null)}
                             >
@@ -823,11 +823,11 @@
                }
 
                let url = `http://127.0.0.1:8000/api/v1/candidates/?page=${page}`;
-               
+
                // Если есть активные фильтры и нужно их использовать
                if (useFilters && activeFilters) {
                    const queryParams = [];
-                   
+
                    // Добавляем параметры фильтров
                    if (activeFilters.dateRange.start && activeFilters.dateRange.end) {
                        const dateRange = formatApiDateRange(
@@ -849,18 +849,18 @@
                            }
                        }
                    }
-                   
+
                    const statusValues = getStatusApiValues(activeFilters.status);
                    if (statusValues.length > 0) {
                        queryParams.push(`candidate_statuses=${statusValues.join(',')}`);
                    }
-                   
+
                    // Для вакансий понадобится доступ к vacancyOptions, но пока можем пропустить
                    // const vacancyValues = getVacancyApiValues(activeFilters.vacancy, vacancyOptions);
                    // if (vacancyValues.length > 0) {
                    //     queryParams.push(`vacancy_title=${vacancyValues.join(',')}`);
                    // }
-                   
+
                    if (queryParams.length > 0) {
                        url += `&${queryParams.join('&')}`;
                    }
@@ -2287,11 +2287,11 @@
     function App() {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [selectedVacancyKey, setSelectedVacancyKey] = useState(null);
-    
+
     // Добавляем недостающие состояния для фильтров
     const [filteredData, setFilteredData] = useState(null);
     const [activeFilters, setActiveFilters] = useState(null);
-    
+
     const filtersButtonRef = useRef(null);
 
     const handleFiltersClick = () => {

@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Система регистрации</title>
     @vite(['resources/css/candidatesProfiles/index.css'])
+    <style>
+        .successMarker{
+            width: 56px;
+            height: 56px;
+            background: rgb(237, 255, 233);
+            border-radius: 60px;
+        }
+
+        .formRow{
+            margin-top: 1rem;
+        }
+    </style>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -637,7 +649,7 @@
         const getMaritalStatusKey = (selectedTitle) => {
             if (window.maritalStatusData) {
                 const status = window.maritalStatusData.find(s => s.title === selectedTitle);
-                return status ? status.id : '';
+                return status ? status.key : '';
             }
             return '';
         };
@@ -1422,10 +1434,26 @@
                             )}
 
                             {submitSuccess && (
-                                <div className="formRow">
-                                    <div style={{ color: '#27ae60', fontSize: '14px', marginTop: '10px' }}>
-                                        Анкета успешно отправлена! Спасибо за заявку.
-                                    </div>
+                                <div class="center-card" style = "max-height: 364px">
+                                <div style="margin-top: 0;" class = "formRow justify-center">
+                                <div class = "successMarker">
+                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" stroke-width="2"/>
+                                <polyline points="12,20 17,25 28,14" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                </svg>
+                                </div>
+                                </div>
+                                <div class = "formRow justify-center">
+                                <h1>Анкета успешно отправлена</h1>
+                                </div>
+                                <div class = "formRow justify-center">
+                                <p>Мы успешно получили вашу анкету</p>
+                                </div>
+                                <div class = "formRow justify-center">
+                                <button id="closeNotification" class="formBtn btn-active">
+                                Закрыть
+                                </button>
+                                </div>
                                 </div>
                             )}
                         </div>

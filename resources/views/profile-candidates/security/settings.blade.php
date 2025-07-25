@@ -31,8 +31,8 @@
                         </h5>
                     </div>
                     <div className="w-80" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px'}}>
-                        <span className="active">Кандидаты</span>
-                        <span>Настройки</span>
+                        <a  href="/profile-candidates/security/">Кандидаты</a>
+                        <a href="/profile-candidates/security/settings" className="active">Настройки</a>
                     </div>
                     <div style={{display: 'flex', justifyContent: 'space-between', minWidth: '250px'}}>
                         <button id="notifBtn"><img src="/img/ring.png" alt="Уведомлений нет" /></button>

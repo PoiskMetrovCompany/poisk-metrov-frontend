@@ -169,35 +169,9 @@
                         <img src="img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
                     </header>
 
-                    <main>
-                        <section>
-                            <div className="center-card">
-                                <h1>Авторизация успешна!</h1>
-                                <p>Добро пожаловать в административную панель</p>
-
-                                <div style={{marginTop: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '8px'}}>
-                                    <strong>Информация о пользователе:</strong><br />
-                                    ID: {authResult.user.id}<br />
-                                    Роль: {authResult.user.role}<br />
-                                    {authResult.user.phone && (
-                                        <>Телефон: {authResult.user.phone}<br /></>
-                                    )}
-                                    {authResult.user.login && (
-                                        <>Логин: {authResult.user.login}<br /></>
-                                    )}
-                                    Токен: {authResult.access_token.substring(0, 20)}...
-                                </div>
-
-                                <button
-                                    className="formBtn btn-active"
-                                    onClick={handleLogout}
-                                    style={{marginTop: '20px'}}
-                                >
-                                    Выйти
-                                </button>
-                            </div>
-                        </section>
-                    </main>
+                    {
+                        window.location.href = '/profile-candidates/security/'
+                    }
                 </>
             );
         }
