@@ -42,14 +42,14 @@ class CandidateProfilesStoreRequest extends FormRequest
             'permanent_registration_address' => ['required', 'string', 'max:255'],
             'temporary_registration_address' => ['required', 'string', 'max:255'],
             'actual_residence_address' => ['required', 'string', 'max:255'],
-            'family_partner' => ['required'],
+            'family_partner' => ['nullable'],
             'adult_family_members' => ['required'],
             'adult_children' => ['required'],
             'serviceman' => ['nullable', 'boolean'],
             'law_breaker' => ['required', 'string', 'max:255'],
             'legal_entity' => ['required', 'string', 'max:255'],
             'is_data_processing' => ['nullable', 'boolean'],
-            'comment' => ['required', 'string'],
+            'comment' => ['nullable', 'string'],
         ];
     }
 }

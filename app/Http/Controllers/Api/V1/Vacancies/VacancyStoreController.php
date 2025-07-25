@@ -8,6 +8,7 @@ use App\Http\Requests\Vacancies\VacancyStoreRequest;
 use App\Http\Resources\Vacancies\VacancyResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class VacancyStoreController extends Controller
 {
@@ -21,6 +22,7 @@ class VacancyStoreController extends Controller
     public function __invoke(VacancyStoreRequest $request): JsonResponse
     {
         $vacancy = $request->validated();
+        $vacancy['key'] = Str::uuid()->toString();
         $repository = $this->vacancyRepository->store($vacancy);
         $data = new VacancyResource($repository);
 

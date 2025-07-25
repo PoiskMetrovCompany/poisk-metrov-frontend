@@ -37,7 +37,30 @@ use Illuminate\Support\Str;
 */
 
 Route::namespace('PROFILE_CANDIDATES')->prefix('profile-candidates')->group(function () {
-    Route::get('/', [ProfileCandidatesController::class, 'index']); // TODO:  ЭТО ДОЛЖНА БЫТЬ СТР. С ФОРМОЙ
+    Route::get('/login', function() {
+        return view('profile-candidates.login');
+    });
+
+    Route::get('/', function() {
+        return view('profile-candidates.index');
+    });
+
+    Route::namespace('SECURITY')->prefix('security')->group(function () {
+        Route::get('/login', function() {
+            return view('profile-candidates.security.login');
+        });
+        Route::get('/', function() {
+            return view('profile-candidates.security.index');
+        });
+        Route::get('/settings', function() {
+            return view('profile-candidates.security.settings');
+        });
+    });
+
+
+    Route::get('/', function() {
+        return view('profile-candidates.index');
+    });
 });
 
 /// Reservations

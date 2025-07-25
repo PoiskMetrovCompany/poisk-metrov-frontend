@@ -20,8 +20,8 @@ return new class extends Migration
                 RoleEnum::SecurityGuard->value,
                 RoleEnum::Candidate->value,
             ]);
-            $table->string('phone')->unique();
-            $table->string('email')->unique();
+            $table->string('phone')->nullable()->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('secret')->nullable();
             $table->timestamp('created_at');
             $table->timestamp('updated_at');

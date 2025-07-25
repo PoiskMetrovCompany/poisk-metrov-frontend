@@ -26,7 +26,7 @@ class VacancyDestroyController extends Controller
         $data = new VacancyResource($repository);
 
         return new JsonResponse(
-            data: $data,
+            data: [],
             status: Response::HTTP_OK
         );
     }
