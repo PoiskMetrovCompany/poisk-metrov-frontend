@@ -11,8 +11,18 @@
     <script src="https://unpkg.com/imask"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
+
+<style>
+    a{
+        text-decoration: none;
+        color: rgba(129, 129, 129, 1);
+    }
+</style>
+
 <body>
 <div id="root"></div>
+
+
 
 <script type="text/babel">
     <?php echo '@verbatim'; ?>
@@ -49,279 +59,306 @@
             </header>
         );
     }
-    function ShowForm({ vacancyKey, setSelectedVacancyKey }) {
-        const [isSelectOpen, setIsSelectOpen] = useState(false);
-        const [selectedOption, setSelectedOption] = useState({
-            value: 'new',
-            text: 'Новая анкета'
-        });
-        const [commentValue, setCommentValue] = useState('');
-        const [isUpdating, setIsUpdating] = useState(false); // Состояние для индикации загрузки
+    function ShowForm({ vacancyKey, setSelectedVacancyKey, currentCandidateStatus }) {
+    const handleLogout = () => {
+        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.reload();
+    };
 
-        const selectOptions = [
-            { value: 'new', text: 'Новая анкета' },
-            { value: 'needs-work', text: 'Нужна доработка' },
-            { value: 'checked', text: 'Проверен' },
-            { value: 'rejected', text: 'Отклонен' }
-        ];
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+    const [commentValue, setCommentValue] = useState('');
+    const [isUpdating, setIsUpdating] = useState(false);
 
-        // Функция для получения CSRF токена
-        const getCsrfToken = () => {
-            // Попробуем получить CSRF токен из meta тега
-            const metaTag = document.querySelector('meta[name="csrf-token"]');
-            if (metaTag) {
-                return metaTag.getAttribute('content');
-            }
+    const selectOptions = [
+        { value: 'new', text: 'Новая анкета' },
+        { value: 'needs-work', text: 'Нужна доработка' },
+        { value: 'checked', text: 'Проверен' },
+        { value: 'rejected', text: 'Отклонен' }
+    ];
 
-            // Попробуем получить из cookie
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [name, value] = cookie.trim().split('=');
-                if (name === 'XSRF-TOKEN') {
-                    return decodeURIComponent(value);
-                }
-            }
+    // Функция для определения текущего статуса на основе переданного статуса анкеты
+    const getCurrentStatusOption = () => {
+        if (!currentCandidateStatus) {
+            return selectOptions.find(option => option.value === 'new') || selectOptions[0];
+        }
 
-            // Используем фиксированный токен как в примере cURL
-            return 'Zva2RlvTSh5wTQogjJMfE8v5ObQoOSIcL40Xwc5d';
+        // Маппинг статусов из API к значениям селекта
+        const statusMapping = {
+            'Новая анкета': 'new',
+            'Нужна доработка': 'needs-work',
+            'Проверен': 'checked',
+            'Отклонен': 'rejected'
         };
 
-        // Функция для преобразования значения статуса в точно такой же формат как в API
-        const mapStatusForAPI = (statusValue) => {
-            const statusMap = {
-                'new': 'Новая анкета',
-                'needs-work': 'Нужна доработка', // Убрал пробел в конце
-                'checked': 'Проверен',
-                'rejected': 'Отклонен'
+        const mappedValue = statusMapping[currentCandidateStatus];
+        return selectOptions.find(option => option.value === mappedValue) || selectOptions[0];
+    };
+
+    const [selectedOption, setSelectedOption] = useState(getCurrentStatusOption());
+
+    // Обновляем выбранную опцию при изменении статуса анкеты
+    useEffect(() => {
+        setSelectedOption(getCurrentStatusOption());
+    }, [currentCandidateStatus]);
+
+    // Функция для скролла к разделу
+    const scrollToSection = (sectionId) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
+    // Функция для получения CSRF токена
+    const getCsrfToken = () => {
+        const metaTag = document.querySelector('meta[name="csrf-token"]');
+        if (metaTag) {
+            return metaTag.getAttribute('content');
+        }
+
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'XSRF-TOKEN') {
+                return decodeURIComponent(value);
+            }
+        }
+
+        return 'Zva2RlvTSh5wTQogjJMfE8v5ObQoOSIcL40Xwc5d';
+    };
+
+    // Функция для преобразования значения статуса в точно такой же формат как в API
+    const mapStatusForAPI = (statusValue) => {
+        const statusMap = {
+            'new': 'Новая анкета',
+            'needs-work': 'Нужна доработка',
+            'checked': 'Проверен',
+            'rejected': 'Отклонен'
+        };
+        return statusMap[statusValue] || statusValue;
+    };
+
+    // Функция для получения access token из cookies
+    const getAccessToken = () => {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'access_token') {
+                return value;
+            }
+        }
+        return null;
+    };
+
+    // Функция для отправки запроса обновления статуса
+    const updateCandidateStatus = async (newStatus) => {
+        const accessToken = getAccessToken();
+
+        if (!accessToken) {
+            console.error('Access token не найден в cookies');
+            return false;
+        }
+
+        if (!vacancyKey) {
+            console.error('Ключ кандидата не передан в props');
+            return false;
+        }
+
+        setIsUpdating(true);
+
+        const mappedStatus = mapStatusForAPI(newStatus);
+        const requestData = {
+            key: vacancyKey,
+            status: mappedStatus,
+            comment: commentValue || ""
+        };
+
+        console.log('=== НАЧАЛО ЗАПРОСА ОБНОВЛЕНИЯ СТАТУСА ===');
+        console.log('vacancyKey:', vacancyKey);
+        console.log('newStatus (original):', newStatus);
+        console.log('mappedStatus:', mappedStatus);
+        console.log('commentValue:', commentValue);
+        console.log('requestData:', requestData);
+
+        try {
+            const csrfToken = getCsrfToken();
+            console.log('CSRF токен:', csrfToken);
+            console.log('Access токен (первые 20 символов):', accessToken.substring(0, 20) + '...');
+
+            const headers = {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
             };
-            return statusMap[statusValue] || statusValue;
-        };
 
-        // Функция для получения access token из cookies
-        const getAccessToken = () => {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [name, value] = cookie.trim().split('=');
-                if (name === 'access_token') {
-                    return value;
+            console.log('=== ДЕТАЛИ ЗАПРОСА ===');
+            console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
+            console.log('Метод:', 'POST');
+            console.log('Заголовки:', headers);
+            console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
+
+            console.log('=== ОТПРАВКА ЗАПРОСА ===');
+
+            const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(requestData)
+            });
+
+            console.log('=== ОТВЕТ СЕРВЕРА ===');
+            console.log('Статус ответа:', response.status);
+            console.log('Статус текст:', response.statusText);
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Статус успешно обновлен:', result);
+                return true;
+            } else {
+                const errorText = await response.text();
+                console.error('❌ Ошибка при обновлении статуса. Статус:', response.status);
+                console.error('❌ Текст ошибки от сервера:', errorText);
+
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    console.error('❌ Ошибка (JSON):', errorJson);
+                } catch (e) {
+                    console.error('❌ Ошибка - не JSON формат');
                 }
-            }
-            return null;
-        };
 
-        // Функция для отправки запроса обновления статуса
-        const updateCandidateStatus = async (newStatus) => {
-            const accessToken = getAccessToken();
-
-            if (!accessToken) {
-                console.error('Access token не найден в cookies');
                 return false;
             }
+        } catch (error) {
+            console.error('=== ОШИБКА ЗАПРОСА ===');
+            console.error('Тип ошибки:', error.name);
+            console.error('Сообщение ошибки:', error.message);
+            console.error('Полная ошибка:', error);
 
-            if (!vacancyKey) {
-                console.error('Ключ кандидата не передан в props');
-                return false;
+            return false;
+        } finally {
+            console.log('=== ЗАВЕРШЕНИЕ ЗАПРОСА ===');
+            setIsUpdating(false);
+        }
+    };
+
+    const handleSelectToggle = (e) => {
+        e.stopPropagation();
+        setIsSelectOpen(!isSelectOpen);
+    };
+
+    const handleOptionSelect = async (option) => {
+        if (selectedOption.value !== option.value) {
+            const success = await updateCandidateStatus(option.value);
+
+            if (success) {
+                setSelectedOption(option);
+                console.log('Статус изменен на:', option.text);
+            } else {
+                console.error('Не удалось обновить статус');
             }
+        }
 
-            setIsUpdating(true);
+        setIsSelectOpen(false);
+    };
 
-            // ПРАВИЛЬНАЯ подготовка данных - как в рабочем примере
-            const mappedStatus = mapStatusForAPI(newStatus);
-            const requestData = {
-                key: vacancyKey,
-                status: mappedStatus,
-                comment: commentValue || ""
+    const handleCommentChange = (e) => {
+        setCommentValue(e.target.value);
+    };
+
+    const handleAddComment = async () => {
+        if (!commentValue.trim()) {
+            console.warn('Комментарий пустой, отправка не требуется');
+            return;
+        }
+
+        const accessToken = getAccessToken();
+
+        if (!accessToken) {
+            console.error('Access token не найден в cookies');
+            return;
+        }
+
+        if (!vacancyKey) {
+            console.error('Ключ кандидата не передан в props');
+            return;
+        }
+
+        const requestData = {
+            key: vacancyKey,
+            status: "",
+            comment: commentValue.trim()
+        };
+
+        console.log('=== НАЧАЛО ОТПРАВКИ КОММЕНТАРИЯ ===');
+        console.log('Комментарий для отправки:', commentValue);
+        console.log('requestData:', requestData);
+
+        try {
+            const csrfToken = getCsrfToken();
+            console.log('CSRF токен:', csrfToken);
+
+            const headers = {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
             };
 
-            console.log('=== НАЧАЛО ЗАПРОСА ОБНОВЛЕНИЯ СТАТУСА ===');
-            console.log('vacancyKey:', vacancyKey);
-            console.log('newStatus (original):', newStatus);
-            console.log('mappedStatus:', mappedStatus);
-            console.log('commentValue:', commentValue);
-            console.log('requestData:', requestData);
+            console.log('=== ДЕТАЛИ ЗАПРОСА КОММЕНТАРИЯ ===');
+            console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
+            console.log('Метод:', 'POST');
+            console.log('Заголовки:', headers);
+            console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
 
-            try {
-                const csrfToken = getCsrfToken();
-                console.log('CSRF токен:', csrfToken);
-                console.log('Access токен (первые 20 символов):', accessToken.substring(0, 20) + '...');
+            const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(requestData)
+            });
 
-                const headers = {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                };
+            console.log('=== ОТВЕТ СЕРВЕРА НА КОММЕНТАРИЙ ===');
+            console.log('Статус ответа:', response.status);
 
-                console.log('=== ДЕТАЛИ ЗАПРОСА ===');
-                console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
-                console.log('Метод:', 'POST');
-                console.log('Заголовки:', headers);
-                console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Комментарий успешно отправлен:', result);
+                setCommentValue('');
+            } else {
+                const errorText = await response.text();
+                console.error('❌ Ошибка при отправке комментария. Статус:', response.status);
+                console.error('❌ Текст ошибки:', errorText);
+            }
+        } catch (error) {
+            console.error('=== ОШИБКА ОТПРАВКИ КОММЕНТАРИЯ ===');
+            console.error('Ошибка:', error);
+        }
+    };
 
-                console.log('=== ОТПРАВКА ЗАПРОСА ===');
-
-                const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(requestData)
-                });
-
-                console.log('=== ОТВЕТ СЕРВЕРА ===');
-                console.log('Статус ответа:', response.status);
-                console.log('Статус текст:', response.statusText);
-
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Статус успешно обновлен:', result);
-                    return true;
-                } else {
-                    const errorText = await response.text();
-                    console.error('❌ Ошибка при обновлении статуса. Статус:', response.status);
-                    console.error('❌ Текст ошибки от сервера:', errorText);
-
-                    // Попробуем распарсить как JSON
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        console.error('❌ Ошибка (JSON):', errorJson);
-                    } catch (e) {
-                        console.error('❌ Ошибка - не JSON формат');
-                    }
-
-                    return false;
-                }
-            } catch (error) {
-                console.error('=== ОШИБКА ЗАПРОСА ===');
-                console.error('Тип ошибки:', error.name);
-                console.error('Сообщение ошибки:', error.message);
-                console.error('Полная ошибка:', error);
-
-                return false;
-            } finally {
-                console.log('=== ЗАВЕРШЕНИЕ ЗАПРОСА ===');
-                setIsUpdating(false);
+    // Закрытие селектора при клике вне его
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (isSelectOpen && !e.target.closest('#customSelect')) {
+                setIsSelectOpen(false);
             }
         };
 
-        const handleSelectToggle = (e) => {
-            e.stopPropagation();
-            setIsSelectOpen(!isSelectOpen);
-        };
-
-        const handleOptionSelect = async (option) => {
-            // Проверяем, изменился ли статус
-            if (selectedOption.value !== option.value) {
-                // Отправляем запрос на обновление статуса
-                const success = await updateCandidateStatus(option.value);
-
-                if (success) {
-                    // Обновляем состояние только если запрос прошел успешно
-                    setSelectedOption(option);
-                    console.log('Статус изменен на:', option.text);
-                } else {
-                    console.error('Не удалось обновить статус');
-                    // Можно добавить уведомление пользователю об ошибке
-                }
-            }
-
-            setIsSelectOpen(false);
-        };
-
-        const handleCommentChange = (e) => {
-            setCommentValue(e.target.value);
-        };
-
-        const handleAddComment = async () => {
-            if (!commentValue.trim()) {
-                console.warn('Комментарий пустой, отправка не требуется');
-                return;
-            }
-
-            const accessToken = getAccessToken();
-
-            if (!accessToken) {
-                console.error('Access token не найден в cookies');
-                return;
-            }
-
-            if (!vacancyKey) {
-                console.error('Ключ кандидата не передан в props');
-                return;
-            }
-
-            // Подготавливаем данные для отправки комментария
-            const requestData = {
-                key: vacancyKey,
-                status: "", // Пустой статус для комментария
-                comment: commentValue.trim()
-            };
-
-            console.log('=== НАЧАЛО ОТПРАВКИ КОММЕНТАРИЯ ===');
-            console.log('Комментарий для отправки:', commentValue);
-            console.log('requestData:', requestData);
-
-            try {
-                const csrfToken = getCsrfToken();
-                console.log('CSRF токен:', csrfToken);
-
-                const headers = {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                };
-
-                console.log('=== ДЕТАЛИ ЗАПРОСА КОММЕНТАРИЯ ===');
-                console.log('URL:', 'http://127.0.0.1:8000/api/v1/candidates/update');
-                console.log('Метод:', 'POST');
-                console.log('Заголовки:', headers);
-                console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
-
-                const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(requestData)
-                });
-
-                console.log('=== ОТВЕТ СЕРВЕРА НА КОММЕНТАРИЙ ===');
-                console.log('Статус ответа:', response.status);
-
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Комментарий успешно отправлен:', result);
-                    setCommentValue('');
-                } else {
-                    const errorText = await response.text();
-                    console.error('❌ Ошибка при отправке комментария. Статус:', response.status);
-                    console.error('❌ Текст ошибки:', errorText);
-                }
-            } catch (error) {
-                console.error('=== ОШИБКА ОТПРАВКИ КОММЕНТАРИЯ ===');
-                console.error('Ошибка:', error);
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setIsSelectOpen(false);
             }
         };
 
-        // Закрытие селектора при клике вне его
-        useEffect(() => {
-            const handleClickOutside = (e) => {
-                if (isSelectOpen && !e.target.closest('#customSelect')) {
-                    setIsSelectOpen(false);
-                }
-            };
+        document.addEventListener('click', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
 
-            const handleKeyDown = (e) => {
-                if (e.key === 'Escape') {
-                    setIsSelectOpen(false);
-                }
-            };
-
-            document.addEventListener('click', handleClickOutside);
-            document.addEventListener('keydown', handleKeyDown);
-
-            return () => {
-                document.removeEventListener('click', handleClickOutside);
-                document.removeEventListener('keydown', handleKeyDown);
-            };
-        }, [isSelectOpen]);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isSelectOpen]);
 
         return (
             <>
@@ -336,8 +373,8 @@
                             </h5>
                         </div>
                         <div className="w-60" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px'}}>
-                            <span style={{cursor: 'pointer'}}>Кандидаты</span>
-                            <span style={{cursor: 'pointer'}} className="active">Настройки</span>
+                             <a  href="/profile-candidates/security/">Кандидаты</a>
+                             <a href="/profile-candidates/security/settings" className="active">Настройки</a>
                         </div>
                         <div style={{display: 'flex', justifyContent: 'space-between', minWidth: '250px'}}>
                             <button id="notifBtn"><img src="/img/ring.png" alt="Уведомлений нет" /></button>
@@ -350,26 +387,26 @@
                         <div className="center-card big">
                             <div className="fixedMenu">
                                 <div className="navArea">
-                                    <div className={`yellowSelect ${isSelectOpen ? 'open' : ''} ${isUpdating ? 'updating' : ''}`} id="customSelect">
-                                        <div className="select-trigger" id="selectTrigger" onClick={handleSelectToggle} style={{opacity: isUpdating ? 0.6 : 1}}>
-                                            {selectedOption.text}
-                                            {isUpdating && <span style={{marginLeft: '10px'}}>...</span>}
-                                            <div className="trigger-icons"></div>
-                                        </div>
-                                        <div className="select-dropdown" id="selectDropdown">
-                                            {selectOptions.map((option) => (
-                                                <div
-                                                    key={option.value}
-                                                    className={`select-option ${selectedOption.value === option.value ? 'selected' : ''}`}
-                                                    data-value={option.value}
-                                                    onClick={() => handleOptionSelect(option)}
-                                                    style={{opacity: isUpdating ? 0.6 : 1, pointerEvents: isUpdating ? 'none' : 'auto'}}
-                                                >
-                                                    {option.text}
-                                                </div>
-                                            ))}
-                                        </div>
+                                     <div className={`yellowSelect ${isSelectOpen ? 'open' : ''} ${isUpdating ? 'updating' : ''}`} id="customSelect">
+                                    <div className="select-trigger" id="selectTrigger" onClick={handleSelectToggle} style={{opacity: isUpdating ? 0.6 : 1}}>
+                                        {selectedOption.text}
+                                        {isUpdating && <span style={{marginLeft: '10px'}}>...</span>}
+                                        <div className="trigger-icons"></div>
                                     </div>
+                                    <div className="select-dropdown" id="selectDropdown">
+                                        {selectOptions.map((option) => (
+                                            <div
+                                                key={option.value}
+                                                className={`select-option ${selectedOption.value === option.value ? 'selected' : ''}`}
+                                                data-value={option.value}
+                                                onClick={() => handleOptionSelect(option)}
+                                                style={{opacity: isUpdating ? 0.6 : 1, pointerEvents: isUpdating ? 'none' : 'auto'}}
+                                            >
+                                                {option.text}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                                     <a className="activeLink" href="#">Общие сведенья</a>
                                     <a href="#">Паспотные данные</a>
                                     <a href="#">Состав семьи</a>
@@ -630,582 +667,601 @@
             </>
         );
     }
+
+
    function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filteredData, activeFilters, onFiltersReset }) {
-       const [candidates, setCandidates] = useState([]);
-       const [loading, setLoading] = useState(true);
-       const [error, setError] = useState('');
-       const [selectedKeys, setSelectedKeys] = useState([]);
-       const [pagination, setPagination] = useState({
-           current_page: 1,
-           last_page: 1,
-           total: 0,
-           per_page: 8,
-           from: 0,
-           to: 0
-       });
+    const [candidates, setCandidates] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [selectedKeys, setSelectedKeys] = useState([]);
+    const [pagination, setPagination] = useState({
+        current_page: 1,
+        last_page: 1,
+        total: 0,
+        per_page: 8,
+        from: 0,
+        to: 0
+    });
 
-       const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
-       const [selectedFormat, setSelectedFormat] = useState('.xlsx');
-       const [downloadLoading, setDownloadLoading] = useState(false);
+    const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
+    const [selectedFormat, setSelectedFormat] = useState('.xlsx');
+    const [downloadLoading, setDownloadLoading] = useState(false);
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
-       const getAccessToken = () => {
-           const cookies = document.cookie.split(';');
-           const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
-           return tokenCookie ? tokenCookie.split('=')[1] : null;
-       };
+    const getAccessToken = () => {
+        const cookies = document.cookie.split(';');
+        const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
+        return tokenCookie ? tokenCookie.split('=')[1] : null;
+    };
 
-       const getCsrfToken = () => {
-           const metaTag = document.querySelector('meta[name="csrf-token"]');
-           return metaTag ? metaTag.getAttribute('content') : null;
-       };
+    const getCsrfToken = () => {
+        const metaTag = document.querySelector('meta[name="csrf-token"]');
+        return metaTag ? metaTag.getAttribute('content') : null;
+    };
 
-       // Добавить вспомогательные функции для фильтров
-       const formatApiDateRange = (startDate, endDate, type) => {
-           if (!startDate || !endDate) return null;
+    // Проверка авторизации при монтировании компонента
+    useEffect(() => {
+        const token = getAccessToken();
+        if (!token) {
+            // Редирект на страницу авторизации
+            window.location.href = 'http://127.0.0.1:8000/profile-candidates/security/login';
+            return;
+        }
+        setIsAuthorized(true);
+    }, []);
 
-           const formatDate = (date, rangeType) => {
-               const year = date.getFullYear();
-               const month = String(date.getMonth() + 1).padStart(2, '0');
-               const day = String(date.getDate()).padStart(2, '0');
+    // Добавить вспомогательные функции для фильтров
+    const formatApiDateRange = (startDate, endDate, type) => {
+        if (!startDate || !endDate) return null;
 
-               switch (rangeType) {
-                   case 'years':
-                       return year.toString();
-                   case 'months':
-                       return `${month}.${year}`;
-                   case 'dates':
-                       return `${day}.${month}.${year}`;
-                   default:
-                       return '';
-               }
-           };
+        const formatDate = (date, rangeType) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
 
-           const start = formatDate(startDate, type);
-           const end = formatDate(endDate, type);
-
-           return `${start},${end}`;
-       };
-
-      const getStatusApiValues = (statusValues) => {
-            const statusMapping = {
-                'showAll': null,
-                'Новая анкета': 'Новая анкета',
-                'checked': 'Проверено',
-                'Нужна доработка': 'Нужна доработка',
-                'rejected': 'Отклонен'
-            };
-
-            return statusValues
-                .filter(status => status !== 'showAll' && statusMapping[status]) // ✅ Добавлена точка
-                .map(status => statusMapping[status]);
+            switch (rangeType) {
+                case 'years':
+                    return year.toString();
+                case 'months':
+                    return `${month}.${year}`;
+                case 'dates':
+                    return `${day}.${month}.${year}`;
+                default:
+                    return '';
+            }
         };
 
-       const getVacancyApiValues = (vacancyValues, vacancyOptions) => {
-           if (vacancyValues.includes('showAll')) {
-               return [];
-           }
+        const start = formatDate(startDate, type);
+        const end = formatDate(endDate, type);
 
-           return vacancyValues
-               .map(vacancyId => {
-                   const vacancy = vacancyOptions.find(option => option.value === vacancyId);
-                   return vacancy ? vacancy.title : null;
-               })
-               .filter(Boolean);
-       };
+        return `${start},${end}`;
+    };
 
-       const handleCheckboxChange = (vacancyKey, isChecked) => {
-           setSelectedKeys(prev => {
-               if (isChecked) {
-                   return prev.includes(vacancyKey) ? prev : [...prev, vacancyKey];
-               } else {
-                   return prev.filter(key => key !== vacancyKey);
-               }
-           });
-       };
+    const getStatusApiValues = (statusValues) => {
+        const statusMapping = {
+            'showAll': null,
+            'Новая анкета': 'Новая анкета',
+            'checked': 'Проверено',
+            'Нужна доработка': 'Нужна доработка',
+            'rejected': 'Отклонен'
+        };
 
-       const handleSelectAll = () => {
-           const allVacancyKeys = candidates.map(candidate => candidate.vacancyKey);
-           const allSelected = allVacancyKeys.every(key => selectedKeys.includes(key));
+        return statusValues
+            .filter(status => status !== 'showAll' && statusMapping[status])
+            .map(status => statusMapping[status]);
+    };
 
-           if (allSelected) {
-               setSelectedKeys(prev => prev.filter(key => !allVacancyKeys.includes(key)));
-           } else {
-               setSelectedKeys(prev => {
-                   const newKeys = allVacancyKeys.filter(key => !prev.includes(key));
-                   return [...prev, ...newKeys];
-               });
-           }
-       };
+    const getVacancyApiValues = (vacancyValues, vacancyOptions) => {
+        if (vacancyValues.includes('showAll')) {
+            return [];
+        }
 
-       const handleDownload = async () => {
-           setDownloadLoading(true);
+        return vacancyValues
+            .map(vacancyId => {
+                const vacancy = vacancyOptions.find(option => option.value === vacancyId);
+                return vacancy ? vacancy.title : null;
+            })
+            .filter(Boolean);
+    };
 
-           try {
-               const token = getAccessToken();
-               if (!token) {
-                   throw new Error('Токен авторизации не найден');
-               }
+    const handleCheckboxChange = (vacancyKey, isChecked) => {
+        setSelectedKeys(prev => {
+            if (isChecked) {
+                return prev.includes(vacancyKey) ? prev : [...prev, vacancyKey];
+            } else {
+                return prev.filter(key => key !== vacancyKey);
+            }
+        });
+    };
 
-               const endpoint = selectedFormat === '.pdf' ? 'pdf-format' : 'xlsx-format';
-               let url = `http://127.0.0.1:8000/api/v1/export/${endpoint}`;
+    const handleSelectAll = () => {
+        const allVacancyKeys = candidates.map(candidate => candidate.vacancyKey);
+        const allSelected = allVacancyKeys.every(key => selectedKeys.includes(key));
 
-               if (selectedKeys.length > 0) {
-                   const keysParam = selectedKeys.join(',');
-                   url += `?keys=${encodeURIComponent(keysParam)}`;
-               }
+        if (allSelected) {
+            setSelectedKeys(prev => prev.filter(key => !allVacancyKeys.includes(key)));
+        } else {
+            setSelectedKeys(prev => {
+                const newKeys = allVacancyKeys.filter(key => !prev.includes(key));
+                return [...prev, ...newKeys];
+            });
+        }
+    };
 
-               const headers = {
-                   'accept': 'application/json',
-                   'Authorization': `Bearer ${token}`
-               };
+    const handleDownload = async () => {
+        setDownloadLoading(true);
 
-               const csrfToken = getCsrfToken();
-               if (csrfToken) {
-                   headers['X-CSRF-TOKEN'] = csrfToken;
-               }
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                throw new Error('Токен авторизации не найден');
+            }
 
-               const response = await fetch(url, {
-                   method: 'GET',
-                   headers: headers
-               });
+            const endpoint = selectedFormat === '.pdf' ? 'pdf-format' : 'xlsx-format';
+            let url = `http://127.0.0.1:8000/api/v1/export/${endpoint}`;
 
-               if (!response.ok) {
-                   if (response.status === 401) {
-                       throw new Error('Неавторизован. Пожалуйста, войдите в систему');
-                   } else if (response.status === 403) {
-                       throw new Error('Доступ запрещен');
-                   } else if (response.status === 404) {
-                       throw new Error('Файл не найден или некорректные ключи');
-                   } else {
-                       throw new Error(`Ошибка сервера: ${response.status}`);
-                   }
-               }
+            if (selectedKeys.length > 0) {
+                const keysParam = selectedKeys.join(',');
+                url += `?keys=${encodeURIComponent(keysParam)}`;
+            }
 
-               const blob = await response.blob();
+            const headers = {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
 
-               const downloadUrl = window.URL.createObjectURL(blob);
-               const link = document.createElement('a');
-               link.href = downloadUrl;
+            const csrfToken = getCsrfToken();
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+            }
 
-               const fileName = selectedKeys.length > 0
-                   ? `candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`
-                   : `all_candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`;
-               link.download = fileName;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: headers
+            });
 
-               document.body.appendChild(link);
-               link.click();
-               document.body.removeChild(link);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Неавторизован. Пожалуйста, войдите в систему');
+                } else if (response.status === 403) {
+                    throw new Error('Доступ запрещен');
+                } else if (response.status === 404) {
+                    throw new Error('Файл не найден или некорректные ключи');
+                } else {
+                    throw new Error(`Ошибка сервера: ${response.status}`);
+                }
+            }
 
-               window.URL.revokeObjectURL(downloadUrl);
+            const blob = await response.blob();
 
-               const exportMessage = selectedKeys.length > 0
-                   ? `Успешно скачано ${selectedKeys.length} анкет в формате ${selectedFormat}`
-                   : `Успешно скачаны все анкеты в формате ${selectedFormat}`;
-               console.log(exportMessage);
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
 
-           } catch (err) {
-               console.error('Ошибка при скачивании:', err);
-               alert(`Ошибка при скачивании: ${err.message}`);
-           } finally {
-               setDownloadLoading(false);
-           }
-       };
+            const fileName = selectedKeys.length > 0
+                ? `candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`
+                : `all_candidates_export_${new Date().toISOString().split('T')[0]}${selectedFormat}`;
+            link.download = fileName;
 
-       // Изменить функцию fetchCandidates для поддержки фильтров
-       const fetchCandidates = async (page = 1, useFilters = false) => {
-           setLoading(true);
-           setError('');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-           try {
-               const token = getAccessToken();
-               if (!token) {
-                   throw new Error('Токен авторизации не найден');
-               }
+            window.URL.revokeObjectURL(downloadUrl);
 
-               let url = `http://127.0.0.1:8000/api/v1/candidates/?page=${page}`;
+            const exportMessage = selectedKeys.length > 0
+                ? `Успешно скачано ${selectedKeys.length} анкет в формате ${selectedFormat}`
+                : `Успешно скачаны все анкеты в формате ${selectedFormat}`;
+            console.log(exportMessage);
 
-               // Если есть активные фильтры и нужно их использовать
-               if (useFilters && activeFilters) {
-                   const queryParams = [];
+        } catch (err) {
+            console.error('Ошибка при скачивании:', err);
+            alert(`Ошибка при скачивании: ${err.message}`);
+        } finally {
+            setDownloadLoading(false);
+        }
+    };
 
-                   // Добавляем параметры фильтров
-                   if (activeFilters.dateRange.start && activeFilters.dateRange.end) {
-                       const dateRange = formatApiDateRange(
-                           activeFilters.dateRange.start,
-                           activeFilters.dateRange.end,
-                           activeFilters.dateRange.type
-                       );
-                       if (dateRange) {
-                           switch (activeFilters.dateRange.type) {
-                               case 'years':
-                                   queryParams.push(`year_range=${dateRange}`);
-                                   break;
-                               case 'months':
-                                   queryParams.push(`month_range=${dateRange}`);
-                                   break;
-                               case 'dates':
-                                   queryParams.push(`date_range=${dateRange}`);
-                                   break;
-                           }
-                       }
-                   }
+    // Изменить функцию fetchCandidates для поддержки фильтров
+    const fetchCandidates = async (page = 1, useFilters = false) => {
+        setLoading(true);
+        setError('');
 
-                   const statusValues = getStatusApiValues(activeFilters.status);
-                   if (statusValues.length > 0) {
-                       queryParams.push(`candidate_statuses=${statusValues.join(',')}`);
-                   }
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                throw new Error('Токен авторизации не найден');
+            }
 
-                   // Для вакансий понадобится доступ к vacancyOptions, но пока можем пропустить
-                   // const vacancyValues = getVacancyApiValues(activeFilters.vacancy, vacancyOptions);
-                   // if (vacancyValues.length > 0) {
-                   //     queryParams.push(`vacancy_title=${vacancyValues.join(',')}`);
-                   // }
+            let url = `http://127.0.0.1:8000/api/v1/candidates/?page=${page}`;
 
-                   if (queryParams.length > 0) {
-                       url += `&${queryParams.join('&')}`;
-                   }
-               }
+            // Если есть активные фильтры и нужно их использовать
+            if (useFilters && activeFilters) {
+                const queryParams = [];
 
-               const headers = {
-                   'accept': '*/*',
-                   'Authorization': `Bearer ${token}`,
-                   'Content-Type': 'application/json'
-               };
+                // Добавляем параметры фильтров
+                if (activeFilters.dateRange.start && activeFilters.dateRange.end) {
+                    const dateRange = formatApiDateRange(
+                        activeFilters.dateRange.start,
+                        activeFilters.dateRange.end,
+                        activeFilters.dateRange.type
+                    );
+                    if (dateRange) {
+                        switch (activeFilters.dateRange.type) {
+                            case 'years':
+                                queryParams.push(`year_range=${dateRange}`);
+                                break;
+                            case 'months':
+                                queryParams.push(`month_range=${dateRange}`);
+                                break;
+                            case 'dates':
+                                queryParams.push(`date_range=${dateRange}`);
+                                break;
+                        }
+                    }
+                }
 
-               const csrfToken = getCsrfToken();
-               if (csrfToken) {
-                   headers['X-CSRF-TOKEN'] = csrfToken;
-               }
+                const statusValues = getStatusApiValues(activeFilters.status);
+                if (statusValues.length > 0) {
+                    queryParams.push(`candidate_statuses=${statusValues.join(',')}`);
+                }
 
-               const response = await fetch(url, {
-                   method: 'GET',
-                   headers: headers
-               });
+                // Для вакансий понадобится доступ к vacancyOptions, но пока можем пропустить
+                // const vacancyValues = getVacancyApiValues(activeFilters.vacancy, vacancyOptions);
+                // if (vacancyValues.length > 0) {
+                //     queryParams.push(`vacancy_title=${vacancyValues.join(',')}`);
+                // }
 
-               if (!response.ok) {
-                   if (response.status === 401) {
-                       throw new Error('Неавторизован. Пожалуйста, войдите в систему');
-                   } else if (response.status === 403) {
-                       throw new Error('Доступ запрещен');
-                   } else {
-                       throw new Error(`Ошибка сервера: ${response.status}`);
-                   }
-               }
+                if (queryParams.length > 0) {
+                    url += `&${queryParams.join('&')}`;
+                }
+            }
 
-               const data = await response.json();
+            const headers = {
+                'accept': '*/*',
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
 
-               if (data.response && data.attributes) {
-                   const transformedCandidates = data.attributes.data.map(candidate => ({
-                       id: candidate.id,
-                       name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
-                       datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
-                       vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
-                       status: candidate.status || 'Не определен',
-                       statusID: getStatusId(candidate.status),
-                       hasVacancyComment: candidate.comment,
-                       vacancyKey: candidate.key,
-                       fullData: candidate
-                   }));
+            const csrfToken = getCsrfToken();
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+            }
 
-                   setCandidates(transformedCandidates);
-                   setPagination({
-                       current_page: data.attributes.current_page,
-                       last_page: data.attributes.last_page,
-                       total: data.attributes.total,
-                       per_page: data.attributes.per_page,
-                       from: data.attributes.from,
-                       to: data.attributes.to
-                   });
-               } else {
-                   throw new Error('Неверный формат ответа сервера');
-               }
-           } catch (err) {
-               console.error('Ошибка при загрузке кандидатов:', err);
-               setError(err.message);
-           } finally {
-               setLoading(false);
-           }
-       };
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: headers
+            });
 
-       const formatDateTime = (dateString) => {
-           if (!dateString) return 'Не указано';
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Неавторизован. Пожалуйста, войдите в систему');
+                } else if (response.status === 403) {
+                    throw new Error('Доступ запрещен');
+                } else {
+                    throw new Error(`Ошибка сервера: ${response.status}`);
+                }
+            }
 
-           try {
-               const date = new Date(dateString);
-               const day = date.getDate().toString().padStart(2, '0');
-               const month = (date.getMonth() + 1).toString().padStart(2, '0');
-               const year = date.getFullYear();
-               const hours = date.getHours().toString().padStart(2, '0');
-               const minutes = date.getMinutes().toString().padStart(2, '0');
+            const data = await response.json();
 
-               return `${day}.${month}.${year} ${hours}:${minutes}`;
-           } catch (err) {
-               return 'Неверная дата';
-           }
-       };
+            if (data.response && data.attributes) {
+                const transformedCandidates = data.attributes.data.map(candidate => ({
+                    id: candidate.id,
+                    name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
+                    datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
+                    vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
+                    status: candidate.status || 'Не определен',
+                    statusID: getStatusId(candidate.status),
+                    hasVacancyComment: candidate.comment,
+                    vacancyKey: candidate.key,
+                    fullData: candidate
+                }));
 
-       const getStatusId = (status) => {
-           switch (status) {
-               case 'Новая анкета':
-                   return 'new';
-               case 'Проверен':
-                   return 'checked';
-               case 'Нужна доработка':
-                   return 'needRevision';
-               case 'Отклонен':
-                   return 'rejected';
-               default:
-                   return 'unknown';
-           }
-       };
+                setCandidates(transformedCandidates);
+                setPagination({
+                    current_page: data.attributes.current_page,
+                    last_page: data.attributes.last_page,
+                    total: data.attributes.total,
+                    per_page: data.attributes.per_page,
+                    from: data.attributes.from,
+                    to: data.attributes.to
+                });
+            } else {
+                throw new Error('Неверный формат ответа сервера');
+            }
+        } catch (err) {
+            console.error('Ошибка при загрузке кандидатов:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-       const handleRowClick = (candidate, event) => {
-           if (event.target.type === 'checkbox' ||
-               event.target.closest('button') ||
-               event.target.closest('label')) {
-               return;
-           }
+    const formatDateTime = (dateString) => {
+        if (!dateString) return 'Не указано';
 
-           if (onRowClick) {
-               onRowClick(candidate.vacancyKey);
-           }
-       };
+        try {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
 
-       // Изменить обработчик смены страницы
-       const handlePageChange = (page) => {
-           if (page >= 1 && page <= pagination.last_page && page !== pagination.current_page) {
-               // Если есть активные фильтры, используем их при пагинации
-               fetchCandidates(page, activeFilters !== null);
-           }
-       };
+            return `${day}.${month}.${year} ${hours}:${minutes}`;
+        } catch (err) {
+            return 'Неверная дата';
+        }
+    };
 
-       const generatePageNumbers = () => {
-           const { current_page, last_page } = pagination;
-           const pages = [];
+    const getStatusId = (status) => {
+        switch (status) {
+            case 'Новая анкета':
+                return 'new';
+            case 'Проверен':
+                return 'checked';
+            case 'Нужна доработка':
+                return 'needRevision';
+            case 'Отклонен':
+                return 'rejected';
+            default:
+                return 'unknown';
+        }
+    };
 
-           if (last_page <= 5) {
-               for (let i = 1; i <= last_page; i++) {
-                   pages.push(i);
-               }
-           } else {
-               if (current_page <= 3) {
-                   pages.push(1, 2, 3, '...', last_page);
-               } else if (current_page >= last_page - 2) {
-                   pages.push(1, '...', last_page - 2, last_page - 1, last_page);
-               } else {
-                   pages.push(1, '...', current_page - 1, current_page, current_page + 1, '...', last_page);
-               }
-           }
+    const handleRowClick = (candidate, event) => {
+        if (event.target.type === 'checkbox' ||
+            event.target.closest('button') ||
+            event.target.closest('label')) {
+            return;
+        }
 
-           return pages;
-       };
+        if (onRowClick) {
+            onRowClick(candidate.vacancyKey);
+        }
+    };
 
-       // Добавить useEffect для обработки фильтрованных данных
-       useEffect(() => {
-           if (filteredData && filteredData.attributes) {
-               const transformedCandidates = filteredData.attributes.data.map(candidate => ({
-                   id: candidate.id,
-                   name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
-                   datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
-                   vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
-                   status: candidate.status || 'Не определен',
-                   statusID: getStatusId(candidate.status),
-                   hasVacancyComment: candidate.comment,
-                   vacancyKey: candidate.key,
-                   fullData: candidate
-               }));
+    // Изменить обработчик смены страницы
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= pagination.last_page && page !== pagination.current_page) {
+            // Если есть активные фильтры, используем их при пагинации
+            fetchCandidates(page, activeFilters !== null);
+        }
+    };
 
-               setCandidates(transformedCandidates);
-               setPagination({
-                   current_page: filteredData.attributes.current_page || 1,
-                   last_page: filteredData.attributes.last_page || 1,
-                   total: filteredData.attributes.total || transformedCandidates.length,
-                   per_page: filteredData.attributes.per_page || 8,
-                   from: filteredData.attributes.from || 1,
-                   to: filteredData.attributes.to || transformedCandidates.length
-               });
-           }
-       }, [filteredData]);
+    const generatePageNumbers = () => {
+        const { current_page, last_page } = pagination;
+        const pages = [];
 
-       useEffect(() => {
-           if (!filteredData) {
-               fetchCandidates();
-           }
-       }, [filteredData]);
+        if (last_page <= 5) {
+            for (let i = 1; i <= last_page; i++) {
+                pages.push(i);
+            }
+        } else {
+            if (current_page <= 3) {
+                pages.push(1, 2, 3, '...', last_page);
+            } else if (current_page >= last_page - 2) {
+                pages.push(1, '...', last_page - 2, last_page - 1, last_page);
+            } else {
+                pages.push(1, '...', current_page - 1, current_page, current_page + 1, '...', last_page);
+            }
+        }
 
-       useEffect(() => {
-           console.log('Выбранные ключи:', selectedKeys);
-       }, [selectedKeys]);
+        return pages;
+    };
 
-       const handleFormatDropdownToggle = (e) => {
-           e.stopPropagation();
-           setIsFormatDropdownOpen(!isFormatDropdownOpen);
-       };
+    // Добавить useEffect для обработки фильтрованных данных
+    useEffect(() => {
+        if (filteredData && filteredData.attributes) {
+            const transformedCandidates = filteredData.attributes.data.map(candidate => ({
+                id: candidate.id,
+                name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
+                datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
+                vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
+                status: candidate.status || 'Не определен',
+                statusID: getStatusId(candidate.status),
+                hasVacancyComment: candidate.comment,
+                vacancyKey: candidate.key,
+                fullData: candidate
+            }));
 
-       const handleFormatSelect = (format) => {
-           setSelectedFormat(format);
-           setIsFormatDropdownOpen(false);
-       };
+            setCandidates(transformedCandidates);
+            setPagination({
+                current_page: filteredData.attributes.current_page || 1,
+                last_page: filteredData.attributes.last_page || 1,
+                total: filteredData.attributes.total || transformedCandidates.length,
+                per_page: filteredData.attributes.per_page || 8,
+                from: filteredData.attributes.from || 1,
+                to: filteredData.attributes.to || transformedCandidates.length
+            });
+        }
+    }, [filteredData]);
 
-       useEffect(() => {
-           const handleClickOutside = (e) => {
-               if (isFormatDropdownOpen && !e.target.closest('.download-button-group')) {
-                   setIsFormatDropdownOpen(false);
-               }
-           };
+    useEffect(() => {
+        if (!filteredData && isAuthorized) {
+            fetchCandidates();
+        }
+    }, [filteredData, isAuthorized]);
 
-           document.addEventListener('mousedown', handleClickOutside);
-           return () => document.removeEventListener('mousedown', handleClickOutside);
-       }, [isFormatDropdownOpen]);
+    useEffect(() => {
+        console.log('Выбранные ключи:', selectedKeys);
+    }, [selectedKeys]);
 
-        return (
-            <section style={{flexWrap: 'wrap', minHeight: 'auto'}}>
-                <div className="formRow justify-space-between w-80">
-                    <div className="flex-direction-column">
-                        <h1>Кандидаты</h1>
-                        <button className="aButton" id="checkAll" onClick={handleSelectAll}>
-                            {candidates.length > 0 && candidates.every(c => selectedKeys.includes(c.vacancyKey))
-                                ? 'Снять выбор со всех'
-                                : 'Выбрать всех'}
-                        </button>
-                    </div>
-                    <button
-                        ref={filtersButtonRef}
-                        id="filters"
-                        aria-label="Нажмите, чтобы открыть фильтры"
-                        onClick={onFiltersClick}
-                    >
-                        <img src="/img/filters.png" alt="PNG картинка, фильтров" />
-                        Фильтры
+    const handleFormatDropdownToggle = (e) => {
+        e.stopPropagation();
+        setIsFormatDropdownOpen(!isFormatDropdownOpen);
+    };
+
+    const handleFormatSelect = (format) => {
+        setSelectedFormat(format);
+        setIsFormatDropdownOpen(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (isFormatDropdownOpen && !e.target.closest('.download-button-group')) {
+                setIsFormatDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isFormatDropdownOpen]);
+
+    // Если пользователь не авторизован, не рендерим компонент (произойдет редирект)
+    if (!isAuthorized) {
+        return null;
+    }
+
+    return (
+        <section style={{flexWrap: 'wrap', minHeight: 'auto'}}>
+            <div className="formRow justify-space-between w-80">
+                <div className="flex-direction-column">
+                    <h1>Кандидаты</h1>
+                    <button className="aButton" id="checkAll" onClick={handleSelectAll}>
+                        {candidates.length > 0 && candidates.every(c => selectedKeys.includes(c.vacancyKey))
+                            ? 'Снять выбор со всех'
+                            : 'Выбрать всех'}
                     </button>
                 </div>
+                <button
+                    ref={filtersButtonRef}
+                    id="filters"
+                    aria-label="Нажмите, чтобы открыть фильтры"
+                    onClick={onFiltersClick}
+                >
+                    <img src="/img/filters.png" alt="PNG картинка, фильтров" />
+                    Фильтры
+                </button>
+            </div>
 
-                {candidates.length === 0 ? (
-                    <div className="w-80" style={{textAlign: 'center', padding: '40px'}}>
-                        <p>Нет данных для отображения</p>
-                    </div>
-                ) : (
-                    <>
-                        <table className="candidatesTable w-80">
-                            <thead>
-                            <tr style={{border: '0'}}>
-                                <th width="50"></th>
-                                <th>ФИО Кандидата</th>
-                                <th>Дата и время</th>
-                                <th>Вакансия</th>
-                                <th style={{textAlign: 'right', paddingRight: '30px'}}>Статус</th>
-                                <th width="100"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="candidatesTableBody">
-                            {candidates.map((candidate) => (
-                                <tr
-                                    key={candidate.id}
-                                    data-keyvacancy={candidate.vacancyKey}
-                                    onClick={(e) => handleRowClick(candidate, e)}
-                                    style={{cursor: 'pointer'}}
-                                >
-                                    <td>
-                                        <label className="custom-checkbox" htmlFor={`personalData${candidate.id}`}>
-                                            <input
-                                                type="checkbox"
-                                                name="personalData"
-                                                id={`personalData${candidate.id}`}
-                                                checked={selectedKeys.includes(candidate.vacancyKey)}
-                                                onChange={(e) => handleCheckboxChange(candidate.vacancyKey, e.target.checked)}
-                                            />
-                                            <span className="checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>{candidate.name}</td>
-                                    <td>{candidate.datetime}</td>
-                                    <td>{candidate.vacancy}</td>
-                                    <td style={{display: 'flex', justifyContent: 'flex-end', marginRight: '20px'}}>
-                                        <p id={candidate.statusID}>{candidate.status}</p>
-                                    </td>
-                                    <td>
-                                        {candidate.hasVacancyComment && (
-                                            <button
-                                                id={`radactBtn${candidate.id}`}
-                                                className = {"redactBtn"}
-                                                onClick={(e) => e.stopPropagation()}
-                                                title = {candidate.hasVacancyComment }
-                                            >
-                                                <img src="/img/pen.png" alt="Редактировать анкету" />
-                                            </button>
-                                        )}
+            {candidates.length === 0 ? (
+                <div className="w-80" style={{textAlign: 'center', padding: '40px'}}>
+                    <p>Нет данных для отображения</p>
+                </div>
+            ) : (
+                <>
+                    <table className="candidatesTable w-80">
+                        <thead>
+                        <tr style={{border: '0'}}>
+                            <th width="50"></th>
+                            <th>ФИО Кандидата</th>
+                            <th>Дата и время</th>
+                            <th>Вакансия</th>
+                            <th style={{textAlign: 'right', paddingRight: '30px'}}>Статус</th>
+                            <th width="100"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="candidatesTableBody">
+                        {candidates.map((candidate) => (
+                            <tr
+                                key={candidate.id}
+                                data-keyvacancy={candidate.vacancyKey}
+                                onClick={(e) => handleRowClick(candidate, e)}
+                                style={{cursor: 'pointer'}}
+                            >
+                                <td>
+                                    <label className="custom-checkbox" htmlFor={`personalData${candidate.id}`}>
+                                        <input
+                                            type="checkbox"
+                                            name="personalData"
+                                            id={`personalData${candidate.id}`}
+                                            checked={selectedKeys.includes(candidate.vacancyKey)}
+                                            onChange={(e) => handleCheckboxChange(candidate.vacancyKey, e.target.checked)}
+                                        />
+                                        <span className="checkmark"></span>
+                                    </label>
+                                </td>
+                                <td>{candidate.name}</td>
+                                <td>{candidate.datetime}</td>
+                                <td>{candidate.vacancy}</td>
+                                <td style={{display: 'flex', justifyContent: 'flex-end', marginRight: '20px'}}>
+                                    <p id={candidate.statusID}>{candidate.status}</p>
+                                </td>
+                                <td>
+                                    {candidate.hasVacancyComment && (
                                         <button
-                                            id={`downloadBtn${candidate.id}`}
+                                            id={`radactBtn${candidate.id}`}
+                                            className = {"redactBtn"}
                                             onClick={(e) => e.stopPropagation()}
+                                            title = {candidate.hasVacancyComment }
                                         >
-                                            <img src="/img/download.png" alt="Скачать анкету" />
+                                            <img src="/img/pen.png" alt="Редактировать анкету" />
                                         </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                                    )}
+                                    <button
+                                        id={`downloadBtn${candidate.id}`}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <img src="/img/download.png" alt="Скачать анкету" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
 
-                        <div className="formRow w-80 justify-space-between" style={{marginTop: '2rem'}}>
-                            <div className="left-side">
-                                <button
-                                    id="prevBtn"
-                                    className={`navBtn ${pagination.current_page === 1 ? 'inactive' : ''}`}
-                                    onClick={() => handlePageChange(pagination.current_page - 1)}
-                                    disabled={pagination.current_page === 1}
-                                >
-                                    Предыдущая
-                                </button>
-                                <div className="pagination">
-                                    {generatePageNumbers().map((page, index) => (
-                                        <button
-                                            key={index}
-                                            className={`paginationBtn ${page === pagination.current_page ? 'active' : ''}`}
-                                            onClick={() => typeof page === 'number' ? handlePageChange(page) : null}
-                                            disabled={typeof page !== 'number'}
-                                        >
-                                            {page}
-                                        </button>
-                                    ))}
-                                </div>
-                                <button
-                                    id="nexBtn"
-                                    className={`navBtn ${pagination.current_page === pagination.last_page ? 'inactive' : ''}`}
-                                    onClick={() => handlePageChange(pagination.current_page + 1)}
-                                    disabled={pagination.current_page === pagination.last_page}
-                                >
-                                    Следующая
-                                </button>
+                    <div className="formRow w-80 justify-space-between" style={{marginTop: '2rem'}}>
+                        <div className="left-side">
+                            <button
+                                id="prevBtn"
+                                className={`navBtn ${pagination.current_page === 1 ? 'inactive' : ''}`}
+                                onClick={() => handlePageChange(pagination.current_page - 1)}
+                                disabled={pagination.current_page === 1}
+                            >
+                                Предыдущая
+                            </button>
+                            <div className="pagination">
+                                {generatePageNumbers().map((page, index) => (
+                                    <button
+                                        key={index}
+                                        className={`paginationBtn ${page === pagination.current_page ? 'active' : ''}`}
+                                        onClick={() => typeof page === 'number' ? handlePageChange(page) : null}
+                                        disabled={typeof page !== 'number'}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
                             </div>
-                            <div className="download-button-group right-side">
-                                <button
-                                    className="download-btn primary"
-                                    onClick={handleDownload}
-                                    disabled={downloadLoading}
-                                >
-                                    {downloadLoading ? 'Скачивание...' : 'Скачать'}
-                                </button>
-                                <button
-                                    className="download-btn dropdown-toggle"
-                                    onClick={handleFormatDropdownToggle}
-                                    disabled={downloadLoading}
-                                >
-                                    <span className="format-text">{selectedFormat}</span>
-                                    <svg className="chevron-down" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    </svg>
-                                </button>
-                                <div className={`file-formats-card ${isFormatDropdownOpen ? '' : 'hide'}`}>
-                                    <div className="format-item" onClick={() => handleFormatSelect('.xlsx')}>.xlsx</div>
-                                    <div className="format-item" onClick={() => handleFormatSelect('.pdf')}>.pdf</div>
-                                </div>
+                            <button
+                                id="nexBtn"
+                                className={`navBtn ${pagination.current_page === pagination.last_page ? 'inactive' : ''}`}
+                                onClick={() => handlePageChange(pagination.current_page + 1)}
+                                disabled={pagination.current_page === pagination.last_page}
+                            >
+                                Следующая
+                            </button>
+                        </div>
+                        <div className="download-button-group right-side">
+                            <button
+                                className="download-btn primary"
+                                onClick={handleDownload}
+                                disabled={downloadLoading}
+                            >
+                                {downloadLoading ? 'Скачивание...' : 'Скачать'}
+                            </button>
+                            <button
+                                className="download-btn dropdown-toggle"
+                                onClick={handleFormatDropdownToggle}
+                                disabled={downloadLoading}
+                            >
+                                <span className="format-text">{selectedFormat}</span>
+                                <svg className="chevron-down" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                            <div className={`file-formats-card ${isFormatDropdownOpen ? '' : 'hide'}`}>
+                                <div className="format-item" onClick={() => handleFormatSelect('.xlsx')}>.xlsx</div>
+                                <div className="format-item" onClick={() => handleFormatSelect('.pdf')}>.pdf</div>
                             </div>
                         </div>
-                    </>
-                )}
-            </section>
-        );
-    }
+                    </div>
+                </>
+            )}
+        </section>
+    );
+}
 
     // FiltersCalendar Component
    function FiltersCalendar({ isOpen, onClose, filtersButtonRef, onFiltersApply }) {

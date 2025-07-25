@@ -16,6 +16,38 @@
         .formRow{
             margin-top: 1rem;
         }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .success-modal {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .success-modal h1 {
+            margin: 20px 0 10px 0;
+            color: #181817;
+        }
+
+        .success-modal p {
+            margin: 0 0 30px 0;
+            color: #666;
+        }
     </style>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -29,6 +61,17 @@
 <script type="text/babel">
     <?php echo '@verbatim'; ?>
     const { useState, useEffect, useRef } = React;
+    
+    const checkAuthAndRedirect = () => {
+    const accessToken = getAccessTokenFromCookie();
+    
+    if (!accessToken) {
+        window.location.href = 'http://127.0.0.1:8000/profile-candidates/login';
+        return false;
+    }
+        
+        return true;
+    };
 
     const SpouseTable = ({ formData, setFormData, isVisible }) => {
         const handleInputChange = (name, value) => {
@@ -1434,28 +1477,32 @@
                             )}
 
                             {submitSuccess && (
-                                <div class="center-card" style = "max-height: 364px">
-                                <div style="margin-top: 0;" class = "formRow justify-center">
-                                <div class = "successMarker">
-                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" stroke-width="2"/>
-                                <polyline points="12,20 17,25 28,14" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                                </svg>
-                                </div>
-                                </div>
-                                <div class = "formRow justify-center">
-                                <h1>Анкета успешно отправлена</h1>
-                                </div>
-                                <div class = "formRow justify-center">
-                                <p>Мы успешно получили вашу анкету</p>
-                                </div>
-                                <div class = "formRow justify-center">
-                                <button id="closeNotification" class="formBtn btn-active">
-                                Закрыть
-                                </button>
-                                </div>
-                                </div>
-                            )}
+                                    <div 
+                                        className="modal-overlay"
+                                        onClick={(e) => {
+                                            if (e.target.className === 'modal-overlay') {
+                                                setSubmitSuccess(false);
+                                            }
+                                        }}
+                                    >
+                                        <div className="success-modal">
+                                            <div className="successMarker" style={{margin: '0 auto 20px auto'}}>
+                                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" strokeWidth="2"/>
+                                                    <polyline points="12,20 17,25 28,14" stroke="#4caf50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                                                </svg>
+                                            </div>
+                                            <h1>Анкета успешно отправлена</h1>
+                                            <p>Мы успешно получили вашу анкету</p>
+                                            <button 
+                                                className="formBtn btn-active"
+                                                onClick={() => setSubmitSuccess(false)}
+                                            >
+                                                Закрыть
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                         </div>
                     </section>
                 </main>
