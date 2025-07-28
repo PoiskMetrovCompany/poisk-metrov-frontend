@@ -11,6 +11,43 @@
     <script src="https://unpkg.com/imask"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
+
+<style>
+    a{
+        text-decoration: none;
+        color: rgba(129, 129, 129, 1);
+    }
+    
+    /* Стили для модального окна */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay.show {
+        opacity: 1;
+    }
+    
+    .modal-content {
+        transform: scale(0.8) translateY(20px);
+        transition: transform 0.3s ease;
+    }
+    
+    .modal-overlay.show .modal-content {
+        transform: scale(1) translateY(0);
+    }
+</style>
+
 <body>
 <div id="root"></div>
 
@@ -43,6 +80,65 @@
         );
     }
 
+    // Компонент модального окна подтверждения удаления
+    function DeleteConfirmationModal({ isOpen, onClose, onConfirm, roleName }) {
+        const [isVisible, setIsVisible] = useState(false);
+
+        useEffect(() => {
+            if (isOpen) {
+                // Небольшая задержка для плавного появления
+                setTimeout(() => setIsVisible(true), 10);
+            } else {
+                setIsVisible(false);
+            }
+        }, [isOpen]);
+
+        const handleOverlayClick = (e) => {
+            if (e.target === e.currentTarget) {
+                onClose();
+            }
+        };
+
+        const handleConfirm = () => {
+            onConfirm();
+            onClose();
+        };
+
+        if (!isOpen) return null;
+
+        return (
+            <div 
+                className={`modal-overlay ${isVisible ? 'show' : ''}`}
+                onClick={handleOverlayClick}
+            >
+                <main className="modal-content">
+                    <section>
+                        <div className="center-card" style={{maxHeight: '263px'}}>
+                            <h1>Удалить вакансию</h1>
+                            <p>Вы точно уверены, что хотите удалить эту вакансию из анкет кандидатов?</p>
+                            <div className="formRow justify-space-between">
+                                <button 
+                                    style={{maxWidth: '150px'}} 
+                                    className="formBtn btn-active" 
+                                    onClick={onClose}
+                                >
+                                    Нет, оставить
+                                </button>
+                                <button 
+                                    style={{maxWidth: '150px'}} 
+                                    className="formBtn btn-inactive" 
+                                    onClick={handleConfirm}
+                                >
+                                    Да, удалить
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        );
+    }
+
     function CandidatesSettings() {
         // Состояния для загрузки данных вакансий
         const [roles, setRoles] = useState([]);
@@ -54,6 +150,10 @@
         const [newRole, setNewRole] = useState('');
         const [editingIndex, setEditingIndex] = useState(null);
         const [editingRole, setEditingRole] = useState('');
+
+        // Состояния для модального окна удаления
+        const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+        const [roleToDelete, setRoleToDelete] = useState(null);
 
         // Функция для получения токена из cookie
         const getAccessTokenFromCookie = () => {
@@ -165,6 +265,12 @@
             setIsAdding(false);
             setEditingIndex(null); // Сбрасываем редактирование при переключении режима
             setEditingRole('');
+        };
+
+        // Функция для отмены добавления новой роли
+        const handleCancelAdd = () => {
+            setNewRole('');
+            setIsAdding(false);
         };
 
         const saveNewRole = async () => {
@@ -290,6 +396,8 @@
                 setRoles(updatedRoles);
                 setEditingIndex(null);
                 setEditingRole('');
+                // ВАЖНО: Завершаем режим редактирования после сохранения
+                setIsEditing(false);
 
                 // Отправляем запрос на сервер (результат не влияет на UI)
                 const requestData = {
@@ -321,13 +429,29 @@
             setEditingRole('');
         };
 
-        const deleteRole = async (index) => {
-            const roleToDelete = roles[index];
+        // Обработчик нажатия на кнопку удаления - показывает модальное окно
+        const handleDeleteClick = (index) => {
+            setRoleToDelete(index);
+            setIsDeleteModalOpen(true);
+        };
+
+        // Закрытие модального окна
+        const handleDeleteModalClose = () => {
+            setIsDeleteModalOpen(false);
+            setRoleToDelete(null);
+        };
+
+        // Подтверждение удаления - вызывается после нажатия "Да, удалить"
+        const confirmDelete = async () => {
+            if (roleToDelete === null) return;
+
+            const index = roleToDelete;
+            const roleToDeleteData = roles[index];
 
             console.log('=== НАЧАЛО УДАЛЕНИЯ ВАКАНСИИ ===');
             console.log('Индекс удаляемой роли:', index);
-            console.log('Данные роли для удаления:', roleToDelete);
-            console.log('Key для удаления:', roleToDelete.key);
+            console.log('Данные роли для удаления:', roleToDeleteData);
+            console.log('Key для удаления:', roleToDeleteData.key);
 
             // Сразу удаляем из UI
             const updatedRoles = roles.filter((_, i) => i !== index);
@@ -340,13 +464,16 @@
                 console.log('Сброшено редактирование удаленной роли');
             }
 
+            // ВАЖНО: Завершаем режим редактирования после удаления
+            setIsEditing(false);
+
             // Отправляем DELETE запрос на сервер
             try {
                 const accessToken = getAccessTokenFromCookie();
                 console.log('Токен доступа для удаления:', accessToken ? 'найден' : 'НЕ найден');
 
                 if (accessToken) {
-                    const deleteUrl = `/api/v1/vacancy/destroy?key=${roleToDelete.key}`;
+                    const deleteUrl = `/api/v1/vacancy/destroy?key=${roleToDeleteData.key}`;
                     console.log('URL для удаления:', deleteUrl);
                     console.log('Метод запроса: DELETE');
                     console.log('Заголовки запроса:', {
@@ -474,7 +601,7 @@
                                                     </svg>
                                                 </button>
                                                 <button
-                                                    onClick={() => deleteRole(index)}
+                                                    onClick={() => handleDeleteClick(index)}
                                                     style={{
                                                     background: 'none',
                                                     border: 'none',
@@ -497,7 +624,7 @@
 
                                 {/* Инпут для добавления новой роли */}
                                 {isAdding && (
-                                    <div className="input-container w-49" style={{minWidth: '200px'}}>
+                                    <div className="input-container" style={{minWidth: '200px'}}>
                                         <label htmlFor="newRole" className="formLabel">Новая роль</label>
                                         <input
                                             style={{width: '100%'}}
@@ -516,7 +643,7 @@
 
                                 {/* Инпут для редактирования роли */}
                                 {editingIndex !== null && (
-                                    <div className="input-container w-49" style={{minWidth: '200px'}}>
+                                    <div className="input-container" style={{minWidth: '200px'}}>
                                         <label htmlFor="editRole" className="formLabel">Редактирование роли</label>
                                         <input
                                             style={{width: '100%'}}
@@ -541,17 +668,38 @@
                                 >
                                     {editingIndex !== null ? 'Подтвердить' : (isAdding ? 'Сохранить роль' : 'Добавить роль')}
                                 </button>
-                                <button
-                                    className={`formBtn small ${isEditing ? 'btn-active' : 'btn-inactive'}`}
-                                    disabled={isAdding || editingIndex !== null || isLoadingRoles}
-                                    onClick={handleEditMode}
-                                >
-                                    {isEditing ? 'Завершить редактирование' : 'Редактировать'}
-                                </button>
+                                
+                                {/* Логика для второй кнопки */}
+                                {isAdding ? (
+                                    // Когда добавляем роль - показываем кнопку "Отменить"
+                                    <button
+                                        className="formBtn small btn-inactive"
+                                        onClick={handleCancelAdd}
+                                    >
+                                        Отменить
+                                    </button>
+                                ) : (
+                                    // В остальных случаях - кнопка редактирования
+                                    <button
+                                        className={`formBtn small ${isEditing ? 'btn-active' : 'btn-inactive'}`}
+                                        disabled={editingIndex !== null || isLoadingRoles}
+                                        onClick={handleEditMode}
+                                    >
+                                        {isEditing ? 'Завершить редактирование' : 'Редактировать'}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </section>
                 </main>
+
+                {/* Модальное окно подтверждения удаления */}
+                <DeleteConfirmationModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={handleDeleteModalClose}
+                    onConfirm={confirmDelete}
+                    roleName={roleToDelete !== null ? roles[roleToDelete]?.title : ''}
+                />
             </>
         );
     }

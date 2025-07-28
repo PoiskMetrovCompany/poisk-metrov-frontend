@@ -12,6 +12,11 @@
     html {
         font-family: 'Onest';
         font-size: 16px;
+        scroll-behavior: smooth;
+    }
+
+    :target{
+        scroll-margin-top: 120px;
     }
 
     body {
@@ -37,6 +42,7 @@
         justify-content: center;
         margin-top: 3rem; /* 48px */
         margin-bottom: 3rem; /* 48px */
+        position: relative;
     }
 
     button{
@@ -1403,7 +1409,6 @@
     }
 
     .select-option.selected {
-        color: rgba(197, 128, 31, 1);
         font-weight: 500;
     }
     #commentArea{
@@ -1428,7 +1433,63 @@
         height: 40px;
         border-radius: 40px;
     }
-
+       .notification-header{
+        font-size: 12px !important;
+        font-weight: 400;
+        line-height: 1.5;
+        width: 100%;
+        text-align: left;
+        padding-bottom: 12px;
+        padding: 12px;
+        color: rgba(24, 24, 23, 1)
+    }
+    .divider {
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 0;
+    }
+    .notifications-container{
+        position: absolute;
+        width: 196px;
+        height: auto;
+        background-color: rgba(255, 255, 255, 1);
+        border-radius: 16px;
+        z-index: 10;
+    }
+    .notification-item{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+    .notifications-list{
+        padding: 12px;
+    }
+    .notification-content{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .notification-text{
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(73, 73, 73, 1)
+    }
+    .notification-time{
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(158, 158, 158, 1);
+    }
+     .notification-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #ff6b35;
+        border-radius: 50%;
+        margin-right: 16px;
+        flex-shrink: 0;
+    }
 
 
 

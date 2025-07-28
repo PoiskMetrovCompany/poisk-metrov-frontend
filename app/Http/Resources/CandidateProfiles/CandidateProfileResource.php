@@ -48,7 +48,7 @@ class CandidateProfileResource extends JsonResource
             'legal_entity' => $this->legal_entity,
             'is_data_processing' => $this->is_data_processing,
             'comment' => $this->comment,
-            'created_at' => $this->created_at
-        ];
+            'created_at' => $this->created_at,
+        ];     
     }
 }
