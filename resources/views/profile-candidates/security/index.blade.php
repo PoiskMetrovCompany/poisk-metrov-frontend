@@ -68,12 +68,36 @@
 
 function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
   const notificationButtonRef = useRef(null);
+
+  // Функция для форматирования даты
+  const formatNotificationDate = (dateString) => {
+    const notificationDate = new Date(dateString);
+    const now = new Date();
+    
+    // Проверяем, является ли дата сегодняшней
+    const isToday = notificationDate.toDateString() === now.toDateString();
+    
+    const hours = notificationDate.getHours().toString().padStart(2, '0');
+    const minutes = notificationDate.getMinutes().toString().padStart(2, '0');
+    const time = `${hours}:${minutes}`;
+    
+    if (isToday) {
+      return time;
+    } else {
+      const day = notificationDate.getDate().toString().padStart(2, '0');
+      const month = (notificationDate.getMonth() + 1).toString().padStart(2, '0');
+      return `${time} ${day}.${month}`;
+    }
+  };
 
   // Добавляем useEffect для запроса при монтировании
   useEffect(() => {
     const fetchNotifications = async () => {
-      const url = '/api/v1/notification/new-candidates';
+      setLoading(true);
+      const url = 'https://poisk-metrov-demos.ru/api/v1/notification/new-candidates';
       
       // Используем уже существующую в проекте функцию для получения токена
       const getAccessToken = () => {
@@ -146,6 +170,11 @@ function Header() {
           // Получаем JSON ответ
           const data = await response.json();
           console.log('✅ Данные уведомлений получены:', data);
+          
+          // Обновляем состояние с полученными уведомлениями
+          if (data.response && data.attributes) {
+            setNotifications(data.attributes);
+          }
         } else {
           // Получаем текст ошибки
           const errorText = await response.text();
@@ -163,6 +192,8 @@ function Header() {
           message: error.message,
           stack: error.stack
         });
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -176,6 +207,15 @@ function Header() {
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
+  };
+
+  // Определяем какую иконку показывать
+  const getNotificationIcon = () => {
+    return notifications.length > 0 ? '/img/ringActive.png' : '/img/ring.png';
+  };
+
+  const getNotificationAlt = () => {
+    return notifications.length > 0 ? 'Есть новые уведомления' : 'Уведомлений нет';
   };
 
   return (
@@ -202,7 +242,10 @@ function Header() {
               onClick={toggleNotifications}
               style={{position: 'relative'}}
             >
-              <img src="/img/ring.png" alt="Уведомлений нет" />
+              <img 
+                src={getNotificationIcon()} 
+                alt={getNotificationAlt()} 
+              />
             </button>
             {/* Блок уведомлений */}
             {showNotifications && (
@@ -212,34 +255,31 @@ function Header() {
                 </div>
                 <div className="divider"></div>
                 <div className="notifications-list">
-                  <div className="notification-item">
-                    <div className="notification-dot"></div>
-                    <div className="notification-content">
-                      <span className="notification-text">Новая анкета</span>
-                      <span className="notification-time">13:50</span>
+                  {loading ? (
+                    <div className="notification-item">
+                      <div className="notification-content">
+                        <span className="notification-text">Загрузка уведомлений...</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="notification-item">
-                    <div className="notification-dot"></div>
-                    <div className="notification-content">
-                      <span className="notification-text">Новая анкета</span>
-                      <span className="notification-time">11:21</span>
+                  ) : notifications.length > 0 ? (
+                    notifications.map((notification, index) => (
+                      <div key={notification.id?.$oid || index} className="notification-item">
+                        <div className="notification-dot"></div>
+                        <div className="notification-content">
+                          <span className="notification-text">{notification.title}</span>
+                          <span className="notification-time">
+                            {formatNotificationDate(notification.created_at)}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="notification-item">
+                      <div className="notification-content">
+                        <span className="notification-text">Уведомлений нет</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="notification-item">
-                    <div className="notification-dot"></div>
-                    <div className="notification-content">
-                      <span className="notification-text">Новая анкета</span>
-                      <span className="notification-time">16:21 11.11</span>
-                    </div>
-                  </div>
-                  <div className="notification-item">
-                    <div className="notification-dot"></div>
-                    <div className="notification-content">
-                      <span className="notification-text">Новая анкета</span>
-                      <span className="notification-time">13:55 11.11</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             )}
@@ -2594,27 +2634,6 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                             }}>
                                     <strong>Ошибка при загрузке данных:</strong><br />
                                     {candidatesError}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Отображение успешного результата */}
-                        {candidatesData && !candidatesError && (
-                            <div className="formRow" style={{marginTop: '15px'}}>
-                                <div style={{
-                                padding: '15px',
-                                backgroundColor: '#eafaf1',
-                                border: '1px solid #27ae60',
-                                borderRadius: '6px',
-                                color: '#1e8449',
-                                fontSize: '14px',
-                                lineHeight: '1.4'
-                            }}>
-                                    <strong>Фильтры успешно применены!</strong><br />
-                                    {candidatesData.attributes ?
-                                        `Найдено кандидатов: ${candidatesData.attributes.length}` :
-                                        'Данные загружены'
-                                    }
                                 </div>
                             </div>
                         )}
