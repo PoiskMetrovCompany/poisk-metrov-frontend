@@ -124,6 +124,7 @@ class CandidateProfileStoreController extends Controller
                 'title' => 'Новая анкета',
                 'is_visible' => false,
                 'meta_attributes' => $attributes,
+                'created_at' => $candidateProfile->created_at
             ]);
 
         $dataCollection = new CandidateProfileResource($candidateProfile);

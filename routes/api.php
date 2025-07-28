@@ -165,7 +165,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// NOTIFICATION
     Route::prefix('notification')->group(function () {
-        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']); //->middleware('auth:sanctum');
     });
     /// END
 
