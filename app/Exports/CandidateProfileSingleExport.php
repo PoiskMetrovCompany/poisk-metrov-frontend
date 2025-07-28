@@ -6,13 +6,17 @@ use App\Core\Common\CandidateProfileExportColumnsConst;
 use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CandidateProfileSingleExport implements FromCollection
+class CandidateProfileSingleExport implements FromCollection, WithHeadings, WithEvents, WithStyles
 {
     public string $keys;
+
     public function __construct(
         string $keys,
         protected CandidateProfilesRepositoryInterface $candidateProfilesRepository,
@@ -22,36 +26,19 @@ class CandidateProfileSingleExport implements FromCollection
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $keys = explode(",", $this->keys);
-        $collectData = [];
-
-        $realColumns = array_filter(CandidateProfileExportColumnsConst::COLUMNS, function ($column) {
-            return !in_array($column, [
-                'family_partner',
-                'family_partner_age',
-                'family_partner_relation',
-                'adult_family_members_list',
-                'adult_children_list',
-            ]);
-        });
+        $collectData = collect();
 
         foreach ($keys as $key) {
-            $data = $this->candidateProfilesRepository->getCandidateProfiles($key, $realColumns);
-
-            $mappedData = $data->map(function ($item) {
-                $item->serviceman = isset($item->serviceman) ? ($item->serviceman ? 'Да' : 'Нет') : 'Нет';
-                $item->is_data_processing = isset($item->is_data_processing) ? ($item->is_data_processing ? 'Да' : 'Нет') : 'Нет';
-                return $item;
-            });
-
-            $collectData = array_merge($collectData, $mappedData->all());
+            $data = $this->candidateProfilesRepository->getCandidateProfiles($key, []);
+            $collectData = $collectData->merge($data);
         }
 
-        return collect($collectData);
+        return $collectData;
     }
 
     public function headings(): array

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\MaritalStatuses;
 use App\Models\Vacancies;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,7 +14,7 @@ class MaritalStatusSeeder extends Seeder
      */
     public function run(): void
     {
-        Vacancies::truncate();
-        Vacancies::factory()->count(3)->create();
+        MaritalStatuses::truncate();
+        MaritalStatuses::factory()->count(3)->create();
     }
 }
