@@ -34,7 +34,7 @@ class MaritalStatusListController extends Controller
 {
 
     public function __construct(
-        protected VacancyRepositoryInterface $vacancyRepository
+        protected MaritalStatusesRepositoryInterface $maritalStatusesRepository
     )
     {
 
@@ -42,7 +42,7 @@ class MaritalStatusListController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        $repository = $this->vacancyRepository->list([]);
+        $repository = $this->maritalStatusesRepository->list([]);
 
         return new JsonResponse(
             data: [
@@ -53,3 +53,5 @@ class MaritalStatusListController extends Controller
         );
     }
 }
+
+
