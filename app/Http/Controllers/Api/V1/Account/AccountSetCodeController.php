@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Account;
 
 use App\Core\Common\RoleEnum;
+use App\Core\Interfaces\Services\SmsServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Accounts\AccountSetCodeRequest;
 use App\Http\Resources\AccountResource;
@@ -49,6 +50,7 @@ class AccountSetCodeController extends Controller
 {
     public function __construct(
         protected Account $account,
+        protected SmsServiceInterface $smsService
     )
     {
 
@@ -67,10 +69,10 @@ class AccountSetCodeController extends Controller
             $this->account::create($attributes);
             return $this->setCode($request);
         } else {
-            // TODO: генерация и отправка кода
-            $code = '000000';
+            $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
             $model = $this->account::where(['phone' => $attributes['phone']])->first();
             $model->update(['secret' => Hash::make($code)]);
+            $this->smsService->sendCall(['phone' => $attributes['phone'], 'code' => $code]);
         }
         return new JsonResponse(
             data: [

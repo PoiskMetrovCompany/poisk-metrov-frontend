@@ -34,6 +34,7 @@ use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
 use App\Core\Interfaces\Services\SearchServiceInterface;
 use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
+use App\Core\Interfaces\Services\SmsServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
 use App\Core\Interfaces\Services\UserServiceInterface;
 use App\Core\Interfaces\Services\VisitedPagesServiceInterface;
@@ -71,6 +72,7 @@ use App\Services\RealEstateService;
 use App\Services\ReservationService;
 use App\Services\SearchService;
 use App\Services\SerializedCollection\SerializedCollectionService;
+use App\Services\SmsService;
 use App\Services\TextService;
 use App\Services\UserService;
 use App\Services\VisitedPagesService;
@@ -203,6 +205,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PDFServiceInterface::class, PDFService::class);
     }
 
+    final public function registerSmsService(): void
+    {
+        $this->app->singleton(SmsServiceInterface::class, SmsService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -295,6 +302,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerSearchService();
         $this->registerBankService();
         $this->registerPDFService();
+        $this->registerSmsService();
 
         /// Repositories
         $this->registerReservationRepository();
