@@ -58,7 +58,7 @@ class AccountSetCodeController extends Controller
      * @param AccountSetCodeRequest $request
      * @return JsonResponse
      */
-    public function __invoke(AccountSetCodeRequest $request): JsonResponse
+    public function setCode(AccountSetCodeRequest $request): JsonResponse
     {
         $attributes = $request->validated();
         if (empty($this->account::where(['phone' => $attributes['phone']])->first())) {

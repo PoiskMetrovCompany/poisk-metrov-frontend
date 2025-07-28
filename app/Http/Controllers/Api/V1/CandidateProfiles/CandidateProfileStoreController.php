@@ -10,6 +10,7 @@ use App\Http\Resources\CandidateProfiles\CandidateProfileResource;
 use App\Jobs\SetChangesCandidatesQuestionnaireQueue;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
 
@@ -115,6 +116,15 @@ class CandidateProfileStoreController extends Controller
         $candidateProfile = $this->candidateProfilesRepository->store($attributes);
 
         // SetChangesCandidatesQuestionnaireQueue::dispatch($candidateProfile);
+
+        DB::connection('pm-log')
+            ->table('candidate_profiles_has')
+            ->insert([
+                'profile_key' => $attributes['key'],
+                'title' => 'Новая анкета',
+                'is_visible' => false,
+                'meta_attributes' => $attributes,
+            ]);
 
         $dataCollection = new CandidateProfileResource($candidateProfile);
 

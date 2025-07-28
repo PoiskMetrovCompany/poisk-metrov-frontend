@@ -124,7 +124,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// ACCOUNT
     Route::prefix('account')->group(function () {
-        Route::post('set-code', [AccountSetCodeController::class, '__invoke']);
+        Route::post('set-code', [AccountSetCodeController::class, 'setCode']);
         Route::post('auth', [AccountAuthorizationController::class, '__invoke']);
     });
     /// END
@@ -138,7 +138,6 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::delete('/destroy', [VacancyDestroyController::class, '__invoke']);
     });
     /// END
-    /// END
 
     /// MARITAL_STATUSES
     Route::prefix('marital-statuses')->group(function () {
@@ -149,7 +148,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// CANDIDATES
     Route::prefix('candidates')->group(function () {
         Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
+        Route::post('/store', [CandidateProfileStoreController::class, '__invoke'])->middleware('auth:sanctum');
         Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
         Route::post('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
     });
@@ -158,8 +157,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// EXPORT
     Route::middleware('auth:sanctum')->prefix('export')->group(function () {
         /// NOTE: эти маршруты могуп принимать гет параметр "keys"
-        Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke']);
-        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke']);
+        Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke'])->middleware('auth:sanctum');
         /// END
     });
     /// END

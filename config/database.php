@@ -86,7 +86,7 @@ return [
             'username' => env('DB_MONGO_USERNAME'),
             'password' => env('DB_MONGO_PASSWORD'),
             'options' => [
-
+                'authSource' => env('DB_MONGO_AUTH_SOURCE', 'poisk-metrov-log'), // <-- вот это
             ],
         ],
 

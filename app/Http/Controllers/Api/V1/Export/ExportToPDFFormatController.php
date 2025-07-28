@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Illuminate\Support\Facades\Log;
-use OpenApi\Annotations as OA;
+use ZipStream\ZipStream;
+use ZipStream\Option\Archive as ZipStreamOptions;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * @OA\Get(
@@ -46,9 +48,6 @@ use OpenApi\Annotations as OA;
  *         )
  *     )
  * )
- *
- * @param Request $request
- * @return JsonResponse
  */
 class ExportToPDFFormatController extends Controller
 {
@@ -66,87 +65,41 @@ class ExportToPDFFormatController extends Controller
      * @throws MpdfException
      * @throws \Throwable
      */
-//    public function __invoke(Request $request)
-//    {
-//        if ($request->input('keys')) {
-//            $keys = explode(",", $request->input('keys'));
-//            foreach ($keys as $key) {
-//                $candidateProfilesKey = $key;
-//
-//                $data = DB::table('candidate_profiles')
-//                    ->select('*')
-//                    ->where('candidate_profiles.key', '=', $candidateProfilesKey)
-//                    ->join('vacancies', 'vacancies.key', '=', 'candidate_profiles.vacancies_key')
-//                    ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key')
-//                    ->first();
-//
-//                $cleanUtf8 = function ($text) {
-//                    if (!$text) return '';
-//                    $text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $text);
-//                    $text = str_replace(['“', '”', '‘', '’', '–', '—', '•'], ['"', '"', "'", "'", '-', '-', '*'], $text);
-//                    return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
-//                };
-//
-//                $dataArray = json_decode(json_encode($data), true);
-//                array_walk_recursive($dataArray, function (&$item) use ($cleanUtf8) {
-//                    if (is_string($item)) {
-//                        $item = $cleanUtf8($item);
-//                    }
-//                });
-//                $data = (object)$dataArray;
-//
-//                $html = view('export-pdf.candidate-profiles.index', compact('data'))->render();
-//
-//                try {
-//                    $mpdf = new Mpdf([
-//                        'mode' => 'utf-8',
-//                        'format' => 'A4',
-//                        'debug' => true,
-//                    ]);
-//                    $mpdf->WriteHTML($html);
-//                    $mpdf->Output("Anketa_{$data->last_name}.pdf", 'D');
-//                } catch (MpdfException $e) {
-//                    \Log::error('mPDF Error: ' . $e->getMessage());
-//                    \Log::error('HTML sample: ' . substr(strip_tags($html), 0, 300));
-//                    abort(500, 'Ошибка генерации PDF. Проверьте данные.');
-//                }
-//            }
-//        }
-//    }
-
     public function __invoke(Request $request)
     {
         $keys = $request->input('keys');
-        if (!$keys) {
-            abort(400, 'Параметр "keys" обязателен.');
-        }
 
-        $keys = array_map('trim', explode(',', $keys));
-        if (empty($keys)) {
-            abort(400, 'Не указаны ключи.');
-        }
+        $query = DB::table('candidate_profiles')
+            ->select('*')
+            ->join('vacancies', 'vacancies.key', '=', 'candidate_profiles.vacancies_key')
+            ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key');
 
-        $allHtml = '';
-
-        foreach ($keys as $key) {
-            $data = DB::table('candidate_profiles')
-                ->select('*')
-                ->where('candidate_profiles.key', '=', $key)
-                ->join('vacancies', 'vacancies.key', '=', 'candidate_profiles.vacancies_key')
-                ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key')
-                ->first();
-
-            if (!$data) {
-                Log::warning("Анкета не найдена для ключа: {$key}");
-                continue;
+        if ($keys) {
+            $keys = array_map('trim', explode(',', $keys));
+            $keys = array_filter($keys);
+            if (empty($keys)) {
+                abort(400, 'Не указаны ключи.');
             }
+            $profiles = $query->whereIn('candidate_profiles.key', $keys)->get();
+        } else {
+            $profiles = $query->get();
+        }
 
-            $cleanUtf8 = function ($text) {
-                if (!$text) return '';
-                $text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $text);
-                $text = str_replace(['“', '”', '‘', '’', '–', '—', '•'], ['"', '"', "'", "'", '-', '-', '*'], $text);
-                return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
-            };
+        if ($profiles->isEmpty()) {
+            abort(404, 'Не найдено ни одной анкеты.');
+        }
+
+        // Очистка UTF-8
+        $cleanUtf8 = function ($text) {
+            if (!$text) return '';
+            $text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $text);
+            $text = str_replace(['“', '”', '‘', '’', '–', '—', '•'], ['"', '"', "'", "'", '-', '-', '*'], $text);
+            return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
+        };
+
+        // Если только один профиль — отдаём один PDF
+        if ($profiles->count() === 1) {
+            $data = $profiles->first();
 
             $dataArray = json_decode(json_encode($data), true);
             array_walk_recursive($dataArray, function (&$item) use ($cleanUtf8) {
@@ -158,34 +111,69 @@ class ExportToPDFFormatController extends Controller
 
             $html = view('export-pdf.candidate-profiles.index', compact('data'))->render();
 
-            $allHtml .= $html;
+            try {
+                $mpdf = new Mpdf([
+                    'mode' => 'utf-8',
+                    'format' => 'A4',
+                    'margin_top' => 10,
+                    'margin_bottom' => 10,
+                    'margin_left' => 15,
+                    'margin_right' => 15,
+                ]);
 
-            $allHtml .= '<div style="page-break-after: always;"></div>';
+                $mpdf->SetDisplayMode('fullpage');
+                $mpdf->WriteHTML($html);
+                $mpdf->Output('Anketa_' . $data->key . '.pdf', 'D');
+            } catch (MpdfException $e) {
+                Log::error('mPDF Error: ' . $e->getMessage());
+                abort(500, 'Ошибка генерации PDF.');
+            }
         }
+        // Если несколько — делаем архив с отдельными PDF
+        else {
+            $response = new StreamedResponse(function () use ($profiles, $cleanUtf8) {
+                $options = new ZipStreamOptions();
+                $options->setSendHttpHeaders(true);
+                $zip = new ZipStream('Ankety_Kandidatov.zip', $options);
 
-        if (empty($allHtml)) {
-            abort(404, 'Не найдено ни одной анкеты для указанных ключей.');
-        }
+                foreach ($profiles as $profile) {
+                    $dataArray = json_decode(json_encode($profile), true);
+                    array_walk_recursive($dataArray, function (&$item) use ($cleanUtf8) {
+                        if (is_string($item)) {
+                            $item = $cleanUtf8($item);
+                        }
+                    });
+                    $data = (object)$dataArray;
 
-        try {
-            $mpdf = new Mpdf([
-                'mode' => 'utf-8',
-                'format' => 'A4',
-                'debug' => false,
-                'margin_top' => 10,
-                'margin_bottom' => 10,
-                'margin_left' => 15,
-                'margin_right' => 15,
-            ]);
+                    $html = view('export-pdf.candidate-profiles.index', compact('data'))->render();
 
-            $mpdf->SetDisplayMode('fullpage');
-            $mpdf->WriteHTML($allHtml);
+                    try {
+                        $mpdf = new Mpdf([
+                            'mode' => 'utf-8',
+                            'format' => 'A4',
+                            'margin_top' => 10,
+                            'margin_bottom' => 10,
+                            'margin_left' => 15,
+                            'margin_right' => 15,
+                            'tempDir' => sys_get_temp_dir(), // важно для CLI
+                        ]);
+                        $mpdf->SetDisplayMode('fullpage');
+                        $mpdf->WriteHTML($html);
+                        $pdfContent = $mpdf->Output('', 'S'); // Получить как строку
 
-            $mpdf->Output('Ankety_Kandidatov.pdf', 'D');
-        } catch (MpdfException $e) {
-            Log::error('mPDF Error: ' . $e->getMessage());
-            Log::error('HTML sample: ' . substr(strip_tags($allHtml), 0, 500));
-            abort(500, 'Ошибка генерации PDF. Проверьте данные.');
+                        $fileName = 'Anketa_' . $data->key . '.pdf';
+                        $zip->addFile($fileName, $pdfContent);
+                    } catch (MpdfException $e) {
+                        Log::error("Ошибка генерации PDF для ключа {$data->key}: " . $e->getMessage());
+                        // Можно пропустить с ошибкой или добавить текстовый файл
+                        $zip->addFile("ERROR_{$data->key}.txt", "Ошибка генерации PDF: " . $e->getMessage());
+                    }
+                }
+
+                $zip->finish();
+            });
+
+            return $response;
         }
     }
 }
