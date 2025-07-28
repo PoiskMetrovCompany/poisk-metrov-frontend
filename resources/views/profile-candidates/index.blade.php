@@ -73,229 +73,380 @@
         return true;
     };
 
-    const SpouseTable = ({ formData, setFormData, isVisible }) => {
-        const handleInputChange = (name, value) => {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        };
-
-        if (!isVisible) return null;
-
-        return (
-            <div className="formRow" style={{
-                        opacity: 1,
-                        maxHeight: '500px',
-                        overflow: 'hidden',
-                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}>
-                <table className="inputTable">
-                    <caption className="tableLabel">
-                        Данные супруга(-и)
-                    </caption>
-                    <tbody>
-                    <tr>
-                        <td colSpan="2">
-                            <input
-                                type="text"
-                                name="FIOSuprug"
-                                placeholder="ФИО супруга(-и)"
-                                value={formData.FIOSuprug || ''}
-                                onChange={(e) => handleInputChange('FIOSuprug', e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name="dateOfBirthTable"
-                                placeholder="Дата рождения"
-                                value={formData.dateOfBirthTable || ''}
-                                onChange={(e) => handleInputChange('dateOfBirthTable', e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="tel"
-                                name="phoneNumberTable"
-                                placeholder="Телефон"
-                                value={formData.phoneNumberTable || ''}
-                                onChange={(e) => handleInputChange('phoneNumberTable', e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name="placeOfStudy"
-                                placeholder="Место учебы/работы, рабочий телефон"
-                                value={formData.placeOfStudy || ''}
-                                onChange={(e) => handleInputChange('placeOfStudy', e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                name="placeOfLiving"
-                                placeholder="Место проживания"
-                                value={formData.placeOfLiving || ''}
-                                onChange={(e) => handleInputChange('placeOfLiving', e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
+const SpouseTable = ({ formData, setFormData, isVisible }) => {
+    // Функции форматирования (добавить в начало компонента)
+    const formatDate = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        if (numbers.length <= 2) {
+            return numbers;
+        } else if (numbers.length <= 4) {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2);
+        } else {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2, 4) + '.' + numbers.slice(4, 8);
+        }
     };
 
-    // Компонент таблицы члена семьи
-    const RelativeTable = ({ index, formData, setFormData }) => {
-        const handleInputChange = (name, value) => {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        };
-
-        return (
-            <div className="formRow table-container" style={{
-                        opacity: 1,
-                        transform: 'translateY(0)',
-                        maxHeight: '216px',
-                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}>
-                <table className="inputTable">
-                    <caption className="tableLabel">Данные члена семьи</caption>
-                    <tbody>
-                    <tr>
-                        <td colSpan="2">
-                            <input
-                                type="text"
-                                name={`FIORelative${index}`}
-                                placeholder="Степень родства, ФИО члена семьи"
-                                value={formData[`FIORelative${index}`] || ''}
-                                onChange={(e) => handleInputChange(`FIORelative${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name={`dateOfBirthRelative${index}`}
-                                placeholder="Дата рождения"
-                                value={formData[`dateOfBirthRelative${index}`] || ''}
-                                onChange={(e) => handleInputChange(`dateOfBirthRelative${index}`, e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="tel"
-                                name={`phoneNumberRelative${index}`}
-                                placeholder="Телефон"
-                                value={formData[`phoneNumberRelative${index}`] || ''}
-                                onChange={(e) => handleInputChange(`phoneNumberRelative${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name={`placeOfStudyRelative${index}`}
-                                placeholder="Место учебы/работы, рабочий телефон"
-                                value={formData[`placeOfStudyRelative${index}`] || ''}
-                                onChange={(e) => handleInputChange(`placeOfStudyRelative${index}`, e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                name={`placeOfLivingRelative${index}`}
-                                placeholder="Место проживания"
-                                value={formData[`placeOfLivingRelative${index}`] || ''}
-                                onChange={(e) => handleInputChange(`placeOfLivingRelative${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
+    const formatMobilePhone = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        let formattedNumbers = numbers;
+        if (numbers.length > 0 && numbers[0] !== '7') {
+            formattedNumbers = '7' + numbers;
+        }
+        
+        if (formattedNumbers.length <= 1) {
+            return '+7';
+        } else if (formattedNumbers.length <= 4) {
+            return '+7 (' + formattedNumbers.slice(1);
+        } else if (formattedNumbers.length <= 7) {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4);
+        } else if (formattedNumbers.length <= 9) {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7);
+        } else {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7, 9) + '-' + formattedNumbers.slice(9, 11);
+        }
     };
 
-    // Компонент таблицы ребенка
-    const ChildrenTable = ({ index, formData, setFormData }) => {
-        const handleInputChange = (name, value) => {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        };
-
-        return (
-            <div className="formRow table-container" style={{
-                        opacity: 1,
-                        transform: 'translateY(0)',
-                        maxHeight: '216px',
-                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}>
-                <table className="inputTable">
-                    <caption className="tableLabel">Данные совершеннолетнего ребенка</caption>
-                    <tbody>
-                    <tr>
-                        <td colSpan="2">
-                            <input
-                                type="text"
-                                name={`FIOChildren${index}`}
-                                placeholder="ФИО ребенка"
-                                value={formData[`FIOChildren${index}`] || ''}
-                                onChange={(e) => handleInputChange(`FIOChildren${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name={`dateOfBirthChildren${index}`}
-                                placeholder="Дата рождения"
-                                value={formData[`dateOfBirthChildren${index}`] || ''}
-                                onChange={(e) => handleInputChange(`dateOfBirthChildren${index}`, e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="tel"
-                                name={`phoneNumberChildren${index}`}
-                                placeholder="Телефон"
-                                value={formData[`phoneNumberChildren${index}`] || ''}
-                                onChange={(e) => handleInputChange(`phoneNumberChildren${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name={`placeOfStudyChildren${index}`}
-                                placeholder="Место учебы/работы, рабочий телефон"
-                                value={formData[`placeOfStudyChildren${index}`] || ''}
-                                onChange={(e) => handleInputChange(`placeOfStudyChildren${index}`, e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                name={`placeOfLivingChildren${index}`}
-                                placeholder="Место проживания"
-                                value={formData[`placeOfLivingChildren${index}`] || ''}
-                                onChange={(e) => handleInputChange(`placeOfLivingChildren${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
+    const handleInputChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
+
+    const handleDateChange = (name, value) => {
+        const formattedValue = formatDate(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    const handlePhoneChange = (name, value) => {
+        const formattedValue = formatMobilePhone(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    if (!isVisible) return null;
+
+    return (
+        <div className="formRow" style={{
+                    opacity: 1,
+                    maxHeight: '500px',
+                    overflow: 'hidden',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
+            <table className="inputTable">
+                <caption className="tableLabel">
+                    Данные супруга(-и)
+                </caption>
+                <tbody>
+                <tr>
+                    <td colSpan="2">
+                        <input
+                            type="text"
+                            name="FIOSuprug"
+                            placeholder="ФИО супруга(-и)"
+                            value={formData.FIOSuprug || ''}
+                            onChange={(e) => handleInputChange('FIOSuprug', e.target.value)}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name="dateOfBirthTable"
+                            placeholder="01.01.1990"
+                            maxLength="10"
+                            value={formData.dateOfBirthTable || ''}
+                            onChange={(e) => handleDateChange('dateOfBirthTable', e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name="phoneNumberTable"
+                            placeholder="+7 (905) 123-45-67"
+                            maxLength="18"
+                            value={formData.phoneNumberTable || ''}
+                            onChange={(e) => handlePhoneChange('phoneNumberTable', e.target.value)}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name="placeOfStudy"
+                            placeholder="Место учебы/работы, рабочий телефон"
+                            value={formData.placeOfStudy || ''}
+                            onChange={(e) => handleInputChange('placeOfStudy', e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name="placeOfLiving"
+                            placeholder="Место проживания"
+                            value={formData.placeOfLiving || ''}
+                            onChange={(e) => handleInputChange('placeOfLiving', e.target.value)}
+                        />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+// 2. RelativeTable - аналогичные изменения
+const RelativeTable = ({ index, formData, setFormData }) => {
+    // Функции форматирования (добавить в начало компонента)
+    const formatDate = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        if (numbers.length <= 2) {
+            return numbers;
+        } else if (numbers.length <= 4) {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2);
+        } else {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2, 4) + '.' + numbers.slice(4, 8);
+        }
+    };
+
+    const formatMobilePhone = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        let formattedNumbers = numbers;
+        if (numbers.length > 0 && numbers[0] !== '7') {
+            formattedNumbers = '7' + numbers;
+        }
+        
+        if (formattedNumbers.length <= 1) {
+            return '+7';
+        } else if (formattedNumbers.length <= 4) {
+            return '+7 (' + formattedNumbers.slice(1);
+        } else if (formattedNumbers.length <= 7) {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4);
+        } else if (formattedNumbers.length <= 9) {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7);
+        } else {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7, 9) + '-' + formattedNumbers.slice(9, 11);
+        }
+    };
+
+    const handleInputChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleDateChange = (name, value) => {
+        const formattedValue = formatDate(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    const handlePhoneChange = (name, value) => {
+        const formattedValue = formatMobilePhone(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    return (
+        <div className="formRow table-container" style={{
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                    maxHeight: '216px',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
+            <table className="inputTable">
+                <caption className="tableLabel">Данные члена семьи</caption>
+                <tbody>
+                <tr>
+                    <td colSpan="2">
+                        <input
+                            type="text"
+                            name={`FIORelative${index}`}
+                            placeholder="Степень родства, ФИО члена семьи"
+                            value={formData[`FIORelative${index}`] || ''}
+                            onChange={(e) => handleInputChange(`FIORelative${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name={`dateOfBirthRelative${index}`}
+                            placeholder="01.01.1990"
+                            maxLength="10"
+                            value={formData[`dateOfBirthRelative${index}`] || ''}
+                            onChange={(e) => handleDateChange(`dateOfBirthRelative${index}`, e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name={`phoneNumberRelative${index}`}
+                            placeholder="+7 (905) 123-45-67"
+                            maxLength="18"
+                            value={formData[`phoneNumberRelative${index}`] || ''}
+                            onChange={(e) => handlePhoneChange(`phoneNumberRelative${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name={`placeOfStudyRelative${index}`}
+                            placeholder="Место учебы/работы, рабочий телефон"
+                            value={formData[`placeOfStudyRelative${index}`] || ''}
+                            onChange={(e) => handleInputChange(`placeOfStudyRelative${index}`, e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name={`placeOfLivingRelative${index}`}
+                            placeholder="Место проживания"
+                            value={formData[`placeOfLivingRelative${index}`] || ''}
+                            onChange={(e) => handleInputChange(`placeOfLivingRelative${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+// 3. ChildrenTable - аналогичные изменения
+const ChildrenTable = ({ index, formData, setFormData }) => {
+    // Функции форматирования (добавить в начало компонента)
+    const formatDate = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        if (numbers.length <= 2) {
+            return numbers;
+        } else if (numbers.length <= 4) {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2);
+        } else {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2, 4) + '.' + numbers.slice(4, 8);
+        }
+    };
+
+    const formatMobilePhone = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        let formattedNumbers = numbers;
+        if (numbers.length > 0 && numbers[0] !== '7') {
+            formattedNumbers = '7' + numbers;
+        }
+        
+        if (formattedNumbers.length <= 1) {
+            return '+7';
+        } else if (formattedNumbers.length <= 4) {
+            return '+7 (' + formattedNumbers.slice(1);
+        } else if (formattedNumbers.length <= 7) {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4);
+        } else if (formattedNumbers.length <= 9) {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7);
+        } else {
+            return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7, 9) + '-' + formattedNumbers.slice(9, 11);
+        }
+    };
+
+    const handleInputChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleDateChange = (name, value) => {
+        const formattedValue = formatDate(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    const handlePhoneChange = (name, value) => {
+        const formattedValue = formatMobilePhone(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    return (
+        <div className="formRow table-container" style={{
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                    maxHeight: '216px',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
+            <table className="inputTable">
+                <caption className="tableLabel">Данные совершеннолетнего ребенка</caption>
+                <tbody>
+                <tr>
+                    <td colSpan="2">
+                        <input
+                            type="text"
+                            name={`FIOChildren${index}`}
+                            placeholder="ФИО ребенка"
+                            value={formData[`FIOChildren${index}`] || ''}
+                            onChange={(e) => handleInputChange(`FIOChildren${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name={`dateOfBirthChildren${index}`}
+                            placeholder="01.01.1990"
+                            maxLength="10"
+                            value={formData[`dateOfBirthChildren${index}`] || ''}
+                            onChange={(e) => handleDateChange(`dateOfBirthChildren${index}`, e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name={`phoneNumberChildren${index}`}
+                            placeholder="+7 (905) 123-45-67"
+                            maxLength="18"
+                            value={formData[`phoneNumberChildren${index}`] || ''}
+                            onChange={(e) => handlePhoneChange(`phoneNumberChildren${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name={`placeOfStudyChildren${index}`}
+                            placeholder="Место учебы/работы, рабочий телефон"
+                            value={formData[`placeOfStudyChildren${index}`] || ''}
+                            onChange={(e) => handleInputChange(`placeOfStudyChildren${index}`, e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name={`placeOfLivingChildren${index}`}
+                            placeholder="Место проживания"
+                            value={formData[`placeOfLivingChildren${index}`] || ''}
+                            onChange={(e) => handleInputChange(`placeOfLivingChildren${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+};
 
     function CandidateForm() {
+
+        useEffect(() => {
+            const checkAuthToken = () => {
+                const accessToken = getAccessTokenFromCookie();
+                
+                if (!accessToken) {
+                    // Получаем текущий URL и добавляем /login
+                    const currentUrl = window.location.origin + window.location.pathname;
+                    const loginUrl = currentUrl.endsWith('/') ? currentUrl + 'login' : currentUrl + '/login';
+                    
+                    // Выполняем редирект
+                    window.location.href = loginUrl;
+                }
+            };
+
+            // Проверяем токен при монтировании компонента
+            checkAuthToken();
+        }, []);
+
         // Состояния для управления видимостью блоков
         const [surnameChanged, setSurnameChanged] = useState(true);
         const [haveChildren, setHaveChildren] = useState(true);
@@ -382,6 +533,91 @@
             console.warn(`Неверный формат даты: ${dateString}`);
             return null;
         };
+
+
+        const formatDate = (value) => {
+            // Удаляем все символы кроме цифр
+            const numbers = value.replace(/\D/g, '');
+            
+            // Применяем маску DD.MM.YYYY
+            if (numbers.length <= 2) {
+                return numbers;
+            } else if (numbers.length <= 4) {
+                return numbers.slice(0, 2) + '.' + numbers.slice(2);
+            } else {
+                return numbers.slice(0, 2) + '.' + numbers.slice(2, 4) + '.' + numbers.slice(4, 8);
+            }
+        };
+
+        const formatMobilePhone = (value) => {
+            // Удаляем все символы кроме цифр
+            const numbers = value.replace(/\D/g, '');
+            
+            // Если первая цифра не 7, добавляем 7
+            let formattedNumbers = numbers;
+            if (numbers.length > 0 && numbers[0] !== '7') {
+                formattedNumbers = '7' + numbers;
+            }
+            
+            // Применяем маску +7 (XXX) XXX-XX-XX
+            if (formattedNumbers.length <= 1) {
+                return '+7';
+            } else if (formattedNumbers.length <= 4) {
+                return '+7 (' + formattedNumbers.slice(1);
+            } else if (formattedNumbers.length <= 7) {
+                return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4);
+            } else if (formattedNumbers.length <= 9) {
+                return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7);
+            } else {
+                return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7, 9) + '-' + formattedNumbers.slice(9, 11);
+            }
+        };
+
+        const formatHomePhone = (value) => {
+            // Удаляем все символы кроме цифр
+            const numbers = value.replace(/\D/g, '');
+            
+            // Применяем маску XXX XXX
+            if (numbers.length <= 3) {
+                return numbers;
+            } else {
+                return numbers.slice(0, 3) + ' ' + numbers.slice(3, 6);
+            }
+        };
+
+        const formatPassport = (value) => {
+            // Удаляем все символы кроме цифр
+            const numbers = value.replace(/\D/g, '');
+            
+            // Применяем маску XXXX XXXXXX
+            if (numbers.length <= 4) {
+                return numbers;
+            } else {
+                return numbers.slice(0, 4) + ' ' + numbers.slice(4, 10);
+            }
+        };
+
+        // Обработчики изменения с масками
+        const handleDateChange = (name, value) => {
+            const formattedValue = formatDate(value);
+            handleFormDataChange(name, formattedValue);
+        };
+
+        const handleMobilePhoneChange = (name, value) => {
+            const formattedValue = formatMobilePhone(value);
+            handleFormDataChange(name, formattedValue);
+        };
+
+        const handleHomePhoneChange = (name, value) => {
+            const formattedValue = formatHomePhone(value);
+            handleFormDataChange(name, formattedValue);
+        };
+
+        const handlePassportChange = (name, value) => {
+            const formattedValue = formatPassport(value);
+            handleFormDataChange(name, formattedValue);
+        };
+
 
         // Функция для сбора данных детей в JSON формате
         const collectChildrenData = () => {
@@ -902,15 +1138,16 @@
                             <div className="formRow justify-space-between">
                                 <div className="input-container w-49">
                                     <label htmlFor="birthDate" className="formLabel">Дата рождения</label>
-                                    <input
-                                        style={{width: '100%'}}
+                                        <input
+                                            style={{width: '100%'}}
                                             type="text"
-                                        name="birthDate"
-                                        className="formInput"
-                                        placeholder="01.01.1990"
-                                        value={formData.birthDate || ''}
-                                        onChange={(e) => handleFormDataChange('birthDate', e.target.value)}
-                                    />
+                                            name="birthDate"
+                                            className="formInput"
+                                            placeholder="01.01.1990"
+                                            maxLength="10"
+                                            value={formData.birthDate || ''}
+                                            onChange={(e) => handleDateChange('birthDate', e.target.value)}
+                                        />
                                 </div>
 
                                 <div className="input-container w-49">
@@ -930,28 +1167,30 @@
                             <div className="formRow justify-space-between">
                                 <div className="input-container w-49">
                                     <label htmlFor="mobileNumber" className="formLabel">Мобильный телефон</label>
-                                    <input
-                                        style={{width: '100%'}}
-                                            type="tel"
-                                        name="mobileNumber"
-                                        className="formInput"
-                                        placeholder="+7(999)999-99-99"
-                                        value={formData.mobileNumber || ''}
-                                        onChange={(e) => handleFormDataChange('mobileNumber', e.target.value)}
-                                    />
+                                        <input
+                                            style={{width: '100%'}}
+                                            type="text"
+                                            name="mobileNumber"
+                                            className="formInput"
+                                            placeholder="+7 (905) 123-45-67"
+                                            maxLength="18"
+                                            value={formData.mobileNumber || ''}
+                                            onChange={(e) => handleMobilePhoneChange('mobileNumber', e.target.value)}
+                                        />
                                 </div>
 
                                 <div className="input-container w-49">
                                     <label htmlFor="domesticNumber" className="formLabel">Домашний телефон</label>
-                                    <input
-                                        style={{width: '100%'}}
-                                            type="tel"
-                                        name="domesticNumber"
-                                        className="formInput"
-                                        placeholder="999 999"
-                                        value={formData.domesticNumber || ''}
-                                        onChange={(e) => handleFormDataChange('domesticNumber', e.target.value)}
-                                    />
+                                        <input
+                                            style={{width: '100%'}}
+                                            type="text"
+                                            name="domesticNumber"
+                                            className="formInput"
+                                            placeholder="999 999"
+                                            maxLength="7"
+                                            value={formData.domesticNumber || ''}
+                                            onChange={(e) => handleHomePhoneChange('domesticNumber', e.target.value)}
+                                        />
                                 </div>
                             </div>
 
@@ -973,13 +1212,17 @@
                                     <label htmlFor="INN" className="formLabel">ИНН</label>
                                     <input
                                         style={{width: '100%'}}
-                                            type="number"
+                                        type="tel"
                                         name="INN"
-                                        type = "tel"
                                         className="formInput"
                                         placeholder="123456789012"
+                                        maxLength="12"
                                         value={formData.INN || ''}
-                                        onChange={(e) => handleFormDataChange('INN', e.target.value)}
+                                        onChange={(e) => {
+                                            // Разрешаем только цифры и ограничиваем до 12 символов
+                                            const value = e.target.value.replace(/\D/g, '');
+                                            handleFormDataChange('INN', value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -991,28 +1234,30 @@
                             <div className="formRow justify-space-between">
                                 <div className="input-container w-49">
                                     <label htmlFor="passwordSeriaNumber" className="formLabel">Серия и номер</label>
-                                    <input
-                                        style={{width: '100%'}}
-                                            type="tel"
-                                        name="passwordSeriaNumber"
-                                        className="formInput"
-                                        placeholder="1234 567890"
-                                        value={formData.passwordSeriaNumber || ''}
-                                        onChange={(e) => handleFormDataChange('passwordSeriaNumber', e.target.value)}
-                                    />
+                                        <input
+                                            style={{width: '100%'}}
+                                            type="text"
+                                            name="passwordSeriaNumber"
+                                            className="formInput"
+                                            placeholder="1234 567890"
+                                            maxLength="11"
+                                            value={formData.passwordSeriaNumber || ''}
+                                            onChange={(e) => handlePassportChange('passwordSeriaNumber', e.target.value)}
+                                        />
                                 </div>
 
                                 <div className="input-container w-49">
                                     <label htmlFor="dateOfIssue" className="formLabel">Дата выдачи</label>
-                                    <input
-                                        style={{width: '100%'}}
-                                            type="tel"
-                                        name="dateOfIssue"
-                                        className="formInput"
-                                        placeholder="01.01.1990"
-                                        value={formData.dateOfIssue || ''}
-                                        onChange={(e) => handleFormDataChange('dateOfIssue', e.target.value)}
-                                    />
+                                        <input
+                                            style={{width: '100%'}}
+                                            type="text"
+                                            name="birthDate"
+                                            className="formInput"
+                                            placeholder="01.01.1990"
+                                            maxLength="10"
+                                            value={formData.birthDate || ''}
+                                            onChange={(e) => handleDateChange('birthDate', e.target.value)}
+                                        />
                                 </div>
                             </div>
 
