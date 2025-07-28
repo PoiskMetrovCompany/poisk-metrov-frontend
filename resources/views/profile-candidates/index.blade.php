@@ -344,88 +344,6 @@
             setFormData(prev => ({ ...prev, [name]: value }));
         };
 
-        // Функция для генерации случайных данных
-        const generateRandomData = () => {
-            const names = ['Иванов Иван Иванович', 'Петрова Мария Сергеевна', 'Сидоров Алексей Николаевич', 'Козлова Анна Владимировна', 'Морозов Дмитрий Александрович'];
-            const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань'];
-            const countries = ['Россия', 'Казахстан', 'Беларусь', 'Украина'];
-            const emails = ['example@gmail.com', 'test@yandex.ru', 'user@mail.ru', 'demo@example.com'];
-            const reasons = ['Замужество', 'Развод', 'Личные причины', 'По семейным обстоятельствам'];
-
-            const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
-            const getRandomDate = () => {
-                const start = new Date(1970, 0, 1);
-                const end = new Date(2005, 11, 31);
-                const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-                return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
-            };
-            const getRandomPhone = () => `+7(${Math.floor(Math.random() * 900 + 100)})${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 90 + 10)}-${Math.floor(Math.random() * 90 + 10)}`;
-            const getRandomINN = () => Math.floor(Math.random() * 900000000000 + 100000000000).toString();
-            const getRandomPassport = () => `${Math.floor(Math.random() * 9000 + 1000)} ${Math.floor(Math.random() * 900000 + 100000)}`;
-
-            // Случайно выбираем вакансию и семейное положение
-            if (vacancyOptions.length > 0) {
-                setSelectedVacancy(getRandomItem(vacancyOptions));
-            }
-
-            const maritalOptions = maritalStatusApiOptions.length > 0 ? maritalStatusApiOptions : [
-                'Не женат/Не замужем',
-                'Женат/Замужем',
-                'В разводе',
-                'Вдовец/Вдова',
-                'Гражданский брак'
-            ];
-            setSelectedMaritalStatus(getRandomItem(maritalOptions));
-
-            // Заполняем основные поля
-            const randomData = {
-                FIO: getRandomItem(names),
-                reasonOfChange: getRandomItem(reasons),
-                birthDate: getRandomDate(),
-                birthPlace: `${getRandomItem(countries)}, ${getRandomItem(cities)}`,
-                mobileNumber: getRandomPhone(),
-                domesticNumber: `${Math.floor(Math.random() * 900 + 100)} ${Math.floor(Math.random() * 900 + 100)}`,
-                email: getRandomItem(emails),
-                INN: getRandomINN(),
-                passwordSeriaNumber: getRandomPassport(),
-                dateOfIssue: getRandomDate(),
-                issuedBy: 'ОФУМС России по городу Москве',
-                adressOfPermanentReg: `г. ${getRandomItem(cities)}, ул. Ленина, д. ${Math.floor(Math.random() * 100 + 1)}`,
-                adressOfTemporaryReg: `г. ${getRandomItem(cities)}, ул. Советская, д. ${Math.floor(Math.random() * 100 + 1)}`,
-                adressOfFactialLiving: `г. ${getRandomItem(cities)}, ул. Пушкина, д. ${Math.floor(Math.random() * 100 + 1)}`,
-                FIOSuprug: getRandomItem(names),
-                whyPrisoner: 'Административное нарушение',
-                LegalEntity: 'ООО "Тестовая компания" - IT услуги'
-            };
-
-            // Заполняем данные детей
-            if (haveChildren) {
-                randomData.FIOChildren1 = getRandomItem(names);
-                randomData.dateOfBirthChildren1 = getRandomDate();
-                randomData.phoneNumberChildren1 = getRandomPhone();
-                randomData.placeOfStudyChildren1 = 'МГУ им. Ломоносова';
-                randomData.placeOfLivingChildren1 = `г. ${getRandomItem(cities)}, ул. Студенческая, д. ${Math.floor(Math.random() * 100 + 1)}`;
-            }
-
-            // Заполняем данные родственников
-            if (haveFamilyMembers) {
-                randomData.FIORelative1 = `Отец - ${getRandomItem(names)}`;
-                randomData.dateOfBirthRelative1 = getRandomDate();
-                randomData.phoneNumberRelative1 = getRandomPhone();
-                randomData.placeOfStudyRelative1 = 'ПАО "Газпром"';
-                randomData.placeOfLivingRelative1 = `г. ${getRandomItem(cities)}, ул. Семейная, д. ${Math.floor(Math.random() * 100 + 1)}`;
-            }
-
-            setFormData(randomData);
-            setPersonalDataChecked(true);
-
-            // Случайно устанавливаем состояния
-            setSurnameChanged(Math.random() > 0.5);
-            setCriminalResponsibility(Math.random() > 0.8);
-            setLegalEntity(Math.random() > 0.7);
-            setMilitaryDuty(Math.random() > 0.3);
-        };
-
         // Функция для получения токена из cookie
         const getAccessTokenFromCookie = () => {
             const cookies = document.cookie.split(';');
@@ -1057,6 +975,7 @@
                                         style={{width: '100%'}}
                                             type="number"
                                         name="INN"
+                                        type = "tel"
                                         className="formInput"
                                         placeholder="123456789012"
                                         value={formData.INN || ''}
