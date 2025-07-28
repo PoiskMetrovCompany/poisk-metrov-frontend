@@ -20,9 +20,9 @@ class MaritalStatusesFactory extends Factory
         return [
             'key' => $this->faker->uuid(),
             'title' => $this->faker->randomElement([
-                MaritalStatusesEnum::REGISERED_MARRIAGE->value,
-                MaritalStatusesEnum::NOT_REGISERED_MARRIAGE->value,
-                MaritalStatusesEnum::NOT_MARRIAGE->value,
+                'Состою в зарегистрированном браке',
+                'Состою в незарегистрированном браке',
+                'Не состою в браке',
             ]),
         ];
     }

@@ -49,6 +49,6 @@ class CandidateProfileResource extends JsonResource
             'is_data_processing' => $this->is_data_processing,
             'comment' => $this->comment,
             'created_at' => $this->created_at,
-        ];      
+        ];     
     }
 }

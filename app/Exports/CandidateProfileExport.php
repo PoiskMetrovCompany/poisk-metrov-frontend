@@ -27,23 +27,8 @@ class CandidateProfileExport implements FromCollection, WithHeadings, WithEvents
     */
     public function collection()
     {
-        $realColumns = array_filter(CandidateProfileExportColumnsConst::COLUMNS, function ($column) {
-            return !in_array($column, [
-                'family_partner',
-                'family_partner_age',
-                'family_partner_relation',
-                'adult_family_members_list',
-                'adult_children_list',
-            ]);
-        });
-
-        $data = $this->candidateProfilesRepository->getCandidateProfiles(null, $realColumns);
-
-        return $data->map(function ($item) {
-            $item->serviceman = isset($item->serviceman) ? ($item->serviceman ? 'Да' : 'Нет') : 'Нет';
-            $item->is_data_processing = isset($item->is_data_processing) ? ($item->is_data_processing ? 'Да' : 'Нет') : 'Нет';
-            return $item;
-        });
+        $data = $this->candidateProfilesRepository->getCandidateProfiles(null, []);
+        return $data;
     }
 
     public function headings(): array

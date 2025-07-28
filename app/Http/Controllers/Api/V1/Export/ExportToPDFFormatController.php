@@ -188,5 +188,4 @@ class ExportToPDFFormatController extends Controller
             abort(500, 'Ошибка генерации PDF. Проверьте данные.');
         }
     }
-
 }
