@@ -97,7 +97,7 @@ function Header() {
   useEffect(() => {
     const fetchNotifications = async () => {
       setLoading(true);
-      const url = 'https://poisk-metrov-demos.ru/api/v1/notification/new-candidates';
+      const url = '/api/v1/notification/new-candidates';
       
       // Используем уже существующую в проекте функцию для получения токена
       const getAccessToken = () => {
