@@ -19,9 +19,9 @@ building-card {
         min-width: calc(50% - 12px);
     }
 
-    @include media-breakpoint-up(lg) {
-        min-width: calc(33.33% - 20px);
-    }
+    // @include media-breakpoint-up(lg) {
+    //     min-width: calc(33.33% - 20px);
+    // }
 
     @include media-breakpoint-up(xl) {
         height: 580px;
