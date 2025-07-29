@@ -316,11 +316,14 @@
             width: 24px;
             height: 24px;
         }
-
+    
         @include media-breakpoint-down(lg) {
             width: 48px;
             height: 48px;
         }
+    }
+    &.soft-button{
+        box-shadow: 0 0px 25px rgba(236, 125, 63, 0.7);
     }
 }
 
