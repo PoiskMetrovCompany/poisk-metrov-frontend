@@ -5,7 +5,7 @@
 
 <agent-building-card id="{{ $code }}" city="{{ $location['code'] }}" long="{{ $longitude }}"
     lat="{{ $latitude }}" buildingname="{{ $name }}" metro="{{ $metro_station }}"
-    metrominutes="{{ $metroMinutes }}" metromoveicon="{{ $metroMoveIcon }}"
+    metrominutes="{{ $metroMinutes }}" metromoveiiicon="{{ $metroMoveIcon }}"
     @if (isset($smallOnly)) smallOnly="{{ $smallOnly }}" @endif>
     <div type="top-content">
         @include('custom-elements.image-gallery', [

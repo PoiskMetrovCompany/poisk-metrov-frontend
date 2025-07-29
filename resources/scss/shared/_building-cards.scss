@@ -379,6 +379,7 @@
             //Чтобы оверфлоу не скрывал высплывашки
             padding-top: 32px;
             margin-top: -32px;
+            position: relative;
             //Тщательно выверенно!
             grid-gap: 24px;
 
