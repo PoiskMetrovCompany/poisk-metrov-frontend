@@ -109,7 +109,7 @@
                     currentMaskRef.current.destroy();
                 }
                 const maskOptions = {
-                    mask: ' 0 0 0 0 0 0 ',
+                    mask: ' 0 0 0 0 ',
                     lazy: false,
                     placeholderChar: " _ "
                 };
