@@ -12,6 +12,7 @@ use App\Models\AuthorizationCall;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
@@ -73,7 +74,6 @@ class AccountSetCodeController extends Controller
         $attributes = $request->validated();
         $phone = $attributes['phone'];
 
-        // Находим или создаём аккаунт
         $account = $this->account::firstOrNew(['phone' => $phone]);
 
         if (!$account->exists) {
@@ -83,17 +83,12 @@ class AccountSetCodeController extends Controller
             ])->save();
         }
 
-        $code = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
-
-        // Подготавливаем данные для запроса
         $fields = [
             'public_key' => $this->apiKey,
             'campaign_id' => $this->campaignId,
             'phone' => $phone,
-            'pincode' => $code,
         ];
 
-        // Выполняем cURL-запрос к zvonok.com
         $curl = curl_init();
 
         curl_setopt_array($curl, [
@@ -110,7 +105,6 @@ class AccountSetCodeController extends Controller
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        // Проверяем ответ
         if (!$response || $httpCode !== 200) {
             \Log::error('Zvonok.com API request failed', [
                 'phone' => $phone,
@@ -127,17 +121,24 @@ class AccountSetCodeController extends Controller
         $responseData = json_decode($response, true);
 
 
-        // Сохраняем код и call_id для последующей проверки
+        $pincode = $responseData['data']['pincode'];
+        $callId = $responseData['data']['call_id'];
+
         AuthorizationCall::updateOrCreate(
             ['phone' => $phone],
             [
-                'pincode' => $code,
-                'call_id' => $responseData['data']['call_id'],
+                'pincode' => $pincode,
+                'call_id' => $callId,
             ]
         );
 
-        // Обновляем secret в аккаунте
-        $account->update(['secret' => Hash::make($code)]);
+        $account->update(['secret' => Hash::make($pincode)]);
+
+        \Log::info("Flash call sent", [
+            'phone' => $phone,
+            'generated_pincode' => $pincode,
+            'call_id' => $callId,
+        ]);
 
         return new JsonResponse([
             'request' => true,
@@ -145,40 +146,3 @@ class AccountSetCodeController extends Controller
         ], 201);
     }
 }
-//class AccountSetCodeController extends Controller
-//{
-//    public function __construct(
-//        protected Account $account,
-//        protected SmsServiceInterface $smsService
-//    )
-//    {
-//
-//    }
-//
-//    /**
-//     * @param AccountSetCodeRequest $request
-//     * @return JsonResponse
-//     */
-//    public function setCode(AccountSetCodeRequest $request): JsonResponse
-//    {
-//        $attributes = $request->validated();
-//        if (empty($this->account::where(['phone' => $attributes['phone']])->first())) {
-//            $attributes['key'] = Str::uuid()->toString();
-//            $attributes['role'] = RoleEnum::Candidate;
-//            $this->account::create($attributes);
-//            return $this->setCode($request);
-//        } else {
-//            $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-//            $model = $this->account::where(['phone' => $attributes['phone']])->first();
-//            $model->update(['secret' => Hash::make($code)]);
-//            $this->smsService->sendCall(['phone' => $attributes['phone'], 'code' => $code]);
-//        }
-//        return new JsonResponse(
-//            data: [
-//                'request' => true,
-//                'attributes' => AccountResource::make($model),
-//            ],
-//            status:  Response::HTTP_CREATED
-//        );
-//    }
-//}
