@@ -86,6 +86,8 @@ const SpouseTable = ({ formData, setFormData, isVisible }) => {
         }
     };
 
+
+
     const formatMobilePhone = (value) => {
         const numbers = value.replace(/\D/g, '');
         let formattedNumbers = numbers;
@@ -193,7 +195,7 @@ const SpouseTable = ({ formData, setFormData, isVisible }) => {
     );
 };
 
-// 2. RelativeTable - аналогичные изменения
+
 const RelativeTable = ({ index, formData, setFormData }) => {
     // Функции форматирования (добавить в начало компонента)
     const formatDate = (value) => {
@@ -227,6 +229,10 @@ const RelativeTable = ({ index, formData, setFormData }) => {
         }
     };
 
+    const formatNameInput = (value) => {
+        return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+    };
+
     const handleInputChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -258,7 +264,10 @@ const RelativeTable = ({ index, formData, setFormData }) => {
                             name={`FIORelative${index}`}
                             placeholder="Степень родства, ФИО члена семьи"
                             value={formData[`FIORelative${index}`] || ''}
-                            onChange={(e) => handleInputChange(`FIORelative${index}`, e.target.value)}
+                            onChange={(e) => {
+                                const formattedValue = formatNameInput(e.target.value);
+                                handleInputChange(`FIORelative${index}`, formattedValue);
+                            }}
                         />
                     </td>
                 </tr>
@@ -310,7 +319,6 @@ const RelativeTable = ({ index, formData, setFormData }) => {
     );
 };
 
-// 3. ChildrenTable - аналогичные изменения
 const ChildrenTable = ({ index, formData, setFormData }) => {
     // Функции форматирования (добавить в начало компонента)
     const formatDate = (value) => {
@@ -348,6 +356,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const formatNameInput = (value) => {
+        return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+    };
+
     const handleDateChange = (name, value) => {
         const formattedValue = formatDate(value);
         handleInputChange(name, formattedValue);
@@ -375,7 +387,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                             name={`FIOChildren${index}`}
                             placeholder="ФИО ребенка"
                             value={formData[`FIOChildren${index}`] || ''}
-                            onChange={(e) => handleInputChange(`FIOChildren${index}`, e.target.value)}
+                            onChange={(e) => {
+                                const formattedValue = formatNameInput(e.target.value);
+                                handleInputChange(`FIOChildren${index}`, formattedValue);
+                            }}
                         />
                     </td>
                 </tr>
@@ -532,6 +547,9 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
 
             console.warn(`Неверный формат даты: ${dateString}`);
             return null;
+        }; 
+        const formatNameInput = (value) => {
+            return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
         };
 
 
@@ -1086,7 +1104,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         className="formInput big"
                                         placeholder="Иванов Иван Иванович"
                                         value={formData.FIO || ''}
-                                        onChange={(e) => handleFormDataChange('FIO', e.target.value)}
+                                        onChange={(e) => {
+                                            const formattedValue = formatNameInput(e.target.value);
+                                            handleFormDataChange('FIO', formattedValue);
+                                        }}
                                     />
                                 </div>
                             </div>
