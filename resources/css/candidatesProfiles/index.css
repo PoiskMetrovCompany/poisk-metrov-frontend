@@ -332,7 +332,6 @@
         margin-left: 0;
     }
 
-    /* Специальные кнопки */
     .aButton {
         font-size: 0.875rem; /* 14px */
         font-weight: 500;
@@ -343,6 +342,10 @@
         text-align: left;
         padding: 0;
         cursor: pointer;
+    }
+
+    .aButton:hover{
+        color: rgba(228, 98, 25, 1);
     }
 
     #filters {
@@ -359,6 +362,9 @@
         border-radius: 0.75rem; /* 12px */
         height: 100%;
         cursor: pointer;
+    }
+    #filters:hover{
+        background: rgba(236, 125, 63, 0.2);
     }
 
     /* ==============================================
@@ -963,7 +969,6 @@
         border-collapse: collapse;
         border-spacing: 0;
         border-radius: 1rem;
-        overflow: hidden;
     }
 
     .candidatesTable th {
@@ -1156,10 +1161,13 @@
     .paginationBtn:not(:first-child) {
         border-left: none;
     }
-
+    .paginationBtn:hover{
+        border: 1px solid white;
+        background: rgba(244, 244, 241, 1);
+    }
     .paginationBtn.active {
         background: rgba(236, 125, 63, 1);
-        color: white;
+        color: white !important;
         border-color: rgba(236, 125, 63, 1);
     }
     /* Контейнер для группы кнопок скачивания */
@@ -1232,6 +1240,9 @@
         width: 28px;
         height: 28px;
     }
+    #notifBtn:hover{
+        background: rgba(236, 125, 63, 0.2);
+    }
     #notifBtn{
         border: none;
         padding: 18px;
@@ -1264,7 +1275,7 @@
         background: none;
     }
     .active{
-        color: rgba(236, 125, 63, 1);
+        color: rgba(236, 125, 63, 1) !important;
     }
     .hidde{
         display: none;
@@ -1342,12 +1353,12 @@
         margin-top: 1rem;
     }
     .fixedMenu {
-    position: fixed;
-    right: 0;
-    top: 60%;
-    transform: translateY(-50%);
-    z-index: 100;
-    right: calc((100vw - 50%) / 2 - 22rem);
+        position: fixed;
+        right: 0;
+        top: 49%;
+        transform: translateY(-50%);
+        z-index: 100;
+        right: calc((100vw - 50%) / 2 - 22rem);
     }
     .navArea {
         display: flex;
@@ -1620,3 +1631,50 @@
 
 
 
+    .comment-tooltip {
+        position: absolute;
+        bottom: -50px;
+        right: -8px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: max-content;
+        word-wrap: break-word;
+        z-index: 1000;
+        font-size: 14px;
+        color: #333;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+    }
+
+    .comment-tooltip.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .comment-tooltip::after {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        right: 20px;
+        border: 8px solid transparent;
+        border-bottom-color: white;
+    }
+
+    .comment-tooltip::before {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        right: 19px;
+        border: 9px solid transparent;
+        border-bottom-color: #ddd;
+        z-index: -1;
+    }
+
+    .redactBtn {
+        position: relative;
+    }

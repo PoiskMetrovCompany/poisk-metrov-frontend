@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Система регистрации</title>
+    <title>Страница безопасника</title>
     @vite(['resources/css/candidatesProfiles/index.css'])
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -14,12 +14,15 @@
 
 <style>
 
-
-
     a{
         text-decoration: none;
         color: rgba(129, 129, 129, 1);
     }
+    
+    a:hover{
+        color: rgba(24, 24, 23, 1);
+    }
+
    .status-new {
         color: #C5801F !important;
         background: #F8F8E8 !important;
@@ -131,19 +134,12 @@ function Header({ onCityChange }) {
     };
   }, []);
 
-  // Хук для отслеживания изменения города (для будущих запросов)
-  useEffect(() => {
-    console.log('Выбранный город изменился:', selectedCity);
-    // Здесь в будущем можно будет добавить логику для отправки запроса с новым городом
-  }, [selectedCity]);
 
-  // Добавляем useEffect для запроса при монтировании
   useEffect(() => {
     const fetchNotifications = async () => {
       setLoading(true);
       const url = '/api/v1/notification/new-candidates';
       
-      // Используем уже существующую в проекте функцию для получения токена
       const getAccessToken = () => {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
@@ -155,7 +151,6 @@ function Header({ onCityChange }) {
         return null;
       };
 
-      // Функция для получения CSRF токена (также как в проекте)
       const getCsrfToken = () => {
         const metaTag = document.querySelector('meta[name="csrf-token"]');
         if (metaTag) {
@@ -189,12 +184,10 @@ function Header({ onCityChange }) {
           'Content-Type': 'application/json'
         };
 
-        // Добавляем Authorization заголовок, если токен найден
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
         }
 
-        // Добавляем CSRF токен
         if (csrfToken) {
           headers['X-CSRF-TOKEN'] = csrfToken;
         }
@@ -372,7 +365,7 @@ function Header({ onCityChange }) {
     </header>
   );
 }
- function ShowForm({ vacancyKey, setSelectedVacancyKey }) {
+ function ShowForm({ vacancyKey, setSelectedVacancyKey, selectedCity }) {
     const handleLogout = () => {
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         window.location.reload();
@@ -548,7 +541,8 @@ function Header({ onCityChange }) {
         const requestData = {
             key: vacancyKey,
             status: mappedStatus,
-            comment: commentValue || ""
+            comment: commentValue || "",
+            city_work: selectedCity || "Новосибирск" 
         };
 
         console.log('=== НАЧАЛО ЗАПРОСА ОБНОВЛЕНИЯ СТАТУСА ===');
@@ -635,7 +629,8 @@ function Header({ onCityChange }) {
         const requestData = {
             key: vacancyKey,
             status: "",
-            comment: commentValue.trim()
+            comment: commentValue.trim(),
+            city_work: selectedCity || "Новосибирск"
         };
 
         try {
@@ -762,7 +757,7 @@ function Header({ onCityChange }) {
             <header>
                 <div className="formRow justify-space-between w-60">
                     <div style={{display: 'flex', alignItems: 'center'}}>
-                        <img id="nonTextImg" src="img/ logo без текста.png" alt="Логотип компании Поиск Метров" />
+                        <img id="nonTextImg" src="/img/ logo без текста.png" alt="Логотип компании Поиск Метров" />
                         <h5 id="city">Город: <span>Новосибирск</span>
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M6 9L12 15L18 9" />
@@ -1148,6 +1143,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [selectedKeys, setSelectedKeys] = useState([]);
+    const [activeTooltip, setActiveTooltip] = useState(null);
     const [pagination, setPagination] = useState({
         current_page: 1,
         last_page: 1,
@@ -1722,15 +1718,19 @@ useEffect(() => {
                                 </td>
                                 <td>
                                     {candidate.hasVacancyComment && (
-                                        <button
-                                            id={`radactBtn${candidate.id}`}
-                                            className = {"redactBtn"}
-                                            onClick={(e) => e.stopPropagation()}
-                                            title = {candidate.hasVacancyComment }
-                                        >
-                                            <img src="/img/pen.png" alt="Редактировать анкету" />
-                                        </button>
-                                    )}
+                                            <button
+                                                id={`radactBtn${candidate.id}`}
+                                                className="redactBtn"
+                                                onClick={(e) => e.stopPropagation()}
+                                                onMouseEnter={() => setActiveTooltip(candidate.id)}
+                                                onMouseLeave={() => setActiveTooltip(null)}
+                                            >
+                                                <img src="/img/pen.png" alt="Редактировать анкету" />
+                                                <div className={`comment-tooltip ${activeTooltip === candidate.id ? 'visible' : ''}`}>
+                                                    {candidate.hasVacancyComment}
+                                                </div>
+                                            </button>
+                                        )}
                                     <button
                                         id={`downloadBtn${candidate.id}`}
                                         className = {"downloadBtn"}
@@ -2948,6 +2948,7 @@ useEffect(() => {
                             <ShowForm
                                 vacancyKey={selectedVacancyKey}
                                 setSelectedVacancyKey={setSelectedVacancyKey}
+                                selectedCity={selectedCity}  
                             />
                         ) : (
                             <>
@@ -2965,7 +2966,7 @@ useEffect(() => {
                                     onClose={handleCalendarClose}
                                     filtersButtonRef={filtersButtonRef}
                                     onFiltersApply={handleFiltersApply}
-                                    selectedCity={selectedCity}  // ДОБАВЛЯЕМ ЭТУ СТРОКУ
+                                    selectedCity={selectedCity} 
                                 />
                             </>
                         )}

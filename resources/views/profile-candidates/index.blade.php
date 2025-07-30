@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Система регистрации</title>
+    <title>Форма кандидата</title>
     @vite(['resources/css/candidatesProfiles/index.css'])
     <style>
         .successMarker{
@@ -12,7 +12,7 @@
             background: rgb(237, 255, 233);
             border-radius: 60px;
         }
-
+            
         .formRow{
             margin-top: 1rem;
         }
@@ -967,7 +967,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                     permanent_registration_address: rawFormData.adressOfPermanentReg || '',
                     temporary_registration_address: rawFormData.adressOfTemporaryReg || '',
                     actual_residence_address: rawFormData.adressOfFactialLiving || '',
-                    family_partner: (selectedMaritalStatus === 'Женат/Замужем' || selectedMaritalStatus === 'Состою в зарегистрированном браке' || selectedMaritalStatus.toLowerCase().includes('женат') || selectedMaritalStatus.toLowerCase().includes('замужем') || selectedMaritalStatus.toLowerCase().includes('браке')) ? JSON.stringify({
+                    family_partner: (selectedMaritalStatus === 'Состою в зарегистрированном браке') ? JSON.stringify({
                         full_name: rawFormData.FIOSuprug || '',
                         birth_date: formatDateForDatabase(rawFormData.dateOfBirthTable) || '',
                         phone: rawFormData.phoneNumberTable || '',
@@ -1556,7 +1556,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                             <SpouseTable
                                 formData={formData}
                                 setFormData={setFormData}
-                                isVisible={selectedMaritalStatus === 'Женат/Замужем' || selectedMaritalStatus === 'Состою в зарегистрированном браке' || selectedMaritalStatus.toLowerCase().includes('женат') || selectedMaritalStatus.toLowerCase().includes('замужем') || selectedMaritalStatus.toLowerCase().includes('браке')}
+                                isVisible={selectedMaritalStatus === 'Состою в зарегистрированном браке'}
                             />
 
                             <div className="formRow flex-direction-column">
