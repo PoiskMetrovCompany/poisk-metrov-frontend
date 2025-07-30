@@ -17,8 +17,8 @@ class MaritalStatusSeeder extends Seeder
     {
 //        MaritalStatuses::truncate();
 //        MaritalStatuses::factory()->count(3)->create();
-        MaritalStatuses::created(['key' => Str::uuid()->toString(), 'title' => 'Состою в зарегистрированном браке']);
-        MaritalStatuses::created(['key' => Str::uuid()->toString(), 'title' => 'Состою в незарегистрированном браке']);
-        MaritalStatuses::created(['key' => Str::uuid()->toString(), 'title' => 'Не состою в браке']);
+        MaritalStatuses::create(['key' => Str::uuid()->toString(), 'title' => 'Состою в зарегистрированном браке']);
+        MaritalStatuses::create(['key' => Str::uuid()->toString(), 'title' => 'Состою в незарегистрированном браке']);
+        MaritalStatuses::create(['key' => Str::uuid()->toString(), 'title' => 'Не состою в браке']);
     }
 }
