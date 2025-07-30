@@ -505,6 +505,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
         const [selectedCity, setSelectedCity] = useState('');
         const [showCityOptions, setShowCityOptions] = useState(false);
 
+
         // Централизованное состояние для данных формы
         const [formData, setFormData] = useState({});
 
@@ -951,6 +952,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                     last_name: nameData.last_name,
                     middle_name: nameData.middle_name,
                     reason_for_changing_surnames: surnameChanged ? (rawFormData.reasonOfChange || '') : null,
+                    city_work: selectedCity, 
                     birth_date: formatDateForDatabase(rawFormData.birthDate),
                     country_birth: birthPlaceData.country,
                     city_birth: birthPlaceData.city,
@@ -965,7 +967,13 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                     permanent_registration_address: rawFormData.adressOfPermanentReg || '',
                     temporary_registration_address: rawFormData.adressOfTemporaryReg || '',
                     actual_residence_address: rawFormData.adressOfFactialLiving || '',
-                    family_partner: selectedMaritalStatus === 'Женат/Замужем' ? (rawFormData.FIOSuprug || '') : null,
+                    family_partner: (selectedMaritalStatus === 'Женат/Замужем' || selectedMaritalStatus === 'Состою в зарегистрированном браке' || selectedMaritalStatus.toLowerCase().includes('женат') || selectedMaritalStatus.toLowerCase().includes('замужем') || selectedMaritalStatus.toLowerCase().includes('браке')) ? JSON.stringify({
+                        full_name: rawFormData.FIOSuprug || '',
+                        birth_date: formatDateForDatabase(rawFormData.dateOfBirthTable) || '',
+                        phone: rawFormData.phoneNumberTable || '',
+                        work_study_place: rawFormData.placeOfStudy || '',
+                        residence_address: rawFormData.placeOfLiving || ''
+                    }) : JSON.stringify({}),
                     adult_family_members: familyMembersData ? JSON.stringify(familyMembersData) : JSON.stringify([]),
                     adult_children: childrenData ? JSON.stringify(childrenData) : JSON.stringify([]),
                     serviceman: militaryDuty,
@@ -975,120 +983,122 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                     comment: 'Коммент'
                 };
 
-                const logSubmittedData = (apiData, rawFormData, selectedVacancy, selectedCity, selectedMaritalStatus) => {
-                    console.group('🚀 ОТПРАВКА АНКЕТЫ - ДЕТАЛЬНЫЕ ДАННЫЕ');
+                console.table(apiData)
+
+                // const logSubmittedData = (apiData, rawFormData, selectedVacancy, selectedCity, selectedMaritalStatus) => {
+                //     console.group('🚀 ОТПРАВКА АНКЕТЫ - ДЕТАЛЬНЫЕ ДАННЫЕ');
                     
-                    // 1. Основная информация
-                    console.group('📋 1. ОСНОВНАЯ ИНФОРМАЦИЯ');
-                    console.log('Выбранная вакансия:', selectedVacancy);
-                    console.log('Выбранный город:', selectedCity);
-                    console.log('Семейное положение:', selectedMaritalStatus);
-                    console.log('ФИО кандидата:', rawFormData.FIO || 'Не указано');
-                    console.log('Дата рождения:', rawFormData.birthDate || 'Не указано');
-                    console.log('Место рождения:', rawFormData.birthPlace || 'Не указано');
-                    console.log('Мобильный телефон:', rawFormData.mobileNumber || 'Не указано');
-                    console.log('Email:', rawFormData.email || 'Не указано');
-                    console.groupEnd();
+                //     // 1. Основная информация
+                //     console.group('📋 1. ОСНОВНАЯ ИНФОРМАЦИЯ');
+                //     console.log('Выбранная вакансия:', selectedVacancy);
+                //     console.log('Выбранный город:', selectedCity);
+                //     console.log('Семейное положение:', selectedMaritalStatus);
+                //     console.log('ФИО кандидата:', rawFormData.FIO || 'Не указано');
+                //     console.log('Дата рождения:', rawFormData.birthDate || 'Не указано');
+                //     console.log('Место рождения:', rawFormData.birthPlace || 'Не указано');
+                //     console.log('Мобильный телефон:', rawFormData.mobileNumber || 'Не указано');
+                //     console.log('Email:', rawFormData.email || 'Не указано');
+                //     console.groupEnd();
 
-                    // 2. Паспортные данные
-                    console.group('📄 2. ПАСПОРТНЫЕ ДАННЫЕ');
-                    console.log('Серия и номер:', rawFormData.passwordSeriaNumber || 'Не указано');
-                    console.log('Дата выдачи:', rawFormData.dateOfIssue || 'Не указано');
-                    console.log('Кем выдан:', rawFormData.issuedBy || 'Не указано');
-                    console.groupEnd();
+                //     // 2. Паспортные данные
+                //     console.group('📄 2. ПАСПОРТНЫЕ ДАННЫЕ');
+                //     console.log('Серия и номер:', rawFormData.passwordSeriaNumber || 'Не указано');
+                //     console.log('Дата выдачи:', rawFormData.dateOfIssue || 'Не указано');
+                //     console.log('Кем выдан:', rawFormData.issuedBy || 'Не указано');
+                //     console.groupEnd();
 
-                    // 3. Адреса
-                    console.group('🏠 3. АДРЕСНАЯ ИНФОРМАЦИЯ');
-                    console.log('Постоянная регистрация:', rawFormData.adressOfPermanentReg || 'Не указано');
-                    console.log('Временная регистрация:', rawFormData.adressOfTemporaryReg || 'Не указано');
-                    console.log('Фактическое проживание:', rawFormData.adressOfFactialLiving || 'Не указано');
-                    console.groupEnd();
+                //     // 3. Адреса
+                //     console.group('🏠 3. АДРЕСНАЯ ИНФОРМАЦИЯ');
+                //     console.log('Постоянная регистрация:', rawFormData.adressOfPermanentReg || 'Не указано');
+                //     console.log('Временная регистрация:', rawFormData.adressOfTemporaryReg || 'Не указано');
+                //     console.log('Фактическое проживание:', rawFormData.adressOfFactialLiving || 'Не указано');
+                //     console.groupEnd();
 
-                    // 4. Семейные данные
-                    console.group('👨‍👩‍👧‍👦 4. СЕМЕЙНАЯ ИНФОРМАЦИЯ');
-                    if (selectedMaritalStatus === 'Женат/Замужем') {
-                        console.log('Данные супруга:', rawFormData.FIOSuprug || 'Не указано');
-                        console.log('Дата рождения супруга:', rawFormData.dateOfBirthTable || 'Не указано');
-                        console.log('Телефон супруга:', rawFormData.phoneNumberTable || 'Не указано');
-                    }
+                //     // 4. Семейные данные
+                //     console.group('👨‍👩‍👧‍👦 4. СЕМЕЙНАЯ ИНФОРМАЦИЯ');
+                //     if (selectedMaritalStatus === 'Женат/Замужем' || selectedMaritalStatus === 'Состою в зарегистрированном браке') {
+                //         console.log('Данные супруга:', rawFormData.FIOSuprug || 'Не указано');
+                //         console.log('Дата рождения супруга:', rawFormData.dateOfBirthTable || 'Не указано');
+                //         console.log('Телефон супруга:', rawFormData.phoneNumberTable || 'Не указано');
+                //     }
                     
-                    // Дети
-                    const childrenData = JSON.parse(apiData.adult_children || '[]');
-                    if (childrenData.length > 0) {
-                        console.log('Количество детей старше 18 лет:', childrenData.length);
-                        childrenData.forEach((child, index) => {
-                            console.log(`Ребенок ${index + 1}:`, child.full_name);
-                        });
-                    } else {
-                        console.log('Детей старше 18 лет: нет');
-                    }
+                //     // Дети
+                //     const childrenData = JSON.parse(apiData.adult_children || '[]');
+                //     if (childrenData.length > 0) {
+                //         console.log('Количество детей старше 18 лет:', childrenData.length);
+                //         childrenData.forEach((child, index) => {
+                //             console.log(`Ребенок ${index + 1}:`, child.full_name);
+                //         });
+                //     } else {
+                //         console.log('Детей старше 18 лет: нет');
+                //     }
                     
-                    // Члены семьи
-                    const familyData = JSON.parse(apiData.adult_family_members || '[]');
-                    if (familyData.length > 0) {
-                        console.log('Количество членов семьи старше 18 лет:', familyData.length);
-                        familyData.forEach((member, index) => {
-                            console.log(`Член семьи ${index + 1}:`, member.relationship_and_name);
-                        });
-                    } else {
-                        console.log('Членов семьи старше 18 лет: нет');
-                    }
-                    console.groupEnd();
+                //     // Члены семьи
+                //     const familyData = JSON.parse(apiData.adult_family_members || '[]');
+                //     if (familyData.length > 0) {
+                //         console.log('Количество членов семьи старше 18 лет:', familyData.length);
+                //         familyData.forEach((member, index) => {
+                //             console.log(`Член семьи ${index + 1}:`, member.relationship_and_name);
+                //         });
+                //     } else {
+                //         console.log('Членов семьи старше 18 лет: нет');
+                //     }
+                //     console.groupEnd();
 
-                    // 5. Юридический статус
-                    console.group('⚖️ 5. ЮРИДИЧЕСКИЙ СТАТУС');
-                    console.log('Военнообязанный:', apiData.serviceman ? 'Да' : 'Нет');
-                    console.log('Привлечение к уголовной ответственности:', apiData.law_breaker);
-                    console.log('Учредитель юрлица:', apiData.legal_entity);
-                    console.log('Согласие на обработку данных:', apiData.is_data_processing ? 'Да' : 'Нет');
-                    console.groupEnd();
+                //     // 5. Юридический статус
+                //     console.group('⚖️ 5. ЮРИДИЧЕСКИЙ СТАТУС');
+                //     console.log('Военнообязанный:', apiData.serviceman ? 'Да' : 'Нет');
+                //     console.log('Привлечение к уголовной ответственности:', apiData.law_breaker);
+                //     console.log('Учредитель юрлица:', apiData.legal_entity);
+                //     console.log('Согласие на обработку данных:', apiData.is_data_processing ? 'Да' : 'Нет');
+                //     console.groupEnd();
 
-                    // 6. Технические данные для API
-                    console.group('🔧 6. ТЕХНИЧЕСКИЕ ДАННЫЕ ДЛЯ API');
-                    console.log('Ключ вакансии:', apiData.vacancies_key);
-                    console.log('Ключ семейного положения:', apiData.marital_statuses_key);
-                    console.log('Статус кандидата:', apiData.status);
-                    console.groupEnd();
+                //     // 6. Технические данные для API
+                //     console.group('🔧 6. ТЕХНИЧЕСКИЕ ДАННЫЕ ДЛЯ API');
+                //     console.log('Ключ вакансии:', apiData.vacancies_key);
+                //     console.log('Ключ семейного положения:', apiData.marital_statuses_key);
+                //     console.log('Статус кандидата:', apiData.status);
+                //     console.groupEnd();
 
-                    // 7. Полный объект для отправки
-                    console.group('📦 7. ПОЛНЫЙ ОБЪЕКТ ДЛЯ ОТПРАВКИ В API');
-                    console.log('Размер объекта:', Object.keys(apiData).length, 'полей');
-                    console.table(apiData);
-                    console.groupEnd();
+                //     // 7. Полный объект для отправки
+                //     console.group('📦 7. ПОЛНЫЙ ОБЪЕКТ ДЛЯ ОТПРАВКИ В API');
+                //     console.log('Размер объекта:', Object.keys(apiData).length, 'полей');
+                //     console.table(apiData);
+                //     console.groupEnd();
 
-                    // 8. Валидация данных
-                    console.group('✅ 8. ПРОВЕРКА ОБЯЗАТЕЛЬНЫХ ПОЛЕЙ');
-                    const requiredFields = {
-                        'ФИО': rawFormData.FIO,
-                        'Вакансия': selectedVacancy,
-                        'Дата рождения': rawFormData.birthDate,
-                        'Мобильный телефон': rawFormData.mobileNumber,
-                        'Email': rawFormData.email,
-                        'Серия и номер паспорта': rawFormData.passwordSeriaNumber,
-                        'Согласие на обработку данных': apiData.is_data_processing
-                    };
+                //     // 8. Валидация данных
+                //     console.group('✅ 8. ПРОВЕРКА ОБЯЗАТЕЛЬНЫХ ПОЛЕЙ');
+                //     const requiredFields = {
+                //         'ФИО': rawFormData.FIO,
+                //         'Вакансия': selectedVacancy,
+                //         'Дата рождения': rawFormData.birthDate,
+                //         'Мобильный телефон': rawFormData.mobileNumber,
+                //         'Email': rawFormData.email,
+                //         'Серия и номер паспорта': rawFormData.passwordSeriaNumber,
+                //         'Согласие на обработку данных': apiData.is_data_processing
+                //     };
 
-                    let missingFields = [];
-                    Object.entries(requiredFields).forEach(([field, value]) => {
-                        if (!value || (typeof value === 'string' && value.trim() === '')) {
-                            missingFields.push(field);
-                            console.warn(`❌ ${field}: НЕ ЗАПОЛНЕНО`);
-                        } else {
-                            console.log(`✅ ${field}: заполнено`);
-                        }
-                    });
+                //     let missingFields = [];
+                //     Object.entries(requiredFields).forEach(([field, value]) => {
+                //         if (!value || (typeof value === 'string' && value.trim() === '')) {
+                //             missingFields.push(field);
+                //             console.warn(`❌ ${field}: НЕ ЗАПОЛНЕНО`);
+                //         } else {
+                //             console.log(`✅ ${field}: заполнено`);
+                //         }
+                //     });
 
-                    if (missingFields.length > 0) {
-                        console.warn('⚠️ ВНИМАНИЕ: Не заполнены обязательные поля:', missingFields);
-                    } else {
-                        console.log('🎉 Все обязательные поля заполнены');
-                    }
-                    console.groupEnd();
+                //     if (missingFields.length > 0) {
+                //         console.warn('⚠️ ВНИМАНИЕ: Не заполнены обязательные поля:', missingFields);
+                //     } else {
+                //         console.log('🎉 Все обязательные поля заполнены');
+                //     }
+                //     console.groupEnd();
 
-                    console.groupEnd();
-                };
+                //     console.groupEnd();
+                // };
 
-                logSubmittedData(apiData, rawFormData, selectedVacancy, selectedCity, selectedMaritalStatus);
+                // logSubmittedData(apiData, rawFormData, selectedVacancy, selectedCity, selectedMaritalStatus);
 
                 const response = await fetch('/api/v1/candidates/store', {
                     method: 'POST',
@@ -1540,31 +1550,13 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                             setShowMaritalOptions(false);
                                         }}
                                     />
-                                    {maritalStatusError && (
-                                        <div className="error-message" style={{ marginTop: '5px', fontSize: '14px', color: '#e74c3c' }}>
-                                            {maritalStatusError}
-                                            <button
-                                                onClick={loadMaritalStatuses}
-                                                style={{
-                                                marginLeft: '10px',
-                                                background: 'none',
-                                                border: 'none',
-                                                color: '#3498db',
-                                                cursor: 'pointer',
-                                                textDecoration: 'underline'
-                                            }}
-                                            >
-                                                Повторить
-                                            </button>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
                             <SpouseTable
                                 formData={formData}
                                 setFormData={setFormData}
-                                isVisible={selectedMaritalStatus === 'Женат/Замужем'}
+                                isVisible={selectedMaritalStatus === 'Женат/Замужем' || selectedMaritalStatus === 'Состою в зарегистрированном браке' || selectedMaritalStatus.toLowerCase().includes('женат') || selectedMaritalStatus.toLowerCase().includes('замужем') || selectedMaritalStatus.toLowerCase().includes('браке')}
                             />
 
                             <div className="formRow flex-direction-column">

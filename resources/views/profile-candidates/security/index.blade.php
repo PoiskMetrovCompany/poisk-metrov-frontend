@@ -66,12 +66,12 @@
     const { useState, useEffect, useRef } = React;
 
 
-function Header() {
+function Header({ onCityChange }) { 
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedCity, setSelectedCity] = useState('Новосибирск'); // Хук для отслеживания города
-  const [showCityDropdown, setShowCityDropdown] = useState(false); // Состояние для dropdown
+  const [selectedCity, setSelectedCity] = useState('Новосибирск'); 
+  const [showCityDropdown, setShowCityDropdown] = useState(false); 
   const notificationButtonRef = useRef(null);
   const cityDropdownRef = useRef(null);
 
@@ -103,10 +103,14 @@ function Header() {
   };
 
   // Обработчик выбора города
-  const handleCitySelect = (city) => {
+ const handleCitySelect = (city) => {
     setSelectedCity(city);
     setShowCityDropdown(false);
+    if (onCityChange) {
+      onCityChange(city);
+    }
   };
+
 
   // Обработчик клика по селектору города
   const toggleCityDropdown = () => {
@@ -454,9 +458,9 @@ function Header() {
 
             console.log('=== ЗАПРОС ДАННЫХ КАНДИДАТА ===');
             console.log('vacancyKey:', vacancyKey);
-            console.log('URL:', `http://127.0.0.1:8000/api/v1/candidates/read?key=${vacancyKey}`);
+            console.log('URL:', `/api/v1/candidates/read?key=${vacancyKey}`);
 
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/candidates/read?key=${vacancyKey}`, {
+            const response = await fetch(`/api/v1/candidates/read?key=${vacancyKey}`, {
                 method: 'GET',
                 headers: headers
             });
@@ -562,7 +566,7 @@ function Header() {
                 'X-CSRF-TOKEN': csrfToken,
             };
 
-            const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+            const response = await fetch('/api/v1/candidates/update', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(requestData)
@@ -643,7 +647,7 @@ function Header() {
                 'X-CSRF-TOKEN': csrfToken,
             };
 
-            const response = await fetch('http://127.0.0.1:8000/api/v1/candidates/update', {
+            const response = await fetch('/api/v1/candidates/update', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(requestData)
@@ -981,11 +985,11 @@ function Header() {
                                     <tr>
                                         <td>
                                             <input type="text" name="placeOfStudy" placeholder="Место учебы/работы, рабочий телефон" 
-                                                   value={candidateData.family_partner.work_place || ''} readOnly />
+                                                   value={candidateData.family_partner.residence_address || ''} readOnly />
                                         </td>
                                         <td>
                                             <input type="text" name="placeOfLiving" placeholder="Место проживания" 
-                                                   value={candidateData.family_partner.residence_place || ''} readOnly />
+                                                   value={candidateData.family_partner.work_study_place || ''} readOnly />
                                         </td>
                                     </tr>
                                     </tbody>
@@ -1139,7 +1143,7 @@ function Header() {
 }
 
 
-function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filteredData, activeFilters, onFiltersReset }) {
+function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filteredData, activeFilters, onFiltersReset, selectedCity }) {
     const [candidates, setCandidates] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -1183,7 +1187,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
     }, []);
 
     // Добавить вспомогательные функции для фильтров
-    const formatApiDateRange = (startDate, endDate, type) => {
+    const formatseRange = (startDate, endDate, type) => {
         if (!startDate || !endDate) return null;
 
         const formatDate = (date, rangeType) => {
@@ -1411,7 +1415,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                 throw new Error('Токен авторизации не найден');
             }
 
-            let url = `/api/v1/candidates/?page=${page}`;
+            let url = `/api/v1/candidates/?page=${page}&city_work=${encodeURIComponent(selectedCity)}`;
 
             // Если есть активные фильтры и нужно их использовать
             if (useFilters && activeFilters) {
@@ -1591,36 +1595,35 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
     };
 
 
-    useEffect(() => {
-        if (isAuthorized) {
-            if (filteredData) {
-                // Если есть отфильтрованные данные, используем их
-                const transformedCandidates = filteredData.attributes.data.map(candidate => ({
-                    id: candidate.id,
-                    name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
-                    datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
-                    vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
-                    status: candidate.status || 'Не определен',
-                    statusID: getStatusId(candidate.status),
-                    hasVacancyComment: candidate.comment,
-                    vacancyKey: candidate.key,
-                    fullData: candidate
-                }));
-                setCandidates(transformedCandidates);
-                setPagination({
-                    current_page: filteredData.attributes.current_page,
-                    last_page: filteredData.attributes.last_page,
-                    total: filteredData.attributes.total,
-                    per_page: filteredData.attributes.per_page,
-                    from: filteredData.attributes.from,
-                    to: filteredData.attributes.to
-                });
-            } else {
-                // Если нет отфильтрованных данных, загружаем обычные
-                fetchCandidates();
-            }
+useEffect(() => {
+    if (isAuthorized) {
+        if (filteredData) {
+            // Если есть отфильтрованные данные, используем их
+            const transformedCandidates = filteredData.attributes.data.map(candidate => ({
+                id: candidate.id,
+                name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
+                datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
+                vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
+                status: candidate.status || 'Не определен',
+                statusID: getStatusId(candidate.status),
+                hasVacancyComment: candidate.comment,
+                vacancyKey: candidate.key,
+                fullData: candidate
+            }));
+            setCandidates(transformedCandidates);
+            setPagination({
+                current_page: filteredData.attributes.current_page,
+                last_page: filteredData.attributes.last_page,
+                total: filteredData.attributes.total,
+                per_page: filteredData.attributes.per_page,
+                from: filteredData.attributes.from,
+                to: filteredData.attributes.to
+            });
+        } else {
+            fetchCandidates();
         }
-    }, [filteredData, isAuthorized]);
+    }
+}, [filteredData, isAuthorized, selectedCity]);
 
     useEffect(() => {
         console.log('Выбранные ключи:', selectedKeys);
@@ -1826,7 +1829,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
 }
 
     // FiltersCalendar Component
-   function FiltersCalendar({ isOpen, onClose, filtersButtonRef, onFiltersApply }) {
+   function FiltersCalendar({ isOpen, onClose, filtersButtonRef, onFiltersApply, selectedCity }) {
         const [selectedFilters, setSelectedFilters] = useState({
             status: ['showAll'],
             vacancy: ['showAll'],
@@ -2119,6 +2122,10 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                };
 
                const queryParams = [];
+
+               if (selectedCity) {
+                    queryParams.push(`city_work=${encodeURIComponent(selectedCity)}`);
+                }
 
                if (updatedFilters.dateRange.start && updatedFilters.dateRange.end) {
                    const dateRange = formatApiDateRange(
@@ -2762,24 +2769,6 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                             ))}
                         </div>
 
-                        {/* Отображение ошибки применения фильтров */}
-                        {candidatesError && (
-                            <div className="formRow" style={{marginTop: '15px'}}>
-                                <div style={{
-                                padding: '15px',
-                                backgroundColor: '#ffeaea',
-                                border: '1px solid #e74c3c',
-                                borderRadius: '6px',
-                                color: '#c0392b',
-                                fontSize: '14px',
-                                lineHeight: '1.4'
-                            }}>
-                                    <strong>Ошибка при загрузке данных:</strong><br />
-                                    {candidatesError}
-                                </div>
-                            </div>
-                        )}
-
                         <div className="formRow justify-center" style={{marginTop: '25px', gap: '1rem'}}>
                             <button
                                 className={`formBtn ${isLoadingCandidates ? 'btn-inactive' : 'btn-active'}`}
@@ -2906,82 +2895,84 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
         );
     }
 
-    function App() {
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [selectedVacancyKey, setSelectedVacancyKey] = useState(null);
+        function App() {
+            const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+            const [selectedVacancyKey, setSelectedVacancyKey] = useState(null);
+            const [filteredData, setFilteredData] = useState(null);
+            const [activeFilters, setActiveFilters] = useState(null);
+            const [selectedCity, setSelectedCity] = useState('Новосибирск');
 
-    // Добавляем недостающие состояния для фильтров
-    const [filteredData, setFilteredData] = useState(null);
-    const [activeFilters, setActiveFilters] = useState(null);
+            const filtersButtonRef = useRef(null);
 
-    const filtersButtonRef = useRef(null);
+            const handleFiltersClick = () => {
+                setIsCalendarOpen(true);
+            };
 
-    const handleFiltersClick = () => {
-        setIsCalendarOpen(true);
-    };
+            const handleCalendarClose = () => {
+                setIsCalendarOpen(false);
+            };
 
-    const handleCalendarClose = () => {
-        setIsCalendarOpen(false);
-    };
+            const handleRowClick = (vacancyKey) => {
+                setSelectedVacancyKey(vacancyKey);
+            };
 
-    // Обработчик клика по строке кандидата
-    const handleRowClick = (vacancyKey) => {
-        setSelectedVacancyKey(vacancyKey);
-    };
+            const handleBackToList = () => {
+                setSelectedVacancyKey(null);
+            };
 
-    // Обработчик возврата к списку кандидатов
-    const handleBackToList = () => {
-        setSelectedVacancyKey(null);
-    };
+            const handleFiltersApply = (data, filters) => {
+                setFilteredData(data);
+                setActiveFilters(filters);
+                setIsCalendarOpen(false);
+            };
 
-    // Обработчик применения фильтров
-    const handleFiltersApply = (data, filters) => {
-        setFilteredData(data);
-        setActiveFilters(filters);
-        setIsCalendarOpen(false); // Закрываем панель фильтров после применения
-    };
+            // ИСПРАВЛЕННАЯ функция handleCityChange
+            const handleCityChange = (city) => {
+                console.log('Изменение города на:', city); // Для отладки
+                setSelectedCity(city);
+                // Сбрасываем фильтры при смене города
+                setFilteredData(null);
+                setActiveFilters(null);
+            };
 
-    // Обработчик сброса фильтров
-    const handleFiltersReset = () => {
-        setFilteredData(null);
-        setActiveFilters(null);
-    };
+            const handleFiltersReset = () => {
+                setFilteredData(null);
+                setActiveFilters(null);
+            };
 
-    return (
-        <>
-            {/* Показываем Header только когда не открыта форма кандидата */}
-            {!selectedVacancyKey && <Header />}
-
-            <main>
-                {selectedVacancyKey ? (
-                    // Показываем форму кандидата, если выбран кандидат
-                    <ShowForm
-                        vacancyKey={selectedVacancyKey}
-                        setSelectedVacancyKey={setSelectedVacancyKey}
-                    />
-                ) : (
-                    // Показываем таблицу кандидатов, если кандидат не выбран
-                    <>
-                        <CandidatesTable
-                            onFiltersClick={handleFiltersClick}
-                            onRowClick={handleRowClick}
-                            filtersButtonRef={filtersButtonRef}
-                            filteredData={filteredData}
-                            activeFilters={activeFilters}
-                            onFiltersReset={handleFiltersReset}
-                        />
-                        <FiltersCalendar
-                            isOpen={isCalendarOpen}
-                            onClose={handleCalendarClose}
-                            filtersButtonRef={filtersButtonRef}
-                            onFiltersApply={handleFiltersApply}
-                        />
-                    </>
-                )}
-            </main>
-        </>
-    );
-}
+            return (
+                <>
+                    {!selectedVacancyKey && <Header onCityChange={handleCityChange} />}
+                    <main>
+                        {selectedVacancyKey ? (
+                            <ShowForm
+                                vacancyKey={selectedVacancyKey}
+                                setSelectedVacancyKey={setSelectedVacancyKey}
+                            />
+                        ) : (
+                            <>
+                                <CandidatesTable
+                                    onFiltersClick={handleFiltersClick}
+                                    onRowClick={handleRowClick}
+                                    filtersButtonRef={filtersButtonRef}
+                                    filteredData={filteredData}
+                                    activeFilters={activeFilters}
+                                    onFiltersReset={handleFiltersReset}
+                                    selectedCity={selectedCity}
+                                />
+                                <FiltersCalendar
+                                    isOpen={isCalendarOpen}
+                                    onClose={handleCalendarClose}
+                                    filtersButtonRef={filtersButtonRef}
+                                    onFiltersApply={handleFiltersApply}
+                                    selectedCity={selectedCity}  // ДОБАВЛЯЕМ ЭТУ СТРОКУ
+                                />
+                            </>
+                        )}
+                    </main>
+                </>
+            );
+        }
 
     // Монтируем главное приложение
     ReactDOM.render(React.createElement(App), document.getElementById('root'));
