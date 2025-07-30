@@ -158,7 +158,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     Route::prefix('export')->group(function () {
         /// NOTE: эти маршруты могуп принимать гет параметр "keys"
         Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke']);
+        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke'])->middleware('auth:sanctum');
         /// END
     });
     /// END
