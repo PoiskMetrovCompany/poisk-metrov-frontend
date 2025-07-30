@@ -27,3 +27,4 @@ yarn-error.log
 /*.tar
 /*.sql
 tests/Unit/Support/Data/dump.sql
+*/.DS_Store
