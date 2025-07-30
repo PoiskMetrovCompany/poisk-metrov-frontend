@@ -20,6 +20,7 @@ class CandidateProfiles extends Model
         'last_name',
         'middle_name',
         'reason_for_changing_surnames',
+        'city_work',
         'birth_date',
         'country_birth',
         'city_birth',

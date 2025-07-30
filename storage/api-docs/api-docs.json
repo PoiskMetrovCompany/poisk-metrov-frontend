@@ -141,15 +141,95 @@
                 "tags": [
                     "CandidateProfiles"
                 ],
-                "summary": "получение списка анкет",
-                "description": "Возвращение JSON объекта",
+                "summary": "Получение списка анкет",
+                "description": "Возвращает JSON объект со списком анкет кандидатов с возможностью фильтрации.",
                 "operationId": "f07dfcc4eae70279e4e7f0492c80133d",
+                "parameters": [
+                    {
+                        "name": "city_work",
+                        "in": "query",
+                        "description": "Город работы кандидата",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "candidate_statuses",
+                        "in": "query",
+                        "description": "Статусы анкет (множественные значения через запятую).",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "vacancy_keys",
+                        "in": "query",
+                        "description": "UUID вакансий (через запятую)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "year_range",
+                        "in": "query",
+                        "description": "Год (например: 2024)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 2100,
+                            "minimum": 1900
+                        }
+                    },
+                    {
+                        "name": "month_range",
+                        "in": "query",
+                        "description": "Месяц (01-12)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 12,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "date_range",
+                        "in": "query",
+                        "description": "Диапазон дат",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "УСПЕХ!"
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Resource not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [
@@ -395,6 +475,10 @@
                                         "reason_for_changing_surnames": {
                                             "type": "string",
                                             "example": ""
+                                        },
+                                        "city_work": {
+                                            "type": "string",
+                                            "example": "Новосибирск"
                                         },
                                         "birth_date": {
                                             "type": "string",
@@ -680,6 +764,10 @@
                                         "reason_for_changing_surnames": {
                                             "type": "string",
                                             "example": ""
+                                        },
+                                        "city_work": {
+                                            "type": "string",
+                                            "example": "Новосибирск"
                                         },
                                         "birth_date": {
                                             "type": "string",

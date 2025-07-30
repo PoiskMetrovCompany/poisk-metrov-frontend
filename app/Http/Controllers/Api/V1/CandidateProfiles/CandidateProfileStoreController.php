@@ -65,6 +65,7 @@ use OpenApi\Annotations as OA;
  *              @OA\Property(property="last_name", type="string", example=""),
  *              @OA\Property(property="middle_name", type="string", example=""),
  *              @OA\Property(property="reason_for_changing_surnames", type="string", example=""),
+ *              @OA\Property(property="city_work", type="string", example="Новосибирск"),
  *              @OA\Property(property="birth_date", type="string", example=""),
  *              @OA\Property(property="country_birth", type="string", example=""),
  *              @OA\Property(property="city_birth", type="string", example=""),
@@ -96,9 +97,6 @@ use OpenApi\Annotations as OA;
  *         )
  *     )
  * )
- *
- * @param CandidateProfilesStoreRequest $request
- * @return JsonResponse
  */
 class CandidateProfileStoreController extends Controller
 {
@@ -109,7 +107,11 @@ class CandidateProfileStoreController extends Controller
 
     }
 
-    public function __invoke(CandidateProfilesStoreRequest $request)
+    /**
+     * @param CandidateProfilesStoreRequest $request
+     * @return JsonResponse
+     */
+    public function __invoke(CandidateProfilesStoreRequest $request): JsonResponse
     {
         $attributes = $request->validated();
         $attributes['key'] = Str::uuid()->toString();
