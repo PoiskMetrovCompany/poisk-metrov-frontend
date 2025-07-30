@@ -30,7 +30,7 @@ class CandidateProfilesUpdateRequest extends FormRequest
             'last_name' => ['nullable', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'reason_for_changing_surnames' => ['nullable'],
-            'city_work' => ['required', 'string', 'max:255'],
+            'city_work' => ['nullable', 'string', 'max:255'],
             'birth_date' => ['nullable'],
             'country_birth' => ['nullable', 'string', 'max:255'],
             'city_birth' => ['nullable', 'string', 'max:255'],
