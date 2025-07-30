@@ -66,11 +66,8 @@ class ExportToPDFFormatController extends Controller
             }
 
             $profiles = $query->whereIn('candidate_profiles.key', $keys)->get();
-            Log::info('Запрошены ключи:', ['keys' => $keys]);
-            Log::info('Найдено анкет:', ['count' => $profiles->count(), 'found_keys' => $profiles->pluck('key')->toArray()]);
         } else {
             $profiles = $query->get();
-            Log::info('Export PDF: экспорт всех анкет', ['count' => $profiles->count()]);
         }
 
         if ($profiles->isEmpty()) {
