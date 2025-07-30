@@ -186,7 +186,7 @@
                     <section>
                         <div className="center-card">
                             <h1>Вход для администратора</h1>
-                            <p>Введите логин и пароль, чтобы авторизоваться в системе и получить доступ к административной панели</p>
+                            <p style = {{maxWidth: "100%"}}>Введите логин и пароль, чтобы авторизоваться в системе и получить доступ к административной панели</p>
 
                             <form action="#" style={{marginTop: '30px'}} onSubmit={handleSubmit}>
                                 <div className="input-container" style={{marginBottom: '20px'}}>

@@ -1577,7 +1577,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                     <table className="candidatesTable w-80">
                         <thead>
                         <tr style={{border: '0'}}>
-                            <th width="50"></th>
+                            <th></th>
                             <th>ФИО Кандидата</th>
                             <th>Дата и время</th>
                             <th>Вакансия</th>
