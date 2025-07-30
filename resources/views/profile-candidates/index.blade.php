@@ -39,6 +39,10 @@
             text-align: center;
         }
 
+        .formRow{
+            margin-top: 2rem;
+        }
+
         .success-modal h1 {
             margin: 20px 0 10px 0;
             color: #181817;
@@ -227,6 +231,10 @@ const RelativeTable = ({ index, formData, setFormData }) => {
         }
     };
 
+    const formatNameInput = (value) => {
+        return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+    };
+
     const handleInputChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -258,7 +266,10 @@ const RelativeTable = ({ index, formData, setFormData }) => {
                             name={`FIORelative${index}`}
                             placeholder="Степень родства, ФИО члена семьи"
                             value={formData[`FIORelative${index}`] || ''}
-                            onChange={(e) => handleInputChange(`FIORelative${index}`, e.target.value)}
+                            onChange={(e) => {
+                                const formattedValue = formatNameInput(e.target.value);
+                                handleInputChange(`FIORelative${index}`, formattedValue);
+                            }}
                         />
                     </td>
                 </tr>
@@ -344,6 +355,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
         }
     };
 
+    const formatNameInput = (value) => {
+        return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+    };
+   
     const handleInputChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -375,7 +390,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                             name={`FIOChildren${index}`}
                             placeholder="ФИО ребенка"
                             value={formData[`FIOChildren${index}`] || ''}
-                            onChange={(e) => handleInputChange(`FIOChildren${index}`, e.target.value)}
+                            onChange={(e) => {
+                                const formattedValue = formatNameInput(e.target.value);
+                                handleInputChange(`FIOChildren${index}`, formattedValue);
+                            }}
                         />
                     </td>
                 </tr>
@@ -483,6 +501,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
         const [submitError, setSubmitError] = useState('');
         const [submitSuccess, setSubmitSuccess] = useState(false);
 
+        //Состояния для селекта города
+        const [selectedCity, setSelectedCity] = useState('');
+        const [showCityOptions, setShowCityOptions] = useState(false);
+
         // Централизованное состояние для данных формы
         const [formData, setFormData] = useState({});
 
@@ -534,7 +556,9 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
             return null;
         };
 
-
+        const formatNameInput = (value) => {
+            return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+        };
         const formatDate = (value) => {
             // Удаляем все символы кроме цифр
             const numbers = value.replace(/\D/g, '');
@@ -808,11 +832,14 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
             'Гражданский брак'
         ];
 
+        const cityOptions = ['Новосибирск', 'Санкт-Петербург'];
+
         // Функция для закрытия всех select'ов при клике вне их
         useEffect(() => {
             const handleClickOutside = () => {
                 setShowVacancyOptions(false);
                 setShowMaritalOptions(false);
+                setShowCityOptions(false);
             };
 
             document.addEventListener('click', handleClickOutside);
@@ -948,7 +975,120 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                     comment: 'Коммент'
                 };
 
-                console.log('Отправляемые данные:', apiData);
+                const logSubmittedData = (apiData, rawFormData, selectedVacancy, selectedCity, selectedMaritalStatus) => {
+                    console.group('🚀 ОТПРАВКА АНКЕТЫ - ДЕТАЛЬНЫЕ ДАННЫЕ');
+                    
+                    // 1. Основная информация
+                    console.group('📋 1. ОСНОВНАЯ ИНФОРМАЦИЯ');
+                    console.log('Выбранная вакансия:', selectedVacancy);
+                    console.log('Выбранный город:', selectedCity);
+                    console.log('Семейное положение:', selectedMaritalStatus);
+                    console.log('ФИО кандидата:', rawFormData.FIO || 'Не указано');
+                    console.log('Дата рождения:', rawFormData.birthDate || 'Не указано');
+                    console.log('Место рождения:', rawFormData.birthPlace || 'Не указано');
+                    console.log('Мобильный телефон:', rawFormData.mobileNumber || 'Не указано');
+                    console.log('Email:', rawFormData.email || 'Не указано');
+                    console.groupEnd();
+
+                    // 2. Паспортные данные
+                    console.group('📄 2. ПАСПОРТНЫЕ ДАННЫЕ');
+                    console.log('Серия и номер:', rawFormData.passwordSeriaNumber || 'Не указано');
+                    console.log('Дата выдачи:', rawFormData.dateOfIssue || 'Не указано');
+                    console.log('Кем выдан:', rawFormData.issuedBy || 'Не указано');
+                    console.groupEnd();
+
+                    // 3. Адреса
+                    console.group('🏠 3. АДРЕСНАЯ ИНФОРМАЦИЯ');
+                    console.log('Постоянная регистрация:', rawFormData.adressOfPermanentReg || 'Не указано');
+                    console.log('Временная регистрация:', rawFormData.adressOfTemporaryReg || 'Не указано');
+                    console.log('Фактическое проживание:', rawFormData.adressOfFactialLiving || 'Не указано');
+                    console.groupEnd();
+
+                    // 4. Семейные данные
+                    console.group('👨‍👩‍👧‍👦 4. СЕМЕЙНАЯ ИНФОРМАЦИЯ');
+                    if (selectedMaritalStatus === 'Женат/Замужем') {
+                        console.log('Данные супруга:', rawFormData.FIOSuprug || 'Не указано');
+                        console.log('Дата рождения супруга:', rawFormData.dateOfBirthTable || 'Не указано');
+                        console.log('Телефон супруга:', rawFormData.phoneNumberTable || 'Не указано');
+                    }
+                    
+                    // Дети
+                    const childrenData = JSON.parse(apiData.adult_children || '[]');
+                    if (childrenData.length > 0) {
+                        console.log('Количество детей старше 18 лет:', childrenData.length);
+                        childrenData.forEach((child, index) => {
+                            console.log(`Ребенок ${index + 1}:`, child.full_name);
+                        });
+                    } else {
+                        console.log('Детей старше 18 лет: нет');
+                    }
+                    
+                    // Члены семьи
+                    const familyData = JSON.parse(apiData.adult_family_members || '[]');
+                    if (familyData.length > 0) {
+                        console.log('Количество членов семьи старше 18 лет:', familyData.length);
+                        familyData.forEach((member, index) => {
+                            console.log(`Член семьи ${index + 1}:`, member.relationship_and_name);
+                        });
+                    } else {
+                        console.log('Членов семьи старше 18 лет: нет');
+                    }
+                    console.groupEnd();
+
+                    // 5. Юридический статус
+                    console.group('⚖️ 5. ЮРИДИЧЕСКИЙ СТАТУС');
+                    console.log('Военнообязанный:', apiData.serviceman ? 'Да' : 'Нет');
+                    console.log('Привлечение к уголовной ответственности:', apiData.law_breaker);
+                    console.log('Учредитель юрлица:', apiData.legal_entity);
+                    console.log('Согласие на обработку данных:', apiData.is_data_processing ? 'Да' : 'Нет');
+                    console.groupEnd();
+
+                    // 6. Технические данные для API
+                    console.group('🔧 6. ТЕХНИЧЕСКИЕ ДАННЫЕ ДЛЯ API');
+                    console.log('Ключ вакансии:', apiData.vacancies_key);
+                    console.log('Ключ семейного положения:', apiData.marital_statuses_key);
+                    console.log('Статус кандидата:', apiData.status);
+                    console.groupEnd();
+
+                    // 7. Полный объект для отправки
+                    console.group('📦 7. ПОЛНЫЙ ОБЪЕКТ ДЛЯ ОТПРАВКИ В API');
+                    console.log('Размер объекта:', Object.keys(apiData).length, 'полей');
+                    console.table(apiData);
+                    console.groupEnd();
+
+                    // 8. Валидация данных
+                    console.group('✅ 8. ПРОВЕРКА ОБЯЗАТЕЛЬНЫХ ПОЛЕЙ');
+                    const requiredFields = {
+                        'ФИО': rawFormData.FIO,
+                        'Вакансия': selectedVacancy,
+                        'Дата рождения': rawFormData.birthDate,
+                        'Мобильный телефон': rawFormData.mobileNumber,
+                        'Email': rawFormData.email,
+                        'Серия и номер паспорта': rawFormData.passwordSeriaNumber,
+                        'Согласие на обработку данных': apiData.is_data_processing
+                    };
+
+                    let missingFields = [];
+                    Object.entries(requiredFields).forEach(([field, value]) => {
+                        if (!value || (typeof value === 'string' && value.trim() === '')) {
+                            missingFields.push(field);
+                            console.warn(`❌ ${field}: НЕ ЗАПОЛНЕНО`);
+                        } else {
+                            console.log(`✅ ${field}: заполнено`);
+                        }
+                    });
+
+                    if (missingFields.length > 0) {
+                        console.warn('⚠️ ВНИМАНИЕ: Не заполнены обязательные поля:', missingFields);
+                    } else {
+                        console.log('🎉 Все обязательные поля заполнены');
+                    }
+                    console.groupEnd();
+
+                    console.groupEnd();
+                };
+
+                logSubmittedData(apiData, rawFormData, selectedVacancy, selectedCity, selectedMaritalStatus);
 
                 const response = await fetch('/api/v1/candidates/store', {
                     method: 'POST',
@@ -1079,6 +1219,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         onToggle={() => {
                                             setShowVacancyOptions(!showVacancyOptions);
                                             setShowMaritalOptions(false);
+                                            setShowCityOptions(false); 
                                         }}
                                         onSelect={(option) => {
                                             setSelectedVacancy(option);
@@ -1108,6 +1249,30 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
 
                             <div className="formRow">
                                 <div className="input-container">
+                                    <label htmlFor="City" className="formLabel">Город работы</label>
+                                    <CustomSelect
+                                        options={cityOptions}
+                                        placeholder="Выберите город в котором хотите работать"
+                                        value={selectedCity}
+                                        show={showCityOptions}
+                                        isLoading={false}
+                                        error=""
+                                        onToggle={() => {
+                                            setShowCityOptions(!showCityOptions);
+                                            setShowVacancyOptions(false);
+                                            setShowMaritalOptions(false);
+                                        }}
+                                        onSelect={(option) => {
+                                            setSelectedCity(option);
+                                            setShowCityOptions(false);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            
+
+                            <div className="formRow">
+                                <div className="input-container">
                                     <label htmlFor="FIO" className="formLabel">ФИО</label>
                                     <input
                                         type="text"
@@ -1115,7 +1280,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         className="formInput big"
                                         placeholder="Иванов Иван Иванович"
                                         value={formData.FIO || ''}
-                                        onChange={(e) => handleFormDataChange('FIO', e.target.value)}
+                                        onChange={(e) => handleFormDataChange('FIO', formatNameInput(e.target.value))}
                                     />
                                 </div>
                             </div>
@@ -1368,6 +1533,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         onToggle={() => {
                                             setShowMaritalOptions(!showMaritalOptions);
                                             setShowVacancyOptions(false);
+                                            setShowCityOptions(false); 
                                         }}
                                         onSelect={(option) => {
                                             setSelectedMaritalStatus(option);

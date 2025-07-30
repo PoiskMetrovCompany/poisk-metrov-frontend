@@ -40,7 +40,7 @@
     header {
         display: flex;
         justify-content: center;
-        margin-top: 3rem; /* 48px */
+        margin-top: 1rem;
         margin-bottom: 3rem; /* 48px */
         position: relative;
     }
@@ -113,7 +113,8 @@
     /* Типография карточек */
     .center-card h1 {
         font-weight: 500;
-        font-size: 1.5rem; /* 24px */
+        font-size: 1.25rem; 
+        
     }
 
     .center-card p {
@@ -121,6 +122,8 @@
         font-weight: 400;
         line-height: 1.5;
         color: rgba(129, 129, 129, 1);
+        font-size: 1.125rem;
+        max-width: 70%;
     }
 
     /* ==============================================
@@ -174,6 +177,7 @@
         font-weight: 500;
         text-align: center;
         margin: 0;
+        font-size: 1.25rem;
     }
 
     .formRow h4 {
@@ -186,7 +190,6 @@
         font-size: 1.125rem; /* 18px */
     }
 
-    /* Контейнеры для ввода */
     .input-container {
         position: relative;
         display: inline-block;
@@ -203,7 +206,7 @@
 
     /* Основные поля ввода */
     .formInput {
-        width: 19.25rem; /* 308px */
+        width: 100%;
         height: 4rem; /* 64px */
         border-radius: 1rem; /* 16px */
         border: 1.5px solid rgba(210, 210, 210, 1);
@@ -291,7 +294,7 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        border: 1.5px solid #E4621980;
+        border: 2px solid #E4621980;
         border-radius: 1rem; /* 16px */
         background: none;
         color: #EC7D3F;
@@ -389,7 +392,6 @@
         border: 2px solid #ddd;
         border-radius: 0.375rem; /* 6px */
         transition: all 0.5s ease-in-out;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .custom-checkbox:hover .checkmark {
@@ -427,6 +429,8 @@
         margin-left: 0.4375rem; /* 7px */
         cursor: pointer;
         font-size: 1.125rem; /* 18px */
+        color: rgba(129, 129, 129, 1);
+
     }
 
     .custom-radio input[type="radio"] {
@@ -446,7 +450,6 @@
         border: 2px solid #ddd;
         border-radius: 50%;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         flex-shrink: 0;
     }
 
@@ -580,7 +583,7 @@
         border: none;
         height: 100%;
         box-sizing: border-box;
-        font-size: 1.125rem; /* 18px */
+        font-size: 1rem; /* 18px */
     }
 
     .inputTable td input:focus {
@@ -645,6 +648,7 @@
         box-sizing: border-box;
         position: relative;
         transition: border-color 0.3s ease;
+        text-align: left;
     }
 
     .select-selected:after {
@@ -687,6 +691,7 @@
         font-size: 1rem; /* 16px */
         color: #333;
         transition: background-color 0.3s ease;
+        text-align: left;
     }
 
     .select-items div:hover {
@@ -970,6 +975,30 @@
         text-align: left;
         padding: 0.625rem;
     }
+    /* Добавить специфичные ширины для столбцов */
+    .candidatesTable th:nth-child(1) {
+        width: 50px; 
+    }
+
+    .candidatesTable th:nth-child(2) {
+        width: 25%;
+    }
+
+    .candidatesTable th:nth-child(3) {
+        width: 20%; 
+    }
+
+    .candidatesTable th:nth-child(4) {
+        width: 20%; 
+    }
+
+    .candidatesTable th:nth-child(5) {
+        width: 15%; 
+    }
+
+    .candidatesTable th:nth-child(6) {
+        width: 100px; 
+    }
 
     .candidatesTable tr {
         border-bottom: 1px solid rgba(228, 228, 228, 1);
@@ -1026,12 +1055,21 @@
         height: 1.2rem;
     }
 
-    #downloadBtn {
-        background: #EC7D3F1A;
+    .downloadBtn{
+        background: rgba(236, 125, 63, 0.2);
+        color: rgba(236, 125, 63, 0.5);
+    }
+
+    .downloadBtn:hover svg{
+        color: rgba(236, 125, 63, 1)
     }
 
     #radactBtn {
         margin-right: 10px;
+    }
+
+    #selectCity{
+        cursor: pointer;
     }
 
     .candidatesTable p {
@@ -1061,7 +1099,8 @@
     }
     .left-side {
         display: inline-flex;
-        width: 600px;
+        max-width: 600px;
+        gap: 1.5rem;
         justify-content: space-between;
     }
 
@@ -1073,6 +1112,10 @@
         border-radius: 16px;
         border: none;
         cursor: pointer;
+    }
+
+    .navBtn:hover{
+        background: rgba(255, 255, 255, 1);
     }
 
     .inactive {
@@ -1143,6 +1186,10 @@
         text-align: center;
     }
 
+    .download-btn.primary:hover{
+        background: rgba(228, 98, 25, 1);
+    }
+        
 
     /* Кнопка dropdown с форматом */
     .download-btn.dropdown-toggle {
@@ -1161,6 +1208,11 @@
         transition: background-color 0.2s ease;
         position: relative;
     }
+
+    .download-btn.dropdown-toggle:hover{
+        background: rgba(228, 98, 25, 1);
+    }
+
     #city{
         margin: 0;
         font-weight: 400;
@@ -1174,6 +1226,7 @@
     #city span{
         color: rgba(236, 125, 63, 1);
         margin-left: 0.5rem;
+        width: max-content;
     }
 
     #notifBtn img{
@@ -1434,13 +1487,12 @@
         border-radius: 40px;
     }
        .notification-header{
-        font-size: 12px !important;
+        font-size: 14px !important;
         font-weight: 400;
         line-height: 1.5;
         width: 100%;
         text-align: left;
-        padding-bottom: 12px;
-        padding: 12px;
+        padding: 0rem 1rem;
         color: rgba(24, 24, 23, 1)
     }
     .divider {
@@ -1491,6 +1543,80 @@
         flex-shrink: 0;
     }
 
+    /* Стили дропдауна города */
+    .city-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 100px;
+        right: 0;
+        background: rgba(255, 255, 255, 1);
+        color: rgba(73, 73, 73, 1);
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        z-index: 1000;
+        max-height: 240px;
+        overflow-y: auto;
+        margin-top: 4px;
+        min-width: 180px;
+    }
+
+    .city-option {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(73, 73, 73, 1);
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .city-option:last-child {
+        border-bottom: none;
+    }
+
+    .city-option.selected {
+        background-color: rgba(236, 125, 63, 0.05);
+        font-weight: 400;
+    }
+
+    #selectCity {
+        margin-left: 4px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+    }
+
+    #selectCity:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    #city svg {
+        margin-left: 6px;
+        vertical-align: middle;
+    }
+
+    #city {
+        user-select: none;
+        position: relative;
+    }
+
+    .city-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
 
 
 

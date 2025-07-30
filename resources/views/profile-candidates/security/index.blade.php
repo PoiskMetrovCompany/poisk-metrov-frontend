@@ -70,7 +70,16 @@ function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedCity, setSelectedCity] = useState('Новосибирск'); // Хук для отслеживания города
+  const [showCityDropdown, setShowCityDropdown] = useState(false); // Состояние для dropdown
   const notificationButtonRef = useRef(null);
+  const cityDropdownRef = useRef(null);
+
+  // Список городов
+  const cities = [
+    'Новосибирск',
+    'Санкт-Петербург',
+  ];
 
   // Функция для форматирования даты
   const formatNotificationDate = (dateString) => {
@@ -92,6 +101,37 @@ function Header() {
       return `${time} ${day}.${month}`;
     }
   };
+
+  // Обработчик выбора города
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+    setShowCityDropdown(false);
+  };
+
+  // Обработчик клика по селектору города
+  const toggleCityDropdown = () => {
+    setShowCityDropdown(!showCityDropdown);
+  };
+
+  // Обработчик клика вне dropdown для закрытия
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target)) {
+        setShowCityDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Хук для отслеживания изменения города (для будущих запросов)
+  useEffect(() => {
+    console.log('Выбранный город изменился:', selectedCity);
+    // Здесь в будущем можно будет добавить логику для отправки запроса с новым городом
+  }, [selectedCity]);
 
   // Добавляем useEffect для запроса при монтировании
   useEffect(() => {
@@ -223,11 +263,47 @@ function Header() {
       <div className="formRow justify-space-between w-80">
         <div style={{display: 'flex', alignItems: 'center'}}>
           <img id="nonTextImg" src="/img/ logo без текста.png" alt="Логотип компании Поиск Метров" />
-          <h5 id="city">Город: <span>Новосибирск</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 9L12 15L18 9" />
-            </svg>
-          </h5>
+          <div style={{position: 'relative'}} ref={cityDropdownRef}>
+            <h5 id="city">
+              Город: 
+              <span 
+                id="selectCity" 
+                onClick={toggleCityDropdown}
+                style={{cursor: 'pointer'}}
+              >
+                {selectedCity}
+              </span>
+              <svg 
+                width="12" 
+                height="12" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+                style={{
+                  transform: showCityDropdown ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s ease'
+                }}
+              >
+                <path d="M6 9L12 15L18 9" />
+              </svg>
+            </h5>
+            
+            {/* Выпадающий список городов */}
+            {showCityDropdown && (
+              <div className="city-dropdown">
+                {cities.map((city) => (
+                  <div 
+                    key={city}
+                    className={`city-option ${city === selectedCity ? 'selected' : ''}`}
+                    onClick={() => handleCitySelect(city)}
+                  >
+                    {city}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="w-80" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px'}}>
           <a href="/profile-candidates/security/" className="active">Кандидаты</a>
@@ -657,7 +733,12 @@ function Header() {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
                 <p style={{ color: 'red', marginBottom: '20px' }}>Ошибка: {error}</p>
-                <button onClick={() => setSelectedVacancyKey(null)}>Вернуться к списку</button>
+                <button onClick={() => {
+                    setSelectedVacancyKey(null); 
+                    window.location.reload();
+                }}>
+                    Вернуться к списку
+                </button>
             </div>
         );
     }
@@ -1132,9 +1213,9 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
         const statusMapping = {
             'showAll': null,
             'Новая анкета': 'Новая анкета',
-            'checked': 'Проверено',
+            'Проверен': 'Проверено',
             'Нужна доработка': 'Нужна доработка',
-            'rejected': 'Отклонен'
+            'Отклонен': 'Отклонен'
         };
 
         return statusValues
@@ -1511,8 +1592,33 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
 
 
     useEffect(() => {
-        if (!filteredData && isAuthorized) {
-            fetchCandidates();
+        if (isAuthorized) {
+            if (filteredData) {
+                // Если есть отфильтрованные данные, используем их
+                const transformedCandidates = filteredData.attributes.data.map(candidate => ({
+                    id: candidate.id,
+                    name: `${candidate.last_name} ${candidate.first_name} ${candidate.middle_name || ''}`.trim(),
+                    datetime: formatDateTime(candidate.created_at || new Date().toISOString()),
+                    vacancy: candidate.vacancy?.attributes?.title || 'Не указана',
+                    status: candidate.status || 'Не определен',
+                    statusID: getStatusId(candidate.status),
+                    hasVacancyComment: candidate.comment,
+                    vacancyKey: candidate.key,
+                    fullData: candidate
+                }));
+                setCandidates(transformedCandidates);
+                setPagination({
+                    current_page: filteredData.attributes.current_page,
+                    last_page: filteredData.attributes.last_page,
+                    total: filteredData.attributes.total,
+                    per_page: filteredData.attributes.per_page,
+                    from: filteredData.attributes.from,
+                    to: filteredData.attributes.to
+                });
+            } else {
+                // Если нет отфильтрованных данных, загружаем обычные
+                fetchCandidates();
+            }
         }
     }, [filteredData, isAuthorized]);
 
@@ -1577,7 +1683,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                     <table className="candidatesTable w-80">
                         <thead>
                         <tr style={{border: '0'}}>
-                            <th width="50"></th>
+                            <th></th>
                             <th>ФИО Кандидата</th>
                             <th>Дата и время</th>
                             <th>Вакансия</th>
@@ -1624,17 +1730,32 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                                     )}
                                     <button
                                         id={`downloadBtn${candidate.id}`}
+                                        className = {"downloadBtn"}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleSingleDownload(candidate.vacancyKey, candidate.name);
                                         }}
                                         disabled={singleDownloadLoading[candidate.vacancyKey]}
                                         title={singleDownloadLoading[candidate.vacancyKey] ? 'Скачивание...' : 'Скачать анкету в PDF'}
-                                    >
+                                        >
                                         {singleDownloadLoading[candidate.vacancyKey] ? (
                                             <span>⏳</span>
                                         ) : (
-                                            <img src="/img/download.png" alt="Скачать анкету" />
+                                            <svg 
+                                            width="20" 
+                                            height="20" 
+                                            viewBox="0 0 24 24" 
+                                            fill="none" 
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                            <path 
+                                                d="M12 3V16M12 16L18 10M12 16L6 10M4 21H20" 
+                                                stroke="currentColor" 
+                                                strokeWidth="3" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round"
+                                            />
+                                            </svg>
                                         )}
                                     </button>
                                 </td>
@@ -1706,15 +1827,15 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
 
     // FiltersCalendar Component
    function FiltersCalendar({ isOpen, onClose, filtersButtonRef, onFiltersApply }) {
-       const [selectedFilters, setSelectedFilters] = useState({
-           status: [],
-           vacancy: [],
-           dateRange: {
-               type: 'dates',
-               start: null,
-               end: null
-           }
-       });
+        const [selectedFilters, setSelectedFilters] = useState({
+            status: ['showAll'],
+            vacancy: ['showAll'],
+            dateRange: {
+                type: 'dates',
+                start: null,
+                end: null
+            }
+        });
 
        const [startDate, setStartDate] = useState(null);
        const [endDate, setEndDate] = useState(null);
@@ -1762,32 +1883,35 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
            return `${start},${end}`;
        };
 
-       const getStatusApiValues = (statusValues) => {
-           const statusMapping = {
-               'showAll': null,
-               'Новая анкета': 'Новая анкета',
-               'Проверен': 'Проверен',
-               'Нужна доработка': 'Нужна доработка',
-               'rejected': 'Отклонен'
-           };
+        const getStatusApiValues = (statusValues) => {
+            if (statusValues.includes('showAll') || statusValues.length === 0) {
+                return [];
+            }
+            
+            const statusMapping = {
+                'Новая анкета': 'Новая анкета',
+                'Проверен': 'Проверен',
+                'Нужна доработка': 'Нужна доработка',
+                'Отклонен': 'Отклонен'
+            };
 
-           return statusValues
-               filter(status => status !== 'showAll' && statusMapping[status])
-               .map(status => statusMapping[status]);
-       };
+            return statusValues
+                .filter(status => statusMapping[status])
+                .map(status => statusMapping[status]);
+        };
 
-       const getVacancyApiValues = (vacancyValues) => {
-           if (vacancyValues.includes('showAll')) {
-               return [];
-           }
+        const getVacancyApiValues = (vacancyValues) => {
+            if (vacancyValues.includes('showAll') || vacancyValues.length === 0) {
+                return [];
+            }
 
-           return vacancyValues
-               .map(vacancyId => {
-                   const vacancy = vacancyOptions.find(option => option.value === vacancyId);
-                   return vacancy ? vacancy.title : null;
-               })
-               .filter(Boolean);
-       };
+            return vacancyValues
+                .map(vacancyId => {
+                    const vacancy = vacancyOptions.find(option => option.value === vacancyId);
+                    return vacancy ? vacancy.title : null;
+                })
+                .filter(Boolean);
+        };
 
        const calendarPanelRef = useRef(null);
 
@@ -1880,19 +2004,37 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
            setIsCustomSelectOpen(false);
        };
 
-       const handleFilterToggle = (filter, value) => {
-           setSelectedFilters(prev => {
-               const newFilters = { ...prev };
-               if (filter === 'status' || filter === 'vacancy') {
-                   if (newFilters[filter].includes(value)) {
-                       newFilters[filter] = newFilters[filter].filter(v => v !== value);
-                   } else {
-                       newFilters[filter] = [...newFilters[filter], value];
-                   }
-               }
-               return newFilters;
-           });
-       };
+        const handleFilterToggle = (filter, value) => {
+            setSelectedFilters(prev => {
+                const newFilters = { ...prev };
+                
+                if (filter === 'status' || filter === 'vacancy') {
+                    if (value === 'showAll') {
+                        // Если нажата "Показать все", очищаем все остальные фильтры этого типа
+                        newFilters[filter] = ['showAll'];
+                    } else {
+                        // Если нажат любой другой фильтр
+                        if (newFilters[filter].includes('showAll')) {
+                            // Убираем "Показать все" и добавляем выбранный фильтр
+                            newFilters[filter] = [value];
+                        } else {
+                            // Обычная логика добавления/удаления фильтра
+                            if (newFilters[filter].includes(value)) {
+                                newFilters[filter] = newFilters[filter].filter(v => v !== value);
+                                // Если не осталось выбранных фильтров, возвращаем "Показать все"
+                                if (newFilters[filter].length === 0) {
+                                    newFilters[filter] = ['showAll'];
+                                }
+                            } else {
+                                newFilters[filter] = [...newFilters[filter], value];
+                            }
+                        }
+                    }
+                }
+                
+                return newFilters;
+            });
+        };
 
        const handleCalendarNavigation = (calendar, direction) => {
            if (calendar === 1) {
@@ -2289,7 +2431,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                     id="calendarPanel"
                     ref={calendarPanelRef}
                 >
-                    <div className="center-card" style={{minWidth: '800px', height: '100%', paddingBottom: '50px'}}>
+                    <div className="center-card" style={{minWidth: '800px', height: '105%', paddingBottom: '50px'}}>
                         <div className="formRow flex-direction-column" style={{marginTop: '20px'}}>
                             <div className="custom-select">
                                 <div
@@ -2638,7 +2780,7 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                             </div>
                         )}
 
-                        <div className="formRow justify-space-between" style={{marginTop: '25px'}}>
+                        <div className="formRow justify-center" style={{marginTop: '25px', gap: '1rem'}}>
                             <button
                                 className={`formBtn ${isLoadingCandidates ? 'btn-inactive' : 'btn-active'}`}
                                 onClick={handleApplyFilters}
@@ -2679,18 +2821,22 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
                             <button
                                 className="formBtn btn-inactive"
                                 onClick={() => {
-                                    setSelectedFilters({status: [], vacancy: [], dateRange: {type: 'dates', start: null, end: null}});
+                                    setSelectedFilters({
+                                        status: ['showAll'], 
+                                        vacancy: ['showAll'], 
+                                        dateRange: {type: 'dates', start: null, end: null}
+                                    });
                                     setStartDate(null);
                                     setEndDate(null);
                                     setCurrentRangeType('dates');
-                                    setCandidatesError(''); // Очищаем ошибку при сбросе
-                                    setCandidatesData(null); // Очищаем данные при сбросе
+                                    setCandidatesError('');
+                                    setCandidatesData(null);
                                 }}
                                 disabled={isLoadingCandidates}
                                 style={{
-                                minWidth: '140px',
-                                height: '45px'
-                            }}
+                                    minWidth: '140px',
+                                    height: '45px'
+                                }}
                             >
                                 Сбросить
                             </button>
