@@ -39,6 +39,10 @@
             text-align: center;
         }
 
+        .formRow{
+            margin-top: 2rem;
+        }
+
         .success-modal h1 {
             margin: 20px 0 10px 0;
             color: #181817;
@@ -227,6 +231,10 @@ const RelativeTable = ({ index, formData, setFormData }) => {
         }
     };
 
+    const formatNameInput = (value) => {
+        return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+    };
+
     const handleInputChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -258,7 +266,10 @@ const RelativeTable = ({ index, formData, setFormData }) => {
                             name={`FIORelative${index}`}
                             placeholder="Степень родства, ФИО члена семьи"
                             value={formData[`FIORelative${index}`] || ''}
-                            onChange={(e) => handleInputChange(`FIORelative${index}`, e.target.value)}
+                            onChange={(e) => {
+                                const formattedValue = formatNameInput(e.target.value);
+                                handleInputChange(`FIORelative${index}`, formattedValue);
+                            }}
                         />
                     </td>
                 </tr>
@@ -344,6 +355,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
         }
     };
 
+    const formatNameInput = (value) => {
+        return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+    };
+   
     const handleInputChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -375,7 +390,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                             name={`FIOChildren${index}`}
                             placeholder="ФИО ребенка"
                             value={formData[`FIOChildren${index}`] || ''}
-                            onChange={(e) => handleInputChange(`FIOChildren${index}`, e.target.value)}
+                            onChange={(e) => {
+                                const formattedValue = formatNameInput(e.target.value);
+                                handleInputChange(`FIOChildren${index}`, formattedValue);
+                            }}
                         />
                     </td>
                 </tr>
@@ -534,7 +552,9 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
             return null;
         };
 
-
+        const formatNameInput = (value) => {
+            return value.replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g, '');
+        };
         const formatDate = (value) => {
             // Удаляем все символы кроме цифр
             const numbers = value.replace(/\D/g, '');
@@ -1034,7 +1054,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                         <div className="center-card big">
 
 
-                            <h1>Общие сведения</h1>
+                            <h1 class = "semiheader">Общие сведения</h1>
                             <p>Мы не передаём эти данные третьим лицам и используем их только для целей адаптации и сопровождения кандидатов</p>
 
                             <div className="formRow">
@@ -1086,7 +1106,10 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         className="formInput big"
                                         placeholder="Иванов Иван Иванович"
                                         value={formData.FIO || ''}
-                                        onChange={(e) => handleFormDataChange('FIO', e.target.value)}
+                                        onChange={(e) => {
+                                            const formattedValue = formatNameInput(e.target.value);
+                                            handleFormDataChange('FIO', formattedValue);
+                                        }}
                                     />
                                 </div>
                             </div>

@@ -113,7 +113,8 @@
     /* Типография карточек */
     .center-card h1 {
         font-weight: 500;
-        font-size: 1.5rem; /* 24px */
+        font-size: 1.25rem; 
+        
     }
 
     .center-card p {
@@ -121,6 +122,8 @@
         font-weight: 400;
         line-height: 1.5;
         color: rgba(129, 129, 129, 1);
+        font-size: 1.125rem;
+        max-width: 70%;
     }
 
     /* ==============================================
@@ -174,6 +177,7 @@
         font-weight: 500;
         text-align: center;
         margin: 0;
+        font-size: 1.25rem;
     }
 
     .formRow h4 {
@@ -186,7 +190,6 @@
         font-size: 1.125rem; /* 18px */
     }
 
-    /* Контейнеры для ввода */
     .input-container {
         position: relative;
         display: inline-block;
@@ -427,6 +430,8 @@
         margin-left: 0.4375rem; /* 7px */
         cursor: pointer;
         font-size: 1.125rem; /* 18px */
+        color: rgba(129, 129, 129, 1);
+
     }
 
     .custom-radio input[type="radio"] {
@@ -645,6 +650,7 @@
         box-sizing: border-box;
         position: relative;
         transition: border-color 0.3s ease;
+        text-align: left;
     }
 
     .select-selected:after {
@@ -687,6 +693,7 @@
         font-size: 1rem; /* 16px */
         color: #333;
         transition: background-color 0.3s ease;
+        text-align: left;
     }
 
     .select-items div:hover {
