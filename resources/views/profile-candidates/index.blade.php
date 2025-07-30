@@ -1039,22 +1039,51 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
         );
 
         return (
-            <>
-                <header>
-                    <img src="/img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
-                </header>
+        <>
+            <header>
+                <img src="/img/Logo с текстом.png" alt="Картинка с логотипом агенства и подписью Поиск метров" />
+            </header>
 
+            {!submitSuccess && (
                 <article>
                     <h1>Анкета кандидата</h1>
                     <p>Заполните анкету, чтобы подать заявку на вакансию</p>
                 </article>
+            )}
 
-                <main>
-                    <section>
+            <main>
+                <section>
+                    {submitSuccess ? (
+                        // Показываем только сообщение об успехе
+                        <div className="center-card" style={{maxHeight: '364px'}}>
+                            <div style={{marginTop: 0}} className="formRow justify-center">
+                                <div className="successMarker">
+                                    <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" strokeWidth="2"/>
+                                        <polyline points="12,20 17,25 28,14" stroke="#4caf50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className="formRow justify-center">
+                                <h1>Анкета успешно отправлена</h1>
+                            </div>
+                            <div className="formRow justify-center">
+                                <p>Мы успешно получили вашу анкету</p>
+                            </div>
+                            <div className="formRow justify-center">
+                                <button
+                                    id="closeNotification"
+                                    className="formBtn btn-active"
+                                    onClick={() => window.location.reload()}
+                                >
+                                    Закрыть
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        // Показываем основную форму
                         <div className="center-card big">
-
-
-                            <h1 class = "semiheader">Общие сведения</h1>
+                            <h1>Общие сведения</h1>
                             <p>Мы не передаём эти данные третьим лицам и используем их только для целей адаптации и сопровождения кандидатов</p>
 
                             <div className="formRow">
@@ -1106,10 +1135,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         className="formInput big"
                                         placeholder="Иванов Иван Иванович"
                                         value={formData.FIO || ''}
-                                        onChange={(e) => {
-                                            const formattedValue = formatNameInput(e.target.value);
-                                            handleFormDataChange('FIO', formattedValue);
-                                        }}
+                                        onChange={(e) => handleFormDataChange('FIO', e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -1274,12 +1300,12 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         <input
                                             style={{width: '100%'}}
                                             type="text"
-                                            name="birthDate"
+                                            name="dateOfIssue"
                                             className="formInput"
                                             placeholder="01.01.1990"
                                             maxLength="10"
-                                            value={formData.birthDate || ''}
-                                            onChange={(e) => handleDateChange('birthDate', e.target.value)}
+                                            value={formData.dateOfIssue || ''}
+                                            onChange={(e) => handleDateChange('dateOfIssue', e.target.value)}
                                         />
                                 </div>
                             </div>
@@ -1662,34 +1688,11 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                     </div>
                                 </div>
                             )}
-
-                            {submitSuccess && (
-                                <div class="center-card" style = "max-height: 364px">
-                                <div style="margin-top: 0;" class = "formRow justify-center">
-                                <div class = "successMarker">
-                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="20" cy="20" r="18" fill="#e8f5e8" stroke="#4caf50" stroke-width="2"/>
-                                <polyline points="12,20 17,25 28,14" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                                </svg>
-                                </div>
-                                </div>
-                                <div class = "formRow justify-center">
-                                <h1>Анкета успешно отправлена</h1>
-                                </div>
-                                <div class = "formRow justify-center">
-                                <p>Мы успешно получили вашу анкету</p>
-                                </div>
-                                <div class = "formRow justify-center">
-                                <button id="closeNotification" class="formBtn btn-active">
-                                Закрыть
-                                </button>
-                                </div>
-                                </div>
-                            )}
                         </div>
-                    </section>
-                </main>
-            </>
+                    )}
+                </section>
+            </main>
+        </>
         );
     }
 

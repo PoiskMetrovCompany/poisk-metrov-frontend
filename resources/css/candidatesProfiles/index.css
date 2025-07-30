@@ -40,7 +40,7 @@
     header {
         display: flex;
         justify-content: center;
-        margin-top: 3rem; /* 48px */
+        margin-top: 1rem;
         margin-bottom: 3rem; /* 48px */
         position: relative;
     }
@@ -985,19 +985,19 @@
     }
 
     .candidatesTable th:nth-child(3) {
-        width: 20%; /* Дата и время */
+        width: 20%; 
     }
 
     .candidatesTable th:nth-child(4) {
-        width: 20%; /* Вакансия - чуть шире чем дата */
+        width: 20%; 
     }
 
     .candidatesTable th:nth-child(5) {
-        width: 15%; /* Статус - самый узкий */
+        width: 15%; 
     }
 
     .candidatesTable th:nth-child(6) {
-        width: 100px; /* кнопки действий */
+        width: 100px; 
     }
 
     .candidatesTable tr {
@@ -1055,8 +1055,13 @@
         height: 1.2rem;
     }
 
-    #downloadBtn {
-        background: #EC7D3F1A;
+    .downloadBtn{
+        background: rgba(236, 125, 63, 0.2);
+        color: rgba(236, 125, 63, 0.5);
+    }
+
+    .downloadBtn:hover svg{
+        color: rgba(236, 125, 63, 1)
     }
 
     #radactBtn {
@@ -1090,7 +1095,8 @@
     }
     .left-side {
         display: inline-flex;
-        width: 600px;
+        max-width: 600px;
+        gap: 1.5rem;
         justify-content: space-between;
     }
 
@@ -1102,6 +1108,10 @@
         border-radius: 16px;
         border: none;
         cursor: pointer;
+    }
+
+    .navBtn:hover{
+        background: rgba(255, 255, 255, 1);
     }
 
     .inactive {
@@ -1172,6 +1182,10 @@
         text-align: center;
     }
 
+    .download-btn.primary:hover{
+        background: rgba(228, 98, 25, 1);
+    }
+        
 
     /* Кнопка dropdown с форматом */
     .download-btn.dropdown-toggle {
@@ -1190,6 +1204,11 @@
         transition: background-color 0.2s ease;
         position: relative;
     }
+
+    .download-btn.dropdown-toggle:hover{
+        background: rgba(228, 98, 25, 1);
+    }
+
     #city{
         margin: 0;
         font-weight: 400;
@@ -1463,13 +1482,12 @@
         border-radius: 40px;
     }
        .notification-header{
-        font-size: 12px !important;
+        font-size: 14px !important;
         font-weight: 400;
         line-height: 1.5;
         width: 100%;
         text-align: left;
-        padding-bottom: 12px;
-        padding: 12px;
+        padding: 0rem 1rem;
         color: rgba(24, 24, 23, 1)
     }
     .divider {
