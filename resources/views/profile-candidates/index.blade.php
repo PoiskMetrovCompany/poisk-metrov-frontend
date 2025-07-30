@@ -1125,6 +1125,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                     )}
                                 </div>
                             </div>
+                            
 
                             <div className="formRow">
                                 <div className="input-container">
@@ -1135,7 +1136,7 @@ const ChildrenTable = ({ index, formData, setFormData }) => {
                                         className="formInput big"
                                         placeholder="Иванов Иван Иванович"
                                         value={formData.FIO || ''}
-                                        onChange={(e) => handleFormDataChange('FIO', e.target.value)}
+                                        onChange={(e) => handleFormDataChange('FIO', formatNameInput(e.target.value))}
                                     />
                                 </div>
                             </div>
