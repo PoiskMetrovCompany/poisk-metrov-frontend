@@ -29,6 +29,7 @@ class CandidateProfilesStoreRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
             'reason_for_changing_surnames' => ['nullable'],
+            'city_work' => ['required', 'string', 'max:255'],
             'birth_date' => ['required'],
             'country_birth' => ['required', 'string', 'max:255'],
             'city_birth' => ['required', 'string', 'max:255'],

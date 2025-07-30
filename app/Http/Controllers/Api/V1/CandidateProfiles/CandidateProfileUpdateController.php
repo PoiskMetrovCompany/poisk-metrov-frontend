@@ -65,6 +65,7 @@ use OpenApi\Annotations as OA;
  *              @OA\Property(property="last_name", type="string", example=""),
  *              @OA\Property(property="middle_name", type="string", example=""),
  *              @OA\Property(property="reason_for_changing_surnames", type="string", example=""),
+ *              @OA\Property(property="city_work", type="string", example="Новосибирск"),
  *              @OA\Property(property="birth_date", type="string", example=""),
  *              @OA\Property(property="country_birth", type="string", example=""),
  *              @OA\Property(property="city_birth", type="string", example=""),

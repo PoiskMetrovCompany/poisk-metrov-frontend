@@ -14,20 +14,78 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Get(
- *       tags={"CandidateProfiles"},
- *       path="/api/v1/candidates/",
- *       summary="получение списка анкет",
- *       description="Возвращение JSON объекта",
- *       security={{"bearerAuth":{}}},
- *       @OA\Response(response=200, description="УСПЕХ!"),
- *       @OA\Response(
- *           response=404,
- *           description="Resource not found"
- *       )
- *  )
+ *     tags={"CandidateProfiles"},
+ *     path="/api/v1/candidates/",
+ *     summary="Получение списка анкет",
+ *     description="Возвращает JSON объект со списком анкет кандидатов с возможностью фильтрации.",
+ *     security={{"bearerAuth":{}}},
  *
- * @param Request $request
- * @return JsonResponse
+ *     @OA\Parameter(
+ *         name="city_work",
+ *         in="query",
+ *         description="Город работы кандидата",
+ *         required=false,
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Parameter(
+ *         name="candidate_statuses",
+ *         in="query",
+ *         description="Статусы анкет (множественные значения через запятую).",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string",
+ *             example=""
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="vacancy_keys",
+ *         in="query",
+ *         description="UUID вакансий (через запятую)",
+ *         required=false,
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Parameter(
+ *         name="year_range",
+ *         in="query",
+ *         description="Год (например: 2024)",
+ *         required=false,
+ *         @OA\Schema(type="integer", minimum=1900, maximum=2100)
+ *     ),
+ *     @OA\Parameter(
+ *         name="month_range",
+ *         in="query",
+ *         description="Месяц (01-12)",
+ *         required=false,
+ *         @OA\Schema(type="integer", minimum=1, maximum=12)
+ *     ),
+ *     @OA\Parameter(
+ *         name="date_range",
+ *         in="query",
+ *         description="Диапазон дат",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string",
+ *             example=""
+ *         )
+ *     ),
+ *
+ *     @OA\Response(
+ *         response=200,
+ *         description="УСПЕХ!",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Resource not found"
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthenticated"
+ *     )
+ * )
  */
 class CandidateProfileListController extends Controller
 {
@@ -41,6 +99,10 @@ class CandidateProfileListController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $candidateProfiles = CandidateProfiles::query();
+
+        if ($cityWork = $request->input('city_work')) {
+            $candidateProfiles->where('city_work', $cityWork);
+        }
 
         if ($statuses = $request->input('candidate_statuses')) {
             $statusArray = array_map('trim', explode(',', $statuses));

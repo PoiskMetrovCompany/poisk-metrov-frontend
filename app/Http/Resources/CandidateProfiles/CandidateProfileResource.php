@@ -27,6 +27,7 @@ class CandidateProfileResource extends JsonResource
             'last_name' => $this->last_name,
             'middle_name' => $this->middle_name,
             'reason_for_changing_surnames' => $this->reason_for_changing_surnames,
+            'city_work' => $this->city_work,
             'birth_date' => $this->birth_date,
             'country_birth' => $this->country_birth,
             'city_birth' => $this->city_birth,
@@ -49,6 +50,6 @@ class CandidateProfileResource extends JsonResource
             'is_data_processing' => $this->is_data_processing,
             'comment' => $this->comment,
             'created_at' => $this->created_at,
-        ];     
+        ];
     }
 }
