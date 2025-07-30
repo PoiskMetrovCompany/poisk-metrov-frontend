@@ -70,7 +70,16 @@ function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedCity, setSelectedCity] = useState('Новосибирск'); // Хук для отслеживания города
+  const [showCityDropdown, setShowCityDropdown] = useState(false); // Состояние для dropdown
   const notificationButtonRef = useRef(null);
+  const cityDropdownRef = useRef(null);
+
+  // Список городов
+  const cities = [
+    'Новосибирск',
+    'Санкт-Петербург',
+  ];
 
   // Функция для форматирования даты
   const formatNotificationDate = (dateString) => {
@@ -92,6 +101,37 @@ function Header() {
       return `${time} ${day}.${month}`;
     }
   };
+
+  // Обработчик выбора города
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+    setShowCityDropdown(false);
+  };
+
+  // Обработчик клика по селектору города
+  const toggleCityDropdown = () => {
+    setShowCityDropdown(!showCityDropdown);
+  };
+
+  // Обработчик клика вне dropdown для закрытия
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target)) {
+        setShowCityDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Хук для отслеживания изменения города (для будущих запросов)
+  useEffect(() => {
+    console.log('Выбранный город изменился:', selectedCity);
+    // Здесь в будущем можно будет добавить логику для отправки запроса с новым городом
+  }, [selectedCity]);
 
   // Добавляем useEffect для запроса при монтировании
   useEffect(() => {
@@ -223,11 +263,47 @@ function Header() {
       <div className="formRow justify-space-between w-80">
         <div style={{display: 'flex', alignItems: 'center'}}>
           <img id="nonTextImg" src="/img/ logo без текста.png" alt="Логотип компании Поиск Метров" />
-          <h5 id="city">Город: <span>Новосибирск</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 9L12 15L18 9" />
-            </svg>
-          </h5>
+          <div style={{position: 'relative'}} ref={cityDropdownRef}>
+            <h5 id="city">
+              Город: 
+              <span 
+                id="selectCity" 
+                onClick={toggleCityDropdown}
+                style={{cursor: 'pointer'}}
+              >
+                {selectedCity}
+              </span>
+              <svg 
+                width="12" 
+                height="12" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+                style={{
+                  transform: showCityDropdown ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s ease'
+                }}
+              >
+                <path d="M6 9L12 15L18 9" />
+              </svg>
+            </h5>
+            
+            {/* Выпадающий список городов */}
+            {showCityDropdown && (
+              <div className="city-dropdown">
+                {cities.map((city) => (
+                  <div 
+                    key={city}
+                    className={`city-option ${city === selectedCity ? 'selected' : ''}`}
+                    onClick={() => handleCitySelect(city)}
+                  >
+                    {city}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="w-80" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px'}}>
           <a href="/profile-candidates/security/" className="active">Кандидаты</a>
@@ -657,7 +733,12 @@ function Header() {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
                 <p style={{ color: 'red', marginBottom: '20px' }}>Ошибка: {error}</p>
-                <button onClick={() => setSelectedVacancyKey(null)}>Вернуться к списку</button>
+                <button onClick={() => {
+                    setSelectedVacancyKey(null); 
+                    window.location.reload();
+                }}>
+                    Вернуться к списку
+                </button>
             </div>
         );
     }
@@ -1132,9 +1213,9 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
         const statusMapping = {
             'showAll': null,
             'Новая анкета': 'Новая анкета',
-            'checked': 'Проверено',
+            'Проверен': 'Проверено',
             'Нужна доработка': 'Нужна доработка',
-            'rejected': 'Отклонен'
+            'Отклонен': 'Отклонен'
         };
 
         return statusValues
@@ -1809,9 +1890,9 @@ function CandidatesTable({ onFiltersClick, onRowClick, filtersButtonRef, filtere
             
             const statusMapping = {
                 'Новая анкета': 'Новая анкета',
-                'checked': 'Проверено',
+                'Проверен': 'Проверен',
                 'Нужна доработка': 'Нужна доработка',
-                'rejected': 'Отклонен'
+                'Отклонен': 'Отклонен'
             };
 
             return statusValues

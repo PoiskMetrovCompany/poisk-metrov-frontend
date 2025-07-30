@@ -1068,6 +1068,10 @@
         margin-right: 10px;
     }
 
+    #selectCity{
+        cursor: pointer;
+    }
+
     .candidatesTable p {
         width: fit-content;
         box-sizing: border-box;
@@ -1222,6 +1226,7 @@
     #city span{
         color: rgba(236, 125, 63, 1);
         margin-left: 0.5rem;
+        width: max-content;
     }
 
     #notifBtn img{
@@ -1538,6 +1543,80 @@
         flex-shrink: 0;
     }
 
+    /* Стили дропдауна города */
+    .city-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 100px;
+        right: 0;
+        background: rgba(255, 255, 255, 1);
+        color: rgba(73, 73, 73, 1);
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        z-index: 1000;
+        max-height: 240px;
+        overflow-y: auto;
+        margin-top: 4px;
+        min-width: 180px;
+    }
+
+    .city-option {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(73, 73, 73, 1);
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .city-option:last-child {
+        border-bottom: none;
+    }
+
+    .city-option.selected {
+        background-color: rgba(236, 125, 63, 0.05);
+        font-weight: 400;
+    }
+
+    #selectCity {
+        margin-left: 4px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+    }
+
+    #selectCity:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    #city svg {
+        margin-left: 6px;
+        vertical-align: middle;
+    }
+
+    #city {
+        user-select: none;
+        position: relative;
+    }
+
+    .city-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
 
 
 
