@@ -17,10 +17,10 @@ return new class extends Migration
                 LevelEducationalConst::HIGHER,
                 LevelEducationalConst::INCOMPLETE_HIGHER,
                 LevelEducationalConst::SECONDARY_SPECIAL,
-                LevelEducationalConst::HIGHER,
+                LevelEducationalConst::SECONDARY_GENERAL,
             ])->nullable()->after('city_birth');
-            $table->jsonb('courses')->nullable()->default('[]')->after('level_educational');
-            $table->jsonb('educational_institution')->default('[]')->after('courses');
+            $table->jsonb('courses')->nullable()->after('level_educational');
+            $table->jsonb('educational_institution')->after('courses');
         });
     }
 
