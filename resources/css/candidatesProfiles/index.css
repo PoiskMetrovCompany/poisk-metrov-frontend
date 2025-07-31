@@ -324,7 +324,7 @@
 
     .filterButton.active {
         background: #EC7D3F;
-        color: #FFFFFF!important;
+        color: #FFFFFF !important;
     }
 
     #filterRow button:first-of-type,
