@@ -90,6 +90,28 @@
             }
         };
 
+        // Добавляем функцию formatMobilePhone в этот компонент
+        const formatMobilePhone = (value) => {
+            const numbers = value.replace(/\D/g, '');
+            
+            let formattedNumbers = numbers;
+            if (numbers.length > 0 && numbers[0] !== '7') {
+                formattedNumbers = '7' + numbers;
+            }
+
+            if (formattedNumbers.length <= 1) {
+                return '+7';
+            } else if (formattedNumbers.length <= 4) {
+                return '+7 (' + formattedNumbers.slice(1);
+            } else if (formattedNumbers.length <= 7) {
+                return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4);
+            } else if (formattedNumbers.length <= 9) {
+                return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7);
+            } else {
+                return '+7 (' + formattedNumbers.slice(1, 4) + ') ' + formattedNumbers.slice(4, 7) + '-' + formattedNumbers.slice(7, 9) + '-' + formattedNumbers.slice(9, 11);
+            }
+        };
+
         const handleInputChange = (name, value) => {
             setFormData(prev => ({ ...prev, [name]: value }));
         };
@@ -126,8 +148,12 @@
                                     type="text"
                                     name="companyPhone"
                                     placeholder="Телефон предприятия"
+                                    maxLength="18"
                                     value={formData.companyPhone || ''}
-                                    onChange={(e) => handleInputChange('companyPhone', e.target.value)}
+                                    onChange={(e) => {
+                                        const formattedValue = formatMobilePhone(e.target.value);
+                                        handleInputChange('companyPhone', formattedValue);
+                                    }}
                                 />
                             </td>
                         </tr>
