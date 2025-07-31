@@ -516,6 +516,46 @@
                                             "type": "string",
                                             "example": ""
                                         },
+                                        "organization_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_phone": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "field_of_activity": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_job_title": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_price": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "date_of_hiring": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "date_of_dismissal": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "reason_for_dismissal": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "recommendation_contact": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
                                         "mobile_phone_candidate": {
                                             "type": "string",
                                             "example": ""
@@ -681,6 +721,46 @@
                                         "example": ""
                                     },
                                     "educational_institution": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "field_of_activity": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_job_title": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_price": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "date_of_hiring": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "date_of_dismissal": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "reason_for_dismissal": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "recommendation_contact": {
                                         "type": "string",
                                         "example": ""
                                     },
