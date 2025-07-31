@@ -36,6 +36,18 @@ class CandidateProfilesStoreRequest extends FormRequest
             'level_educational' => ['required', 'string', 'max:255'],
             'courses' => ['required'],
             'educational_institution' => ['required'],
+
+            'organization_name' => ['required'],
+            'organization_phone' => ['required'],
+            'field_of_activity' => ['required'],
+            'organization_address' => ['required'],
+            'organization_job_title' => ['required'],
+            'organization_price' => ['required'],
+            'date_of_hiring' => ['required'],
+            'date_of_dismissal' => ['required'],
+            'reason_for_dismissal' => ['required'],
+            'recommendation_contact' => ['required'],
+
             'mobile_phone_candidate' => ['required', 'string', 'max:100'],
             'home_phone_candidate' => ['required', 'string', 'max:100'],
             'mail_candidate' => ['required', 'string', 'max:255'],

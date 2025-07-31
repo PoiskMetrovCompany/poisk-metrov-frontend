@@ -34,6 +34,18 @@ class CandidateProfileResource extends JsonResource
             'level_educational' => $this->level_educational,
             'courses' => $this->courses,
             'educational_institution' => $this->educational_institution,
+
+            'organization_name' => $this->organization_name,
+            'organization_phone' => $this->organization_phone,
+            'field_of_activity' => $this->field_of_activity,
+            'organization_address' => $this->organization_address,
+            'organization_job_title' => $this->organization_job_title,
+            'organization_price' => $this->organization_price,
+            'date_of_hiring' => $this->date_of_hiring,
+            'date_of_dismissal' => $this->date_of_dismissal,
+            'reason_for_dismissal' => $this->reason_for_dismissal,
+            'recommendation_contact' => $this->recommendation_contact,
+
             'mobile_phone_candidate' => $this->mobile_phone_candidate,
             'home_phone_candidate' => $this->home_phone_candidate,
             'mail_candidate' => $this->mail_candidate,
