@@ -32,9 +32,9 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
 
     public function getCandidateProfiles(?string $key, array $columnsToSelect)
     {
-        $query = DB::table('candidate_profiles');
-//            ->join('vacancies', 'vacancies.key', '=', 'candidate_profiles.vacancies_key')
-//            ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key');
+        $query = DB::table('candidate_profiles')
+            ->join('vacancies', 'vacancies.key', '=', 'candidate_profiles.vacancies_key')
+            ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key');
 
         if (!empty($key)) {
             $query->where('candidate_profiles.key', '=', $key);
@@ -42,8 +42,8 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
 
         $query->select(
             'candidate_profiles.*',
-//            'vacancies.title as vacancy_name',
-//            'marital_statuses.title as marital_status_name',
+            'vacancies.title as vacancy_name',
+            'marital_statuses.title as marital_status_name',
             DB::raw("COALESCE(JSON_UNQUOTE(JSON_EXTRACT(candidate_profiles.family_partner, '$.name')), '') AS family_partner_name"),
             DB::raw("COALESCE(JSON_UNQUOTE(JSON_EXTRACT(candidate_profiles.family_partner, '$.age')), '') AS family_partner_age"),
             DB::raw("COALESCE(JSON_UNQUOTE(JSON_EXTRACT(candidate_profiles.family_partner, '$.relation')), '') AS family_partner_relation")

@@ -113,8 +113,8 @@
     /* Типография карточек */
     .center-card h1 {
         font-weight: 500;
-        font-size: 1.25rem; 
-        
+        font-size: 1.25rem;
+
     }
 
     .center-card p {
@@ -981,7 +981,7 @@
     }
     /* Добавить специфичные ширины для столбцов */
     .candidatesTable th:nth-child(1) {
-        width: 50px; 
+        width: 50px;
     }
 
     .candidatesTable th:nth-child(2) {
@@ -989,19 +989,19 @@
     }
 
     .candidatesTable th:nth-child(3) {
-        width: 20%; 
+        width: 20%;
     }
 
     .candidatesTable th:nth-child(4) {
-        width: 20%; 
+        width: 20%;
     }
 
     .candidatesTable th:nth-child(5) {
-        width: 15%; 
+        width: 15%;
     }
 
     .candidatesTable th:nth-child(6) {
-        width: 100px; 
+        width: 100px;
     }
 
     .candidatesTable tr {
@@ -1196,7 +1196,7 @@
     .download-btn.primary:hover{
         background: rgba(228, 98, 25, 1);
     }
-        
+
 
     /* Кнопка dropdown с форматом */
     .download-btn.dropdown-toggle {

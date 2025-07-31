@@ -363,6 +363,18 @@
                                         "type": "string",
                                         "example": ""
                                     },
+                                    "level_educational": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "courses": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "educational_institution": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
                                     "mobile_phone_candidate": {
                                         "type": "string",
                                         "example": ""
@@ -489,6 +501,18 @@
                                             "example": ""
                                         },
                                         "city_birth": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "level_educational": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "courses": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "educational_institution": {
                                             "type": "string",
                                             "example": ""
                                         },
@@ -648,6 +672,18 @@
                                         "type": "string",
                                         "example": ""
                                     },
+                                    "level_educational": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "courses": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "educational_institution": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
                                     "mobile_phone_candidate": {
                                         "type": "string",
                                         "example": ""
@@ -778,6 +814,18 @@
                                             "example": ""
                                         },
                                         "city_birth": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "level_educational": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "courses": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "educational_institution": {
                                             "type": "string",
                                             "example": ""
                                         },
@@ -957,61 +1005,37 @@
                 "tags": [
                     "Export"
                 ],
-                "summary": "Экспорт анкет кандидата в ПДФ (если передать ключ кандидата, то экспортирует анкету по ключу. Ключи нужно перечислять через запятую)",
-                "description": "Возвращение JSON объекта",
+                "summary": "Экспорт анкет кандидатов в PDF",
+                "description": "Экспорт одной или нескольких анкет кандидатов в одном PDF-документе. Ключи передаются через запятую в параметре 'keys'.",
                 "operationId": "c550713e8dc6643208e67da96976df09",
                 "parameters": [
                     {
                         "name": "keys",
                         "in": "query",
-                        "description": "Ключ для получения анкеты",
+                        "description": "Ключи кандидатов, разделённые запятой. Пример: 53cbb9a9-...,fc8e5010-...",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "УСПЕХ!",
+                        "description": "Успешная генерация PDF",
                         "content": {
-                            "application/json": {
+                            "application/pdf": {
                                 "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Иван Иванов"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "ivan@example.com"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "type": "string",
+                                    "format": "binary"
                                 }
                             }
                         }
                     },
+                    "400": {
+                        "description": "Не указаны ключи"
+                    },
                     "404": {
-                        "description": "Resource not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Анкета не найдена"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Анкеты не найдены"
                     }
                 },
                 "security": [
