@@ -809,7 +809,7 @@ function Header({ onCityChange }) {
                                 </div>
                                 </div>
                                 <a className="#activeLink" href="#generalData">Общие сведенья</a>
-                                <a href="#passportData">Паспотные данные</a>
+                                <a href="#passportData">Паспортные данные</a>
                                 <a href="#familyData">Состав семьи</a>
                                 <a href="#legalData">Юридический статус</a>
                             </div>
@@ -903,6 +903,266 @@ function Header({ onCityChange }) {
 
                         <div className="formRow" style={{marginTop: '50px'}} id = "passportData">
                             <h3>Паспортные данные</h3>
+                        </div>
+
+                        <div className="formRow flex-direction-column" style={{marginTop: '50px'}}>
+                            <h3>Образование и профессиональный опыт</h3>
+                        </div>
+
+                        <div className="formRow">
+                            <div className="input-container">
+                                <label htmlFor="educationLevel" className="formLabel">Уровень образования</label>
+                                <input 
+                                    style={{width: '100%'}} 
+                                    type="text" 
+                                    name="educationLevel" 
+                                    id="educationLevel" 
+                                    className="formInput" 
+                                    defaultValue="Высшее" 
+                                    readOnly 
+                                />
+                            </div>
+                        </div>
+
+                        <div className="formRow">
+                            <table className="inputTable showTable">
+                                <caption className="tableLabel">Данные об образовательном учреждении</caption>
+                                <tbody>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <input 
+                                                type="text" 
+                                                name="nameInstitution1" 
+                                                placeholder="Полное наименование учебного заведения" 
+                                                defaultValue="Московский государственный университет им. М.В. Ломоносова" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="dateOfEntrance1" 
+                                                placeholder="Дата поступления" 
+                                                defaultValue="01.09.2010" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="dateOfEnding1" 
+                                                placeholder="Дата окончания" 
+                                                defaultValue="30.06.2015" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="typeOfEducation1" 
+                                                placeholder="Форма обучения" 
+                                                defaultValue="Дневная" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="diplomaSpeciality1" 
+                                                placeholder="Специальность по диплому" 
+                                                defaultValue="Экономика и управление" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="formRow">
+                            <table className="inputTable showTable">
+                                <caption className="tableLabel">Данные о пройденном курсе</caption>
+                                <tbody>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <input 
+                                                type="text" 
+                                                name="courseName1" 
+                                                placeholder="Полное наименование учебного заведения" 
+                                                defaultValue="Институт дополнительного профессионального образования" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <input 
+                                                type="text" 
+                                                name="courseTitle1" 
+                                                placeholder="Название курса/тренинга" 
+                                                defaultValue="Управление недвижимостью и оценка объектов" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="courseStartDate1" 
+                                                placeholder="Дата начала" 
+                                                defaultValue="15.01.2020" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="courseEndDate1" 
+                                                placeholder="Дата окончания" 
+                                                defaultValue="30.03.2020" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="formRow">
+                            <div className="input-container">
+                                <label htmlFor="professionalExperience" className="formLabel">Профессиональный опыт</label>
+                                <input 
+                                    style={{width: '100%'}} 
+                                    type="text" 
+                                    name="professionalExperience" 
+                                    id="professionalExperience" 
+                                    className="formInput" 
+                                    defaultValue="Опыт есть" 
+                                    readOnly 
+                                />
+                            </div>
+                        </div>
+
+                        <div className="formRow" style={{
+                            opacity: 1,
+                            height: '550px',
+                            overflow: 'hidden',
+                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                        }}>
+                            <table className="inputTable showTable" style={{height: 'auto', minHeight: '350px'}}>
+                                <caption className="tableLabel">Данные о последнем месте работы</caption>
+                                <tbody>
+                                    <tr>
+                                        <td style={{borderTopLeftRadius: '16px', borderTopRightRadius: 0}}>
+                                            <input 
+                                                type="text" 
+                                                name="companyName" 
+                                                placeholder="Полное наименование предприятия" 
+                                                defaultValue="ООО «Премиум Недвижимость»" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                        <td style={{borderTopRightRadius: '16px', borderTopLeftRadius: 0}}>
+                                            <input 
+                                                type="text" 
+                                                name="companyPhone" 
+                                                placeholder="Телефон предприятия" 
+                                                defaultValue="+7(495)789-01-23" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <input 
+                                                type="text" 
+                                                name="companyActivity" 
+                                                placeholder="Сфера деятельности предприятия" 
+                                                defaultValue="Услуги по купле-продаже недвижимости" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <input 
+                                                type="text" 
+                                                name="companyAddress" 
+                                                placeholder="Адрес предприятия" 
+                                                defaultValue="г. Москва, ул. Тверская, д. 20, офис 301" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="position" 
+                                                placeholder="Должность" 
+                                                defaultValue="Агент по недвижимости" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="salary" 
+                                                placeholder="Уровень заработной платы" 
+                                                defaultValue="45 000 руб." 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="hireDate" 
+                                                placeholder="Дата приема (месяц, год)" 
+                                                defaultValue="15.03.2020" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="dismissalDate" 
+                                                placeholder="Дата увольнения (месяц, год)" 
+                                                defaultValue="30.11.2023" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <input 
+                                                type="text" 
+                                                name="dismissalReason" 
+                                                placeholder="Причина увольнения" 
+                                                defaultValue="По собственному желанию" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="2" style={{borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px'}}>
+                                            <input 
+                                                type="text" 
+                                                name="referenceContact" 
+                                                placeholder="ФИО и номер телефона лица, к которому можно обратиться за рекомендацией" 
+                                                defaultValue="Петров Игорь Викторович, +7(495)123-45-67" 
+                                                readOnly 
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <div className="formRow justify-space-between">

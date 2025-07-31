@@ -42,88 +42,80 @@
             </header>
         );
     }
-        function ShowForm({ vacancyKey }) { // Добавляем prop vacancyKey
+    function ShowForm({ vacancyKey }) { 
         const [isSelectOpen, setIsSelectOpen] = useState(false);
         const [selectedOption, setSelectedOption] = useState({
-        value: 'new',
-        text: 'Новая анкета'
+            value: 'new',
+            text: 'Новая анкета'
         });
         const [commentValue, setCommentValue] = useState('');
-        const [isUpdating, setIsUpdating] = useState(false); // Состояние для индикации загрузки
+        const [isUpdating, setIsUpdating] = useState(false); 
 
         const selectOptions = [
-        { value: 'new', text: 'Новая анкета' },
-        { value: 'needs-work', text: 'Нужна доработка' },
-        { value: 'checked', text: 'Проверен' },
-        { value: 'rejected', text: 'Отклонен' }
+            { value: 'new', text: 'Новая анкета' },
+            { value: 'needs-work', text: 'Нужна доработка' },
+            { value: 'checked', text: 'Проверен' },
+            { value: 'rejected', text: 'Отклонен' }
         ];
 
-        // Функция для получения CSRF токена
         const getCsrfToken = () => {
-        // Попробуем получить CSRF токен из meta тега
         const metaTag = document.querySelector('meta[name="csrf-token"]');
-        if (metaTag) {
-        return metaTag.getAttribute('content');
+            if (metaTag) {
+            return metaTag.getAttribute('content');
         }
 
-        // Попробуем получить из cookie
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        if (name === 'XSRF-TOKEN') {
-        return decodeURIComponent(value);
-        }
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'XSRF-TOKEN') {
+                return decodeURIComponent(value);
+            }
         }
 
-        // Используем фиксированный токен как в примере cURL
         return 'Zva2RlvTSh5wTQogjJMfE8v5ObQoOSIcL40Xwc5d';
         };
 
-        // Функция для преобразования значения статуса в точно такой же формат как в API
         const mapStatusForAPI = (statusValue) => {
         const statusMap = {
-        'new': 'Новая анкета',
-        'needs-work': 'Нужна доработка', // Убрал пробел в конце
-        'checked': 'Проверен',
-        'rejected': 'Отклонен'
+            'new': 'Новая анкета',
+            'needs-work': 'Нужна доработка', 
+            'checked': 'Проверен',
+            'rejected': 'Отклонен'
         };
         return statusMap[statusValue] || statusValue;
         };
 
-        // Функция для получения access token из cookies
         const getAccessToken = () => {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        if (name === 'access_token') {
-        return value;
-        }
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'access_token') {
+                return value;
+            }
         }
         return null;
         };
 
-        // Функция для отправки запроса обновления статуса
         const updateCandidateStatus = async (newStatus) => {
         const accessToken = getAccessToken();
 
         if (!accessToken) {
-        console.error('Access token не найден в cookies');
-        return false;
+            console.error('Access token не найден в cookies');
+            return false;
         }
 
         if (!vacancyKey) {
-        console.error('Ключ кандидата не передан в props');
-        return false;
+            console.error('Ключ кандидата не передан в props');
+            return false;
         }
 
         setIsUpdating(true);
 
-        // ПРАВИЛЬНАЯ подготовка данных - как в рабочем примере
         const mappedStatus = mapStatusForAPI(newStatus);
         const requestData = {
-        key: vacancyKey,
-        status: mappedStatus,
-        comment: commentValue || ""
+            key: vacancyKey,
+            status: mappedStatus,
+            comment: commentValue || ""
         };
 
         console.log('=== НАЧАЛО ЗАПРОСА ОБНОВЛЕНИЯ СТАТУСА ===');
@@ -139,10 +131,10 @@
         console.log('Access токен (первые 20 символов):', accessToken.substring(0, 20) + '...');
 
         const headers = {
-        'accept': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
+            'accept': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
         };
 
         console.log('=== ДЕТАЛИ ЗАПРОСА ===');
@@ -154,9 +146,9 @@
         console.log('=== ОТПРАВКА ЗАПРОСА ===');
 
         const response = await fetch('/api/v1/candidates/update', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(requestData)
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(requestData)
         });
 
         console.log('=== ОТВЕТ СЕРВЕРА ===');
@@ -164,88 +156,85 @@
         console.log('Статус текст:', response.statusText);
 
         if (response.ok) {
-        const result = await response.json();
-        console.log('✅ Статус успешно обновлен:', result);
-        return true;
+            const result = await response.json();
+            console.log('✅ Статус успешно обновлен:', result);
+            return true;
         } else {
-        const errorText = await response.text();
-        console.error('❌ Ошибка при обновлении статуса. Статус:', response.status);
-        console.error('❌ Текст ошибки от сервера:', errorText);
+            const errorText = await response.text();
+            console.error('❌ Ошибка при обновлении статуса. Статус:', response.status);
+            console.error('❌ Текст ошибки от сервера:', errorText);
 
-        // Попробуем распарсить как JSON
         try {
-        const errorJson = JSON.parse(errorText);
-        console.error('❌ Ошибка (JSON):', errorJson);
+            const errorJson = JSON.parse(errorText);
+            console.error('❌ Ошибка (JSON):', errorJson);
         } catch (e) {
-        console.error('❌ Ошибка - не JSON формат');
+            console.error('❌ Ошибка - не JSON формат');
         }
 
         return false;
         }
         } catch (error) {
-        console.error('=== ОШИБКА ЗАПРОСА ===');
-        console.error('Тип ошибки:', error.name);
-        console.error('Сообщение ошибки:', error.message);
-        console.error('Полная ошибка:', error);
+            console.error('=== ОШИБКА ЗАПРОСА ===');
+            console.error('Тип ошибки:', error.name);
+            console.error('Сообщение ошибки:', error.message);
+            console.error('Полная ошибка:', error);
 
         return false;
         } finally {
-        console.log('=== ЗАВЕРШЕНИЕ ЗАПРОСА ===');
-        setIsUpdating(false);
+            console.log('=== ЗАВЕРШЕНИЕ ЗАПРОСА ===');
+            setIsUpdating(false);
         }
         };
 
         const handleSelectToggle = (e) => {
-        e.stopPropagation();
-        setIsSelectOpen(!isSelectOpen);
+            e.stopPropagation();
+            setIsSelectOpen(!isSelectOpen);
         };
 
         const handleOptionSelect = async (option) => {
-        // Проверяем, изменился ли статус
-        if (selectedOption.value !== option.value) {
-        // Отправляем запрос на обновление статуса
-        const success = await updateCandidateStatus(option.value);
+            if (selectedOption.value !== option.value) {
 
-        if (success) {
-        // Обновляем состояние только если запрос прошел успешно
-        setSelectedOption(option);
-        console.log('Статус изменен на:', option.text);
-        } else {
-        console.error('Не удалось обновить статус');
-        // Можно добавить уведомление пользователю об ошибке
-        }
-        }
+            const success = await updateCandidateStatus(option.value);
 
-        setIsSelectOpen(false);
+            if (success) {
+
+                setSelectedOption(option);
+                console.log('Статус изменен на:', option.text);
+            } else {
+                console.error('Не удалось обновить статус');
+
+            }
+            }
+
+            setIsSelectOpen(false);
         };
 
         const handleCommentChange = (e) => {
-        setCommentValue(e.target.value);
+            setCommentValue(e.target.value);
         };
 
         const handleAddComment = async () => {
-        if (!commentValue.trim()) {
-        console.warn('Комментарий пустой, отправка не требуется');
-        return;
+            if (!commentValue.trim()) {
+                console.warn('Комментарий пустой, отправка не требуется');
+            return;
         }
 
         const accessToken = getAccessToken();
 
         if (!accessToken) {
-        console.error('Access token не найден в cookies');
-        return;
+            console.error('Access token не найден в cookies');
+            return;
         }
 
         if (!vacancyKey) {
-        console.error('Ключ кандидата не передан в props');
-        return;
+            console.error('Ключ кандидата не передан в props');
+            return;
         }
 
-        // Подготавливаем данные для отправки комментария
         const requestData = {
-        key: vacancyKey,
-        status: "", // Пустой статус для комментария
-        comment: commentValue.trim()
+            key: vacancyKey,
+            status: "", 
+            comment: commentValue.trim()
         };
 
         console.log('=== НАЧАЛО ОТПРАВКИ КОММЕНТАРИЯ ===');
@@ -253,67 +242,66 @@
         console.log('requestData:', requestData);
 
         try {
-        const csrfToken = getCsrfToken();
-        console.log('CSRF токен:', csrfToken);
+            const csrfToken = getCsrfToken();
+            console.log('CSRF токен:', csrfToken);
 
-        const headers = {
-        'accept': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
-        };
+            const headers = {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            };
 
-        console.log('=== ДЕТАЛИ ЗАПРОСА КОММЕНТАРИЯ ===');
-        console.log('URL:', '/api/v1/candidates/update');
-        console.log('Метод:', 'POST');
-        console.log('Заголовки:', headers);
-        console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
+            console.log('=== ДЕТАЛИ ЗАПРОСА КОММЕНТАРИЯ ===');
+            console.log('URL:', '/api/v1/candidates/update');
+            console.log('Метод:', 'POST');
+            console.log('Заголовки:', headers);
+            console.log('Тело запроса (JSON):', JSON.stringify(requestData, null, 2));
 
-        const response = await fetch('/api/v1/candidates/update', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(requestData)
-        });
+            const response = await fetch('/api/v1/candidates/update', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(requestData)
+            });
 
-        console.log('=== ОТВЕТ СЕРВЕРА НА КОММЕНТАРИЙ ===');
-        console.log('Статус ответа:', response.status);
+            console.log('=== ОТВЕТ СЕРВЕРА НА КОММЕНТАРИЙ ===');
+            console.log('Статус ответа:', response.status);
 
-        if (response.ok) {
-        const result = await response.json();
-        console.log('✅ Комментарий успешно отправлен:', result);
-        setCommentValue('');
-        } else {
-        const errorText = await response.text();
-        console.error('❌ Ошибка при отправке комментария. Статус:', response.status);
-        console.error('❌ Текст ошибки:', errorText);
-        }
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Комментарий успешно отправлен:', result);
+                setCommentValue('');
+            } else {
+                const errorText = await response.text();
+                console.error('❌ Ошибка при отправке комментария. Статус:', response.status);
+                console.error('❌ Текст ошибки:', errorText);
+            }
         } catch (error) {
-        console.error('=== ОШИБКА ОТПРАВКИ КОММЕНТАРИЯ ===');
-        console.error('Ошибка:', error);
+            console.error('=== ОШИБКА ОТПРАВКИ КОММЕНТАРИЯ ===');
+            console.error('Ошибка:', error);
         }
         };
 
-        // Закрытие селектора при клике вне его
         useEffect(() => {
-        const handleClickOutside = (e) => {
-        if (isSelectOpen && !e.target.closest('#customSelect')) {
-        setIsSelectOpen(false);
-        }
-        };
+            const handleClickOutside = (e) => {
+                if (isSelectOpen && !e.target.closest('#customSelect')) {
+                    setIsSelectOpen(false);
+                }
+            };
 
-        const handleKeyDown = (e) => {
-        if (e.key === 'Escape') {
-        setIsSelectOpen(false);
-        }
-        };
+            const handleKeyDown = (e) => {
+                if (e.key === 'Escape') {
+                    setIsSelectOpen(false);
+                }
+            };
 
-        document.addEventListener('click', handleClickOutside);
-        document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('click', handleClickOutside);
+            document.addEventListener('keydown', handleKeyDown);
 
-        return () => {
-        document.removeEventListener('click', handleClickOutside);
-        document.removeEventListener('keydown', handleKeyDown);
-        };
+            return () => {
+                document.removeEventListener('click', handleClickOutside);
+                document.removeEventListener('keydown', handleKeyDown);
+            };
         }, [isSelectOpen]);
 
         return (
@@ -437,7 +425,7 @@
                 <div className="formRow" style={{marginTop: '50px'}}>
                     <h3>Паспортные данные</h3>
                 </div>
-
+                
                 <div className="formRow justify-space-between">
                     <div className="input-container w-49">
                         <label htmlFor="passwordSeriaNumber" id="passwordSeriaNumber" className="formLabel">Серия и номер </label>
@@ -619,7 +607,7 @@
         </main>
         </>
         );
-        }
+    }
     function App() {
         const [isCalendarOpen, setIsCalendarOpen] = useState(false);
         const [selectedVacancyKey, setSelectedVacancyKey] = useState(null); // Состояние для выбранного кандидата
