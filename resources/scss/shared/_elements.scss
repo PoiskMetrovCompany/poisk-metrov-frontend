@@ -87,5 +87,16 @@ main {
     &>* {
         padding: 0px $page-padding-sm;
         max-width: 1920px;
+         @include media-breakpoint-up(md) {
+            padding: 0px $page-padding-md;
+        }
+
+        @include media-breakpoint-up(xl) {
+            padding: 0px $page-padding-xl;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            padding: 0px $page-padding-xxl;
+        }
     }
 }
