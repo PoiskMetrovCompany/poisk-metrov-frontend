@@ -956,8 +956,60 @@
             const formattedValue = formatPassport(value);
             handleFormDataChange(name, formattedValue);
         };
+        
+        const collectEducationData = () => {
+            const educationData = [];
+            
+            if (formData.nameInstitution1) {
+                educationData.push({
+                    institution_name: formData.nameInstitution1 || '',
+                    start_date: formatDateForDatabase(formData.dateOfEntrance1) || '',
+                    end_date: formatDateForDatabase(formData.dateOfEnding1) || '',
+                    education_type: formData.typeOfEducation1 || '',
+                    specialty: formData.diplomaSpeciality1 || ''
+                });
+            }
+            
+            additionalEducationTables.forEach(index => {
+                if (formData[`nameInstitution${index}`]) {
+                    educationData.push({
+                        institution_name: formData[`nameInstitution${index}`] || '',
+                        start_date: formatDateForDatabase(formData[`dateOfEntrance${index}`]) || '',
+                        end_date: formatDateForDatabase(formData[`dateOfEnding${index}`]) || '',
+                        education_type: formData[`typeOfEducation${index}`] || '',
+                        specialty: formData[`diplomaSpeciality${index}`] || ''
+                    });
+                }
+            });
+            
+            return educationData;
+        };
 
-
+        const collectCoursesData = () => {
+            const coursesData = [];
+            
+            if (formData.courseName1) {
+                coursesData.push({
+                    institution_name: formData.courseName1 || '',
+                    course_name: formData.courseTitle1 || '',
+                    start_date: formatDateForDatabase(formData.courseStartDate1) || '',
+                    end_date: formatDateForDatabase(formData.courseEndDate1) || ''
+                });
+            }
+            
+            additionalCourseTables.forEach(index => {
+                if (formData[`courseName${index}`]) {
+                    coursesData.push({
+                        institution_name: formData[`courseName${index}`] || '',
+                        course_name: formData[`courseTitle${index}`] || '',
+                        start_date: formatDateForDatabase(formData[`courseStartDate${index}`]) || '',
+                        end_date: formatDateForDatabase(formData[`courseEndDate${index}`]) || ''
+                    });
+                }
+            });
+            
+            return coursesData;
+        };
         const collectChildrenData = () => {
             if (!haveChildren) {
                 return null;
@@ -975,7 +1027,6 @@
                 });
             }
 
-            // Дополнительные дети
             additionalChildrenTables.forEach(index => {
                 if (formData[`FIOChildren${index}`]) {
                     children.push({
@@ -1279,6 +1330,19 @@
                     birth_date: formatDateForDatabase(rawFormData.birthDate),
                     country_birth: birthPlaceData.country,
                     city_birth: birthPlaceData.city,
+                    level_educational: selectedEducationLevel,
+                    courses: JSON.stringify(collectCoursesData()),
+                    educational_institution: JSON.stringify(collectEducationData()),
+                    organization_name: formData.companyName || '',
+                    organization_phone: formData.companyPhone || '',
+                    field_of_activity: formData.companyActivity || '',
+                    organization_address: formData.companyAddress || '',
+                    organization_job_title: formData.position || '',
+                    organization_price: formData.salary || '',
+                    date_of_hiring: formatDateForDatabase(formData.hireDate),
+                    date_of_dismissal: formatDateForDatabase(formData.dismissalDate),
+                    reason_for_dismissal: formData.dismissalReason || '',
+                    recommendation_contact: formData.referenceContact || '',
                     mobile_phone_candidate: rawFormData.mobileNumber || '',
                     home_phone_candidate: rawFormData.domesticNumber || '',
                     mail_candidate: rawFormData.email || '',
@@ -1708,7 +1772,7 @@
                                         </button>
                                     </div>
                                     <div className="formRow justify-flex-start" style={{marginTop: '10px'}}>
-                                        <p style={{marginTop: 0}}>Добавьте информацию о пройденных курсах повышения квалификации</p>
+                                        <p style={{marginTop: 0}}>Добавьте информацию о дополнительном высшем образовании</p>
                             </div>
 
                             {additionalCourseTables.map(index => (

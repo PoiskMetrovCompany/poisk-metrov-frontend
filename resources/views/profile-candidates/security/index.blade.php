@@ -365,7 +365,7 @@ function Header({ onCityChange }) {
     </header>
   );
 }
- function ShowForm({ vacancyKey, setSelectedVacancyKey, selectedCity }) {
+function ShowForm({ vacancyKey, setSelectedVacancyKey, selectedCity }) {
     const handleLogout = () => {
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         window.location.reload();
@@ -421,6 +421,18 @@ function Header({ onCityChange }) {
         return null;
     };
 
+    // Функция для парсинга JSON строк
+    const parseJsonField = (jsonString) => {
+        if (!jsonString || jsonString === null || jsonString === 'null') return [];
+        try {
+            const parsed = JSON.parse(jsonString);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.error('Ошибка парсинга JSON:', error);
+            return [];
+        }
+    };
+
     // Функция для загрузки данных кандидата
     const fetchCandidateData = async () => {
         if (!vacancyKey) {
@@ -466,10 +478,12 @@ function Header({ onCityChange }) {
                 console.log('✅ Данные кандидата получены:', result);
                 
                 if (result.response && result.attributes) {
-                    setCandidateData(result.attributes);
+                    // Если данные приходят в виде массива, берем первый элемент
+                    const data = Array.isArray(result.attributes.data) ? result.attributes.data[0] : result.attributes;
+                    setCandidateData(data);
                     
                     // Устанавливаем текущий статус в селектор
-                    const currentStatus = result.attributes.status;
+                    const currentStatus = data.status;
                     const statusOption = selectOptions.find(option => {
                         const statusMap = {
                             'new': 'Новая анкета',
@@ -485,8 +499,8 @@ function Header({ onCityChange }) {
                     }
                     
                     // Устанавливаем комментарий, если есть
-                    if (result.attributes.comment) {
-                        setCommentValue(result.attributes.comment);
+                    if (data.comment) {
+                        setCommentValue(data.comment);
                     }
                 } else {
                     setError('Неверный формат ответа сервера');
@@ -664,20 +678,19 @@ function Header({ onCityChange }) {
 
     const getStatusClass = (statusText) => {
         console.log(statusText + " СТАТУС");
-    switch (statusText) {
-        case 'Новая анкета':
-        return 'status-new';
-        case 'Проверен':
-        return 'status-checked';
-        case 'Нужна доработка':
-        return 'status-needRevision';
-        case 'Отклонен':
-        return 'status-rejected';
-        default:
-        return 'status-new'; // по умолчанию
-    }
+        switch (statusText) {
+            case 'Новая анкета':
+                return 'status-new';
+            case 'Проверен':
+                return 'status-checked';
+            case 'Нужна доработка':
+                return 'status-needRevision';
+            case 'Отклонен':
+                return 'status-rejected';
+            default:
+                return 'status-new'; // по умолчанию
+        }
     };
-
 
     // Функции для форматирования данных
     const formatDate = (dateString) => {
@@ -751,6 +764,23 @@ function Header({ onCityChange }) {
             </div>
         );
     }
+
+    // Парсим данные об образовании, курсах и работе
+    const educationalInstitutions = parseJsonField(candidateData.educational_institution);
+    const courses = parseJsonField(candidateData.courses);
+
+    // Безопасная проверка для семейных данных
+    const hasPartner = candidateData.family_partner && 
+                      Array.isArray(candidateData.family_partner) && 
+                      candidateData.family_partner.length > 0;
+    
+    const hasAdultChildren = candidateData.adult_children && 
+                            Array.isArray(candidateData.adult_children) && 
+                            candidateData.adult_children.length > 0;
+    
+    const hasAdultFamilyMembers = candidateData.adult_family_members && 
+                                 Array.isArray(candidateData.adult_family_members) && 
+                                 candidateData.adult_family_members.length > 0;
 
     return (
         <>
@@ -901,268 +931,282 @@ function Header({ onCityChange }) {
                             </div>
                         </div>
 
-                        <div className="formRow" style={{marginTop: '50px'}} id = "passportData">
+
+                        {/* Показываем раздел образования только если есть данные */}
+                        {(candidateData.level_educational || educationalInstitutions.length > 0 || courses.length > 0) && (
+                            <>
+                                <div className="formRow flex-direction-column" style={{marginTop: '50px'}}>
+                                    <h3>Образование и профессиональный опыт</h3>
+                                </div>
+
+                                {candidateData.level_educational && (
+                                    <div className="formRow">
+                                        <div className="input-container">
+                                            <label htmlFor="educationLevel" className="formLabel">Уровень образования</label>
+                                            <input 
+                                                style={{width: '100%'}} 
+                                                type="text" 
+                                                name="educationLevel" 
+                                                id="educationLevel" 
+                                                className="formInput" 
+                                                value={candidateData.level_educational || ''} 
+                                                readOnly 
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Динамические данные об образовательных учреждениях */}
+                                {educationalInstitutions.length > 0 && educationalInstitutions.map((institution, index) => (
+                            <div key={index} className="formRow">
+                                <table className="inputTable showTable">
+                                    <tbody>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <input 
+                                                    type="text" 
+                                                    name={`nameInstitution${index + 1}`} 
+                                                    placeholder="Полное наименование учебного заведения" 
+                                                    value={institution?.institution_name || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name={`dateOfEntrance${index + 1}`} 
+                                                    placeholder="Дата поступления" 
+                                                    value={formatDate(institution?.start_date)} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name={`dateOfEnding${index + 1}`} 
+                                                    placeholder="Дата окончания" 
+                                                    value={formatDate(institution?.end_date)} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name={`typeOfEducation${index + 1}`} 
+                                                    placeholder="Форма обучения" 
+                                                    value={institution?.education_type || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name={`diplomaSpeciality${index + 1}`} 
+                                                    placeholder="Специальность по диплому" 
+                                                    value={institution?.specialty || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        ))}
+
+                        {/* Динамические данные о курсах */}
+                        {courses.length > 0 && courses.map((course, index) => (
+                            <div key={index} className="formRow">
+                                <table className="inputTable showTable">
+                                    <tbody>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <input 
+                                                    type="text" 
+                                                    name={`courseName${index + 1}`} 
+                                                    placeholder="Полное наименование учебного заведения" 
+                                                    value={course?.institution_name || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <input 
+                                                    type="text" 
+                                                    name={`courseTitle${index + 1}`} 
+                                                    placeholder="Название курса/тренинга" 
+                                                    value={course?.course_name || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name={`courseStartDate${index + 1}`} 
+                                                    placeholder="Дата начала" 
+                                                    value={formatDate(course?.start_date)} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name={`courseEndDate${index + 1}`} 
+                                                    placeholder="Дата окончания" 
+                                                    value={formatDate(course?.end_date)} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                                ))}
+
+                                <div className="formRow">
+                                    <div className="input-container">
+                                        <label htmlFor="professionalExperience" className="formLabel">Профессиональный опыт</label>
+                                        <input 
+                                            style={{width: '100%'}} 
+                                            type="text" 
+                                            name="professionalExperience" 
+                                            id="professionalExperience" 
+                                            className="formInput" 
+                                            value={candidateData.organization_name ? "Опыт есть" : "Опыт отсутствует"} 
+                                            readOnly 
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
+                        {/* Динамические данные о последнем месте работы */}
+                        {candidateData.organization_name && (
+                            <div className="formRow" style={{
+                                opacity: 1,
+                                height: '550px',
+                                overflow: 'hidden',
+                                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                            }}>
+                                <table className="inputTable showTable" style={{height: 'auto', minHeight: '350px'}}>
+                                    <tbody>
+                                        <tr>
+                                            <td style={{borderTopLeftRadius: '16px', borderTopRightRadius: 0}}>
+                                                <input 
+                                                    type="text" 
+                                                    name="companyName" 
+                                                    placeholder="Полное наименование предприятия" 
+                                                    value={candidateData.organization_name || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                            <td style={{borderTopRightRadius: '16px', borderTopLeftRadius: 0}}>
+                                                <input 
+                                                    type="text" 
+                                                    name="companyPhone" 
+                                                    placeholder="Телефон предприятия" 
+                                                    value={candidateData.organization_phone || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <input 
+                                                    type="text" 
+                                                    name="companyActivity" 
+                                                    placeholder="Сфера деятельности предприятия" 
+                                                    value={candidateData.field_of_activity || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <input 
+                                                    type="text" 
+                                                    name="companyAddress" 
+                                                    placeholder="Адрес предприятия" 
+                                                    value={candidateData.organization_address || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name="position" 
+                                                    placeholder="Должность" 
+                                                    value={candidateData.organization_job_title || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name="salary" 
+                                                    placeholder="Уровень заработной платы" 
+                                                    value={candidateData.organization_price || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name="hireDate" 
+                                                    placeholder="Дата приема (месяц, год)" 
+                                                    value={formatDate(candidateData.date_of_hiring)} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    name="dismissalDate" 
+                                                    placeholder="Дата увольнения (месяц, год)" 
+                                                    value={formatDate(candidateData.date_of_dismissal)} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <input 
+                                                    type="text" 
+                                                    name="dismissalReason" 
+                                                    placeholder="Причина увольнения" 
+                                                    value={candidateData.reason_for_dismissal || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2" style={{borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px'}}>
+                                                <input 
+                                                    type="text" 
+                                                    name="referenceContact" 
+                                                    placeholder="ФИО и номер телефона лица, к которому можно обратиться за рекомендацией" 
+                                                    value={candidateData.recommendation_contact || ''} 
+                                                    readOnly 
+                                                />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                         <div className="formRow" style={{marginTop: '50px'}} id = "passportData">
                             <h3>Паспортные данные</h3>
-                        </div>
-
-                        <div className="formRow flex-direction-column" style={{marginTop: '50px'}}>
-                            <h3>Образование и профессиональный опыт</h3>
-                        </div>
-
-                        <div className="formRow">
-                            <div className="input-container">
-                                <label htmlFor="educationLevel" className="formLabel">Уровень образования</label>
-                                <input 
-                                    style={{width: '100%'}} 
-                                    type="text" 
-                                    name="educationLevel" 
-                                    id="educationLevel" 
-                                    className="formInput" 
-                                    defaultValue="Высшее" 
-                                    readOnly 
-                                />
-                            </div>
-                        </div>
-
-                        <div className="formRow">
-                            <table className="inputTable showTable">
-                                <caption className="tableLabel">Данные об образовательном учреждении</caption>
-                                <tbody>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <input 
-                                                type="text" 
-                                                name="nameInstitution1" 
-                                                placeholder="Полное наименование учебного заведения" 
-                                                defaultValue="Московский государственный университет им. М.В. Ломоносова" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="dateOfEntrance1" 
-                                                placeholder="Дата поступления" 
-                                                defaultValue="01.09.2010" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="dateOfEnding1" 
-                                                placeholder="Дата окончания" 
-                                                defaultValue="30.06.2015" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="typeOfEducation1" 
-                                                placeholder="Форма обучения" 
-                                                defaultValue="Дневная" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="diplomaSpeciality1" 
-                                                placeholder="Специальность по диплому" 
-                                                defaultValue="Экономика и управление" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="formRow">
-                            <table className="inputTable showTable">
-                                <caption className="tableLabel">Данные о пройденном курсе</caption>
-                                <tbody>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <input 
-                                                type="text" 
-                                                name="courseName1" 
-                                                placeholder="Полное наименование учебного заведения" 
-                                                defaultValue="Институт дополнительного профессионального образования" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <input 
-                                                type="text" 
-                                                name="courseTitle1" 
-                                                placeholder="Название курса/тренинга" 
-                                                defaultValue="Управление недвижимостью и оценка объектов" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="courseStartDate1" 
-                                                placeholder="Дата начала" 
-                                                defaultValue="15.01.2020" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="courseEndDate1" 
-                                                placeholder="Дата окончания" 
-                                                defaultValue="30.03.2020" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="formRow">
-                            <div className="input-container">
-                                <label htmlFor="professionalExperience" className="formLabel">Профессиональный опыт</label>
-                                <input 
-                                    style={{width: '100%'}} 
-                                    type="text" 
-                                    name="professionalExperience" 
-                                    id="professionalExperience" 
-                                    className="formInput" 
-                                    defaultValue="Опыт есть" 
-                                    readOnly 
-                                />
-                            </div>
-                        </div>
-
-                        <div className="formRow" style={{
-                            opacity: 1,
-                            height: '550px',
-                            overflow: 'hidden',
-                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                        }}>
-                            <table className="inputTable showTable" style={{height: 'auto', minHeight: '350px'}}>
-                                <caption className="tableLabel">Данные о последнем месте работы</caption>
-                                <tbody>
-                                    <tr>
-                                        <td style={{borderTopLeftRadius: '16px', borderTopRightRadius: 0}}>
-                                            <input 
-                                                type="text" 
-                                                name="companyName" 
-                                                placeholder="Полное наименование предприятия" 
-                                                defaultValue="ООО «Премиум Недвижимость»" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                        <td style={{borderTopRightRadius: '16px', borderTopLeftRadius: 0}}>
-                                            <input 
-                                                type="text" 
-                                                name="companyPhone" 
-                                                placeholder="Телефон предприятия" 
-                                                defaultValue="+7(495)789-01-23" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <input 
-                                                type="text" 
-                                                name="companyActivity" 
-                                                placeholder="Сфера деятельности предприятия" 
-                                                defaultValue="Услуги по купле-продаже недвижимости" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <input 
-                                                type="text" 
-                                                name="companyAddress" 
-                                                placeholder="Адрес предприятия" 
-                                                defaultValue="г. Москва, ул. Тверская, д. 20, офис 301" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="position" 
-                                                placeholder="Должность" 
-                                                defaultValue="Агент по недвижимости" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="salary" 
-                                                placeholder="Уровень заработной платы" 
-                                                defaultValue="45 000 руб." 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="hireDate" 
-                                                placeholder="Дата приема (месяц, год)" 
-                                                defaultValue="15.03.2020" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                        <td>
-                                            <input 
-                                                type="text" 
-                                                name="dismissalDate" 
-                                                placeholder="Дата увольнения (месяц, год)" 
-                                                defaultValue="30.11.2023" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <input 
-                                                type="text" 
-                                                name="dismissalReason" 
-                                                placeholder="Причина увольнения" 
-                                                defaultValue="По собственному желанию" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2" style={{borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px'}}>
-                                            <input 
-                                                type="text" 
-                                                name="referenceContact" 
-                                                placeholder="ФИО и номер телефона лица, к которому можно обратиться за рекомендацией" 
-                                                defaultValue="Петров Игорь Викторович, +7(495)123-45-67" 
-                                                readOnly 
-                                            />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
 
                         <div className="formRow justify-space-between">
@@ -1217,34 +1261,34 @@ function Header({ onCityChange }) {
                             </div>
                         </div>
 
-                        {candidateData.family_partner && (
+                        {hasPartner && (
                             <div className="formRow">
                                 <table className="inputTable showTable">
                                     <tbody>
                                     <tr>
                                         <td colSpan="2">
                                             <input type="text" name="FIOSuprug" placeholder="ФИО супруга(-и)" 
-                                                   value={candidateData.family_partner.full_name || ''} readOnly />
+                                                   value={candidateData.family_partner[0]?.full_name || ''} readOnly />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <input type="text" name="dateOfBirthTable" placeholder="Дата рождения" 
-                                                   value={formatDate(candidateData.family_partner.birth_date)} readOnly />
+                                                   value={formatDate(candidateData.family_partner[0]?.birth_date)} readOnly />
                                         </td>
                                         <td>
                                             <input type="tel" name="phoneNumberTable" placeholder="Телефон" 
-                                                   value={candidateData.family_partner.phone || ''} readOnly />
+                                                   value={candidateData.family_partner[0]?.phone || ''} readOnly />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <input type="text" name="placeOfStudy" placeholder="Место учебы/работы, рабочий телефон" 
-                                                   value={candidateData.family_partner.residence_address || ''} readOnly />
+                                                   value={candidateData.family_partner[0]?.work_study_place || ''} readOnly />
                                         </td>
                                         <td>
                                             <input type="text" name="placeOfLiving" placeholder="Место проживания" 
-                                                   value={candidateData.family_partner.work_study_place || ''} readOnly />
+                                                   value={candidateData.family_partner[0]?.residence_address || ''} readOnly />
                                         </td>
                                     </tr>
                                     </tbody>
@@ -1252,7 +1296,7 @@ function Header({ onCityChange }) {
                             </div>
                         )}
 
-                        {candidateData.adult_children && candidateData.adult_children.length > 0 && (
+                        {hasAdultChildren && (
                             <>
                                 <div className="formRow flex-direction-column">
                                     <h3>Данные совершеннолетнего ребенка</h3>
@@ -1272,27 +1316,27 @@ function Header({ onCityChange }) {
                                                 <tr>
                                                     <td colSpan="2">
                                                         <input type="text" name={`FIOChildren${index + 1}`} placeholder="ФИО ребенка" 
-                                                               value={child.full_name || ''} readOnly />
+                                                               value={child?.full_name || ''} readOnly />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <input type="text" name={`dateOfBirthChildren${index + 1}`} placeholder="Дата рождения" 
-                                                               value={formatDate(child.birth_date)} readOnly />
+                                                               value={formatDate(child?.birth_date)} readOnly />
                                                     </td>
                                                     <td>
                                                         <input type="tel" name={`phoneNumberChildren${index + 1}`} placeholder="Телефон" 
-                                                               value={child.phone || ''} readOnly />
+                                                               value={child?.phone || ''} readOnly />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <input type="text" name={`placeOfStudyChildren${index + 1}`} placeholder="Место учебы/работы, рабочий телефон" 
-                                                               value={child.work_study_place || ''} readOnly />
+                                                               value={child?.work_study_place || ''} readOnly />
                                                     </td>
                                                     <td>
                                                         <input type="text" name={`placeOfLivingChildren${index + 1}`} placeholder="Место проживания" 
-                                                               value={child.residence_address || ''} readOnly />
+                                                               value={child?.residence_address || ''} readOnly />
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -1303,7 +1347,7 @@ function Header({ onCityChange }) {
                             </>
                         )}
 
-                        {candidateData.adult_family_members && candidateData.adult_family_members.length > 0 && (
+                        {hasAdultFamilyMembers && (
                             <>
                                 <div className="formRow flex-direction-column">
                                     <h3>2. Члены семьи старше 18 лет</h3>
@@ -1317,27 +1361,27 @@ function Header({ onCityChange }) {
                                                 <tr>
                                                     <td colSpan="2">
                                                         <input type="text" name={`FIORelative${index + 1}`} placeholder="Степень родства, ФИО члена семьи" 
-                                                               value={member.relationship_and_name} readOnly />
+                                                               value={member?.relationship_and_name || ''} readOnly />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <input type="text" name={`dateOfBirthRelative${index + 1}`} placeholder="Дата рождения" 
-                                                               value={formatDate(member.birth_date)} readOnly />
+                                                               value={formatDate(member?.birth_date)} readOnly />
                                                     </td>
                                                     <td>
                                                         <input type="tel" name={`phoneNumberRelative${index + 1}`} placeholder="Телефон" 
-                                                               value={member.phone || ''} readOnly />
+                                                               value={member?.phone || ''} readOnly />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <input type="text" name={`placeOfStudyRelative${index + 1}`} placeholder="Место учебы/работы, рабочий телефон" 
-                                                               value={member.work_study_place || ''} readOnly />
+                                                               value={member?.work_study_place || ''} readOnly />
                                                     </td>
                                                     <td>
                                                         <input type="text" name={`placeOfLivingRelative${index + 1}`} placeholder="Место проживания" 
-                                                               value={member.residence_address || ''} readOnly />
+                                                               value={member?.residence_address || ''} readOnly />
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -1362,10 +1406,10 @@ function Header({ onCityChange }) {
                             <div className="input-container">
                                 <label htmlFor="reasonOfChange" id="formLabel" className="formLabel">Наличие уголовной или административной ответственности</label>
                                 <input type="text" name="reasonOfChange" id="reasonOfChange" className="formInput big" 
-                                       value={candidateData.law_breaker ? 'Да, имеется' : 'Нет'} readOnly />
+                                       value={candidateData.law_breaker !== "Нет" ? 'Да, имеется' : 'Нет'} readOnly />
                             </div>
                         </div>
-                        {candidateData.law_breaker && (
+                        {candidateData.law_breaker && candidateData.law_breaker !== "Нет" && (
                             <div className="formRow">
                                 <div className="input-container">
                                     <label htmlFor="whyPrisoner" id="whyPrisoner" className="formLabel">Причины привлечения к уголовной или административной ответственности</label>
