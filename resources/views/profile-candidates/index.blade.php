@@ -1704,30 +1704,28 @@
                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
-                                            Добавить дополнительное образование
+                                            Добавить высшее образование
                                         </button>
                                     </div>
                                     <div className="formRow justify-flex-start" style={{marginTop: '10px'}}>
                                         <p style={{marginTop: 0}}>Добавьте информацию о пройденных курсах повышения квалификации</p>
                             </div>
 
-                            <CourseDataTable index={1} formData={formData} setFormData={setFormData} />
-
                             {additionalCourseTables.map(index => (
                                 <CourseDataTable key={index} index={index} formData={formData} setFormData={setFormData} />
                             ))}
 
-                            <div className="formRow" style={{marginBottom: 0, display: "none"}}>
+                            <div className="formRow" style={{marginBottom: 0}}>
                                 <button className="bigFormButton" onClick={addCourseTable}>
                                     <div className="textCont"></div>
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
-                                    Добавить курс/тренинг
+                                    Добавить дополнительное образование
                                 </button>
                             </div>
-                            <div className="formRow justify-flex-start" style={{marginTop: '10px', display: "none"}}>
-                                <p style={{marginTop: 0}}>Добавьте все курсы и тренинги, которые вы прошли</p>
+                            <div className="formRow justify-flex-start" style={{marginTop: '10px'}}>
+                                <p style={{marginTop: 0}}>Добавьте информацию о пройденных курсах повышения квалификации</p>
                             </div>
 
                             <div className="formRow justify-flex-start">
