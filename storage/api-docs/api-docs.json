@@ -239,6 +239,35 @@
                 "summary": "получение списка планировок",
                 "description": "Возвращение JSON объекта",
                 "operationId": "80d77721b0ffc035e0381293825bd313",
+                "parameters": [
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Указывает, какие связанные данные нужно включить",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "UserFavoriteBuilding",
+                                    "CRMSyncRequiredForUser",
+                                    "ResidentialComplexFeedSiteName",
+                                    "DeletedFavoriteBuilding",
+                                    "File",
+                                    "ManagerChatMessage",
+                                    "News",
+                                    "VisitedPage",
+                                    "UserFavoritePlan",
+                                    "Manager",
+                                    "Interaction"
+                                ]
+                            }
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!"
@@ -621,6 +650,108 @@
                 ]
             }
         },
+        "/api/v1/residential-complex/": {
+            "get": {
+                "tags": [
+                    "ResidentialComplex"
+                ],
+                "summary": "получение списка ЖК",
+                "description": "Возвращение JSON объекта",
+                "operationId": "910c7705f281b9cfa4ec32183d2e2bae",
+                "parameters": [
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Указывает, какие связанные данные нужно включить",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "Amenity",
+                                    "Apartment",
+                                    "BestOffer",
+                                    "BuildingProcess",
+                                    "Doc",
+                                    "Gallery",
+                                    "ResidentialComplexCategoryPivot",
+                                    "SpriteImagePosition",
+                                    "UserFavoriteBuilding",
+                                    "Location"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/residential-complex/read": {
+            "get": {
+                "tags": [
+                    "ResidentialComplex"
+                ],
+                "summary": "получение конкретного ЖК",
+                "description": "Возвращение JSON объекта",
+                "operationId": "7cbb5be783fea6ee10cf1dc3c6dc8b7e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID для получения ЖК",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Указывает, какие связанные данные нужно включить в выборку",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "Amenity",
+                                    "Apartment",
+                                    "BestOffer",
+                                    "BuildingProcess",
+                                    "Doc",
+                                    "Gallery",
+                                    "ResidentialComplexCategoryPivot",
+                                    "SpriteImagePosition",
+                                    "UserFavoriteBuilding",
+                                    "Location"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/users/get-current": {
             "get": {
                 "tags": [
@@ -888,6 +1019,10 @@
         {
             "name": "Favorite",
             "description": "Операции над избранным"
+        },
+        {
+            "name": "ResidentialComplex",
+            "description": "Операции над ЖК"
         }
     ]
 }

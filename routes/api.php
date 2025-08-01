@@ -37,6 +37,8 @@ use App\Http\Controllers\Api\V1\Managers\ListManagerController;
 use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsWithoutManagerController;
 use App\Http\Controllers\Api\V1\RealEstate\GetAllRealEstateController;
 use App\Http\Controllers\Api\V1\RealEstate\UpdateRealEstateController;
+use App\Http\Controllers\Api\V1\ResidentialComplexes\ListResidentialComplexesController;
+use App\Http\Controllers\Api\V1\ResidentialComplexes\ReadResidentialComplexesController;
 use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
 use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
@@ -57,6 +59,8 @@ if (!function_exists('operation')) {
         return [$className, '__invoke'];
     }
 }
+
+
 /// Override API
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
@@ -264,7 +268,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     });
     /// END
 
-    /// Visited
+    /// Cbr
     // TODO: Пока не добавлять в SWAGGER
     Route::namespace('CRM')->prefix('crm')->group(function () {
         Route::post('/reset-ads-agreement', operation(ResetAdsAgreementController::class))
@@ -275,6 +279,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::post('/store-without-name', operation(StoreWithoutNameController::class))
             ->name('api.v1.crm.store-without-name');
+    });
+    /// END
+
+    /// Residential Complex
+    Route::namespace('RESIDENTIAL-COMPLEX')->prefix('residential-complex')->group(function () {
+        Route::get('/', operation(ListResidentialComplexesController::class))
+            ->name('api.v1.residential-complex.list');
+        Route::get('/read', operation(ReadResidentialComplexesController::class))
+            ->name('api.v1.residential-complex.read');
     });
     /// END
 });

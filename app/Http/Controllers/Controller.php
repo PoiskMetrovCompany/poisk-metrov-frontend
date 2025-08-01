@@ -55,6 +55,11 @@ use OpenApi\Annotations as OA;
  *       name="Favorite",
  *       description="Операции над избранным"
  *   )
+ *
+ * @OA\Tag(
+ *        name="ResidentialComplex",
+ *        description="Операции над ЖК"
+ *    )
  */
 class Controller extends BaseController
 {

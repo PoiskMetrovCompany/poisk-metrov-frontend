@@ -1,38 +1,34 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Apartments;
+namespace App\Http\Controllers\Api\V1\ResidentialComplexes;
 
 use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ApartmentResource;
-use App\Http\Resources\EditableApartmentResource;
-use App\Models\Apartment;
+use App\Http\Resources\ResidentialComplexes\ResidentialComplexesCollection;
+use App\Models\ResidentialComplex;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
 
 /**
  * @see ResidentialComplexRepositoryInterface
  */
-class ListApartmentController extends AbstractOperations
+class ListResidentialComplexesController extends AbstractOperations
 {
-    /**
-     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
-     */
     public function __construct(
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
     )
     {
+
     }
 
     /**
      * @OA\Get(
-     *      tags={"Apartment"},
-     *      path="/api/v1/apartments/list",
-     *      summary="получение списка планировок",
+     *      tags={"ResidentialComplex"},
+     *      path="/api/v1/residential-complex/",
+     *      summary="получение списка ЖК",
      *      description="Возвращение JSON объекта",
      *      @OA\Parameter(
      *          name="includes",
@@ -46,17 +42,16 @@ class ListApartmentController extends AbstractOperations
      *              @OA\Items(
      *                  type="string",
      *                  enum={
+     *                       "Amenity",
+     *                       "Apartment",
+     *                       "BestOffer",
+     *                       "BuildingProcess",
+     *                       "Doc",
+     *                       "Gallery",
+     *                       "ResidentialComplexCategoryPivot",
+     *                       "SpriteImagePosition",
      *                       "UserFavoriteBuilding",
-     *                       "CRMSyncRequiredForUser",
-     *                       "ResidentialComplexFeedSiteName",
-     *                       "DeletedFavoriteBuilding",
-     *                       "File",
-     *                       "ManagerChatMessage",
-     *                       "News",
-     *                       "VisitedPage",
-     *                       "UserFavoritePlan",
-     *                       "Manager",
-     *                       "Interaction"
+     *                       "Location",
      *                   }
      *              )
      *          )
@@ -72,23 +67,13 @@ class ListApartmentController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $allBuildings = $this->residentialComplexRepository->list([]);
-        $apartments = new Collection();
-
-        foreach ($allBuildings as $building) {
-            $apartmentsInBuilding = $building->apartments()->get();
-
-            foreach ($apartmentsInBuilding as $apartment) {
-                $apartment->residentialComplexName = $building->name;
-            }
-
-            $apartments = $apartments->merge($apartmentsInBuilding);
-        }
+        $attributes = $this->residentialComplexRepository->list([]);
+        $collect = new ResidentialComplexesCollection($attributes);
 
         return new JsonResponse(
             data: [
                 ...self::identifier(),
-                ...self::attributes($apartments),
+                ...self::attributes($collect->resource),
                 ...self::metaData($request, $request->all()),
             ],
             status: Response::HTTP_OK
@@ -97,11 +82,11 @@ class ListApartmentController extends AbstractOperations
 
     public function getEntityClass(): string
     {
-        return Apartment::class;
+        return ResidentialComplex::class;
     }
 
     public function getResourceClass(): string
     {
-        return EditableApartmentResource::class;
+        return ResidentialComplexesCollection::class;
     }
 }
