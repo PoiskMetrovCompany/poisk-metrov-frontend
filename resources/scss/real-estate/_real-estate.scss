@@ -301,6 +301,9 @@
             @include media-breakpoint-up(xl) {
                 padding: 0px 44px;
             }
+            @include media-breakpoint-up(xxl) {
+                padding: 0px 100px;
+            }
 
         }
 

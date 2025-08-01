@@ -220,6 +220,9 @@ $grid-breakpoints: (
     @include media-breakpoint-up(xl) {
         padding: 0px $page-padding-xl;
     }
+    @include media-breakpoint-up(xxl) {
+        padding: 0px $page-padding-xxl;
+    }
 
 }
 

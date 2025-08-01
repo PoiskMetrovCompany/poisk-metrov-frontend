@@ -7,7 +7,7 @@
 <div id="{{ $code }}" city="{{ $location['code'] }}" class="expanded-building-cards container"
     usemap="#slider_map_{{ $code }}" long="{{ $longitude }}" lat="{{ $latitude }}"
     buildingname={{ $name }} metro="{{ $metro_station }}" metrominutes="{{ $metroMinutes }}"
-    >
+    metromoveicon="{{ $metroMoveIcon }}">
     <div id="background-{{ $code }}" style="background-image: url({{ '/storage/' . $spriteUrl }})"
         class="building-cards card">
         <input type="hidden" value="{{ $spritePositionsStr }}" id="previews_{{ $code }}">
