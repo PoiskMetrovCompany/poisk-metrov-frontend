@@ -23,6 +23,23 @@
         color: rgba(24, 24, 23, 1);
     }
 
+    section{
+        max-width: 1980px
+    }
+
+    .center-card.big{
+        width: 60%;
+    }
+
+    header{
+        width: 100%;
+    }
+
+    main{
+        flex-wrap: wrap;
+        width: 100vw;
+    }
+
    .status-new {
         color: #C5801F !important;
         background: #F8F8E8 !important;

@@ -825,7 +825,7 @@
                         <div className="formRow justify-flex-start w-60">
                             <h2>Настройки анкеты</h2>
                         </div>
-                        <div className="center-card big w-60">
+                        <div className="center-card big">
                             <div className="formRow">
                                 <h3 style={{textAlign: 'left'}}>Роли вакансий</h3>
                             </div>
