@@ -1,0 +1,51 @@
+.finishing {
+    &.base-container {
+        display: grid;
+        gap: 32px;
+    }
+
+    &.header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 500;
+    }
+
+    img {
+        border-radius: 32px;
+        width: 100%;
+        object-fit: contain;
+        max-height: 290px;
+
+        @include media-breakpoint-up(lg) {
+            max-height: 360px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            max-height: 580px;
+        }
+    }
+
+    .arrow-buttons-container {
+        position: absolute;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 28px;
+    }
+
+    &.container-with-buttons {
+        position: relative;
+        display: grid;
+        align-items: center;
+    }
+
+    &.container {
+        display: grid;
+        gap: 32px;
+        height: fit-content;
+        overflow-x: auto;
+        padding-bottom: 12px;
+        grid-template-columns: repeat(30, 100%);
+    }
+}

@@ -1,0 +1,24 @@
+.docs {
+    &.base-container {
+        display: grid;
+        gap: 32px;
+    }
+
+    &.container {
+        display: grid;
+        gap: inherit;
+        width: fit-content;
+        min-width: 40%;
+    }
+
+    &.item {
+        display: flex;
+        gap: inherit;
+        padding: 16px;
+        align-items: center;
+        cursor: pointer;
+        border-bottom: 1px solid $grey1;
+        font-weight: 400;
+        font-size: 14px;
+    }
+}

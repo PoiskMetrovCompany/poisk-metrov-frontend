@@ -1,0 +1,20 @@
+.ignore-additional-padding {
+    color: inherit;
+}
+
+.invisible {
+    display: none;
+    position: absolute;
+}
+
+.not-mobile {
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+}
+
+.not-md {
+    @include media-breakpoint-down(lg) {
+        display: none;
+    }
+}

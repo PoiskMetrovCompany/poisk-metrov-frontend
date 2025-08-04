@@ -1,0 +1,55 @@
+.profile {
+    &.base-container {
+        display: grid;
+        gap: 24px;
+
+        @include media-breakpoint-up(md) {
+            gap: 32px;
+        }
+    }
+
+    &.container {
+        display: none;
+        gap: 32px;
+
+        @include media-breakpoint-up(md) {
+            gap: 44px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            grid-template-columns: 1fr 2fr;
+        }
+
+        @include media-breakpoint-up(xl) {
+            grid-template-columns: 1fr 3fr;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            grid-template-columns: 3fr 10fr;
+        }
+    }
+
+    &.form {
+        display: grid;
+        gap: 24px;
+        width: 100%;
+
+        input[type=submit] {
+            border: none;
+            width: 100%;
+        }
+
+        &.inputs-container {
+            gap: 12px;
+        }
+    }
+
+    &.image {
+        justify-self: center;
+        object-fit: cover;
+
+        @include media-breakpoint-down(md) {
+            width: 100%;
+        }
+    }
+}

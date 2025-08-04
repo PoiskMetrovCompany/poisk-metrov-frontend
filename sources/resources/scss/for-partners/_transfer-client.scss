@@ -1,0 +1,79 @@
+.transfer-client {
+    border-color: $grey2;
+
+    &.base-container {
+        display: grid;
+        background-color: white;
+        border-radius: 32px;
+        padding: 32px;
+        justify-self: center;
+        gap: 32px;
+
+        @include media-breakpoint-up(lg) {
+            grid-template-columns: 1fr 2fr;
+        }
+    }
+
+    &.left {
+        &.container {
+            width: 100%;
+            display: grid;
+            gap: 16px;
+            height: fit-content;
+
+            @include media-breakpoint-up(lg) {
+                
+            }
+        }
+
+        &.title {
+            width: 100%;
+            font-size: 20px;
+
+            @include media-breakpoint-up(lg) {
+                font-size: 24px; 
+            }
+        }
+
+        &.description {
+            width: 100%;
+            font-size: 14px;
+            line-height: 22px;
+            color: $grey4;
+            font-weight: 400;
+        }
+    }
+
+    &.right {
+        &.form {
+            width: 100%;
+            display: grid;
+            gap: 40px;
+
+            @include media-breakpoint-up(lg) {
+                
+            }
+        }
+
+        &.fields {
+            display: grid;
+            gap: 24px;
+        }
+
+        &.title {
+            font-size: 16px;
+            line-height: 26px;
+
+            @include media-breakpoint-up(lg) {
+                font-size: 18px;
+                line-height: 28px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                font-size: 20px;
+                line-height: 30px;
+            }
+        }
+    }
+
+}

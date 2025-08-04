@@ -1,0 +1,93 @@
+.peinag {
+    color: inherit;
+
+    &.base-container {
+        display: grid;
+        gap: 20px;
+        border-color: $grey2;
+        padding: 0;
+    }
+
+    &.container {
+        display: flex;
+        gap: 12px;
+        border-color: inherit;
+    }
+
+    &.checkbox-borders {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        border-width: 2px;
+        border-style: solid;
+        border-color: inherit;
+        background: inherit;
+        padding: 2px;
+        cursor: pointer;
+        box-sizing: content-box;
+        display: grid;
+    }
+
+    &.checkbox {
+        appearance: none;
+        height: inherit;
+        width: inherit;
+        margin-bottom: 2px;
+        pointer-events: none;
+        cursor: pointer;
+    }
+
+    &.checkbox:checked {
+        background: $orange1;
+        border-color: $orange1;
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+
+    &.button {
+        background-color: $grey2;
+        color: $grey4;
+        border-radius: 40px;
+        height: 48px;
+        width: fit-content;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 40px;
+        padding-right: 40px;
+        white-space: nowrap;
+        border-width: 0;
+        font-weight: 500;
+
+        @include media-breakpoint-up(lg) {
+            height: 56px;
+        }
+
+        &.active {
+            background-color: $orange1;
+            color: $white;
+        }
+
+        &.modal {
+            width: 100%;
+            height: 48px;
+
+            &.active {
+                background-color: $orange1;
+                color: $white;
+            }
+        }
+    }
+
+    &.description {
+        margin-top: 2px;
+        font-size: 14px;
+        font-weight: 400;
+
+        a {
+            text-decoration: underline;
+            margin-left: 4px;
+            color: $orange1;
+        }
+    }
+}

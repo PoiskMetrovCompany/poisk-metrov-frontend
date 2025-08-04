@@ -1,0 +1,53 @@
+.arrow-buttons-container {
+    display: flex;
+    gap: 12px;
+
+    &.about-us {
+        position: absolute;
+        justify-content: space-between;
+        width: inherit;
+        top: 50%;
+        translate: 0 -50%;
+
+        .arrow-button {
+            box-shadow: $common-shadow;
+
+            &:nth-child(1) {
+                translate: -50% 0;
+            }
+
+            &:nth-child(2) {
+                translate: 50% 0;
+            }
+
+            @include media-breakpoint-down(md) {
+                width: 24px;
+                height: 24px;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+    }
+
+    &.spaced {
+        justify-content: space-between;
+
+        &>.arrow-button {
+            background-color: $white;
+        }
+    }
+}
+
+.arrow-button {
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    cursor: pointer;
+}

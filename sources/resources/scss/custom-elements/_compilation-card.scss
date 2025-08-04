@@ -1,0 +1,64 @@
+compilation-card {
+    display: grid;
+    // gap: 16px;
+    border-radius: 32px;
+    background-color: $superwhite;
+
+    img {
+        border-radius: inherit;
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    &>div {
+        padding: 16px 24px;
+        display: grid;
+        gap: 12px;
+
+        h6 {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 175%;
+            color: $black1;
+        }
+
+        p {
+            color: $grey5;
+            font-size: 14px;
+            line-height: 140%;
+            font-weight: 400;
+            margin-top: -12px;
+        }
+
+
+        &>div {
+            display: flex;
+            gap: 16px;
+
+            .common-button {
+                flex: 1;
+                border-style: none !important;
+
+                &:hover {
+                    background-color: $white !important;
+                }
+            }
+
+            a:not(.common-button) {
+                border-radius: 50%;
+                display: grid;
+                align-items: center;
+                justify-content: center;
+                background-color: $white;
+                width: 48px;
+                height: 48px;
+
+                .icon {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+    }
+}

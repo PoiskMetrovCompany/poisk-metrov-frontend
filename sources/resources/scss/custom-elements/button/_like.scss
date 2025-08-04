@@ -1,0 +1,28 @@
+like-button {
+    @extend .round-button-template;
+
+    &[like="1"] {
+        outline: 2px solid $orange1;
+
+        .icon {
+            background-color: $orange1;
+            -webkit-mask-image: url(../assets/actions/action-like-filled.svg);
+            mask-image: url(../assets/actions/action-like-filled.svg);
+        }
+    }
+
+    &[like=""],
+    &[like="0"] {
+        .icon {
+            background-color: $black1;
+            -webkit-mask-image: url(../assets/actions/action-like.svg);
+            mask-image: url(../assets/actions/action-like.svg);
+        }
+
+        &:hover {
+            .icon {
+                background-color: $orange1;
+            }
+        }
+    }
+}

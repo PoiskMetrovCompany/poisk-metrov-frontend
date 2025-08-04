@@ -1,0 +1,64 @@
+.price-dropdown {
+    font-weight: inherit;
+    font-size: inherit;
+
+    &>:not(input) {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    &.base-container {
+        display: grid;
+        column-gap: 12px;
+        row-gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: max-content;
+        min-width: 100%;
+    }
+
+    &.container {
+        display: grid;
+        gap: 4px;
+        max-height: 165px;
+        overflow-y: scroll;
+        width: 100%;
+
+        &>.text-item {
+            margin: 0;
+            margin-right: 4px;
+
+            @include media-breakpoint-up(sm) {
+                margin-left: 12px;
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                margin-left: 0;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &.title {
+        border-radius: 12px;
+        border: 1px solid $grey3;
+        padding: 8px 12px;
+        width: 100px;
+        min-width: 100%;
+        font-weight: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        background-color: inherit;
+
+        &:focus {
+            border: 1px $orange1 solid;
+            outline: none;
+        }
+    }
+}

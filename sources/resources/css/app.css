@@ -1,0 +1,1344 @@
+.apartment-grid-min,
+.apartment-grid-phone {
+    display: none;
+}
+.apartment-card__grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.apartment-container__label,
+apartment-card__text {
+    font-size: 1em;
+}
+.apartment-container__label {
+    color: #818181;
+}
+
+.apartment-grid {
+    padding: 1.2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav .apartment-col {
+    color: #818181;
+}
+.apartment-col{
+    font-weight: 400;
+}
+.apartment-grid__wrap{
+    flex-wrap: wrap;
+}
+
+.apartment-col {
+    width: 10%;
+}
+
+.apartment-col__10 {
+    width: 10%;
+}
+
+.apartment-col__15 {
+    width: 15%;
+}
+
+.apartment-card__href {
+    color: #EC7D3F;
+}
+.apartment-card__href:hover {
+    transition: .7s;
+    color: #181817;
+    text-decoration: underline;
+}
+/**/
+.apartment-card {
+    width: 100%;
+    padding: 1.2em;
+    background-color: #fff;
+    margin-bottom: 0.15em;
+}
+
+.apartment-top__round {
+    border-radius: 1em 1em 0em 0em;
+}
+
+.apartment-bottom__round {
+    border-radius: 0em 0em 1em 1em;
+}
+
+.full-row{
+    flex-wrap: nowrap;
+    position: relative;
+    top: -1em;
+}
+
+.full-row table {
+    width: 100%;
+}
+
+
+
+.apartment-card__grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+/**/
+.revervation__grid{
+    display: flex;
+    justify-content: space-between;
+    /*align-items: center;*/
+}
+.revervation_user__card-container {
+    width: 20.5em;
+    height: fit-content;
+    padding: 1em;
+    background-color: #fff;
+    border-radius: 1em;
+}
+
+.revervation_user__card-item{
+    margin: 1.4em 0.2em;
+}
+
+.evervation_user__card-data {
+    margin: 1.1em 0em 1.2em 0em;
+}
+
+.revervation_user__card-title,
+.revervation_user__card-description,
+.apartment-card__text {
+    font-weight: 400;
+    color: #000;
+}
+.apartment-card__text-18w{
+    width: 18%;
+}
+.revervation_user__card-label {
+    color: #9E9E9E;
+    margin-bottom: 0.4em;
+}
+.revervation__title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.revervation__title p {
+    font-size: 1.5em;
+}
+.reservation__layout {
+    width: 68%;
+    margin: 0 auto;
+}
+
+.actions-navbar {
+    background-color: #fff;
+    border-radius: 1em;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.actions-navbar__container {
+    padding: 1em;
+}
+.actions-navbar__min {
+    width: 80%;
+    height: 3em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+.actions-navbar__item {
+    cursor: pointer;
+    color: #9E9E9E;
+    font-weight: 450;
+}
+
+.actions-navbar__point {
+    cursor: pointer;
+}
+
+.actions-navbar__active,
+.actions-navbar__chat-active{
+    color: #000;
+}
+
+.actions-navbar__active-indicator {
+    position: relative;
+    top: 0.74em;
+    background-color: #EC7D3F;
+    width: 100%;
+    padding: 0.1em;
+}
+
+.action-form-card {
+    background-color: #fff;
+    border-radius: 1em 1em;
+    width: 100%;
+}
+
+.action-form-card__form-accordion,
+.action-form-card__form-booking,
+.action-form-card__mortgage-solution,
+.action-form-card__mortgage-agreement
+{
+    display: none;
+}
+
+.action-form-card__form-booking,
+.action-form-card__form-order,
+.action-form-card__mortgage-solution,
+.action-form-card__mortgage-agreement
+{
+    padding: 2em;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-form-card__form-active {
+    display: block;
+}
+
+.action-form-card__form-title {
+    width: 100%;
+    margin-bottom: 2em;
+}
+
+.action-form-card__form-accordion-title {
+    background-color: #E9E9E9;
+    border-radius: 1em 1em 0em 0em;
+    padding: 1em;
+}
+
+.action-form-card__form-accordion-title,
+.action-form-card__form-title {
+    margin-bottom: 0em;
+}
+
+.action-form-card__form-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.2em;
+}
+
+.action-form-card__title {
+    width: 28%;
+}
+
+.action-form-card__description {
+    width: 72%;
+}
+
+.action-form-card__title p,
+.action-form-card__description p {
+    font-weight: 400;
+}
+
+.action-form-card__title p {
+    color: #9E9E9E;
+}
+
+.action-form-card__description p {
+    color: #000;
+}
+
+.actions-bottom {
+    margin-top: 2em;
+    width: 57%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a.action-button,
+button.action-button {
+    width: 45%;
+    font-size: 0.9em;
+    border-radius: 0.8em;
+    padding: 0.8em;
+    background-color: #EC7D3F;
+    border: solid #EC7D3F 0.2em;
+    color: #fff;
+    cursor: pointer;
+}
+
+.action-button #right-arrow,
+.action-button-outline #close{
+    display: none;
+}
+
+.action-button:hover #right-arrow {
+    display: inline-flex;
+    position: relative;
+    left: 5%;
+    transition: .7s;
+}
+
+.action-button-outline:hover #close {
+    display: inline-flex;
+    transition: .7s;
+}
+
+a.action-button-outline,
+button.action-button-outline {
+    width: 52%;
+    background-color: #fff!important;
+    color: #EC7D3F!important;
+}
+
+.action-accordion {
+    background-color: #fff;
+    border-radius: 10em;
+}
+
+.action-accordion__item {
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5em;
+}
+
+.action-accordion__item-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    /*width: -webkit-fill-available;*/
+    width: 90%;
+}
+
+.action-accordion__item-container p {
+
+}
+
+.action-accordion__item-container span.active {
+    color: #181817;
+    border-radius: 5em;
+    background-color: #D0F9E1;
+    font-weight: 400;
+    padding: 0.1em;
+    width: 11%;
+    text-align: center;
+    margin-left: 1em;
+    font-size: 0.8em;
+}
+
+.action-accordion__item-control {
+    background-color: #D2D2D2;
+    border-radius: 5em;
+    width: 1.4em;
+    text-align: center;
+    position: relative;
+    right: 2%;
+    cursor: pointer;
+}
+
+.action-accordion__item-top {
+    background-color: #D2D2D2;
+    height: 0.1em;
+    width: 98%;
+    position: relative;
+    top: -1em;
+}
+
+.action-accordion-user-info {
+    display: none; /* flex */
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.action-accordion-user-info .inputs  {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+}
+
+.action-accordion-user-info .inputs:has(> .input-container:only-child) .input-container {
+    width: 100%;
+}
+
+.action-accordion-user-info .inputs .input-container {
+    width: 49%;
+}
+
+.action-accordion-user-info .inputs .input-container .dropdown {
+    width: 100%;
+}
+
+.action-accordion-user-info .inputs .input-container .dropdown .custom-dropdown.base-container.open {
+    background-color: rgb(244 244 241);
+    /*margin-top: -1%;*/
+}
+
+.action-accordion-user-info .inputs .input-container .dropdown .arrow-tailless {
+    display: block;
+    position: relative;
+    top: -40%;
+}
+
+.action-accordion-user-info .inputs .input-container .input-wrapper {
+    padding-right: 0;
+}
+
+.action-accordion-user-info .inputs  .text-item {
+    padding: 1.3em;
+}
+
+.action-accordion-user-info .inputs .input-container .input-text {
+    padding: 5px 0px 14px 24px;
+}
+
+.action-accordion-user-info .inputs .input-container .icon-inside {
+    position: relative;
+    right: 4%;
+    top: 0.4em;
+}
+
+.action-accordion-user-info__sub-dropdown {
+    cursor: pointer;
+    margin: 2em 0em 2em 0em;
+}
+
+.action-accordion-user-info__sub-dropdown p {
+    color: #EC7D3F;
+    font-weight: 450;
+    font-size: 0.9em;
+    margin: 0em 0em 2em 0em;
+}
+
+.action-accordion-user-info__dropdown-large {
+    color: #000!important;
+}
+.action-accordion-user-info__dropdown-large small {
+    color: #9E9E9E;
+}
+
+.action-accordion-user-info__dropdown-large span {
+    position: relative;
+    left: 72%;
+}
+
+.action-accordion-user-info__sub-dropdown {
+    width: 100%;
+    cursor: pointer;
+}
+
+.sub-menu {
+    width: 100%;
+}
+
+.sub-menu .inputs .input-container {
+    margin-bottom: 1.2em;
+}
+
+.row-80 {
+    width: 80%!important;
+}
+
+.card-file {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    border-radius: 1em;
+}
+
+.card-file .card-file__upload {
+    background-color: #F4F4F1;
+    border-radius: 1em;
+    padding: 1em;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    height: 9em;
+    border: dashed 0.15em #9E9E9E;
+}
+
+.card-file .card-file__upload .card-file__upload-70 {
+    margin: 1.1em 0em 0em 1.1em;
+}
+
+.card-file .card-file__upload .card-file__upload-70 p {
+    font-weight: 400;
+    color: #000;
+}
+
+.card-file .card-file__upload .card-file__upload-70 div{
+    color: #9E9E9E;
+    font-size: 0.9em;
+    font-weight: 400;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.card-file .card-file__upload .card-file__upload-30 {
+    width: 30%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-file .card-file__upload .card-file__upload-30 button {
+    height: 4em;
+    font-size: 0.8em;
+    width: 100%;
+}
+
+.input-wrapper span.ico {
+    position: relative;
+    right: 1.5em;
+    top: 0.1em;
+}
+.input-wrapper span.ico-2 {
+    width: 5%;
+}
+
+.co-borrower {
+    display: none;
+    margin-top: 3em;
+}
+
+.co-borrower__card {
+    background-color: #fff;
+    border-radius: 1em;
+}
+
+.co-borrower__card-head {
+    border-bottom: solid #D2D2D2 0.13em;
+    display: flex;
+    justify-content: space-around;
+}
+.co-borrower__card-head-text {
+
+}
+
+.co-borrower__card-head-icon {
+
+}
+
+.co-borrower__card-head,
+.co-borrower__card-footer {
+    padding: 1em;
+}
+
+.co-borrower__card-head p {
+    margin-bottom: 1.5em;
+}
+
+.co-borrower__card-head p {
+    font-size: 1em;
+    margin-bottom: 0.8em;
+}
+
+.co-borrower__card-head small {
+    color: #9E9E9E;
+    font-size: 0.8em;
+    font-weight: 400;
+}
+
+.co-borrower__card-footer {
+    margin-top: 1em;
+}
+
+.co-borrower__card-footer button {
+    width: 18%;
+    height: 3em;
+    font-size: 0.9em;
+}
+
+.co-borrower__card-body {
+    display: none;
+    /*padding: 1em;*/
+}
+
+.action-button__ficon {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.co-borrower .input-wrapper span.ico-2 {
+    width: 7%;
+}
+
+
+.control-action-button {
+    display: none;
+    margin-top: 1em;
+}
+
+.control-action-button button {
+    width: 30%;
+
+ymaps .infrastructure.menu.icon-container {
+    background-color: #e9e9e900;
+}
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+    nav .apartment-col,
+    .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 90%;
+    }
+    .action-accordion__item-container span.active {
+        width: 13%;
+    }
+    .input-wrapper span.ico-2 {
+        width: 7%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 button {
+        height: 3.6em;
+    }
+    .card-file__upload .card-file__upload-70 div{
+        margin-top: -1em;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+        width: 32%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+        width: 68%;
+    }
+    .co-borrower .action-accordion__item-container span.active {
+        font-size: 0.7em;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1220px) {
+    .reservation__layout {
+        width: 65%;
+        margin: 0 auto;
+    }
+    .revervation_user__card-container {
+        width: 18.5em;
+    }
+    .actions-bottom {
+        width: 80%;
+    }
+    a.action-button:hover,
+    button.action-button:hover {
+        width: 45%;
+    }
+    a.action-button-outline:hover,
+    button.action-button-outline:hover {
+        width: 52%;
+    }
+    .actions-navbar__active-indicator {
+        padding: 1%;
+    }
+    .revervation__title {
+        flex-wrap: wrap;
+    }
+    .revervation__title p {
+        font-size: 125%;
+    }
+    .apartment-col {
+        font-size: 86%;
+    }
+    nav.apartment-grid{
+        margin-bottom: -1em;
+    }
+    nav .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 94%;
+    }
+    .full-row {
+        top: -1.2em;
+    }
+    .actions-navbar__min {
+        width: 88%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+        width: 38%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+        width: 65%;
+    }
+    .card-file .card-file__upload {
+        position: relative;
+        left: 10%;
+    }
+    .card-file .card-file__upload {
+        width: 90%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 {
+        width: 36%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 {
+        width: 60%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 p {
+        font-size: 93%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        margin-top: -1em;
+    }
+    button#btn-add_co_borrower {
+        width: 18%!important;
+    }
+}
+
+@media (min-width: 990px) and (max-width: 1024px) {
+    .reservation__layout {
+        width: 62%;
+    }
+    .revervation_user__card-container {
+        width: 28%;
+    }
+    .apartment-grid {
+        padding: 1.1em;
+    }
+    .actions-bottom {
+        width: 80%;
+    }
+    a.action-button:hover,
+    button.action-button:hover {
+        width: 45%;
+    }
+    a.action-button-outline:hover,
+    button.action-button-outline:hover {
+        width: 52%;
+    }
+    .actions-navbar__active-indicator {
+        padding: 1%;
+    }
+    .revervation__title {
+        flex-wrap: wrap;
+    }
+    .revervation__title p {
+        font-size: 114%;
+    }
+    .revervation_user__card-container {
+        padding: 0% 2% 0% 2%;
+    }
+    .action-accordion .filter.base-container {
+        display: flex;
+    }
+    .card-file .card-file__upload .card-file__upload-70 {
+        margin: 1.1em 0em 0em 0.1em;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        width: 100%!important;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
+        width: 100%;
+        font-size: 90%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 button {
+        width: 95%;
+    }
+    .card-file .card-file__upload {
+        padding: 0.8em;
+    }
+    .apartment-col {
+        font-size: 86%;
+    }
+    nav.apartment-grid{
+        margin-bottom: -1em;
+    }
+    nav .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 86%;
+    }
+    .full-row {
+        top: -1.2em;
+    }
+    .actions-navbar__min {
+        width: 100%;
+    }
+    .action-accordion__item-container span.active {
+        width: 14%;
+    }
+    .revervation_user__card-body .revervation_user__card-item {
+        font-size: 94%;
+    }
+    .input-wrapper span.ico-2 {
+        width: 8%;
+    }
+
+    .input-wrapper span.ico {
+        position: relative;
+        right: 0.9em;
+        top: 0.1em;
+    }
+
+    .co-borrower .card-file .card-file__upload .card-file__upload-30  {
+        width: 38%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70  {
+        width: 65%;
+    }
+    .card-file .card-file__upload {
+        position: relative;
+        left: 5%;
+    }
+    .card-file .card-file__upload {
+        width: 95%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 {
+        width: 36%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 {
+        width: 60%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 p {
+        font-size: 93%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        margin-top: -1em;
+        width: 90%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 button {
+        height: 3.4em;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 button {
+        font-size: 74%;
+    }
+    button#btn-add_co_borrower {
+        width: 24% !important;
+    }
+}
+
+@media (min-width: 774px) and (max-width: 990px) {
+    .revervation__grid {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    nav .apartment-col,
+    .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 90%;
+    }
+    .revervation_user__card-container {
+        width: 100%;
+        margin-bottom: 3em;
+    }
+    .revervation_user__card-body {
+        display: flex;
+        justify-content: space-around;
+    }
+    .evervation_user__card-data {
+        margin: 0.8em 0em 0.8em 0em;
+    }
+    .reservation__layout {
+        width: 100%;
+    }
+    .revervation__title p {
+        font-size: 1.3em;
+    }
+    .actions-bottom {
+        width: 65%;
+    }
+    .action-form-card__title {
+        width: 35%;
+    }
+    .action-form-card__description {
+        width: 65%;
+    }
+    .action-accordion__item-container span.active {
+        width: 13%;
+    }
+    .action-accordion .filter.base-container {
+        display: flex;
+    }
+    .input-wrapper span.ico-2 {
+        width: 8%;
+    }
+    .card-file .card-file__upload {
+        position: relative;
+        left: 10%;
+        width: 90%;
+    }
+    .action-accordion-user-info__dropdown-large span {
+        left: 67%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        margin-top: -1em;
+    }
+    .co-borrower__card-footer button {
+        width: 21%;
+    }
+    .card-file .card-file__upload .card-file__upload-30 {
+        width: 34%;
+    }
+    legend,
+    fieldset span,
+    input
+    {
+        font-size: 90%;
+    }
+    section.apartment-grid__wrap,
+    nav.apartment-grid {
+        display: none;
+    }
+    .apartment-grid-min {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .apartment-grid-container {
+        background-color: #fff;
+        padding: 3% 3% 3% 3%;
+        width: 48%;
+        border-radius: 1em;
+        font-size: 90%;
+    }
+    .apartment-grid-container .apartment-grid-min__label{
+        color: #9E9E9E;
+    }
+    .apartment-grid-container table tbody tr {
+        font-weight: 400;
+    }
+}
+
+@media (max-width: 630px) {
+    main {
+        width: 90%;
+    }
+    .actions-navbar__min {
+        width: 97%;
+    }
+    .revervation__grid {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .full-row {
+        top: 0em;
+    }
+    .action-accordion-user-info .inputs .input-container {
+        width: 100%;
+        margin-bottom: 2em;
+    }
+    .co-borrower__card-head small {
+        font-size: 0.7em;
+    }
+    .action-accordion__item {
+        margin-bottom: 0.5em;
+    }
+    .action-accordion-user-info__sub-dropdown p {
+        font-size: 100%;
+        margin: 0em 0em 1em 0em;
+    }
+    .action-accordion-user-info__sub-dropdown {
+        margin: 0em 0em 2em 0em;
+    }
+    nav .apartment-col,
+    .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 82%;
+    }
+    .revervation_user__card-container {
+        width: 100%;
+        margin-bottom: 3em;
+    }
+    .revervation_user__card-body {
+        display: flex;
+        justify-content: space-around;
+    }
+    .evervation_user__card-data {
+        margin: 0.8em 0em 0.8em 0em;
+    }
+    .reservation__layout {
+        width: 100%;
+    }
+    .revervation__title p {
+        font-size: 100%;
+    }
+    .actions-bottom {
+        width: 75%;
+    }
+    .action-form-card__title {
+        width: 40%;
+    }
+    .action-form-card__description {
+        width: 60%;
+    }
+    a.action-button-outline, button.action-button-outline {
+        height: 3.5em;
+    }
+    .action-accordion-user-info__dropdown-large span {
+        left: 54%;
+    }
+    .action-accordion .filter.base-container {
+        display: flex;
+    }
+    .input-wrapper span.ico-2 {
+        width: 8%;
+    }
+    .card-file .card-file__upload {
+        position: relative;
+        left: 10%;
+        width: 90%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        margin-top: -1em;
+    }
+    .co-borrower__card-footer button {
+        width: 28%;
+        height: 3.1em;
+    }
+    .card-file .card-file__upload .card-file__upload-30 {
+        width: 34%;
+    }
+    legend,
+    fieldset span,
+    input
+    {
+        font-size: 90%;
+    }
+    section.apartment-grid__wrap,
+    nav.apartment-grid {
+        display: none;
+    }
+    .apartment-grid-min {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .apartment-grid-container {
+        background-color: #fff;
+        padding: 3% 3% 3% 3%;
+        width: 49%;
+        border-radius: 1em;
+        font-size: 90%;
+    }
+    .apartment-grid-container .apartment-grid-min__label{
+        color: #9E9E9E;
+    }
+    .apartment-grid-container table tbody tr {
+        font-weight: 400;
+    }
+    .co-borrower .input-wrapper span.ico-2 {
+        width: 14%;
+    }
+    .action-accordion__item-container span.active {
+        width: 16%;
+    }
+    .co-borrower .card-file .card-file__upload {
+        padding: 0.5em;
+    }
+    .co-borrower .action-accordion-user-info__sub-dropdown p {
+        font-size: 93%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 div {
+        font-size: 72%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 {
+        width: 40%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 button {
+        height: 3.7em;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
+        margin: 1em 0em 0em 1em;
+    }
+}
+
+@media (min-width: 430px) and (max-width: 774px) {
+    .actions-navbar__point {
+        margin-right: 2%;
+    }
+}
+
+@media (max-width: 430px) {
+    .actions-navbar__min {
+        width: auto;
+    }
+    .revervation__grid {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .full-row {
+        top: 0em;
+    }
+    .action-accordion-user-info .inputs .input-container {
+        width: 100%;
+        margin-bottom: 1em;
+    }
+    .input-fieldset {
+        height: 91%;
+    }
+    .co-borrower__card-head small {
+        font-size: 0.7em;
+    }
+    .action-accordion__item {
+        margin-bottom: 0.5em;
+    }
+    .action-accordion-user-info__sub-dropdown p {
+        font-size: 100%;
+        margin: 0em 0em 1em 0em;
+    }
+    .action-accordion-user-info__sub-dropdown {
+        margin: 0em 0em 2em 0em;
+    }
+    nav .apartment-col,
+    .apartment-col,
+    .revervation_user__card-item,
+    .actions-navbar__point,
+    .action-form-card {
+        font-size: 82%;
+    }
+    .revervation_user__card-container {
+        width: 100%;
+        margin-bottom: 3em;
+    }
+    .revervation_user__card-body {
+        display: flex;
+        justify-content: space-around;
+    }
+    .evervation_user__card-data {
+        margin: 0.8em 0em 0.8em 0em;
+    }
+    .reservation__layout {
+        width: 100%;
+        margin-top: 2em;
+    }
+    .actions-bottom {
+        width: 75%;
+    }
+    .action-form-card__title,
+    .action-form-card__description {
+        width: 50%;
+    }
+    a.action-button-outline, button.action-button-outline {
+        height: 3.5em;
+    }
+    .action-accordion-user-info__dropdown-large span {
+        left: 35%;
+    }
+    .action-accordion .filter.base-container {
+        display: flex;
+    }
+    .input-wrapper span.ico-2 {
+        width: 8%;
+    }
+    .actions-navbar {
+        overflow: auto;
+        /*display: none;*/
+    }
+    .actions-navbar__point {
+        margin-right: 4%;
+    }
+    .card-file .card-file__upload {
+        position: relative;
+        left: 0%;
+        width: 100%;
+    }
+    .action-button__ficon {
+        justify-content: center;
+    }
+    .action-button__ficon svg {
+        margin-right: 2%;
+    }
+    .card-file .card-file__upload .card-file__upload-30,
+    .card-file .card-file__upload .card-file__upload-70 {
+        width: 100%;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        margin-top: -1em;
+    }
+    .co-borrower__card-footer button {
+        width: 28%;
+        height: 3.1em;
+    }
+    .card-file .card-file__upload .card-file__upload-30 {
+        width: 100%;
+        margin-top: 2em;
+    }
+    legend,
+    fieldset span,
+    input
+    {
+        font-size: 90%;
+    }
+    section.apartment-grid__wrap,
+    nav.apartment-grid {
+        display: none;
+    }
+    .revervation_user__card-container {
+        display: none;
+    }
+    .revervation__title {
+        width: 100%;
+        display: block;
+        margin-bottom: 2em;
+    }
+
+    .apartment-grid-container {
+        background-color: #fff;
+        padding: 3% 3% 3% 3%;
+        width: 49%;
+        border-radius: 1em;
+        font-size: 90%;
+    }
+    .apartment-grid-container .apartment-grid-min__label{
+        color: #9E9E9E;
+    }
+    .apartment-grid-container table tbody tr {
+        font-weight: 400;
+    }
+    .co-borrower .input-wrapper span.ico-2 {
+        width: 13%;
+    }
+    .action-accordion__item-container span.active {
+        width: 24%;
+    }
+    .co-borrower .card-file .card-file__upload {
+        padding: 0.5em;
+    }
+    .co-borrower .action-accordion-user-info__sub-dropdown p {
+        font-size: 93%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30 button {
+        height: 3em;
+        width: 90%
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
+        margin: 1em 0em 0em 1em;
+    }
+
+    .apartment-grid-min {
+        display: none;
+    }
+    .revervation__title p {
+        font-size: 1.1em;
+        margin-bottom: 0.4em;
+    }
+    .actions-bottom {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    button.action-button,
+    button.action-button-outline {
+        width: 100%;
+        margin-bottom: 1em;
+    }
+    co-borrower .action-accordion__item-container span.active {
+        width: 23%;
+        font-size: 60%;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-30,
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 {
+        width: 100%;
+    }
+    .card-file__upload {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .card-file .card-file__upload {
+        height: auto;
+    }
+    .card-file .card-file__upload .card-file__upload-70 p {
+        font-size: 1.1em;
+    }
+    .card-file .card-file__upload .card-file__upload-70 div {
+        font-size: 1em;
+        margin-top: 0.2em;
+    }
+    .co-borrower .card-file .card-file__upload .card-file__upload-70 p {
+        font-size: 0.9em;
+    }
+    .actions-navbar__container {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .actions-navbar__container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .actions-navbar__item {
+        flex-shrink: 0;
+    }
+    .co-borrower .action-accordion__item-container span.active {
+        width: 27%;
+    }
+    .apartment-grid-phone {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: 82vw;
+    }
+
+    .apartment-grid-phone::-webkit-scrollbar {
+        display: none;
+    }
+
+    .apartment-grid-row {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: auto;
+    }
+
+    .apartment-grid-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .apartment-grid-phone__container {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        border-radius: 0.8em;
+        padding: 0.7em;
+        width: 95%;
+        justify-content: space-between;
+        flex-shrink: 0;
+        margin-right: 1em;
+    }
+
+    .apartment-grid-phone__container section {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .apartment-grid-phone__container-row-price {
+        display: flex;
+        justify-content: end;
+        align-items: end;
+    }
+
+    .apartment-grid-phone__container-row p {
+        font-weight: 400;
+    }
+    .input-wrapper span.ico-2 {
+        width: 14%;
+    }
+    .co-borrower .action-accordion-user-info__dropdown-large span {
+        left: 25%;
+    }
+}
+

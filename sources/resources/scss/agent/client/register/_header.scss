@@ -1,0 +1,103 @@
+.client-register {
+    &.header {
+        display: grid;
+        gap: 4px;
+        justify-content: space-between;
+        grid-template-columns: repeat(3, 1fr);
+
+        h1 {
+            grid-column: span 2;
+            font-size: 18px;
+            line-height: 125%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            button {
+                background-color: $superwhite;
+                border-radius: 50%;
+                width: 24px;
+                height: 24px;
+                border: none;
+                display: grid;
+                align-items: center;
+                justify-content: center;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    max-width: 16px;
+                    max-height: 16px;
+                    min-width: 16px;
+                    min-height: 16px;
+                    background-color: $orange1;
+                }
+
+                @include media-breakpoint-up(md) {
+                    display: none;
+                }
+            }
+        }
+
+        custom-select {
+            background-color: $superwhite;
+            outline-color: $superwhite;
+            padding: 4px 16px;
+
+            &[open=true] {
+                outline-color: $orange1;
+            }
+
+            ul[is=option-list] {
+                max-height: 400px;
+            }
+
+            .placeholder {
+                font-size: 14px;
+                line-height: 28px;
+            }
+
+            &#client-status-dropdown {
+                .placeholder {
+                    opacity: 0;
+                    line-height: 20px;
+                    padding: 4px 16px;
+
+                    &.chosen {
+                        color: $black1;
+                        background-color: $status-tab;
+                        border-radius: 8px;
+                        width: fit-content;
+                        opacity: 1;
+                    }
+
+                    &:empty {
+                        opacity: 0;
+                    }
+                }
+            }
+        }
+
+        @include media-breakpoint-down(lg) {
+            grid-template-columns: auto;
+            gap: 20px;
+            justify-content: initial;
+
+            h1 {
+                grid-column: span 1;
+            }
+        }
+    }
+
+    &.dropdown-with-title {
+        display: grid;
+        gap: 8px;
+
+        &>h6 {
+            color: $grey3;
+            font-size: 14px;
+            line-height: 125%;
+            font-weight: 400;
+        }
+    }
+}
