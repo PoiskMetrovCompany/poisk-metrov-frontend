@@ -122,7 +122,7 @@
         };
 
         return (
-            <div className="formRow" style={{
+            <div className="formRow" id = "workTable" style={{
                 opacity: 1,
                 height: '550px',
                 overflow: 'hidden',
@@ -448,95 +448,100 @@
         );
     };
 
-    const EducationDataTable = ({ index, formData, setFormData }) => {
-        const formatDate = (value) => {
-            const numbers = value.replace(/\D/g, '');
-            if (numbers.length <= 2) {
-                return numbers;
-            } else if (numbers.length <= 4) {
-                return numbers.slice(0, 2) + '.' + numbers.slice(2);
-            } else {
-                return numbers.slice(0, 2) + '.' + numbers.slice(2, 4) + '.' + numbers.slice(4, 8);
-            }
-        };
-
-        const handleInputChange = (name, value) => {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        };
-
-        const handleDateChange = (name, value) => {
-            const formattedValue = formatDate(value);
-            handleInputChange(name, formattedValue);
-        };
-
-        return (
-            <div className="formRow table-container" style={{
-                        opacity: 1,
-                        transform: 'translateY(0)',
-                        maxHeight: '216px',
-                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}>
-                <table className="inputTable">
-                    <caption className="tableLabel">Данные об образовательном учреждении</caption>
-                    <tbody>
-                    <tr>
-                        <td colSpan="2">
-                            <input
-                                type="text"
-                                name={`nameInstitution${index}`}
-                                placeholder="Полное наименование учебного заведения"
-                                value={formData[`nameInstitution${index}`] || ''}
-                                onChange={(e) => handleInputChange(`nameInstitution${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name={`dateOfEntrance${index}`}
-                                placeholder="01.01.1990"
-                                maxLength="10"
-                                value={formData[`dateOfEntrance${index}`] || ''}
-                                onChange={(e) => handleDateChange(`dateOfEntrance${index}`, e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                name={`dateOfEnding${index}`}
-                                placeholder="01.01.1994"
-                                maxLength="10"
-                                value={formData[`dateOfEnding${index}`] || ''}
-                                onChange={(e) => handleDateChange(`dateOfEnding${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input
-                                type="text"
-                                name={`typeOfEducation${index}`}
-                                placeholder="Форма обучения (дневная/вечерняя/заочная)"
-                                value={formData[`typeOfEducation${index}`] || ''}
-                                onChange={(e) => handleInputChange(`typeOfEducation${index}`, e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                name={`diplomaSpeciality${index}`}
-                                placeholder="Специальность по диплому"
-                                value={formData[`diplomaSpeciality${index}`] || ''}
-                                onChange={(e) => handleInputChange(`diplomaSpeciality${index}`, e.target.value)}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
+const EducationDataTable = ({ index, formData, setFormData }) => {
+    const formatDate = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        if (numbers.length <= 2) {
+            return numbers;
+        } else if (numbers.length <= 4) {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2);
+        } else {
+            return numbers.slice(0, 2) + '.' + numbers.slice(2, 4) + '.' + numbers.slice(4, 8);
+        }
     };
+
+    const handleInputChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleDateChange = (name, value) => {
+        const formattedValue = formatDate(value);
+        handleInputChange(name, formattedValue);
+    };
+
+    return (
+        <div className="formRow table-container" style={{
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                    maxHeight: '216px',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
+            <table className="inputTable">
+                <caption className="tableLabel">Данные об образовательном учреждении</caption>
+                <tbody>
+                {/* Первая строка - полное наименование (всегда на всю ширину) */}
+                <tr>
+                    <td colSpan="2">
+                        <input
+                            type="text"
+                            name={`nameInstitution${index}`}
+                            placeholder="Полное наименование учебного заведения"
+                            value={formData[`nameInstitution${index}`] || ''}
+                            onChange={(e) => handleInputChange(`nameInstitution${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                
+                {/* Вторая строка - даты поступления и окончания */}
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name={`dateOfEntrance${index}`}
+                            placeholder="01.01.1990"
+                            maxLength="10"
+                            value={formData[`dateOfEntrance${index}`] || ''}
+                            onChange={(e) => handleDateChange(`dateOfEntrance${index}`, e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name={`dateOfEnding${index}`}
+                            placeholder="01.01.1994"
+                            maxLength="10"
+                            value={formData[`dateOfEnding${index}`] || ''}
+                            onChange={(e) => handleDateChange(`dateOfEnding${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                
+                {/* Третья строка - форма обучения и специальность */}
+                <tr>
+                    <td>
+                        <input
+                            type="text"
+                            name={`typeOfEducation${index}`}
+                            placeholder="Форма обучения (дневная/вечерняя/заочная)"
+                            value={formData[`typeOfEducation${index}`] || ''}
+                            onChange={(e) => handleInputChange(`typeOfEducation${index}`, e.target.value)}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            name={`diplomaSpeciality${index}`}
+                            placeholder="Специальность по диплому"
+                            value={formData[`diplomaSpeciality${index}`] || ''}
+                            onChange={(e) => handleInputChange(`diplomaSpeciality${index}`, e.target.value)}
+                        />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+};
 
     const RelativeTable = ({ index, formData, setFormData }) => {
         const formatDate = (value) => {
@@ -2081,8 +2086,8 @@
                                             Добавить члена семьи
                                         </button>
                                     </div>
-                                    <div className="formRow justify-flex-start" style={{marginTop: '10px', marginLeft: '30px'}}>
-                                        <p style={{marginTop: 0}}>Добавьте всех ближайших совершеннолетних членов семьи: родителей, братьев/сестер</p>
+                                    <div className="formRow justify-flex-start" style={{marginTop: '10px'}}>
+                                        <p style={{marginTop: 0, textAlign: "left"}}>Добавьте всех ближайших совершеннолетних членов семьи: родителей, братьев/сестер</p>
                                     </div>
                                 </div>
                             )}
@@ -2093,7 +2098,7 @@
                             </div>
 
                             <div className="formRow justify-flex-start">
-                                <p style={{marginTop: 0, color: '#181817', fontSize: '18px'}}>1. Являетесь ли военнообязанным(-ой)?</p>
+                                <p style={{marginTop: 0, color: '#181817', fontSize: '18px', textAlign: "left"}}>1. Являетесь ли военнообязанным(-ой)?</p>
                             </div>
                             <div className="formRow justify-flex-start" style={{marginTop: 0, fontSize: '18px'}}>
                                 <div className="input-container big">
@@ -2122,7 +2127,7 @@
                             </div>
 
                             <div className="formRow justify-flex-start" style={{marginTop: '50px'}}>
-                                <p style={{marginTop: 0, color: '#181817', fontSize: '18px'}}>2. Привлекались ли вы когда-либо к уголовной ответственности?</p>
+                                <p style={{marginTop: 0, color: '#181817', fontSize: '18px', textAlign: "left"}}>2. Привлекались ли вы когда-либо к уголовной ответственности?</p>
                             </div>
                             <div className="formRow justify-flex-start" style={{marginTop: 0, fontSize: '18px'}}>
                                 <div className="input-container big">
@@ -2170,7 +2175,7 @@
                             )}
 
                             <div className="formRow justify-flex-start" style={{marginTop: '50px'}}>
-                                <p style={{marginTop: 0, color: '#181817', fontSize: '18px'}}>3. Являетесь ли вы (со-)учредителем юридического лица?</p>
+                                <p style={{marginTop: 0, color: '#181817', fontSize: '18px', textAlign: "left"}}>3. Являетесь ли вы (со-)учредителем юридического лица?</p>
                             </div>
                             <div className="formRow justify-flex-start" style={{marginTop: 0, fontSize: '18px'}}>
                                 <div className="input-container big">
