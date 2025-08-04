@@ -137,31 +137,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/list', operation(ListManagerController::class))
             ->name('api.v1.managers.list')
             ->middleware('auth:api');
-        //TODO: Пока не добавлять в SWAGGER
-        Route::namespace('CHAT')->prefix('chats')->group(function () {
-            Route::get('/read-without', operation(GetChatsWithoutManagerController::class))
-                ->name('api.v1.manager.chats.without')
-                ->middleware('auth:api');
-
-            Route::get('/try-start-session', operation(TryStartSessionController::class))
-                ->name('api.v1.manager.chats.try-start-session')
-                ->middleware('auth:api');
-
-            Route::get('/read', operation(GetChatsController::class))
-                ->name('api.v1.manager.chats.read')
-                ->middleware('auth:api');
-
-            Route::post('/send-message-to-session', operation(SendMessageToSessionController::class))
-                ->name('api.v1.manager.chats.send-message-to-session')
-                ->middleware('auth:api');
-        });
-        // TODO: END
     });
     /// END
 
+
     /// FEED
+    // TODO: убрать текущую реализацию из свагера и из тестов
     Route::namespace('FEED')->prefix('feeds')->group(function () {
-         // TODO: добавить в Swagger
         Route::post('/create', operation(CreateFeedController::class))
             ->name('api.v1.feeds.create')
             ->middleware('auth:api');
@@ -173,15 +155,15 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/get-name', operation(GetFeedNamesController::class))
             ->name('api.v1.feeds.get-name')
             ->middleware('auth:api');
-        // TODO: добавить в Swagger
+
         Route::post('/update', operation(UpdateFeedController::class))
             ->name('api.v1.feeds.update')
             ->middleware('auth:api');
-        // TODO: добавить в Swagger
+
         Route::post('/update-name', operation(UpdateFeedNamesController::class))
             ->name('api.v1.feeds.update-name')
             ->middleware('auth:api');
-        // TODO: добавить в Swagger
+
         Route::delete('/delete', operation(DeleteFeedController::class))
             ->name('api.v1.feeds.delete')
             ->middleware('auth:api');
@@ -189,8 +171,9 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 
     /// FILE
+    // TODO: пока повременить
     Route::namespace('FILE')->prefix('files')->group(function () {
-        // Этот роут надо в браузере запускать
+
         Route::get('/download', operation(DownloadFilesController::class))
             ->name('api.v1.files.download')
             ->middleware('auth:api');
@@ -223,14 +206,30 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// CHAT
     Route::namespace('CHAT')->prefix('chats')->group(function () {
+        Route::get('/read-without', operation(GetChatsWithoutManagerController::class))
+            ->name('api.v1.chats.without')
+            ->middleware('auth:api');
+
+        Route::post('/try-start-session', operation(TryStartSessionController::class))
+            ->name('api.v1.chats.try-start-session')
+            ->middleware('auth:api');
+
+        Route::get('/read', operation(GetChatsController::class))
+            ->name('api.v1.chats.read')
+            ->middleware('auth:api');
+
+        Route::post('/send-message-to-session', operation(SendMessageToSessionController::class))
+            ->name('api.v1.manager.chats.send-message-to-session')
+            ->middleware('auth:api');
+
         Route::get('/get-history', operation(GetChatHistoryController::class))
-            ->name('api.v1.file.chats.get-history');
+            ->name('api.v1.chats.get-history');
 
         Route::get('/get-user-token', operation(GetUserChatTokenController::class))
-            ->name('api.v1.file.chats.get-token');
+            ->name('api.v1.chats.get-token');
 
         Route::post('/send-message', operation(SendChatMessageController::class))
-            ->name('api.v1.file.chats.send-message');
+            ->name('api.v1.chats.send-message');
     });
     /// END
 
@@ -240,36 +239,32 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.favorites.count');
 
         Route::group(['middleware' => ['web']], function () {
-            // TODO: добавить в Swagger
             Route::post('/switch-like', operation(SwitchLikeController::class))
                 ->name('api.v1.favorites.switch-like')
                 ->withoutMiddleware('api');
 
-            // TODO: вспомнить об этом при рефакторинге фронта
+            // TODO: искоренить это
             Route::get('/get-plan-views', operation(GetFavoritePlanViewsController::class))
                 ->name('api.v1.favorites.get-plan-views')
                 ->withoutMiddleware('api');
 
-            // TODO: вспомнить об этом при рефакторинге фронта
             Route::get('/building-views', operation(GetFavoriteBuildingViewsControllers::class))
                 ->name('api.v1.favorites.building-views')
                 ->withoutMiddleware('api');
+            // TODO: END
         });
     });
     /// END
 
     /// Visited
     Route::namespace('VISITED')->prefix('visited')->group(function () {
-        Route::group(['middleware' => 'auth'], function () {
-            // TODO: добавить в Swagger
-            Route::post('/update', operation(UpdatePagesVisitedController::class))
-                ->name('api.v1.visited.update');
-        });
+        Route::post('/update', operation(UpdatePagesVisitedController::class))
+            ->name('api.v1.visited.update');
     });
     /// END
 
-    /// Cbr
-    // TODO: Пока не добавлять в SWAGGER
+    /// CRM
+    // TODO: добавить в Swagger
     Route::namespace('CRM')->prefix('crm')->group(function () {
         Route::post('/reset-ads-agreement', operation(ResetAdsAgreementController::class))
             ->name('api.v1.crm.reset-ads-agreement');

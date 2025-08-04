@@ -9,6 +9,7 @@ use App\Http\Resources\Crm\CrmResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 use stdClass;
 
 class StoreCrmController extends AbstractOperations
@@ -20,6 +21,28 @@ class StoreCrmController extends AbstractOperations
     }
 
     /**
+     * @OA\Post(
+     *       tags={"Crm"},
+     *       path="/api/v1/crm/store",
+     *       summary="Отправка сообщения в црм + создание лида",
+     *       description="Возвращение JSON объекта",
+     *       security={{"bearerAuth":{}}},
+     *       @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="name", type="string", example=""),
+     *              @OA\Property(property="phone", type="string", example=""),
+     *              @OA\Property(property="comment", type="string", example=""),
+     *              @OA\Property(property="city", type="string", example=""),
+     *          )
+     *        ),
+     *       @OA\Response(response=200, description="УСПЕХ!"),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found"
+     *       )
+     *  )
+     *
      * @param Request $request
      * @return JsonResponse
      */

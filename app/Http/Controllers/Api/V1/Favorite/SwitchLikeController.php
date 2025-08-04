@@ -11,6 +11,7 @@ use App\Models\UserFavoriteBuilding;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
 
 class SwitchLikeController extends AbstractOperations
 {
@@ -23,6 +24,27 @@ class SwitchLikeController extends AbstractOperations
     }
 
     /**
+     * @OA\Post(
+     *       tags={"Favorite"},
+     *       path="/api/v1/favorites/switch-like",
+     *       summary="Добавить в избранное",
+     *       description="Возвращение JSON объекта",
+     *       security={{"bearerAuth":{}}},
+     *       @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="code", type="string", example=""),
+     *              @OA\Property(property="type", type="string", example="..."),
+     *              @OA\Property(property="action", type="string", example="..."),
+     *          )
+     *        ),
+     *       @OA\Response(response=200, description="УСПЕХ!"),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found"
+     *       )
+     *  )
+     *
      * @param LikeSwitchRequest $request
      * @return \Illuminate\Http\JsonResponse
      */

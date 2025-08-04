@@ -117,7 +117,7 @@ class AuthenticationAccountController extends AbstractOperations
             return new JsonResponse(
                 data: [
                     ...self::identifier(),
-                    'attributes' => ['data' => $response->data],
+                    ...self::attributes(['data' => $response->data]),
                     ...self::metaData($request, $request->all()),
                 ],
                 status: Response::HTTP_OK
@@ -146,7 +146,7 @@ class AuthenticationAccountController extends AbstractOperations
         return new JsonResponse(
             data: [
                 ...self::identifier(),
-                'attributes' => [],
+                ...self::attributes([]),
                 ...self::metaData($request, $request->all()),
             ],
             status: Response::HTTP_OK

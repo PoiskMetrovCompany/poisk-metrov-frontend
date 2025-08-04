@@ -52,14 +52,29 @@ use OpenApi\Annotations as OA;
  *  )
  *
  * @OA\Tag(
- *       name="Favorite",
- *       description="Операции над избранным"
- *   )
+ *      name="Favorite",
+ *      description="Операции над избранным"
+ * )
  *
  * @OA\Tag(
- *        name="ResidentialComplex",
- *        description="Операции над ЖК"
- *    )
+ *      name="ResidentialComplex",
+ *      description="Операции над ЖК"
+ * )
+ *
+ * @OA\Tag(
+ *      name="Chat",
+ *      description="Операции над чатом с клиентом + синх с ЦРМ"
+ * )
+ *
+ * @OA\Tag(
+ *      name="Visited",
+ *      description="Операции над посещениями"
+ * )
+ *
+ * @OA\Tag(
+ *       name="Сrm",
+ *       description="Операции связанные с Энви ЦРМ"
+ *  )
  */
 class Controller extends BaseController
 {

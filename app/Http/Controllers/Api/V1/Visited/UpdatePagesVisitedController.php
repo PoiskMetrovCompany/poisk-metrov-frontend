@@ -13,6 +13,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
+
 
 class UpdatePagesVisitedController extends AbstractOperations
 {
@@ -26,10 +28,28 @@ class UpdatePagesVisitedController extends AbstractOperations
     }
 
     /**
+     * @OA\Post(
+     *       tags={"Visited"},
+     *       path="/api/v1/visited/update",
+     *       summary="Фиксация посещения страницы",
+     *       description="Возвращение JSON объекта",
+     *       security={{"bearerAuth":{}}},
+     *       @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="page", type="string", example=""),
+     *              @OA\Property(property="code", type="string", example="..."),
+     *          )
+     *        ),
+     *       @OA\Response(response=200, description="УСПЕХ!"),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found"
+     *       )
+     *  )
+     *
      * @param AddVisitedPageRequest $request
      * @return \Illuminate\Http\JsonResponse
-     *
-     * Убрал public static function
      */
     public function __invoke(AddVisitedPageRequest $request)
     {

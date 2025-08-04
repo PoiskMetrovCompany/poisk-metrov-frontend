@@ -385,6 +385,256 @@
                 }
             }
         },
+        "/api/v1/chats/get-history": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Показывает историю чата",
+                "description": "Возвращение JSON объекта",
+                "operationId": "29dc12e815d0cc9d1d80be09d69f17ef",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID клиента",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/chats/get-user-token": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Выдача токена для чата",
+                "description": "Возвращение JSON объекта",
+                "operationId": "c169bdfefcf82d815a1f7aee14e4c113",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID клиента",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/chats/send-message": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Отправка сообщеничя в чат",
+                "description": "Возвращение JSON объекта",
+                "operationId": "c27292e69d9eb94045e0eb2f927a6ebb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "chatCategory": {
+                                        "type": "string",
+                                        "example": "..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/crm/reset-ads-agreement": {
+            "post": {
+                "tags": [
+                    "Crm"
+                ],
+                "summary": "Что то связанное с рекламой",
+                "description": "Возвращение JSON объекта",
+                "operationId": "36b174770a478902ca4aa6f0b691124d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/crm/store": {
+            "post": {
+                "tags": [
+                    "Crm"
+                ],
+                "summary": "Отправка сообщения в црм + создание лида",
+                "description": "Возвращение JSON объекта",
+                "operationId": "1e4fb513ce8b34e790120619a08b6d30",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/crm/store-without-name": {
+            "post": {
+                "tags": [
+                    "Crm"
+                ],
+                "summary": "Отправка сообщения в црм (без указания имени) + создание лида",
+                "description": "Возвращение JSON объекта",
+                "operationId": "6070cfcc38f7f59359c7078ac8dbce67",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/favorites/count": {
             "get": {
                 "tags": [
@@ -393,6 +643,53 @@
                 "summary": "получение уоличества понравившихся планировок",
                 "description": "Возвращение JSON объекта",
                 "operationId": "13a8bc89daa85695065006c52a03f2a5",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/favorites/switch-like": {
+            "post": {
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "Добавить в избранное",
+                "description": "Возвращение JSON объекта",
+                "operationId": "47f9c2237fc9faac051897a1676d7966",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "example": "..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!"
@@ -439,6 +736,158 @@
                 "summary": "получение конкретного фида",
                 "description": "Возвращение JSON объекта",
                 "operationId": "e95e3fdb3b59868f884916dc82580dc4",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/chats/read": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "читать чат",
+                "description": "Возвращение JSON объекта",
+                "operationId": "99a8f8e3f562c323bcd862fe32c96bec",
+                "parameters": [
+                    {
+                        "name": "manager_id",
+                        "in": "query",
+                        "description": "ID менеджера",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/chats/read-without": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "читать без менеджера",
+                "description": "Возвращение JSON объекта",
+                "operationId": "169b6494fee3f5be3df2d4bf1b2110fa",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/chats/send-message-to-session": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "отправка сообщения по текущей сессии",
+                "description": "Возвращение JSON объекта",
+                "operationId": "36e0b7d7ff57d4639bb372aaafdbdace",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "chatToken": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "apiToken": {
+                                        "type": "string",
+                                        "example": "..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/chats/try-start-session": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Создать сессию для клиента",
+                "description": "Возвращение JSON объекта",
+                "operationId": "158fb78c18dc4e0b3e57cb1e50c25b87",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "chatToken": {
+                                        "type": "string",
+                                        "example": "..."
+                                    },
+                                    "apiToken": {
+                                        "type": "string",
+                                        "example": "..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!"
@@ -964,6 +1413,49 @@
                     }
                 ]
             }
+        },
+        "/api/v1/visited/update": {
+            "post": {
+                "tags": [
+                    "Visited"
+                ],
+                "summary": "Фиксация посещения страницы",
+                "description": "Возвращение JSON объекта",
+                "operationId": "4710688309adfab05ad68ffed40e4ab4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "page": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -1023,6 +1515,18 @@
         {
             "name": "ResidentialComplex",
             "description": "Операции над ЖК"
+        },
+        {
+            "name": "Chat",
+            "description": "Операции над чатом с клиентом + синх с ЦРМ"
+        },
+        {
+            "name": "Visited",
+            "description": "Операции над посещениями"
+        },
+        {
+            "name": "Crm",
+            "description": "Crm"
         }
     ]
 }

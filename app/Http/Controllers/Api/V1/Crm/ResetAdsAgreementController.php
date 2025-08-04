@@ -9,6 +9,7 @@ use App\Http\Resources\Crm\CrmResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 class ResetAdsAgreementController extends AbstractOperations
 {
@@ -22,6 +23,25 @@ class ResetAdsAgreementController extends AbstractOperations
     }
 
     /**
+     * @OA\Post(
+     *       tags={"Crm"},
+     *       path="/api/v1/crm/reset-ads-agreement",
+     *       summary="Что то связанное с рекламой",
+     *       description="Возвращение JSON объекта",
+     *       security={{"bearerAuth":{}}},
+     *       @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="phone", type="string", example=""),
+     *          )
+     *        ),
+     *       @OA\Response(response=200, description="УСПЕХ!"),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found"
+     *       )
+     *  )
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
