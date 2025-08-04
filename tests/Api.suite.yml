@@ -1,9 +1,0 @@
-actor: ApiTester
-suite_namespace: Tests\Api
-modules:
-  enabled:
-    - Laravel
-    - REST:
-        url: api/v1
-        depends: Laravel
-    - Asserts

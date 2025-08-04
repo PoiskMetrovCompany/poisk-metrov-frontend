@@ -1,6 +1,0 @@
-*
-!public/
-!.gitignore
-!feed-data
-!feed-data/*
-!feed-data/*/required-buildings.json
