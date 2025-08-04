@@ -100,7 +100,7 @@ services:
       - nginx
       - mongodb
       - mysql
-#      - rabbitmq
+      - rabbitmq
     networks:
       - app
 
@@ -121,7 +121,7 @@ services:
     networks:
       - jenkins-network
     restart: unless-stopped
-#
+
   jenkins-agent:
     build:
       context: ${DOCKER_PATH}/jenkins
@@ -140,7 +140,6 @@ services:
     networks:
       - jenkins-network
     restart: unless-stopped
-
 
 volumes:
   database:
