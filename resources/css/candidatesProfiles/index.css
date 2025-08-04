@@ -2,6 +2,12 @@
     БАЗОВЫЕ СТИЛИ И ТИПОГРАФИЯ
     ============================================== */
 
+    /* ==============================================
+МЕДИА-ЗАПРОСЫ ДЛЯ ЭКРАНОВ МЕНЕЕ 1024PX
+============================================== */
+
+
+
     /* Шрифты */
     @font-face {
         font-family: "Onest";
@@ -49,6 +55,11 @@
         cursor: pointer;
     }
 
+        main{
+            display: flex;
+            justify-content: center;
+        }
+
     header p{
         width: 40%;
     }
@@ -63,10 +74,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100vw;
+        max-width: 990px;
         min-height: calc(100vh - 5.625rem);
         position: relative;
+        margin: 0px 40px;
+        width: 100%;
+        box-sizing: border-box; 
     }
+
 
     article {
         width: 100%;
@@ -101,13 +116,14 @@
     }
 
     .center-card.big {
-        width: 50%;
+        width: 100%;
         height: auto;
         min-height: auto;
-        padding-bottom: 1.5rem; /* 24px */
+        padding-bottom: 1.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
+        box-sizing: border-box;
     }
 
     /* Типография карточек */
@@ -197,6 +213,8 @@
 
     .input-container.big {
         width: auto;
+        flex-wrap: wrap;
+        text-align: left;
     }
 
     /* ==============================================
@@ -430,8 +448,8 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem; /* 8px */
-        margin-top: 0.125rem; /* 2px */
-        margin-left: 0.4375rem; /* 7px */
+        margin-top: 1.125rem; /* 2px */
+        margin-left: 0.4375rem; /* 7px */;
         cursor: pointer;
         font-size: 1.125rem; /* 18px */
         color: rgba(129, 129, 129, 1);
@@ -484,7 +502,6 @@
         display: block;
     }
 
-    /* Строки с чекбоксами */
     .checkboxRow {
         display: flex;
         align-items: flex-start;
@@ -1678,3 +1695,514 @@
     .redactBtn {
         position: relative;
     }
+
+@media screen and (max-width: 1023px) {
+    html {
+        font-size: 14px;
+    }
+
+    section article h1 {
+        font-size: 1.375rem;
+    }
+
+    section article p {
+        font-size: 1rem;
+    }
+
+    .center-card h1 {
+        font-size: 1.125rem;
+    }
+
+    .center-card p {
+        font-size: 1rem;
+    }
+
+    form .formRow h1 {
+        font-size: 1.375rem;
+    }
+
+    form .formRow h2 {
+        font-size: 1.375rem;
+    }
+
+    form .formRow h3 {
+        font-size: 1.125rem;
+    }
+
+    form .formRow h4 {
+        font-size: 1rem;
+    }
+
+    .input-container .formInput {
+        font-size: 0.875rem;
+    }
+
+    .input-container .formLabel:has(+ .formInput[readonly]) {
+        font-size: 0.875rem;
+    }
+
+    .input-container .formLabel {
+        font-size: 0.75rem;
+    }
+
+    form .formBtn {
+        font-size: 0.875rem;
+    }
+
+    form .bigFormButton {
+        font-size: 0.875rem;
+    }
+
+    .filterButton {
+        font-size: 1rem;
+    }
+
+    button.aButton {
+        font-size: 0.75rem;
+    }
+
+    button#filters {
+        font-size: 0.875rem;
+    }
+
+    .custom-radio {
+        font-size: 1rem;
+    }
+
+    .custom-radio input[type="radio"] + label {
+        font-size: 1rem;
+    }
+
+    .custom-checkbox input[type="checkbox"] + label {
+        font-size: 1rem;
+    }
+
+    .checkboxRow {
+        margin-top: 2rem;
+    }
+
+    .inputTable td input {
+        font-size: 0.875rem;
+    }
+
+    .table-container .tableLabel {
+        font-size: 0.75rem;
+    }
+
+    .custom-select .select-selected {
+        font-size: 0.875rem;
+    }
+
+    .custom-select .select-items div {
+        font-size: 0.875rem;
+    }
+
+    .custom-select .select-label {
+        font-size: 0.75rem;
+    }
+
+    .calendar-wrapper .calendar-header {
+        font-size: 1rem;
+    }
+
+    .calendar-wrapper .nav-arrow {
+        font-size: 1.125rem;
+    }
+
+    .calendar-wrapper .calendar th {
+        font-size: 0.875rem;
+    }
+
+    .calendar-wrapper .calendar td {
+        font-size: 0.875rem;
+    }
+
+    table.candidatesTable th {
+        font-size: 0.75rem;
+    }
+
+    table.candidatesTable td {
+        font-size: 0.875rem;
+    }
+
+    button.navBtn {
+        font-size: 0.875rem;
+    }
+
+    .pagination .paginationBtn {
+        font-size: 0.875rem;
+    }
+
+    .download-button-group .download-btn.primary {
+        font-size: 0.875rem;
+    }
+
+    .download-button-group .download-btn.dropdown-toggle {
+        font-size: 0.875rem;
+    }
+
+    header #city {
+        font-size: 0.875rem;
+    }
+
+    header button#exitBtn {
+        font-size: 0.875rem;
+    }
+
+    .file-formats-card .format-item {
+        font-size: 0.75rem;
+    }
+
+    .roleItem {
+        font-size: 1rem;
+    }
+
+    .fixedMenu .navArea a {
+        font-size: 0.75rem;
+    }
+
+    .yellowSelect .select-trigger {
+        font-size: 1rem;
+    }
+
+    .yellowSelect .select-option {
+        font-size: 0.875rem;
+    }
+
+    .notifications-container .notification-header {
+        font-size: 0.75rem;
+    }
+
+    .notifications-container .notification-text {
+        font-size: 0.625rem;
+    }
+
+    .notifications-container .notification-time {
+        font-size: 0.625rem;
+    }
+
+    .city-dropdown .city-option {
+        font-size: 0.75rem;
+    }
+
+    .redactBtn .comment-tooltip {
+        font-size: 0.75rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    section {
+        margin: 0px 20px; /* Уменьшенные отступы для мобильных */
+        max-width: 100%;
+    }
+    
+    .center-card {
+        width: 100%;
+        padding: 1rem 1.5rem 0; /* Уменьшенные внутренние отступы */
+        border-radius: 1rem; /* Уменьшенный радиус */
+    }
+    
+    .center-card.big {
+        width: 100%;
+        padding: 1rem 1.5rem 1rem;
+    }
+    
+    /* Адаптивность для полей формы */
+    .formRow.justify-space-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .w-49 {
+        width: 100% !important;
+    }
+    
+    /* Адаптивность для кнопок */
+    .formBtn {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    html {
+        font-size: 14px;
+    }
+
+    section article h1 {
+        font-size: 1.25rem;
+    }
+
+    section article p {
+        font-size: 0.875rem;
+    }
+
+    .center-card h1 {
+        font-size: 1rem;
+    }
+
+    .center-card p {
+        font-size: 0.875rem;
+    }
+
+    form .formRow h1 {
+        font-size: 1.25rem;
+    }
+
+    form .formRow h2 {
+        font-size: 1.25rem;
+    }
+
+    form .formRow h3 {
+        font-size: 1rem;
+    }
+
+    form .formRow h4 {
+        font-size: 0.875rem;
+    }
+
+    .input-container .formInput {
+        font-size: 0.75rem;
+    }
+
+    .input-container .formLabel:has(+ .formInput[readonly]) {
+        font-size: 0.75rem;
+    }
+
+    .input-container .formLabel {
+        font-size: 0.625rem;
+    }
+
+    form .formBtn {
+        font-size: 0.75rem;
+    }
+
+    form .bigFormButton {
+        font-size: 0.75rem;
+    }
+
+    .filterButton {
+        font-size: 0.875rem;
+    }
+
+    button.aButton {
+        font-size: 0.625rem;
+    }
+
+    button#filters {
+        font-size: 0.75rem;
+    }
+
+    .custom-radio {
+        font-size: 0.875rem;
+    }
+
+    .custom-radio input[type="radio"] + label {
+        font-size: 0.875rem;
+    }
+
+    .custom-checkbox input[type="checkbox"] + label {
+        font-size: 0.875rem;
+    }
+
+    .checkboxRow {
+        margin-top: 2rem;
+    }
+
+    .inputTable td input {
+        font-size: 0.75rem;
+    }
+
+    .table-container .tableLabel {
+        font-size: 0.625rem;
+    }
+
+    .custom-select .select-selected {
+        font-size: 0.75rem;
+    }
+
+    .custom-select .select-items div {
+        font-size: 0.75rem;
+    }
+
+    .custom-select .select-label {
+        font-size: 0.625rem;
+    }
+
+    .calendar-wrapper .calendar-header {
+        font-size: 0.875rem;
+    }
+
+    .calendar-wrapper .nav-arrow {
+        font-size: 1rem;
+    }
+
+    .calendar-wrapper .calendar th {
+        font-size: 0.75rem;
+    }
+
+    .calendar-wrapper .calendar td {
+        font-size: 0.75rem;
+    }
+
+    table.candidatesTable th {
+        font-size: 0.625rem;
+    }
+
+    table.candidatesTable td {
+        font-size: 0.75rem;
+    }
+
+    button.navBtn {
+        font-size: 0.75rem;
+    }
+
+    .pagination .paginationBtn {
+        font-size: 0.75rem;
+    }
+
+    .download-button-group .download-btn.primary {
+        font-size: 0.75rem;
+    }
+
+    .download-button-group .download-btn.dropdown-toggle {
+        font-size: 0.75rem;
+    }
+
+    header #city {
+        font-size: 0.75rem;
+    }
+
+    header button#exitBtn {
+        font-size: 0.75rem;
+    }
+
+    .file-formats-card .format-item {
+        font-size: 0.625rem;
+    }
+
+    .roleItem {
+        font-size: 0.875rem;
+    }
+
+    .fixedMenu .navArea a {
+        font-size: 0.625rem;
+    }
+
+    .yellowSelect .select-trigger {
+        font-size: 0.875rem;
+    }
+
+    .yellowSelect .select-option {
+        font-size: 0.75rem;
+    }
+
+    .notifications-container .notification-header {
+        font-size: 0.625rem;
+    }
+
+    .notifications-container .notification-text {
+        font-size: 0.5rem;
+    }
+
+    .notifications-container .notification-time {
+        font-size: 0.5rem;
+    }
+
+    .city-dropdown .city-option {
+        font-size: 0.625rem;
+    }
+
+    .redactBtn .comment-tooltip {
+        font-size: 0.625rem;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    /* Изменяем структуру таблицы на мобильных */
+    .inputTable {
+        display: block;
+        width: 100%;
+        border: 1.5px solid #D2D2D2; /* Сохраняем исходную ширину границы */
+        border-radius: 1rem;
+        height: auto;
+        min-height: auto;
+    }
+    #workTable{
+        height: max-content !important;
+    }
+    .inputTable tbody {
+        display: block;
+        width: 100%;
+    }
+    
+    .inputTable tr {
+        display: block;
+        width: 100%;
+        border: none;
+        margin-bottom: 0;
+    }
+    
+    .inputTable td {
+        display: block;
+        width: 100% !important;
+        border: none;
+        border-bottom: 1.5px solid #D2D2D2; 
+        padding: 1rem; 
+        box-sizing: border-box;
+    }
+    
+    .inputTable tr:last-child td:last-child {
+        border-bottom: none;
+        padding-bottom: 1rem; 
+    }
+    
+
+    .inputTable td {
+        border-radius: 0;
+    }
+    
+
+    .inputTable td input {
+        width: 100%;
+        padding: 0.75rem 0; 
+        border: none;
+        background: transparent;
+        box-sizing: border-box;
+        font-size: 0.9375rem;
+        min-height: 2.5rem;
+        line-height: 1.5;
+    }
+    
+    .bigFormButton{
+        font-size: 0.7rem;
+    }
+
+    .inputTable td input:focus {
+        outline: none;
+    }
+    
+
+    .table-container {
+        max-height: none !important;
+        height: auto;
+        padding-bottom: 0; 
+        margin-bottom: 1.25rem; 
+    }
+    .inputTable tr:last-child td:first-child{
+        border-bottom-left-radius: 0;
+    }
+    
+
+    .tableLabel {
+        position: absolute;
+        z-index: 3;
+        top: -0.6875rem;
+        left: 0.5rem;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.5;
+        background-color: rgba(255, 255, 255, 1);
+        padding: 0 0.3125rem;
+    }
+}
