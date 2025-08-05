@@ -53,7 +53,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-#      - ${MYSQL_DATA_LOCAL}:${MYSQL_DATA}
+      - mysql_data:/var/lib/mysql
       - ./:/docker-entrypoint-initdb.d
     networks:
       - app
@@ -146,3 +146,4 @@ volumes:
   logging:
   jenkins_home:
   agent_workdir:
+  mysql_data:
