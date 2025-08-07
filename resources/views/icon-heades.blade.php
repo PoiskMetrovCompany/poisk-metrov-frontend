@@ -1,4 +1,4 @@
-<link rel="icon" type="image/x-icon" href="/icon/16.ico">
+{{--<link rel="icon" type="image/x-icon" href="/icon/16.ico">--}}
 
 <!-- Основная иконка -->
 <link rel="icon" type="image/x-icon" sizes="32x32" href="/icon/32.ico">
