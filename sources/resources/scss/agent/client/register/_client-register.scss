@@ -1,0 +1,77 @@
+.client-register {
+    &.base-container {
+        background-color: $superwhite;
+        padding: 24px;
+        gap: 16px;
+        border-radius: 16px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        @include media-breakpoint-down(md) {
+            grid-template-columns: auto;
+            padding: 16px;
+
+            div[dummy=true] {
+                display: none;
+            }
+        }
+    }
+
+    &.show-request {
+        display: none;
+        grid-column: span 3;
+        grid-template-columns: inherit;
+        gap: inherit;
+
+        &.shown {
+            display: grid;
+        }
+
+        @include media-breakpoint-down(md) {
+            grid-template-columns: auto;
+            grid-column: span 1;
+        }
+    }
+
+    &.show-fixation {
+        display: none;
+        grid-column: span 3;
+        grid-template-columns: repeat(3, 1fr);
+        gap: inherit;
+
+        &.shown {
+            display: grid;
+        }
+
+        @include media-breakpoint-down(md) {
+            grid-template-columns: auto;
+            grid-column: span 1;
+        }
+    }
+
+    &.checkboxes {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column: span 2;
+        gap: inherit;
+
+        @include media-breakpoint-down(md) {
+            grid-template-columns: auto;
+            grid-column: span 1;
+        }
+    }
+
+    &.deal-comment {
+        display: grid;
+        grid-column: span 3;
+        gap: inherit;
+
+        input {
+            height: 84px;
+        }
+
+        @include media-breakpoint-down(md) {
+            grid-column: span 1;
+        }
+    }
+}

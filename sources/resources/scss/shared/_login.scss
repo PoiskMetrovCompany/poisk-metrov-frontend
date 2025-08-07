@@ -1,0 +1,85 @@
+.login {
+    &.text-container {
+        display: grid;
+        gap: 24px;
+        font-size: 14px;
+        font-weight: 400;
+        color: $grey4;
+    }
+
+    &.phome-highlight {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    &.underlined {
+        font-size: 16px;
+        font-weight: 500;
+        color: $orange1;
+        text-decoration: underline;
+    }
+
+    &.success-container {
+        display: none;
+        gap: 40px;
+        align-items: center;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400;
+        color: $grey4;
+        text-align: center;
+    }
+
+    &.success-title {
+        font-size: 32px;
+        color: $orange1;
+    }
+
+    &.form {
+        display: grid;
+        gap: 24px;
+    }
+
+    &.failure {
+        display: none;
+        gap: 32px;
+        font-size: 14px;
+        font-weight: 400;
+        color: $grey4;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.icon-with-text {
+        display: flex;
+        gap: 24px;
+        font-size: 32px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    &.fail-icon {
+        background-color: $error;
+        border-radius: 50%;
+        width: 52px;
+        height: 52px;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &.inputs {
+        display: grid;
+        gap: 24px;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 400;
+        color: $grey4;
+        padding: 0 60px;
+
+        &>.common-button {
+            width: 100%;
+        }
+    }
+}

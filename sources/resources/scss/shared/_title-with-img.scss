@@ -1,0 +1,80 @@
+.title-with-img {
+    &.container {
+        display: grid;
+        gap: 32px;
+        justify-self: center;
+        width: 100%;
+    }
+
+    &.img-container {
+        background-size: cover;
+        padding: 32px 24px 140px 24px;
+        border-radius: 32px;
+        display: grid;
+        gap: 44px;
+
+        @include media-breakpoint-up(md) {
+            padding: 44px 36px 108px 36px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            padding: 56px 100px 224px 36px;
+            border-radius: 44px;
+            display: flex;
+            gap: 120px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            padding: 56px 180px 248px 32px;
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            padding-right: 160px;
+        }
+
+        &.partners {
+           background-position: center 25%;
+        }
+    }
+    
+    &.title {
+        font-size: 20px;
+
+        @include media-breakpoint-up(md) {
+            width: 50%;
+        }
+
+        @include media-breakpoint-up(lg) {
+            width: 100%;
+            font-size: 34px;
+            line-height: 46px;
+        }
+    }
+    
+    &.text {
+        display: none;
+        font-weight: 400;
+
+        @include media-breakpoint-up(md) {
+            display: grid;
+            font-size: 14px;
+            width: 30%;
+        }
+
+        @include media-breakpoint-up(lg) {
+            width: 100%;
+            font-size: 18px;
+        }
+    }
+
+    &.text-small {
+        font-size: 14px;
+        font-weight: 400;
+
+        @include media-breakpoint-up(md) {
+            display: none;
+        }
+    }
+}

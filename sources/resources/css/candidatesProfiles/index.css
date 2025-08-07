@@ -1,0 +1,2208 @@
+    /* ==============================================
+    БАЗОВЫЕ СТИЛИ И ТИПОГРАФИЯ
+    ============================================== */
+
+    /* ==============================================
+МЕДИА-ЗАПРОСЫ ДЛЯ ЭКРАНОВ МЕНЕЕ 1024PX
+============================================== */
+
+
+
+    /* Шрифты */
+    @font-face {
+        font-family: "Onest";
+        src: url("Onest-VariableFont_wght.ttf");
+    }
+
+    /* HTML и Body */
+    html {
+        font-family: 'Onest';
+        font-size: 16px;
+        scroll-behavior: smooth;
+    }
+
+    :target{
+        scroll-margin-top: 120px;
+    }
+
+    body {
+        margin: 0;
+        background: rgba(244, 244, 241, 1);
+        padding-bottom: 3rem; /* 48px */
+    }
+
+
+
+    /* Базовая типография */
+    h1, p {
+        margin: 0.625rem 0; /* 10px */
+    }
+
+    /* ==============================================
+    LAYOUT СТРУКТУРА
+    ============================================== */
+
+    /* Header */
+    header {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+        margin-bottom: 3rem; /* 48px */
+        position: relative;
+    }
+
+    button{
+        cursor: pointer;
+    }
+
+        main{
+            display: flex;
+            justify-content: center;
+        }
+
+    header p{
+        width: 40%;
+    }
+
+    #nonTextImg{
+        width: 40px;
+        height: 40px;
+    }
+
+
+    section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 990px;
+        min-height: calc(100vh - 5.625rem);
+        position: relative;
+        margin: 0px 40px;
+        width: 100%;
+        box-sizing: border-box; 
+    }
+
+
+    article {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 3rem; /* 48px */
+    }
+
+    article h1 {
+        font-weight: 500;
+        font-size: 1.5rem; /* 24px */
+    }
+
+    article p {
+        font-weight: 400;
+        color: #818181;
+        font-size: 1.125rem; /* 18px */
+    }
+
+    /* ==============================================
+    КАРТОЧКИ И КОНТЕЙНЕРЫ
+    ============================================== */
+
+    /* Основная карточка */
+    .center-card {
+        width: 21rem; /* 336px */
+        padding: 1.5rem 3rem 0; /* 24px 48px 0 */
+        height: 27.25rem; /* 436px */
+        background-color: rgba(255, 255, 255, 1);
+        border-radius: 2rem; /* 32px */
+        text-align: center;
+        position: relative;
+    }
+
+    .center-card.big {
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        padding-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* Типография карточек */
+    .center-card h1 {
+        font-weight: 500;
+        font-size: 1.25rem;
+
+    }
+
+    .center-card p {
+        font-size: 1rem; /* 16px */
+        font-weight: 400;
+        line-height: 1.5;
+        color: rgba(129, 129, 129, 1);
+        font-size: 1.125rem;
+    }
+
+    /* ==============================================
+    ФОРМЫ И ПОЛЯ ВВОДА
+    ============================================== */
+
+    /* Основная форма */
+    form {
+        position: relative;
+        margin-top: 3.75rem; /* 60px */
+    }
+
+    /* Ряды формы */
+    .formRow {
+        width: 100%;
+        margin-top: 1.875rem; /* 30px */
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .formRow.justify-space-between {
+        justify-content: space-between;
+    }
+
+    .formRow.justify-space-around {
+        justify-content: space-around;
+    }
+
+    .formRow.justify-flex-start {
+        justify-content: flex-start;
+    }
+
+    /* Заголовки в формах */
+    .formRow h1 {
+        font-weight: 500;
+        font-size: 1.5rem; /* 24px */
+        line-height: 1.3;
+    }
+
+    .formRow h2{
+        width: 100%;
+        font-weight: 500;
+        text-align: left;
+        margin-bottom: 2rem;
+        font-size: 24px;
+    }
+
+    .formRow h3 {
+        width: 100%;
+        font-weight: 500;
+        text-align: center;
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .formRow h4 {
+        width: 100%;
+        margin: 0;
+        font-weight: 400;
+        text-align: center;
+        color: #818181;
+        margin-top: 1.25rem; /* 20px */
+        font-size: 1.125rem; /* 18px */
+    }
+
+    .input-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .input-container.big {
+        width: auto;
+        flex-wrap: wrap;
+        text-align: left;
+    }
+
+    /* ==============================================
+    ПОЛЯ ВВОДА
+    ============================================== */
+
+    /* Основные поля ввода */
+    .formInput {
+        width: 100%;
+        height: 4rem; /* 64px */
+        border-radius: 1rem; /* 16px */
+        border: 1.5px solid rgba(210, 210, 210, 1);
+        padding-left: 0.875rem; /* 14px */
+        font-weight: 400;
+        font-size: 1rem; /* 16px */
+        line-height: 1.5;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .formInput:focus {
+        outline: none;
+    }
+
+    .formInput.big {
+        width: 100%;
+    }
+
+    .formInput[readonly]{
+        background: rgba(249, 249, 247, 1);
+        border: none;
+        padding-top: 1rem;
+    }
+    .inputTable input[readonly]{
+        background: rgba(249, 249, 247, 1);
+        border: none;
+    }
+    .formLabel:has(+ .formInput[readonly]) {
+        font-weight: 600;
+        font-size: 16px;
+        top: 0px;
+        background: none;
+    }
+
+    /* Лейблы для полей */
+    .formLabel {
+        font-weight: 400;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.5;
+        position: absolute;
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 1);
+        top: -0.6875rem; /* -10.5px */
+        left: 0.5rem; /* 8px */
+        padding: 0 0.3125rem; /* 0 5px */
+    }
+
+    /* ==============================================
+    КНОПКИ
+    ============================================== */
+
+    /* Основные кнопки формы */
+    .formBtn {
+        margin-top: 1.25rem; /* 20px */
+        width: 21rem; /* 336px */
+        height: 4rem; /* 64px */
+        border: none;
+        border-radius: 2.5rem; /* 40px */
+        font-size: 1rem; /* 16px */
+        transition: background ease-in-out 0.3s;
+        cursor: pointer;
+    }
+    .formBtn.small{
+        width: 181px;
+        height: 56px;
+        margin-right: 1rem;
+    }
+
+    .btn-inactive {
+        background: #E4E4E4;
+        color: rgba(129, 129, 129, 1);
+    }
+
+    .btn-active {
+        background: #EC7D3F;
+        color: #F4F4F1;
+    }
+
+    /* Большие кнопки формы */
+    .bigFormButton {
+        width: 100%;
+        display: flex;
+        height: 4rem; /* 64px */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border: 2px solid #E4621980;
+        border-radius: 1rem; /* 16px */
+        background: none;
+        color: #EC7D3F;
+        font-size: 1rem; /* 16px */
+        font-weight: 500;
+        gap: 0.5rem; /* 8px */
+        cursor: pointer;
+    }
+
+    .bigFormButton svg {
+        width: 1rem; /* 16px */
+        height: 1rem; /* 16px */
+    }
+
+    /* Кнопки фильтра */
+    .filterButton {
+        color: #494949;
+        font-weight: 400;
+        line-height: 1.5;
+        padding: 0.5rem 1rem; /* 8px 16px */
+        font-size: 1.125rem; /* 18px */
+        margin: 1.25rem; /* 20px */
+        border-radius: 1.5rem; /* 24px */
+        border: none;
+        background: #F4F4F1;
+        cursor: pointer;
+    }
+
+    .filterButton.active {
+        background: #EC7D3F;
+        color: #FFFFFF !important;
+    }
+
+    #filterRow button:first-of-type,
+    #filterRow button:last-of-type {
+        margin-left: 0;
+    }
+
+    .aButton {
+        font-size: 0.875rem; /* 14px */
+        font-weight: 500;
+        line-height: 1.5;
+        color: #EC7D3F;
+        background: none;
+        border: none;
+        text-align: left;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .aButton:hover{
+        color: rgba(228, 98, 25, 1);
+    }
+
+    #filters {
+        border: none;
+        background: #EC7D3F1A;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: #EC7D3F;
+        font-size: 1rem; /* 16px */
+        width: 8.75rem; /* 140px */
+        height: 1.3125rem; /* 21px */
+        padding: 0.84375rem; /* 13.5px */
+        border-radius: 0.75rem; /* 12px */
+        height: 100%;
+        cursor: pointer;
+    }
+    #filters:hover{
+        background: rgba(236, 125, 63, 0.2);
+    }
+
+    /* ==============================================
+    ЧЕКБОКСЫ И РАДИОКНОПКИ
+    ============================================== */
+
+    /* Кастомные чекбоксы */
+    .custom-checkbox {
+        position: relative;
+        display: inline-block;
+        margin-top: 0.125rem; /* 2px */
+        margin-left: 0.4375rem; /* 7px */
+        cursor: pointer;
+    }
+
+    .custom-checkbox input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .custom-checkbox .checkmark {
+        position: relative;
+        display: inline-block;
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        background: #ffffff;
+        border: 2px solid #ddd;
+        border-radius: 0.375rem; /* 6px */
+        transition: all 0.5s ease-in-out;
+    }
+
+    .custom-checkbox:hover .checkmark {
+        border-color: #EC7D3F;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+        background: #EC7D3F;
+    }
+
+    .custom-checkbox .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 0.375rem; /* 6px */
+        top: 0.125rem; /* 2px */
+        width: 0.375rem; /* 6px */
+        height: 0.625rem; /* 10px */
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Кастомные радиокнопки */
+    .custom-radio {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem; /* 8px */
+        margin-top: 1.125rem; /* 2px */
+        margin-left: 0.4375rem; /* 7px */;
+        cursor: pointer;
+        font-size: 1.125rem; /* 18px */
+        color: rgba(129, 129, 129, 1);
+
+    }
+
+    .custom-radio input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .custom-radio .radiomark {
+        position: relative;
+        display: inline-block;
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        background: #ffffff;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .custom-radio:hover .radiomark {
+        border-color: #EC7D3F;
+    }
+
+    .custom-radio input[type="radio"]:checked ~ .radiomark {
+        background: #ffffff;
+        border: 2px solid #EC7D3F;
+    }
+
+    .custom-radio .radiomark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 50%;
+        top: 50%;
+        width: 0.75rem; /* 12px */
+        height: 0.75rem; /* 12px */
+        background: #EC7D3F;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .custom-radio input[type="radio"]:checked ~ .radiomark:after {
+        display: block;
+    }
+
+    .checkboxRow {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 0.75rem; /* 12px */
+        max-width: 25rem; /* 400px */
+        font-family: Arial, sans-serif;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.4;
+        margin-top: 1.25rem; /* 20px */
+    }
+
+    .checkboxRow input[type="checkbox"] {
+        margin: 0;
+        margin-top: 0.125rem; /* 2px */
+        flex-shrink: 0;
+        width: 1rem; /* 16px */
+        height: 1rem; /* 16px */
+        cursor: pointer;
+        margin-left: 0.4375rem; /* 7px */
+    }
+
+    .checkboxRow label {
+        cursor: pointer;
+        color: #333;
+        text-align: left;
+    }
+
+    .checkboxRow label span {
+        color: #ff6b35;
+        font-weight: normal;
+    }
+
+    /* Лейблы для радио и чекбоксов */
+    input[type="radio"] + label {
+        font-weight: 400;
+        font-size: 1.125rem; /* 18px */
+        margin-right: 1.875rem; /* 30px */
+    }
+
+    input[type="checkbox"] + label {
+        font-weight: 400;
+        font-size: 1.125rem; /* 18px */
+        margin-right: 1.875rem; /* 30px */
+    }
+
+    /* ==============================================
+    ТАБЛИЦЫ
+    ============================================== */
+
+    /* Таблицы ввода */
+    .inputTable {
+        width: 100%;
+        border-spacing: 0;
+        height: 13.5rem; /* 216px */
+        border-radius: 1rem; /* 16px */
+        border: 1px solid #D2D2D2;
+        position: relative;
+        margin-top: 1.25rem; /* 20px */
+    }
+
+    .showTable tr{
+        background: rgba(249, 249, 247, 1);
+    }
+
+    .showTable{
+        border-width: 0.5px !important;
+    }
+
+    .showTable td{
+        border-width: 0.5px !important;
+    }
+
+    .inputTable tr {
+        margin: 0;
+        padding: 0;
+        border-spacing: 0;
+    }
+
+    .inputTable td {
+        border: 1px solid #D2D2D2;
+        padding: 0.625rem; /* 10px */
+    }
+
+    .inputTable tr:first-child td {
+        border-top-left-radius: 1rem; /* 16px */
+        border-top-right-radius: 1rem; /* 16px */
+    }
+
+    .inputTable tr:last-child td:first-child {
+        border-bottom-left-radius: 1rem; /* 16px */
+    }
+
+    .inputTable tr:last-child td:last-child {
+        border-bottom-right-radius: 1rem; /* 16px */
+    }
+
+    .inputTable td input {
+        width: 100%;
+        padding: 0;
+        border: none;
+        height: 100%;
+        box-sizing: border-box;
+        font-size: 1rem; /* 18px */
+    }
+
+    .inputTable td input:focus {
+        outline: none;
+    }
+
+    /* Лейблы таблиц */
+    .tableLabel {
+        position: absolute;
+        z-index: 3;
+        top: -0.6875rem; /* -11px */
+        left: 0.5rem; /* 8px */
+        font-weight: 400;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.5;
+        background-color: rgba(255, 255, 255, 1);
+        padding: 0 0.3125rem; /* 0 5px */
+        transform: translateY(0);
+    }
+
+    /* Контейнеры таблиц */
+    .table-container {
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 1;
+        max-height: 13.5rem; /* 216px */
+        overflow: hidden;
+        margin-bottom: 0;
+        padding-bottom: 1.25rem; /* 20px */
+    }
+
+    .table-container[style*="opacity: 0"] {
+        margin-bottom: 0 !important;
+        transform: translateY(-1.25rem); /* -20px */
+    }
+
+    /* ==============================================
+    КАСТОМНЫЙ SELECT
+    ============================================== */
+
+    .custom-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .custom-select select {
+        display: none;
+    }
+
+    .select-selected {
+        width: 100%;
+        height: 4rem; /* 64px */
+        border-radius: 1rem; /* 16px */
+        border: 1.5px solid rgba(210, 210, 210, 1);
+        padding: 0 0.875rem; /* 0 14px */
+        font-weight: 400;
+        font-size: 1rem; /* 16px */
+        line-height: 4rem; /* 64px */
+        color: #333;
+        background-color: white;
+        cursor: pointer;
+        box-sizing: border-box;
+        position: relative;
+        transition: border-color 0.3s ease;
+        text-align: left;
+    }
+
+    .select-selected:after {
+        position: absolute;
+        content: "";
+        top: 1.25rem; /* 20px */
+        right: 1rem; /* 16px */
+        width: 0.625rem; /* 10px */
+        height: 0.625rem; /* 10px */
+        border: solid #818181;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .select-selected.select-arrow-active:after {
+        transform: rotate(-135deg);
+        top: 1.25rem; /* 20px */
+    }
+
+    .select-items {
+        position: absolute;
+        background-color: white;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        border-radius: 1rem; /* 16px */
+        border: 1.5px solid rgba(210, 210, 210, 1);
+        margin-top: 0.5rem; /* 8px */
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-height: 18.75rem; /* 300px */
+        overflow-y: auto;
+    }
+
+    .select-items div {
+        padding: 0.75rem 1rem; /* 12px 16px */
+        cursor: pointer;
+        font-size: 1rem; /* 16px */
+        color: #333;
+        transition: background-color 0.3s ease;
+        text-align: left;
+    }
+
+    .select-items div:hover {
+        background-color: rgba(236, 125, 63, 0.1);
+    }
+
+    .hide{
+        display: none;
+    }
+
+    .select-hide {
+        display: none;
+    }
+
+    .same-as-selected {
+        background-color: rgba(236, 125, 63, 0.1);
+        color: #EC7D3F;
+    }
+
+    .select-label {
+        position: absolute;
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 1);
+        top: -0.6875rem; /* -10.5px */
+        left: 0.5rem; /* 8px */
+        padding: 0 0.3125rem; /* 0 5px */
+        font-weight: 400;
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.5;
+    }
+
+    /* ==============================================
+    КАЛЕНДАРЬ
+    ============================================== */
+
+    .calendar-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1.25rem; /* 20px */
+        margin-top: 1.875rem; /* 30px */
+    }
+
+    .calendar-wrapper {
+        flex: 1;
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        font-weight: 500;
+        font-size: 1.125rem; /* 18px */
+        color: #181817;
+        margin-bottom: 0.9375rem; /* 15px */
+        padding: 0 0.625rem; /* 0 10px */
+    }
+
+    .calendar-header .month-year {
+        flex: 1;
+        text-align: center;
+    }
+
+    .nav-arrow {
+        cursor: pointer;
+        font-size: 1.25rem; /* 20px */
+        color: #494949;
+        user-select: none;
+        padding: 0.3125rem; /* 5px */
+        border-radius: 50%;
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-arrow:hover {
+        background-color: rgba(236, 125, 63, 0.1);
+    }
+
+    .calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .calendar th {
+        font-weight: 400;
+        font-size: 1rem; /* 16px */
+        color: #818181;
+        padding: 0.625rem 0; /* 10px 0 */
+        text-align: center;
+    }
+
+    .calendar td {
+        font-weight: 200;
+        font-size: 1rem; /* 16px */
+        color: #9E9E9E;
+        line-height: 1.5;
+        text-align: center;
+        position: relative;
+        cursor: pointer;
+        height: 1.875rem; /* 30px */
+    }
+
+    .calendar tr {
+        margin-bottom: 0.625rem; /* 10px */
+        margin-top: 0.625rem; /* 10px */
+    }
+
+    .start-date-bg {
+        background: linear-gradient(to left, rgba(236, 125, 63, 0.1) 0 50%, #ffffff 50%);
+    }
+
+    .end-date-bg {
+        background: linear-gradient(to right, rgba(236, 125, 63, 0.1) 0 50%, #ffffff 50%);
+    }
+
+    .calendar td .day-number {
+        display: inline-block;
+        width: 1.875rem; /* 30px */
+        line-height: 1.875rem; /* 30px */
+        position: relative;
+        z-index: 1;
+    }
+
+    .calendar td.in-range {
+        background-color: rgba(236, 125, 63, 0.1);
+    }
+
+    .calendar td.start-date::after,
+    .calendar td.end-date::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 1.875rem; /* 30px */
+        height: 1.875rem; /* 30px */
+        background-color: #EC7D3F;
+        border-radius: 50%;
+        z-index: 0;
+    }
+
+    .calendar td.start-date .day-number,
+    .calendar td.end-date .day-number,
+    .calendar td.start-date,
+    .calendar td.end-date {
+        color: white;
+    }
+
+    .calendar td:empty {
+        cursor: default;
+    }
+
+    .calendar td {
+        position: relative;
+        z-index: 1;
+    }
+
+    .calendar td::after {
+        z-index: -1;
+    }
+
+    /* ==============================================
+    АНИМАЦИИ И ПЕРЕХОДЫ
+    ============================================== */
+
+    /* Анимируемые блоки */
+    .toggle-block {
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 15000px;
+        opacity: 1;
+        transform: translateY(0);
+        margin-bottom: 0;
+    }
+
+    .toggle-block.hidden {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-1.25rem); /* -20px */
+        margin-bottom: 0;
+    }
+
+    .toggle-block .formRow {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toggle-block.hidden .formRow {
+        transform: translateY(-0.9375rem); /* -15px */
+        opacity: 0;
+    }
+
+    .toggle-block .formInput {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toggle-block.hidden .formInput {
+        transform: translateY(-0.625rem); /* -10px */
+    }
+
+    /* Иконка галочки */
+    .checkmark-icon {
+        position: absolute;
+        right: 1.25rem; /* 20px */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.5rem; /* 24px */
+        height: 1.5rem; /* 24px */
+        display: none;
+        z-index: 3;
+    }
+
+    .checkmark-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: #EC7D3F;
+    }
+
+    /* ==============================================
+    УТИЛИТАРНЫЕ КЛАССЫ
+    ============================================== */
+
+    /* Размеры */
+    .w-49 {
+        width: 49% !important;
+    }
+
+    .w-60 {
+        width: 60%!important;
+    }
+
+    .w-80{
+        width: 80% !important;
+    }
+
+    /* Направление flex */
+    .flex-direction-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Позиционирование */
+    .position-absolute {
+        position: absolute !important;
+    }
+
+    /* Специальные отступы */
+    .calendar-spacing {
+        margin-top: 625rem; /* 10000px */
+        margin-bottom: 625rem; /* 10000px */
+    }
+
+    /* Ссылка для смены номера */
+    #changeNumber {
+        position: absolute;
+        bottom: 4.6875rem; /* 75px */
+        left: 50%;
+        transform: translateX(-50%);
+        text-decoration: none;
+        color: #818181;
+    }
+    .candidatesTable {
+        margin-top: 1.875rem;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border-radius: 1rem;
+    }
+
+    .candidatesTable th {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: #818181;
+        text-align: left;
+        padding: 0.625rem;
+    }
+    /* Добавить специфичные ширины для столбцов */
+    .candidatesTable th:nth-child(1) {
+        width: 50px;
+    }
+
+    .candidatesTable th:nth-child(2) {
+        width: 25%;
+    }
+
+    .candidatesTable th:nth-child(3) {
+        width: 20%;
+    }
+
+    .candidatesTable th:nth-child(4) {
+        width: 20%;
+    }
+
+    .candidatesTable th:nth-child(5) {
+        width: 15%;
+    }
+
+    .candidatesTable th:nth-child(6) {
+        width: 100px;
+    }
+
+    .candidatesTable tr {
+        border-bottom: 1px solid rgba(228, 228, 228, 1);
+    }
+
+    .candidatesTable td {
+        font-weight: 400;
+        line-height: 1.4;
+        color: #494949;
+        padding: 0.625rem;
+    }
+
+    .candidatesTable tbody {
+        background: rgba(255, 255, 255, 1);
+    }
+
+
+    .candidatesTable tbody tr:first-child td:first-child {
+        border-top-left-radius: 1rem;
+    }
+
+    .candidatesTable tbody tr:first-child td:last-child {
+        border-top-right-radius: 1rem;
+    }
+
+
+    .candidatesTable tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 1rem;
+    }
+
+    .candidatesTable tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 1rem;
+    }
+
+
+    .candidatesTable tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .candidatesTable button {
+        display: inline-flex;
+        width: 2.5rem;
+        height: 2.5rem;
+        justify-content: center;
+        align-items: center;
+        background-color: none;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .candidatesTable button img {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    .downloadBtn{
+        background: rgba(236, 125, 63, 0.2);
+        color: rgba(236, 125, 63, 0.5);
+    }
+
+    .downloadBtn:hover svg{
+        color: rgba(236, 125, 63, 1)
+    }
+
+    #radactBtn {
+        margin-right: 10px;
+    }
+
+    #selectCity{
+        cursor: pointer;
+    }
+
+    .candidatesTable p {
+        width: fit-content;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 8px;
+        border-radius: 24px;
+    }
+
+    #new {
+        color: #C5801F;
+        background: #F8F8E8;
+    }
+    #checked{
+        color: rgba(15, 141, 19, 1);
+        background: rgba(228, 248, 228, 1);
+    }
+    #needRevision{
+        color: rgba(44, 129, 150, 1);
+        background: rgba(236, 246, 248, 1);
+        width: 160px;
+    }
+    #rejected{
+        color: rgba(240, 76, 26, 1);
+        background: rgba(255, 239, 233, 1);
+    }
+    .left-side {
+        display: inline-flex;
+        max-width: 600px;
+        gap: 1.5rem;
+        justify-content: space-between;
+    }
+
+    .navBtn {
+        width: 149px;
+        height: 42px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .navBtn:hover{
+        background: rgba(255, 255, 255, 1);
+    }
+
+    .inactive {
+        color: rgba(158, 158, 158, 1);
+        cursor: default;
+    }
+
+    .pagination {
+        display: flex;
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    .paginationBtn {
+        height: 42px;
+        width: 42px;
+        margin: 0;
+        padding: 0;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 0;
+    }
+
+
+    .paginationBtn:first-child {
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+    }
+
+
+    .paginationBtn:last-child {
+        border-top-right-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+
+
+    .paginationBtn:not(:first-child) {
+        border-left: none;
+    }
+    .paginationBtn:hover{
+        border: 1px solid white;
+        background: rgba(244, 244, 241, 1);
+    }
+    .paginationBtn.active {
+        background: rgba(236, 125, 63, 1);
+        color: white !important;
+        border-color: rgba(236, 125, 63, 1);
+    }
+    /* Контейнер для группы кнопок скачивания */
+    .download-button-group {
+        position: relative;
+        display: flex;
+        border-radius: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Основная кнопка скачивания */
+    .download-btn.primary {
+        background: rgba(236, 125, 63, 1);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 25px 0 0 25px;
+        transition: background-color 0.2s ease;
+        min-width: 100px;
+        text-align: center;
+    }
+
+    .download-btn.primary:hover{
+        background: rgba(228, 98, 25, 1);
+    }
+
+
+    /* Кнопка dropdown с форматом */
+    .download-btn.dropdown-toggle {
+        background: rgba(236, 125, 63, 1);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 0 25px 25px 0;
+        border-left: 2px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s ease;
+        position: relative;
+    }
+
+    .download-btn.dropdown-toggle:hover{
+        background: rgba(228, 98, 25, 1);
+    }
+
+    #city{
+        margin: 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.5;
+        color: rgba(73, 73, 73, 1);
+        display: flex;
+        align-items: center;
+        margin-left: 3rem;
+    }
+    #city span{
+        color: rgba(236, 125, 63, 1);
+        margin-left: 0.5rem;
+        width: max-content;
+    }
+
+    #notifBtn img{
+        width: 28px;
+        height: 28px;
+    }
+    #notifBtn:hover{
+        background: rgba(236, 125, 63, 0.2);
+    }
+    #notifBtn{
+        border: none;
+        padding: 18px;
+        background: rgba(236, 125, 63, 0.1);
+        border-radius: 16px;
+    }
+
+    /*#notifBtn:hover img{*/
+    /*    content: url("/img/ ringHover.png");*/
+    /*}*/
+    #exitBtn img{
+        width: 16px;
+        height: 16px;
+    }
+
+    .redactBtn{
+        margin-right: 10px;
+    }
+
+    #exitBtn{
+        font-weight: 500;
+        font-size: 16px;
+        border-radius: 16px;
+        border: none;
+        width: 180px;
+        transition: background 0.3s ease-in-out;
+    }
+
+    #exitBtn:hover{
+        background: none;
+    }
+    .active{
+        color: rgba(236, 125, 63, 1) !important;
+    }
+    .hidde{
+        display: none;
+    }
+    .file-formats-card {
+        background-color: white;
+        border-radius: 16px;
+        overflow: hidden;
+        position: absolute;
+        width: 103px;
+        right: -20px;
+        bottom: -85px;
+    }
+    .format-item {
+        font-size: 14px;
+        display: flex;
+        font-weight: 400;
+        color: rgba(73, 73, 73, 1);
+        padding-left: 1rem;
+        align-items: center;
+        height: 40px;
+        border-bottom: 1px solid #e5e5e5;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+    .format-item:hover {
+        background:rgba(236, 125, 63, 0.05);
+    }
+
+    .format-item:last-child {
+        border-bottom: none;
+    }
+    .calendar-filter-panel {
+        position: fixed;
+        top: 0;
+        right: -900px;
+        width: 900px;
+        height: 100vh;
+        background: #fff;
+        box-shadow: -2px 0 16px rgba(0,0,0,0.08);
+        z-index: 1000;
+        transition: right 0.4s cubic-bezier(.4,0,.2,1);
+        overflow-y: auto;
+        padding-bottom: 0;
+    }
+    .calendar-filter-panel.open {
+        right: 0;
+     }
+    .calendar-filter-panel .close-btn {
+        position: absolute;
+        top: 24px;
+        right: 32px;
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        z-index: 10;
+    }
+    .roleItem{
+        color: rgba(236, 125, 63, 1);
+        background: rgba(236, 125, 63, 0.1);
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 1.5;
+        padding: 0.3rem 0.8rem;
+        margin-right: 1rem;
+        border-radius: 24px;
+    }
+    .roleItem:first-child, .roleItem:last-child{
+        margin: 0;
+    }
+    #line{
+        border-bottom: 1px solid rgba(210, 210, 210, 1);
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .fixedMenu {
+        position: fixed;
+        right: 0;
+        top: 49%;
+        transform: translateY(-50%);
+        z-index: 100;
+        right: calc((100vw - 50%) / 2 - 22rem);
+    }
+    .navArea {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(210, 210, 210, 0.3);
+        min-width: 200px;
+    }
+
+    .navArea a {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: rgba(24, 24, 23, 1);
+        text-decoration: none;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .navArea a:active{
+        color:rgba(236, 125, 63, 1);
+    }
+    .activeLink{
+        color: rgba(236, 125, 63, 1) !important;
+    }
+
+    .yellowSelect {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .select-trigger {
+        background: rgba(248, 248, 232, 1);
+        border: none;
+        border-radius: 20px;
+        padding: 12px 50px 12px 20px;
+        font-size: 18px;
+        color: rgba(197, 128, 31, 1);
+        cursor: pointer;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .select-trigger:hover {
+        background: rgba(236, 125, 63, 0.05);
+    }
+
+    .select-trigger::after {
+        content: '';
+        background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxNiAxMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMSAxIEw4IDggTDE1IDEiIHN0cm9rZT0iI2I4ODYwYiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGZpbGw9Im5vbmUiLz4KPC9zdmc+') no-repeat center;
+        width: 16px;
+        height: 10px;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.2s ease;
+    }
+
+    .yellowSelect.open .select-trigger::after {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .select-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(248, 248, 232, 1);
+        border-radius: 20px;
+        margin-top: 5px;
+        padding: 10px 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .yellowSelect.open .select-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .select-option {
+        padding: 12px 20px;
+        font-size: 16px;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+
+    .select-option:hover {
+        background: rgba(184, 134, 11, 0.1);
+    }
+
+    .select-option.selected {
+        font-weight: 500;
+    }
+    #commentArea{
+        resize: none;
+        height: 152px !important;
+        background: rgba(249, 249, 247, 1);
+        border-radius: 16px;
+        border: none;
+        padding: 1rem;
+
+    }
+    #commentArea:focus{
+        outline: none;
+    }
+    #addComment{
+        width: 100%;
+        background: rgba(236, 125, 63, 0.1);
+        color: rgba(236, 125, 63, 1);
+        font-weight: 500;
+        border: none;
+        width: 218px;
+        height: 40px;
+        border-radius: 40px;
+    }
+       .notification-header{
+        font-size: 14px !important;
+        font-weight: 400;
+        line-height: 1.5;
+        width: 100%;
+        text-align: left;
+        padding: 0rem 1rem;
+        color: rgba(24, 24, 23, 1)
+    }
+    .divider {
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 0;
+    }
+    .notifications-container{
+        position: absolute;
+        width: 196px;
+        height: auto;
+        background-color: rgba(255, 255, 255, 1);
+        border-radius: 16px;
+        z-index: 10;
+    }
+    .notification-item{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+    .notifications-list{
+        padding: 12px;
+    }
+    .notification-content{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .notification-text{
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(73, 73, 73, 1)
+    }
+    .notification-time{
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(158, 158, 158, 1);
+    }
+     .notification-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #ff6b35;
+        border-radius: 50%;
+        margin-right: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Стили дропдауна города */
+    .city-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 100px;
+        right: 0;
+        background: rgba(255, 255, 255, 1);
+        color: rgba(73, 73, 73, 1);
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        z-index: 1000;
+        max-height: 240px;
+        overflow-y: auto;
+        margin-top: 4px;
+        min-width: 180px;
+    }
+
+    .city-option {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(73, 73, 73, 1);
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .city-option:last-child {
+        border-bottom: none;
+    }
+
+    .city-option.selected {
+        background-color: rgba(236, 125, 63, 0.05);
+        font-weight: 400;
+    }
+
+    #selectCity {
+        margin-left: 4px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+    }
+
+    #selectCity:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    #city svg {
+        margin-left: 6px;
+        vertical-align: middle;
+    }
+
+    #city {
+        user-select: none;
+        position: relative;
+    }
+
+    .city-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    .city-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+
+
+
+    .comment-tooltip {
+        position: absolute;
+        bottom: -50px;
+        right: -8px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: max-content;
+        word-wrap: break-word;
+        z-index: 1000;
+        font-size: 14px;
+        color: #333;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+    }
+
+    .comment-tooltip.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .comment-tooltip::after {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        right: 20px;
+        border: 8px solid transparent;
+        border-bottom-color: white;
+    }
+
+    .comment-tooltip::before {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        right: 19px;
+        border: 9px solid transparent;
+        border-bottom-color: #ddd;
+        z-index: -1;
+    }
+
+    .redactBtn {
+        position: relative;
+    }
+
+@media screen and (max-width: 1023px) {
+    html {
+        font-size: 14px;
+    }
+
+    section article h1 {
+        font-size: 1.375rem;
+    }
+
+    section article p {
+        font-size: 1rem;
+    }
+
+    .center-card h1 {
+        font-size: 1.125rem;
+    }
+
+    .center-card p {
+        font-size: 1rem;
+    }
+
+    form .formRow h1 {
+        font-size: 1.375rem;
+    }
+
+    form .formRow h2 {
+        font-size: 1.375rem;
+    }
+
+    form .formRow h3 {
+        font-size: 1.125rem;
+    }
+
+    form .formRow h4 {
+        font-size: 1rem;
+    }
+
+    .input-container .formInput {
+        font-size: 0.875rem;
+    }
+
+    .input-container .formLabel:has(+ .formInput[readonly]) {
+        font-size: 0.875rem;
+    }
+
+    .input-container .formLabel {
+        font-size: 0.75rem;
+    }
+
+    form .formBtn {
+        font-size: 0.875rem;
+    }
+
+    form .bigFormButton {
+        font-size: 0.875rem;
+    }
+
+    .filterButton {
+        font-size: 1rem;
+    }
+
+    button.aButton {
+        font-size: 0.75rem;
+    }
+
+    button#filters {
+        font-size: 0.875rem;
+    }
+
+    .custom-radio {
+        font-size: 1rem;
+    }
+
+    .custom-radio input[type="radio"] + label {
+        font-size: 1rem;
+    }
+
+    .custom-checkbox input[type="checkbox"] + label {
+        font-size: 1rem;
+    }
+
+    .checkboxRow {
+        margin-top: 2rem;
+    }
+
+    .inputTable td input {
+        font-size: 0.875rem;
+    }
+
+    .table-container .tableLabel {
+        font-size: 0.75rem;
+    }
+
+    .custom-select .select-selected {
+        font-size: 0.875rem;
+    }
+
+    .custom-select .select-items div {
+        font-size: 0.875rem;
+    }
+
+    .custom-select .select-label {
+        font-size: 0.75rem;
+    }
+
+    .calendar-wrapper .calendar-header {
+        font-size: 1rem;
+    }
+
+    .calendar-wrapper .nav-arrow {
+        font-size: 1.125rem;
+    }
+
+    .calendar-wrapper .calendar th {
+        font-size: 0.875rem;
+    }
+
+    .calendar-wrapper .calendar td {
+        font-size: 0.875rem;
+    }
+
+    table.candidatesTable th {
+        font-size: 0.75rem;
+    }
+
+    table.candidatesTable td {
+        font-size: 0.875rem;
+    }
+
+    button.navBtn {
+        font-size: 0.875rem;
+    }
+
+    .pagination .paginationBtn {
+        font-size: 0.875rem;
+    }
+
+    .download-button-group .download-btn.primary {
+        font-size: 0.875rem;
+    }
+
+    .download-button-group .download-btn.dropdown-toggle {
+        font-size: 0.875rem;
+    }
+
+    header #city {
+        font-size: 0.875rem;
+    }
+
+    header button#exitBtn {
+        font-size: 0.875rem;
+    }
+
+    .file-formats-card .format-item {
+        font-size: 0.75rem;
+    }
+
+    .roleItem {
+        font-size: 1rem;
+    }
+
+    .fixedMenu .navArea a {
+        font-size: 0.75rem;
+    }
+
+    .yellowSelect .select-trigger {
+        font-size: 1rem;
+    }
+
+    .yellowSelect .select-option {
+        font-size: 0.875rem;
+    }
+
+    .notifications-container .notification-header {
+        font-size: 0.75rem;
+    }
+
+    .notifications-container .notification-text {
+        font-size: 0.625rem;
+    }
+
+    .notifications-container .notification-time {
+        font-size: 0.625rem;
+    }
+
+    .city-dropdown .city-option {
+        font-size: 0.75rem;
+    }
+
+    .redactBtn .comment-tooltip {
+        font-size: 0.75rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    section {
+        margin: 0px 20px; /* Уменьшенные отступы для мобильных */
+        max-width: 100%;
+    }
+    
+    .center-card {
+        width: 100%;
+        padding: 1rem 1.5rem 0; /* Уменьшенные внутренние отступы */
+        border-radius: 1rem; /* Уменьшенный радиус */
+    }
+    
+    .center-card.big {
+        width: 100%;
+        padding: 1rem 1.5rem 1rem;
+    }
+    
+    /* Адаптивность для полей формы */
+    .formRow.justify-space-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .w-49 {
+        width: 100% !important;
+    }
+    
+    /* Адаптивность для кнопок */
+    .formBtn {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    html {
+        font-size: 14px;
+    }
+
+    section article h1 {
+        font-size: 1.25rem;
+    }
+
+    section article p {
+        font-size: 0.875rem;
+    }
+
+    .center-card h1 {
+        font-size: 1rem;
+    }
+
+    .center-card p {
+        font-size: 0.875rem;
+    }
+
+    form .formRow h1 {
+        font-size: 1.25rem;
+    }
+
+    form .formRow h2 {
+        font-size: 1.25rem;
+    }
+
+    form .formRow h3 {
+        font-size: 1rem;
+    }
+
+    form .formRow h4 {
+        font-size: 0.875rem;
+    }
+
+    .input-container .formInput {
+        font-size: 0.75rem;
+    }
+
+    .input-container .formLabel:has(+ .formInput[readonly]) {
+        font-size: 0.75rem;
+    }
+
+    .input-container .formLabel {
+        font-size: 0.625rem;
+    }
+
+    form .formBtn {
+        font-size: 0.75rem;
+    }
+
+    form .bigFormButton {
+        font-size: 0.75rem;
+    }
+
+    .filterButton {
+        font-size: 0.875rem;
+    }
+
+    button.aButton {
+        font-size: 0.625rem;
+    }
+
+    button#filters {
+        font-size: 0.75rem;
+    }
+
+    .custom-radio {
+        font-size: 0.875rem;
+    }
+
+    .custom-radio input[type="radio"] + label {
+        font-size: 0.875rem;
+    }
+
+    .custom-checkbox input[type="checkbox"] + label {
+        font-size: 0.875rem;
+    }
+
+    .checkboxRow {
+        margin-top: 2rem;
+    }
+
+    .inputTable td input {
+        font-size: 0.75rem;
+    }
+
+    .table-container .tableLabel {
+        font-size: 0.625rem;
+    }
+
+    .custom-select .select-selected {
+        font-size: 0.75rem;
+    }
+
+    .custom-select .select-items div {
+        font-size: 0.75rem;
+    }
+
+    .custom-select .select-label {
+        font-size: 0.625rem;
+    }
+
+    .calendar-wrapper .calendar-header {
+        font-size: 0.875rem;
+    }
+
+    .calendar-wrapper .nav-arrow {
+        font-size: 1rem;
+    }
+
+    .calendar-wrapper .calendar th {
+        font-size: 0.75rem;
+    }
+
+    .calendar-wrapper .calendar td {
+        font-size: 0.75rem;
+    }
+
+    table.candidatesTable th {
+        font-size: 0.625rem;
+    }
+
+    table.candidatesTable td {
+        font-size: 0.75rem;
+    }
+
+    button.navBtn {
+        font-size: 0.75rem;
+    }
+
+    .pagination .paginationBtn {
+        font-size: 0.75rem;
+    }
+
+    .download-button-group .download-btn.primary {
+        font-size: 0.75rem;
+    }
+
+    .download-button-group .download-btn.dropdown-toggle {
+        font-size: 0.75rem;
+    }
+
+    header #city {
+        font-size: 0.75rem;
+    }
+
+    header button#exitBtn {
+        font-size: 0.75rem;
+    }
+
+    .file-formats-card .format-item {
+        font-size: 0.625rem;
+    }
+
+    .roleItem {
+        font-size: 0.875rem;
+    }
+
+    .fixedMenu .navArea a {
+        font-size: 0.625rem;
+    }
+
+    .yellowSelect .select-trigger {
+        font-size: 0.875rem;
+    }
+
+    .yellowSelect .select-option {
+        font-size: 0.75rem;
+    }
+
+    .notifications-container .notification-header {
+        font-size: 0.625rem;
+    }
+
+    .notifications-container .notification-text {
+        font-size: 0.5rem;
+    }
+
+    .notifications-container .notification-time {
+        font-size: 0.5rem;
+    }
+
+    .city-dropdown .city-option {
+        font-size: 0.625rem;
+    }
+
+    .redactBtn .comment-tooltip {
+        font-size: 0.625rem;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    /* Изменяем структуру таблицы на мобильных */
+    .inputTable {
+        display: block;
+        width: 100%;
+        border: 1.5px solid #D2D2D2; /* Сохраняем исходную ширину границы */
+        border-radius: 1rem;
+        height: auto;
+        min-height: auto;
+    }
+    #workTable{
+        height: max-content !important;
+    }
+    .inputTable tbody {
+        display: block;
+        width: 100%;
+    }
+    
+    .inputTable tr {
+        display: block;
+        width: 100%;
+        border: none;
+        margin-bottom: 0;
+    }
+    
+    .inputTable td {
+        display: block;
+        width: 100% !important;
+        border: none;
+        border-bottom: 1.5px solid #D2D2D2; 
+        padding: 1rem; 
+        box-sizing: border-box;
+    }
+    
+    .inputTable tr:last-child td:last-child {
+        border-bottom: none;
+        padding-bottom: 1rem; 
+    }
+    
+
+    .inputTable td {
+        border-radius: 0;
+    }
+    
+
+    .inputTable td input {
+        width: 100%;
+        padding: 0.75rem 0; 
+        border: none;
+        background: transparent;
+        box-sizing: border-box;
+        font-size: 0.9375rem;
+        min-height: 2.5rem;
+        line-height: 1.5;
+    }
+    
+    .bigFormButton{
+        font-size: 0.7rem;
+    }
+
+    .inputTable td input:focus {
+        outline: none;
+    }
+    
+
+    .table-container {
+        max-height: none !important;
+        height: auto;
+        padding-bottom: 0; 
+        margin-bottom: 1.25rem; 
+    }
+    .inputTable tr:last-child td:first-child{
+        border-bottom-left-radius: 0;
+    }
+    
+
+    .tableLabel {
+        position: absolute;
+        z-index: 3;
+        top: -0.6875rem;
+        left: 0.5rem;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.5;
+        background-color: rgba(255, 255, 255, 1);
+        padding: 0 0.3125rem;
+    }
+}

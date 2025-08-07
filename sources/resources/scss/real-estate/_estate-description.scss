@@ -1,0 +1,111 @@
+.about-estate {
+    display: grid;
+
+    &.base-container {
+        gap: 32px;
+    }
+
+    &.info-title {
+        font-size: 14px;
+
+        @include media-breakpoint-up(lg) {
+            font-size: 16px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 20px;
+        }
+    }
+
+    &.info-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        font-size: 20px;
+
+        @include media-breakpoint-up(md) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        @include media-breakpoint-up(lg) {
+            font-size: 28px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 36px;
+            gap: 40px;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            font-size: 40px;
+        }
+    }
+
+    &.info-single-grid {
+        display: grid;
+        gap: 16px;
+
+        @include media-breakpoint-up(sm) {
+            width: 165px;
+        }
+
+        @include media-breakpoint-up(md) {
+            width: 185px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            width: 200px;
+
+            &:nth-child(n+3) {
+                width: 100%;
+            }
+        }
+
+        @include media-breakpoint-up(xl) {
+            width: 300px;
+        }
+    }
+
+    &.description-grid {
+        display: grid;
+        gap: 24px;
+        font-size: 14px;
+        line-height: 24px;
+        white-space: pre-line;
+        font-weight: 400;
+        
+        @include media-breakpoint-up(md) {
+            gap: 40px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            gap: 64px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            gap: 80px;
+        }
+
+        &.description-text {
+            display: grid;
+            gap: 16px;
+
+            @include media-breakpoint-up(md) {
+                gap: 24px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                gap: 40px;
+            }
+        }
+
+        &.underlined {
+            color: $orange1;
+            cursor: pointer;
+            font-weight: 500;
+            text-underline-offset: 4px;
+            text-decoration: underline;
+            width: fit-content;
+        }
+    }
+}

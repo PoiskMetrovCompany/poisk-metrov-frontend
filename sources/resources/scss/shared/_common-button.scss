@@ -1,0 +1,177 @@
+.common-button {
+    background-color: $orange1;
+    color: $white;
+    border-radius: 40px;
+    width: fit-content;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    gap: 8px;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: none;
+    padding: 16px 16px;
+    font-size: 14px;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+
+    @include media-breakpoint-up(lg) {
+        padding: 16px 48px;
+    }
+
+    &:hover {
+        background-color: $orange2;
+
+        &>.icon {
+            background-color: $superwhite;
+        }
+    }
+
+    &>.icon {
+        background-color: $white;
+        transition: background-color 0.2s;
+    }
+
+    &.white {
+        background-color: $white;
+        border-style: solid;
+        border-color: $grey2;
+        border-width: 2px;
+        color: $black1;
+        box-sizing: border-box;
+
+        &:hover {
+            background-color: $superwhite;
+
+            .icon {
+                background-color: $orange2;
+            }
+        }
+
+        .icon {
+            background-color: $orange1;
+        }
+    }
+
+    &.superwhite {
+        background-color: $superwhite;
+        font-weight: 400;
+        border: none;
+        color: $grey5;
+
+        .icon {
+            background-color: $orange1;
+        }
+
+        &:hover {
+            .icon {
+                background-color: $orange2;
+            }
+        }
+    }
+
+    &.transparent {
+        background-color: $white;
+        opacity: 0.8;
+        color: $black1;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+
+    &.disabled {
+        background-color: $grey2;
+        color: $grey4;
+        cursor: not-allowed;
+    }
+
+    &.big {
+        justify-self: center;
+        align-self: center;
+        font-size: 12px;
+        line-height: 22px;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 16px;
+            line-height: 30px;
+        }
+
+        @include media-breakpoint-up(md) {
+            padding: 16px 48px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            font-size: 12px;
+            line-height: 22px;
+            padding: 16px 24px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 16px;
+            line-height: 30px;
+            width: 90%;
+            border-radius: 56px;
+            justify-self: start;
+            justify-content: center;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            font-size: 20px;
+        }
+    }
+
+    &.centered {
+        justify-self: center;
+        height: 48px;
+        width: 260px;
+
+        @include media-breakpoint-up(md) {
+            width: 360px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            height: 56px;
+            width: 412px;
+        }
+    }
+
+    &.bordered {
+        background-color: $grey0;
+        color: $black1;
+        border: 2px solid $grey0;
+        width: 100%;
+
+        &:hover {
+            color: $orange1;
+            border-color: $orange1;
+
+            &>.icon {
+                background-color: $orange2;
+            }
+        }
+
+        &>.icon {
+            background-color: $orange1;
+            transition: background-color 0.2s;
+        }
+    }
+
+    &.whatsapp {
+        background-color: $whatsapp;
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        &:hover {
+            background-color: $whatsapp-hover;
+        }
+    }
+}

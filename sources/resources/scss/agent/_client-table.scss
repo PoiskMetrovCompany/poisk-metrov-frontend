@@ -1,0 +1,128 @@
+client-table {
+    font-size: 12px;
+    line-height: 125%;
+
+    table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    tr[type=request-row] {
+        display: none;
+
+        th,
+        td {
+            color: $grey4;
+            font-weight: 400;
+            height: 30px;
+
+            a {
+                color: $orange1;
+                font-weight: 500;
+            }
+        }
+
+        &[shown=true] {
+            display: table-row;
+        }
+    }
+
+    td,
+    th {
+        padding-left: 8px;
+        padding-right: 8px;
+
+        &:nth-child(1),
+        &:nth-child(2),
+        &:nth-child(3) {
+            width: 220px;
+        }
+
+        // &:nth-child(4),
+        // &:nth-child(5),
+        // &:nth-child(6),
+        // &:nth-child(7) {
+        //     width: 130px;
+        // }
+    }
+
+    thead {
+        th {
+            color: $grey5;
+            font-weight: 400;
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1.5px solid $grey2;
+        }
+
+        td {
+            color: $black1;
+            font-weight: 400;
+            height: 40px;
+
+            custom-select {
+                background-color: $status-tab;
+                outline: none;
+                width: 240px;
+
+                .selected-counter,
+                .pseudo-checkbox {
+                    display: none;
+                }
+
+                .arrow-tailless {
+                    background-color: $grey5;
+                }
+
+                .placeholder {
+                    color: $status-tab-text;
+
+                    &.chosen {
+                        color: $black1;
+                    }
+                }
+
+                li[is=custom-option] {
+                    font-size: inherit;
+                }
+
+                @include media-breakpoint-down(xl) {
+                    width: 120px;
+
+                    ul[is=option-list] {
+                        padding-left: 4px;
+                        padding-right: 4px;
+                    }
+                }
+            }
+
+            &:last-of-type {
+                &>button {
+                    border-radius: 50%;
+                    background-color: $superwhite;
+                    height: 24px;
+                    aspect-ratio: 1/1;
+                    border: none;
+
+                    .icon {
+                        background-color: $orange1;
+                        height: 6px;
+                        width: 12px;
+                        margin: auto;
+                        transition: rotate 0.2s;
+                        rotate: 0deg;
+                    }
+
+                    &[shown=true] {
+                        .icon {
+                            rotate: 180deg;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

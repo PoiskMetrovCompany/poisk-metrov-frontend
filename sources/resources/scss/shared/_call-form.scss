@@ -1,0 +1,187 @@
+.call-form {
+    &.base-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: $grey0;
+        font-size: 24px;
+
+        @include media-breakpoint-down(md) {
+            font-size: 20px;
+        }
+
+        @include media-breakpoint-up(md) {
+            background-color: inherit;
+        }
+
+        @include media-breakpoint-up(xl) {
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+
+    &.title {
+        width: 75%;
+        text-align: center;
+
+        @include media-breakpoint-up(md) {
+            width: 100%;
+            text-align: left;
+        }
+    }
+
+    &.container {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+        padding: 40px 16px;
+        flex-direction: column;
+        width: 100%;
+
+        @include media-breakpoint-up(md) {
+            align-items: start;
+            border-radius: 32px;
+            padding: 32px 64px;
+            // background-color: $superwhite;
+            background-color: #F3E8D4;
+            background-image: url('../assets/waves.svg');
+            background-size: cover;
+        }
+
+        @include media-breakpoint-up(lg) {
+            padding: 40px 180px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            gap: 48px;
+            flex-direction: row;
+            padding: 80px 64px;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            gap: 36px;
+        }
+    }
+
+    &.input-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        &>.peinag.button {
+            font-size: 14px;
+            line-height: 14px;
+            width: 100%;
+            height: 48px;
+            font-weight: 400;
+            border-style: none;
+
+            @include media-breakpoint-up(md) {
+                width: fit-content;
+                padding: 0 40px;
+                height: 60px;
+                align-self: center;
+            }
+        }
+
+        .checkbox-borders {
+            border-color: $grey2;
+        }
+
+        &>.input-container {
+            margin-bottom: -8px;
+            margin-top: -8px;
+        }
+
+        .input-fieldset {
+            height: 64px;
+            background-color: $white;
+            border-color: $white;
+
+            legend {
+                opacity: 0;
+                width: 0;
+                max-width: 0;
+                margin: 0;
+                padding: 0;
+            }
+
+            &>.input-wrapper {
+                &>.icon {
+                    margin-top: 4px;
+                }
+
+                &>.error-icon {
+                    margin-top: 8px;
+                    align-self: flex-start;
+                }
+            }
+        }
+
+        .input-text {
+            padding-top: 6px;
+        }
+
+        .input-error {
+            position: absolute;
+            margin-top: 68px;
+        }
+
+        @include media-breakpoint-up(md) {
+            display: grid;
+            grid-template-columns: 8fr;
+
+            &>:nth-child(1) {
+                grid-column: span 6;
+            }
+
+            &>:nth-child(2) {
+                grid-column: span 2;
+            }
+
+            &>:nth-child(3) {
+                grid-column: span 8;
+            }
+        }
+    }
+
+    &.sent {
+        display: none;
+        gap: 24px;
+        justify-content: center;
+        padding: 40px 16px;
+
+        @include media-breakpoint-up(md) {
+            padding: 32px 64px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            padding: 40px 180px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            padding: 60px 64px;
+        }
+    }
+
+    &.success {
+        display: none;
+        font-size: 14px;
+        font-weight: 400;
+        color: $orange1;
+    }
+
+    &.failure {
+        display: none;
+        gap: 16px;
+        font-size: 16px;
+    }
+
+    &.error {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: $error;
+    }
+}

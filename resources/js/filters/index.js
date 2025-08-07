@@ -1,2 +1,0 @@
-import './simpleRange';
-import './transferClickToCheckbox';

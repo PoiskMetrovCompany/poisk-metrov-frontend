@@ -1,2 +1,0 @@
-import './tel';
-import './name';

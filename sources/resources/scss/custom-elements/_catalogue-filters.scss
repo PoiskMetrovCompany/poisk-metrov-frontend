@@ -1,0 +1,109 @@
+catalogue-filters {
+    display: grid;
+    gap: 24px;
+    background-color: $white;
+
+    *[type=filter-container],
+    *[type=additional-filters] {
+        display: grid;
+        grid-template-columns: repeat(16, 1fr);
+        gap: 16px;
+        background-color: inherit;
+    }
+
+    *[type=additional-filters] {
+
+        &[showall=false],
+        &[showall="0"] {
+            display: none;
+        }
+    }
+
+    *[type=bottom-buttons] {
+        display: flex;
+        gap: 16px;
+        background-color: inherit;
+
+        .common-button {
+            width: fit-content;
+        }
+    }
+
+    search-bar {
+        grid-column: span 8;
+        outline-color: $grey2;
+        border-radius: 16px;
+
+        input {
+            font-size: 14px;
+
+            &::placeholder {
+                color: $grey5;
+            }
+        }
+    }
+
+    .input-fieldset {
+        border-color: $grey2;
+        position: relative;
+        background-color: inherit;
+
+        &:first-of-type {
+            grid-column: span 4;
+        }
+
+        legend {
+            position: absolute;
+            top: 0%;
+            transform: translateY(-100%);
+            font-weight: 400;
+            background-color: inherit;
+            width: fit-content;
+            padding: 0px 12px;
+            font-size: inherit;
+            translate: 0 4px;
+        }
+
+        .input-container {
+            padding-left: 20px;
+            margin-bottom: 0 !important;
+        }
+    }
+
+    custom-select {
+        border-color: $grey2;
+        background-color: inherit;
+        border-radius: 16px;
+        font-size: 14px;
+        grid-column: span 4;
+        padding: 12px 24px;
+
+        &:first-of-type {
+            padding: 16px 24px;
+            grid-column: span 4;
+        }
+
+        .selected-counter {
+            background-color: $grey1;
+        }
+
+        .icon.arrow-tailless {
+            background-color: $grey5;
+            height: 9px;
+        }
+
+        ul[is=option-list] {
+            right: 16px;
+            left: 16px;
+        }
+
+        .divider {
+            display: block;
+
+            &:first-of-type {
+                display: none;
+            }
+        }
+    }
+
+}

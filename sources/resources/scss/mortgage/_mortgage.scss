@@ -1,0 +1,183 @@
+.mortgage {
+    color: $black1;
+
+    &.types {
+        box-sizing: border-box;
+
+        &.container {
+            display: grid;
+            gap: 42px;
+
+            @include media-breakpoint-up(md) {
+                gap: 48px;
+            }
+
+            @include media-breakpoint-up(lg) {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+
+            display: none;
+        }
+
+        &.card {
+            background-color: $superwhite;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border-radius: 40px;
+            gap: 8px;
+            align-content: start;
+
+            @include media-breakpoint-up(lg) {
+                height: 100%;
+                gap: 12px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                border-radius: 56px;
+                gap: 16px;
+            }
+
+            &.horizontal {
+                @include media-breakpoint-down(lg) {
+                    order: 1;
+
+                    &>.photo {
+                        order: -1;
+                    }
+                }
+
+                @include media-breakpoint-up(lg) {
+                    grid-column: span 2;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    height: fit-content;
+                }
+            }
+
+            &.top {
+                @include media-breakpoint-down(lg) {
+                    order: 1;
+                }
+            }
+
+            &.bottom {
+                @include media-breakpoint-down(lg) {
+                    order: 2;
+                }
+            }
+        }
+
+        &.photo {
+            width: inherit;
+            height: 100%;
+            flex: 0;
+        }
+
+        &.photo>img {
+            border-radius: 32px;
+            width: inherit;
+            height: inherit;
+            object-fit: cover;
+
+            @include media-breakpoint-up(xl) {
+                border-radius: 44px;
+            }
+        }
+
+        &.content {
+            flex: 1;
+            display: flex;
+            gap: 24px;
+            padding: 32px;
+            flex-direction: column;
+            justify-content: space-between;
+
+            @include media-breakpoint-up(lg) {
+                padding: 16px 16px 36px 32px;
+                gap: 32px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                padding: 32px;
+            }
+
+            @include media-breakpoint-up(xxl) {
+                padding: 24px 40px 52px 40px;
+            }
+        }
+
+        &.title {
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: 500;
+
+            @include media-breakpoint-up(md) {
+                font-size: 24px;
+                line-height: 32px;
+            }
+        }
+
+        &.description {
+            font-size: 14px;
+            line-height: 22px;
+            color: $grey4;
+            font-weight: 400;
+        }
+
+        &.header {
+            display: grid;
+            gap: 16px;
+        }
+
+        &.info {
+            &.container {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                width: 100%;
+                padding: 0px;
+            }
+
+            &.unit {
+                display: grid;
+                gap: 4px;
+                height: fit-content;
+            }
+
+            &.title {
+                font-size: 14px;
+                line-height: 22px;
+                color: $grey3;
+                font-weight: 400;
+            }
+
+            &.value {
+                font-size: 20px;
+                line-height: 28px;
+                font-weight: 500;
+
+                @include media-breakpoint-up(md) {
+                    font-size: 24px;
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+}
+
+.mortage-tabs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-self: end;
+
+    &>.tab {
+        border: 1px solid $grey2;
+        background-color: $superwhite;
+
+        &.enabled {
+            border: 1px solid $grey5;
+        }
+    }
+}

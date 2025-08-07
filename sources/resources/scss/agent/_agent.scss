@@ -1,0 +1,43 @@
+.agent {
+    &.dropdown-with-title {
+        display: grid;
+        gap: 8px;
+
+        custom-select {
+            .selected-counter {
+                display: none;
+            }
+        }
+    }
+
+    &.bottom-buttons {
+        display: flex;
+        justify-content: end;
+        gap: 32px;
+
+        button,
+        input {
+            border-radius: 8px;
+            padding: 8px 24px;
+            line-height: 125%;
+            font-weight: 400;
+            gap: 16px;
+        }
+
+        button {
+            background-color: $white;
+            color: $black1;
+
+            .icon {
+                background-color: $orange1;
+                width: 12px;
+                height: 12px;
+            }
+        }
+    }
+
+    &.form {
+        display: grid;
+        gap: 16px;
+    }
+}

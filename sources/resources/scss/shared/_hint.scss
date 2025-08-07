@@ -1,0 +1,21 @@
+.hint {
+    &.base-container {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        transform: translateY(-8px) translateX(-32px);
+    }
+
+    &.container {
+        display: grid;
+        position: fixed;
+        background-color: $orange1;
+        color: $superwhite;
+        white-space: nowrap;
+        border-radius: 16px;
+        padding: 12px 24px;
+        font-size: 14px;
+        font-weight: 400;
+        transform: translateX(-50%) translateY(-100%);
+    }
+}

@@ -1,0 +1,110 @@
+.apartment-suggestions {
+    &.base-container {
+        $gapXXL: 32px;
+        $gapLG: 24px;
+        $gapMD: 16px;
+        $columnCountXXL: 4;
+        $columnCountLG: 3;
+        $columnCountMD: 2;
+        display: flex;
+        gap: $gapXXL;
+        overflow: auto;
+        padding-bottom: 16px;
+        padding-left: 16px;
+        margin-left: -16px;
+        padding-top: 32px;
+        margin-top: -32px;
+
+        @include media-breakpoint-down(xl) {
+            gap: $gapLG;
+        }
+
+        @include media-breakpoint-down(lg) {
+            gap: $gapMD;
+        }
+
+        .category-suggestion-card,
+        .plan-card.container {
+            $lessColumns: calc($columnCountXXL - 1);
+            $width: calc(calc(100% / $columnCountXXL) - calc(calc($gapXXL*$lessColumns)/$columnCountXXL));
+            width: $width;
+            min-width: $width;
+            max-width: $width;
+
+            @include media-breakpoint-down(xl) {
+                $lessColumns: calc($columnCountLG - 1);
+                $width: calc(calc(100% / $columnCountLG) - calc(calc($gapLG*$lessColumns)/$columnCountLG));
+                width: $width;
+                min-width: $width;
+                max-width: $width;
+            }
+
+            @include media-breakpoint-down(lg) {
+                $lessColumns: calc($columnCountMD - 1);
+                $width: calc(calc(100% / $columnCountMD) - calc(calc($gapMD*$lessColumns)/$columnCountMD));
+                width: $width;
+                min-width: $width;
+                max-width: $width;
+            }
+
+            @include media-breakpoint-down(md) {
+                $width: 100%;
+                width: $width;
+                min-width: $width;
+                max-width: $width;
+            }
+        }
+
+        .plan-card {
+            &.img-container {
+                height: 180px;
+            }
+
+            &.small-card {
+                border-radius: 32px;
+                padding: 24px;
+                gap: 8px;
+
+                .common-button {
+                    display: none;
+                }
+            }
+
+            &.card-button {
+                width: 32px;
+                height: 32px;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+    }
+
+    &.category-suggestion-card {
+        display: grid;
+        padding: 8px;
+        border-radius: 32px;
+        align-content: space-between;
+        background-position: center;
+        background-size: cover;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        h6 {
+            margin: 16px;
+            font-size: 28px;
+            line-height: 32px;
+        }
+
+        .common-button {
+            border: none;
+            width: 100%;
+        }
+    }
+}

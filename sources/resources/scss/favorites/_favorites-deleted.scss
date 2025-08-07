@@ -1,0 +1,58 @@
+.favorites-deleted {
+    &.card {
+        background-color: $superwhite;
+        border-radius: 16px;
+        padding: 20px;
+        gap: 20px;
+        position: absolute;
+        display: none;
+        align-self: center;
+        justify-self: center;
+        justify-items: center;
+        transform: translateY(-50%);
+        top: 50%;
+        z-index: 4;
+        box-shadow: $common-shadow;
+
+        &.visible {
+            display: grid;
+        }
+    }
+
+    &.title {
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 400;
+        color: $black1;
+    }
+
+    &.description {
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 400;
+        display: flex;
+        gap: 4px;
+        color: $orange1;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        cursor: pointer;
+        background-color: inherit;
+
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        &.delete {
+            color: $grey3;
+        }
+    }
+
+    &.buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        width: 100%;
+    }
+}

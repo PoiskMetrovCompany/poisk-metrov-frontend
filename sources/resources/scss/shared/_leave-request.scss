@@ -1,0 +1,106 @@
+.leave-request {
+    color: $grey2;
+
+    &.base-container {
+        overflow: hidden;
+        max-width: 100%;
+    }
+
+    &.content {
+        flex-shrink: 0;
+        font-size: 32px;
+        line-height: 42px;
+        color: inherit;
+
+        @include media-breakpoint-up(lg) {
+            font-size: 42px;
+            line-height: 100px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 48px;
+        }
+
+        @include media-breakpoint-up(xxl) {
+            font-size: 40px;
+        }
+    }
+
+    &.divider {
+        border-radius: 50%;
+        background-color: $grey2;
+        flex-shrink: 0;
+        width: 12px;
+        height: 12px;
+
+        @include media-breakpoint-up(md) {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    $animation-duration: 10s;
+    $animation-start-position: -25%;
+    $animation-end-position: -45%;
+
+    .scroll-text {
+        -moz-animation: scroll-anim $animation-duration linear infinite;
+        -webkit-animation: scroll-anim $animation-duration linear infinite;
+        animation: scroll-anim $animation-duration linear infinite;
+        display: flex;
+        gap: 32px;
+        //Padding needs to be equal to gap
+        padding-right: 32px;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        transform: translateX($animation-start-position);
+        will-change: transform;
+
+        &:hover {
+            -moz-animation-play-state: paused;
+            -webkit-animation-play-state: paused;
+            animation-play-state: paused;
+            cursor: pointer;
+            color: $orange1;
+
+            &>.divider {
+                background-color: $orange1;
+            }
+        }
+    }
+
+    @-moz-keyframes scroll-anim {
+        from {
+            -moz-transform: translateX($animation-start-position);
+        }
+
+        to {
+            -moz-transform: translateX($animation-end-position);
+        }
+    }
+
+    @-webkit-keyframes scroll-anim {
+        from {
+            -webkit-transform: translateX($animation-start-position);
+        }
+
+        to {
+            -webkit-transform: translateX($animation-end-position);
+        }
+    }
+
+    @keyframes scroll-anim {
+        from {
+            -moz-transform: translateX($animation-start-position);
+            -webkit-transform: translateX($animation-start-position);
+            transform: translateX($animation-start-position);
+        }
+
+        to {
+            -moz-transform: translateX($animation-end-position);
+            -webkit-transform: translateX($animation-end-position);
+            transform: translateX($animation-end-position);
+        }
+    }
+}

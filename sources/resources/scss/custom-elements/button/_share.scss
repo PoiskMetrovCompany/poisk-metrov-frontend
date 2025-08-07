@@ -1,0 +1,75 @@
+share-button {
+    @extend .round-button-template;
+
+    &[open=true] {
+        *[type=menu] {
+            display: grid;
+        }
+    }
+
+    &>.icon {
+        pointer-events: none;
+
+        @include media-breakpoint-up(xl) {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &>*[type=menu] {
+        width: fit-content;
+        background-color: $superwhite;
+        position: absolute;
+        cursor: default;
+        pointer-events: all;
+        overflow: hidden;
+        max-width: fit-content;
+        max-height: fit-content;
+        padding: 24px 16px;
+        gap: 4px;
+        font-size: 16px;
+        color: $black1;
+        transform: translate(-50%, 50%);
+        border-radius: 24px;
+        border: 1.5px solid $grey2;
+        display: none;
+
+        button {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+            cursor: pointer;
+            border-radius: 16px;
+            background-color: $superwhite;
+            outline: none !important;
+            padding: 10px 16px;
+            width: 100%;
+            justify-content: start;
+            border: none;
+            align-items: center;
+
+            &:hover {
+                background-color: $grey0;
+            }
+
+            &:last-of-type {
+                justify-content: center;
+                margin-top: 8px;
+                background-color: $grey0;
+                border-radius: 24px;
+            }
+
+            .icon {
+                width: 24px;
+                height: 24px;
+                background-color: $orange1;
+            }
+
+            // *[type=text] {
+            //     font-size: 16px;
+            //     font-weight: 400;
+            //     color: $black1;
+            // }
+        }
+    }
+}
