@@ -9,19 +9,19 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-{{--    <script type="application/ld+json">--}}
-{{--        {--}}
-{{--            "@context":"https://schema.org",--}}
-{{--            "@type":"WebSite",--}}
-{{--            "url":"{{ $metaUrl }}",--}}
-{{--            "name":"Поиск метров",--}}
-{{--            "potentialAction":{--}}
-{{--                "@type":"SearchAction",--}}
-{{--                "target":"https:\/\/poisk-metrov.ru\/?s={search_term_string}",--}}
-{{--                "query-input":"required name=search_term_string"--}}
-{{--            }--}}
-{{--        }--}}
-{{--    </script>--}}
+    <script type="application/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"WebSite",
+            "url":"{{ $metaUrl }}",
+            "name":"Поиск метров",
+            "potentialAction":{
+                "@type":"SearchAction",
+                "target":"https:\/\/poisk-metrov.ru\/?s={search_term_string}",
+                "query-input":"required name=search_term_string"
+            }
+        }
+    </script>
 
     <meta property="og:title" content="Поиск метров">
     <meta property="og:site_name" content="Поиск метров">
