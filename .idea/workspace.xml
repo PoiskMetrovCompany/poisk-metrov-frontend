@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="febd431d-c9f8-496f-b7c0-6b4c07af95f4" name="Changes" comment="Поправил проверку данных организации в анкете кандидата" />
+    <list default="true" id="febd431d-c9f8-496f-b7c0-6b4c07af95f4" name="Changes" comment="Поправил проверку данных организации в анкете кандидата">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/php-fpm/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker/php-fpm/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/php-fpm/conf/php.ini" beforeDir="false" afterPath="$PROJECT_DIR$/docker/php-fpm/conf/php.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/app/Http/Controllers/Api/ApiDoc/Annotations.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/sources/app/Http/Controllers/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/sources/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/sources/composer.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -475,7 +483,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;SQL Inserts&quot;,
     &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#30 on feature/1209492985890047&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/poisk-metrov/poisk-metrov-core&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -650,6 +658,13 @@
       <workItem from="1754462210348" duration="1697000" />
       <workItem from="1754470577216" duration="113000" />
       <workItem from="1754473183777" duration="2184000" />
+      <workItem from="1754555590124" duration="336000" />
+      <workItem from="1754555973304" duration="328000" />
+      <workItem from="1754556885705" duration="2122000" />
+      <workItem from="1754560101769" duration="81000" />
+      <workItem from="1754560434449" duration="309000" />
+      <workItem from="1754561384146" duration="202000" />
+      <workItem from="1754562016842" duration="58000" />
     </task>
     <task id="LOCAL-00024" summary="Поправил мета информацию">
       <option name="closed" value="true" />

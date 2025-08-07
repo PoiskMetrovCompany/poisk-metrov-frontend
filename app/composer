@@ -1,0 +1,6 @@
+"jenssegers/mongodb": "^5.4",
+"mpdf/mpdf": "^8.2",
+"laravel/ui": "^4.6",
+"halaxa/json-machine": "^1.2",
+"php-amqplib/php-amqplib": "^3.7",
+"vladimir-yuldashev/laravel-queue-rabbitmq": "^14.2"

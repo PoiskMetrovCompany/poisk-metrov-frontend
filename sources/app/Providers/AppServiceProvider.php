@@ -15,6 +15,7 @@ use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserAdsAgreementRepositoryInterface;
 use App\Core\Interfaces\Repositories\UserRepositoryInterface;
 use App\Core\Interfaces\Repositories\VacancyRepositoryInterface;
+use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Core\Interfaces\Services\AdsAgreementServiceInterface;
 use App\Core\Interfaces\Services\ApartmentServiceInterface;
 use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
@@ -51,6 +52,7 @@ use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\UserAdsAgreementRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VacancyRepository;
+use App\Repositories\VisitedPageRepository;
 use App\Services\AdsAgreementService;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
@@ -62,7 +64,7 @@ use App\Services\CityService;
 use App\Services\CRMService;
 use App\Services\FavoritesService;
 use App\Services\FeedService;
-use App\Services\FileService;
+// use App\Services\FileService;
 use App\Services\ManagersService;
 use App\Services\NewsService;
 use App\Services\PDFService;
@@ -251,6 +253,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ResidentialComplexRepositoryInterface::class, ResidentialComplexRepository::class);
     }
 
+    final public function registerVisitedPageRepository(): void
+    {
+        $this->app->singleton(VisitedPageRepositoryInterface::class, VisitedPageRepository::class);
+    }
+
     final public function registerFeedRepository()
     {
         $this->app->singleton(FeedRepositoryInterface::class, FeedRepository::class);
@@ -313,6 +320,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerComplexRepository();
         $this->registerUserAdsAgreementRepository();
         $this->registerResidentialComplexRepository();
+        $this->registerVisitedPageRepository();
         $this->registerFeedRepository();
         $this->registerVacancyRepository();
         $this->registerMaritalStatusesRepository();
@@ -326,7 +334,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::share([
-            'fileService' => app()->make(FileService::class),
+            // 'fileService' => app()->make(FileService::class),
             'priceFormattingService' => app()->make(PriceFormattingService::class),
             'favoritesService' => app()->make(FavoritesService::class),
             'apartmentService' => app()->make(ApartmentService::class),

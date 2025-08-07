@@ -28,6 +28,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gd \
     && docker-php-ext-install exif
 
+RUN pecl install mongodb
+RUN docker-php-ext-enable mongodb
+
 # Установка xdebug через pecl
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug

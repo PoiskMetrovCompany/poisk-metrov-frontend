@@ -75,6 +75,42 @@ use OpenApi\Annotations as OA;
  *       name="Сrm",
  *       description="Операции связанные с Энви ЦРМ"
  *  )
+ *
+ * @OA\SecurityScheme(
+ *        type="http",
+ *        securityScheme="bearerAuth",
+ *        scheme="bearer"
+ *  ),
+ *
+ * @OA\Tag(
+ *       name="Account",
+ *       description="Операции над юзерами для аккаунтами кандидата/безопасника"
+ * ),
+ *
+ * @OA\Tag(
+ *        name="Vacancy",
+ *        description="Операции над вакансиями"
+ * ),
+ *
+ * @OA\Tag(
+ *         name="MaritalStatus",
+ *         description="Операции над семейным положением"
+ * ),
+ *
+ * @OA\Tag(
+ *          name="CandidateProfiles",
+ *          description="Операции над анкетами кандидатов"
+ * ),
+ *
+ * @OA\Tag(
+ *           name="Export",
+ *           description="Операции экспорта"
+ * ),
+ *
+ * @OA\Tag(
+ *            name="Notification",
+ *            description="Операции над уведомлениями"
+ * ),
  */
 class Controller extends BaseController
 {
