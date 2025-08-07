@@ -44,7 +44,7 @@
     @endif
 
     <title>{!! $title ?? 'Поиск метров' !!}</title>
-    <link rel="icon" type="image/x-icon" href="/icon/16.ico">
+    @include('icon-heades')
     <link rel="preconnect"
         href="https://yastatic.net/s3/front-maps-static/maps-front-jsapi-3/3.0.13965858/build/static/bundles/main.js" />
     <link rel="preconnect"
