@@ -8,15 +8,6 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        // Enums
-//        DB::statement("CREATE TYPE accounts_role_enum AS ENUM ('security-guard', 'candidate')");
-//        DB::statement("CREATE TYPE borrower_documents_documents_type_enum AS ENUM ('Паспорт')");
-//        DB::statement("CREATE TYPE candidate_profiles_status_enum AS ENUM ('Новая анкета', 'Проверен', 'Нужна доработка', 'Отклонен')");
-//        DB::statement("CREATE TYPE candidate_profiles_level_educational_enum AS ENUM ('Высшее', 'Неоконченное высшее', 'Среднее специальное', 'Среднее общее')");
-//        DB::statement("CREATE TYPE journals_type_enum AS ENUM ('synchronizeFeed')");
-//        DB::statement("CREATE TYPE journals_status_enum AS ENUM ('Загружено', 'Частично загружено', 'В обработке', 'Ошибка загрузки')");
-//        DB::statement("CREATE TYPE marital_statuses_title_enum AS ENUM ('Состою в зарегистрированном браке', 'Состою в незарегистрированном браке', 'Не состою в браке')");
-
         // Tables
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
@@ -614,6 +605,7 @@ return new class extends Migration {
             $table->timestampTz('created_at')->useCurrent();
             $table->timestampTz('updated_at')->useCurrent();
             $table->timestampTz('deleted_at')->nullable(true)->default(null);
+            $table->uuid('key');
             $table->uuid('booked_order_key')->nullable();
             $table->string('fio', 255);
             $table->date('birth_date');
@@ -622,6 +614,8 @@ return new class extends Migration {
             $table->string('marital_status', 255);
             $table->bigInteger('income');
             $table->boolean('is_primary');
+            // Indexes
+            $table->unique('key');
             // Fk
             $table->foreign('booked_order_key')->references('key')->on('booked_orders')->nullOnDelete();
         });
@@ -631,16 +625,18 @@ return new class extends Migration {
             $table->timestampTz('created_at')->useCurrent();
             $table->timestampTz('updated_at')->useCurrent();
             $table->timestampTz('deleted_at')->nullable(true)->default(null);
-            $table->uuid('borrower_key')->nullable();
+            $table->uuid('key');
+            $table->uuid('borrower_key');
             $table->uuid('file_key');
             $table->enum('documents_type', [DocumentTypeEnum::PASSPORT->value]);
             // Fk
-            $table->foreign('borrower_key')->references('key')->on('borrowers')->nullOnDelete();
+            $table->foreign('borrower_key')->references('key')->on('borrowers');
         });
 
         Schema::create('borrower_passports', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('borrower_id');
+            $table->uuid('key');
+            $table->uuid('borrower_key');
             $table->integer('number');
             $table->date('issue_date');
             $table->integer('code');
@@ -652,7 +648,7 @@ return new class extends Migration {
             $table->unique('number');
             $table->unique('code');
             // Fk
-            $table->foreign('borrower_id')->references('id')->on('borrowers')->onDelete('cascade');
+            $table->foreign('borrower_key')->references('key')->on('borrowers')->onDelete('cascade');
         });
 
         Schema::create('borrower_works', function (Blueprint $table) {
@@ -660,7 +656,8 @@ return new class extends Migration {
             $table->timestampTz('created_at')->useCurrent();
             $table->timestampTz('updated_at')->useCurrent();
             $table->timestampTz('deleted_at')->nullable(true)->default(null);
-            $table->bigInteger('borrower_id');
+            $table->uuid('key');
+            $table->uuid('borrower_key');
             $table->string('organization_name', 255);
             $table->string('inn', 255);
             $table->string('phone', 255);
@@ -670,7 +667,7 @@ return new class extends Migration {
             $table->integer('number_of_employees');
             $table->integer('experience');
             // Fk
-            $table->foreign('borrower_id')->references('id')->on('borrowers')->onDelete('cascade');
+            $table->foreign('borrower_key')->references('key')->on('borrowers')->onDelete('cascade');
         });
 
         Schema::create('candidate_profiles', function (Blueprint $table) {
@@ -735,13 +732,10 @@ return new class extends Migration {
         Schema::create('interactions', function (Blueprint $table) {
             $table->id();
             $table->uuid('key');
-            $table->bigInteger('apartment_id');
-            $table->bigInteger('manager_id');
-            $table->bigInteger('user_id');
+            $table->uuid('apartment_key');
+            $table->uuid('manager_key');
+            $table->uuid('user_key');
             $table->uuid('reservation_key');
-            $table->uuid('apartment_key')->nullable();
-            $table->uuid('user_key')->nullable();
-            $table->uuid('manager_key')->nullable();
             // Indexes
             $table->unique('key');
             // Fk
@@ -753,9 +747,8 @@ return new class extends Migration {
 
         Schema::create('manager_chat_messages', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('chat_session_id');
-            $table->bigInteger('manager_id')->nullable();
             $table->integer('manager_telegram_id')->nullable();
+            $table->uuid('chat_session_key');
             $table->uuid('manager_key')->nullable();
             $table->text('message')->nullable();
             // Fk
@@ -822,14 +815,5 @@ return new class extends Migration {
         Schema::dropIfExists('builders');
         Schema::dropIfExists('authorization_calls');
         Schema::dropIfExists('accounts');
-
-        // Drop enums
-//        DB::statement("DROP TYPE IF EXISTS accounts_role_enum");
-//        DB::statement("DROP TYPE IF EXISTS borrower_documents_documents_type_enum");
-//        DB::statement("DROP TYPE IF EXISTS candidate_profiles_status_enum");
-//        DB::statement("DROP TYPE IF EXISTS candidate_profiles_level_educational_enum");
-//        DB::statement("DROP TYPE IF EXISTS journals_type_enum");
-//        DB::statement("DROP TYPE IF EXISTS journals_status_enum");
-//        DB::statement("DROP TYPE IF EXISTS marital_statuses_title_enum");
     }
 };
