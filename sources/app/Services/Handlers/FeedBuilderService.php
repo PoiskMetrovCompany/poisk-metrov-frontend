@@ -9,7 +9,6 @@ final class FeedBuilderService extends AbstractHandler
 {
     public function handle(?array $attributes): ?array
     {
-        Log::info('FeedBuilderService');
         $data = [
             'builder' => $this->readFeedBuilderFile(builderKey: $attributes['apartments']['block_builder']),
             'detail' => $this->readFeedDetailFile(detailsBlockKey: $attributes['apartments']['block_id']),

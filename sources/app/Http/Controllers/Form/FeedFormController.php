@@ -28,7 +28,7 @@ class FeedFormController extends Controller
 
                 $fileDetail = [
                     'name'          => $fileData->hashName(),
-                    'originalName'  =>  $fileData->getClientOriginalName(),
+                    'originalName'  => $fileData->getClientOriginalName(),
                     'extension'     => $fileData->extension(),
                     'size'          => $fileData->getSize(),
                     'mime'          => $fileData->getMimeType(),
@@ -42,6 +42,9 @@ class FeedFormController extends Controller
                     'fileName' => explode('.', $fileDetail['originalName'])[0],
                     'extension' => $fileDetail['extension']
                 ]);
+                // Запуск обновления кэша (ЖК, Квартиры)
+                Artisan::call('app:update-cache-residential-complexes-command');
+                Artisan::call('app:update-cache-apartments-command');
                 return response()->json([]);
             }
         }
