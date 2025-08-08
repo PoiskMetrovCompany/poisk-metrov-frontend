@@ -57,6 +57,24 @@ services:
       - ./:/docker-entrypoint-initdb.d
     networks:
       - app
+  
+  memcached:
+    container_name: ${NAME}_memcached
+    hostname: ${NAME}_memcached
+    restart: always
+    ports:
+      - ${MEMCACHED_PORT}:5000
+    build:
+      context: ${DOCKER_PATH}/memcached
+      dockerfile: Dockerfile
+    volumes:
+      - cachedata:${MEMCACHED_CACHEDATA}
+    depends_on:
+      - nginx
+      - mongodb
+      - mysql
+    networks:
+      - app
 
   rabbitmq:
     container_name: ${NAME}_rabbitmq
@@ -112,7 +130,7 @@ services:
     hostname: ${NAME}_jenkins
     ports:
       - ${JENKINS_PORT}:8080
-      - ${JENKINS_WEB_PORT}:5000
+      - ${JENKINS_WEB_PORT}:5010
     volumes:
       - jenkins_home:${JENKINS_DATA:-/var/jenkins_home}
       - ./app/rsa:/var/jenkins_home/.ssh
@@ -147,3 +165,4 @@ volumes:
   jenkins_home:
   agent_workdir:
   mysql_data:
+  cachedata:

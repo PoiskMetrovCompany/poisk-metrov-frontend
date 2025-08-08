@@ -12,10 +12,26 @@ use Illuminate\Support\Collection as BasicCollection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Queries\FindByCodeQueryTrait;
+use App\Repositories\Queries\FindByIdQueryTrait;
+use App\Repositories\Queries\FindHasQueryTrait;
+use App\Repositories\Queries\FindInBuildingIdQueryTrait;
+use App\Repositories\Queries\IsCodeQueryTrait;
+use App\Repositories\Queries\IsExistsQueryTrait;
+use App\Repositories\Queries\ListQueryTrait;
+use App\Repositories\Build\FindNotQueryBuilderTrait;
 
 #[AllowDynamicProperties]
 final class ResidentialComplexRepository implements ResidentialComplexRepositoryInterface
 {
+    use ListQueryTrait;
+    use FindByIdQueryTrait;
+    use FindByCodeQueryTrait;
+    use IsExistsQueryTrait;
+    use FindInBuildingIdQueryTrait;
+    use FindNotQueryBuilderTrait;
+    use FindHasQueryTrait;
+
     public function __construct(
         protected CityServiceInterface $cityService
     ) {
@@ -96,9 +112,9 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
             ->pluck('name');
     }
 
-    public function getCode(array $attributes, string $cityCode): Collection
+    public function getCode(Collection $code, string $cityCode): Collection
     {
-        return ResidentialComplex::whereIn($attributes[0], $attributes[1])
+        return $this->model::whereIn('code', $code)
             ->whereHas('location', function (Builder $locationQuery) use ($cityCode) {
                 return $locationQuery->where('code', $cityCode);
             })
