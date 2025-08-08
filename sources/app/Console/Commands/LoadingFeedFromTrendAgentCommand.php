@@ -49,7 +49,6 @@ class LoadingFeedFromTrendAgentCommand extends Command
      */
     public function handle()
     {
-        Log::info('LoadingFeedFromTrendAgentCommand');
         $this->setCity($this->argument('city'));
         $extractPath = storage_path('app/public/temp-feed');
         $fileName = $this->argument('fileName');
@@ -62,18 +61,15 @@ class LoadingFeedFromTrendAgentCommand extends Command
             ->setNext(new SynchronizationFeedService());
 
         if (!file_exists($path)) {
-            Log::error("Файл не найден: $path");
             return;
         }
 
-        Log::info('Распаковка архива');
         switch ($extension) {
             case 'zip':
                 $zip = new \ZipArchive;
                 if ($zip->open($path) === TRUE) {
                     $zip->extractTo($extractPath);
                     $zip->close();
-                    Log::info("ZIP-архив успешно распакован.");
                 } else {
                     Log::error("Не удалось открыть ZIP-архив: $path");
                 }
@@ -81,29 +77,24 @@ class LoadingFeedFromTrendAgentCommand extends Command
 
             case 'tar':
                 exec("tar -xf {$path}.{$extension} -C {$extractPath}");
-                Log::info("TAR-архив распакован.");
                 break;
 
             case 'gz':
             case 'tgz':
                 exec("tar -xzf {$path}.{$extension} -C {$extractPath}");
-                Log::info("TAR.GZ/TGZ-архив распакован.");
                 break;
 
             case 'bz2':
             case 'tbz':
                 exec("tar -xjf {$path}.{$extension} -C {$extractPath}");
-                Log::info("TAR.BZ2/TBZ-архив распакован.");
                 break;
 
             case 'rar':
                 exec("unrar x {$path}.{$extension} {$extractPath}");
-                Log::info("RAR-архив распакован.");
                 break;
 
             case '7z':
                 exec("7z x {$path}.{$extension} -o{$extractPath}");
-                Log::info("7Z-архив распакован.");
                 break;
 
             default:
@@ -122,7 +113,6 @@ class LoadingFeedFromTrendAgentCommand extends Command
             'found_objects' => (int)Session::get('feedDataLength'),
             'loaded_objects' => 0,
         ]);
-        Log::info('do foreach');
         foreach ($feedData as $item) {
             $service->handle($item);
             unset($item);
