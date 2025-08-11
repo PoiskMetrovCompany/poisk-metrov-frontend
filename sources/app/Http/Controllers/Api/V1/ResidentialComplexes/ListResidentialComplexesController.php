@@ -31,6 +31,13 @@ class ListResidentialComplexesController extends AbstractOperations
      *      summary="получение списка ЖК",
      *      description="Возвращение JSON объекта",
      *      @OA\Parameter(
+     *          name="city",
+     *          in="query",
+     *          required=true,
+     *          description="Имя города",
+     *          @OA\Schema(type="string", example="novosibirsk")
+     *      ),
+     *      @OA\Parameter(
      *          name="includes",
      *          in="query",
      *          description="Указывает, какие связанные данные нужно включить",
@@ -67,7 +74,8 @@ class ListResidentialComplexesController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $attributes = $this->residentialComplexRepository->list([]);
+        $city = $request->input('city');
+        $attributes = $this->residentialComplexRepository->list(!empty($city) ? ['city' => $city] : []);
         $collect = new ResidentialComplexesCollection($attributes);
 
         return new JsonResponse(
