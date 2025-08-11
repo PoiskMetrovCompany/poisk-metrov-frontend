@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Models\Log;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Facades\DB;
 
-class Notification extends Model
+class Metrics extends Model
 {
+    use HasFactory;
+
     /**
      * @var string
      */
@@ -15,7 +17,7 @@ class Notification extends Model
     /**
      * @var string
      */
-    protected $collection = 'notification';
+    protected $collection = 'metrics';
 
     /**
      * The attributes that are mass assignable.
@@ -28,4 +30,5 @@ class Notification extends Model
         'created_at',
         'updated_at',
     ];
+    
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Apartments;
 
-use App\Core\Abstracts\AbstractOperations;
+C
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApartmentResource;

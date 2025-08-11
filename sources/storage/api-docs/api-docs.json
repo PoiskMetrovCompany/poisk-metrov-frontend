@@ -6,6 +6,136 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/v1/account/auth": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Отправка кода для кандидата.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "d47fafab3d59bc6a183f5c82301c4e3a",
+                "requestBody": {
+                    "description": "Данные для входа кандидата и безопасника",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "000000"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (999) 999-99-99"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "example": "000000"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Пользователь не найден"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/account/set-code": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Вход для кандидата.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "872ecd99d487f1e4bf6af71411be0afe",
+                "requestBody": {
+                    "description": "Данные для отправки кода",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (999) 999-99-99"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Пользователь не найден"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users/account/authentication/": {
             "post": {
                 "tags": [
@@ -367,6 +497,881 @@
                 ]
             }
         },
+        "/api/v1/candidates/": {
+            "get": {
+                "tags": [
+                    "CandidateProfiles"
+                ],
+                "summary": "Получение списка анкет",
+                "description": "Возвращает JSON объект со списком анкет кандидатов с возможностью фильтрации.",
+                "operationId": "f07dfcc4eae70279e4e7f0492c80133d",
+                "parameters": [
+                    {
+                        "name": "city_work",
+                        "in": "query",
+                        "description": "Город работы кандидата",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "candidate_statuses",
+                        "in": "query",
+                        "description": "Статусы анкет (множественные значения через запятую).",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "vacancy_keys",
+                        "in": "query",
+                        "description": "UUID вакансий (через запятую)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "year_range",
+                        "in": "query",
+                        "description": "Год (например: 2024)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 2100,
+                            "minimum": 1900
+                        }
+                    },
+                    {
+                        "name": "month_range",
+                        "in": "query",
+                        "description": "Месяц (01-12)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 12,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "date_range",
+                        "in": "query",
+                        "description": "Диапазон дат",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/candidates/read": {
+            "get": {
+                "tags": [
+                    "CandidateProfiles"
+                ],
+                "summary": "Получение анкеты кандидата по ключу",
+                "description": "Возвращение JSON объекта",
+                "operationId": "898d2e0fca47e675340d78fdbf9d1083",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ для получения анкеты",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван Иванов"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ivan@example.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/candidates/store": {
+            "post": {
+                "tags": [
+                    "CandidateProfiles"
+                ],
+                "summary": "Отправка анкеты кандидата.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "935e27bc1a9dc0789122c2396a1a70a0",
+                "requestBody": {
+                    "description": "Данные для отправки анкеты кандидата",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "vacancies_key": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "marital_statuses_key": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "middle_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "reason_for_changing_surnames": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "country_birth": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "city_birth": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "level_educational": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "courses": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "educational_institution": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "mobile_phone_candidate": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "home_phone_candidate": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "mail_candidate": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "inn": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "passport_series": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "passport_number": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "passport_issued": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "permanent_registration_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "temporary_registration_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "actual_residence_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "family_partner": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "adult_family_members": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "adult_children": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "serviceman": {
+                                        "type": "boolean",
+                                        "example": ""
+                                    },
+                                    "law_breaker": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "legal_entity": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "is_data_processing": {
+                                        "type": "boolean",
+                                        "example": ""
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "vacancies_key": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "marital_statuses_key": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "first_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "last_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "middle_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "reason_for_changing_surnames": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city_work": {
+                                            "type": "string",
+                                            "example": "Новосибирск"
+                                        },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "country_birth": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city_birth": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "level_educational": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "courses": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "educational_institution": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_phone": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "field_of_activity": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_job_title": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "organization_price": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "date_of_hiring": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "date_of_dismissal": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "reason_for_dismissal": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "recommendation_contact": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "mobile_phone_candidate": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "home_phone_candidate": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "mail_candidate": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "inn": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "passport_series": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "passport_number": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "passport_issued": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "permanent_registration_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "temporary_registration_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "actual_residence_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "family_partner": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "adult_family_members": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "adult_children": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "serviceman": {
+                                            "type": "boolean",
+                                            "example": ""
+                                        },
+                                        "law_breaker": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "legal_entity": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "is_data_processing": {
+                                            "type": "boolean",
+                                            "example": ""
+                                        },
+                                        "comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Ошибка отправки анкеты"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/candidates/update": {
+            "post": {
+                "tags": [
+                    "CandidateProfiles"
+                ],
+                "summary": "Обновление анкеты кандидата.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "3adeaf793aaef275a50e79317035e457",
+                "requestBody": {
+                    "description": "Данные для обновления анкеты кандидата",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "key": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "vacancies_key": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "marital_statuses_key": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "middle_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "reason_for_changing_surnames": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "country_birth": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "city_birth": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "level_educational": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "courses": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "educational_institution": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "field_of_activity": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_job_title": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "organization_price": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "date_of_hiring": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "date_of_dismissal": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "reason_for_dismissal": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "recommendation_contact": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "mobile_phone_candidate": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "home_phone_candidate": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "mail_candidate": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "inn": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "passport_series": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "passport_number": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "passport_issued": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "permanent_registration_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "temporary_registration_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "actual_residence_address": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "family_partner": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "adult_family_members": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "adult_children": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "serviceman": {
+                                        "type": "boolean",
+                                        "example": ""
+                                    },
+                                    "law_breaker": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "legal_entity": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "is_data_processing": {
+                                        "type": "boolean",
+                                        "example": ""
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "key": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "vacancies_key": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "marital_statuses_key": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "first_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "last_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "middle_name": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "reason_for_changing_surnames": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city_work": {
+                                            "type": "string",
+                                            "example": "Новосибирск"
+                                        },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "country_birth": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city_birth": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "level_educational": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "courses": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "educational_institution": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "mobile_phone_candidate": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "home_phone_candidate": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "mail_candidate": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "inn": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "passport_series": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "passport_number": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "passport_issued": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "permanent_registration_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "temporary_registration_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "actual_residence_address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "family_partner": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "adult_family_members": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "adult_children": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "serviceman": {
+                                            "type": "boolean",
+                                            "example": ""
+                                        },
+                                        "law_breaker": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "legal_entity": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "is_data_processing": {
+                                            "type": "boolean",
+                                            "example": ""
+                                        },
+                                        "comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Ошибка отправки анкеты"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/cbr/actual-date/": {
             "get": {
                 "tags": [
@@ -626,6 +1631,189 @@
                     },
                     "404": {
                         "description": "Resource not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/event/view-profile": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Запись в лог анкеты кандидата по ключу",
+                "description": "Возвращение JSON объекта",
+                "operationId": "bf95482543f2ba8f89090a6dcc949381",
+                "parameters": [
+                    {
+                        "name": "profile_key",
+                        "in": "query",
+                        "description": "Ключ для записи",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван Иванов"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ivan@example.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/export/pdf-format": {
+            "get": {
+                "tags": [
+                    "Export"
+                ],
+                "summary": "Экспорт анкет кандидатов в PDF",
+                "description": "Экспорт одной или нескольких анкет кандидатов в одном PDF-документе. Ключи передаются через запятую в параметре 'keys'.",
+                "operationId": "c550713e8dc6643208e67da96976df09",
+                "parameters": [
+                    {
+                        "name": "keys",
+                        "in": "query",
+                        "description": "Ключи кандидатов, разделённые запятой. Пример: 53cbb9a9-...,fc8e5010-...",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная генерация PDF",
+                        "content": {
+                            "application/pdf": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Не указаны ключи"
+                    },
+                    "404": {
+                        "description": "Анкеты не найдены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/export/xlsx-format": {
+            "get": {
+                "tags": [
+                    "Export"
+                ],
+                "summary": "Экспорт анкет кандидата в таблицу (если передать ключ кандидата, то экспортирует анкету по ключу. Ключи нужно перечислять через запятую)",
+                "description": "Возвращение JSON объекта",
+                "operationId": "b272734eb9b023db2b6d1243b3791608",
+                "parameters": [
+                    {
+                        "name": "keys",
+                        "in": "query",
+                        "description": "Ключ для получения анкеты",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван Иванов"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ivan@example.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -926,6 +2114,93 @@
                 ]
             }
         },
+        "/api/v1/marital-statuses/": {
+            "get": {
+                "tags": [
+                    "MaritalStatus"
+                ],
+                "summary": "получение списка семейного положения",
+                "description": "Возвращение JSON объекта",
+                "operationId": "81a804a5a679e99d0e1916647b3e01b6",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/notification/new-candidates": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Получения лога анкет кандидатов по ключу",
+                "description": "Возвращение JSON объекта",
+                "operationId": "9e9ecff868a364fbde29f3d93bee1690",
+                "parameters": [
+                    {
+                        "name": "profile_key",
+                        "in": "query",
+                        "description": "Ключ для записи",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван Иванов"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ivan@example.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/real-estate/get-all": {
             "get": {
                 "tags": [
@@ -1108,6 +2383,16 @@
                 "description": "Возвращение JSON объекта",
                 "operationId": "910c7705f281b9cfa4ec32183d2e2bae",
                 "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Имя города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "novosibirsk"
+                        }
+                    },
                     {
                         "name": "includes",
                         "in": "query",
@@ -1414,6 +2699,24 @@
                 ]
             }
         },
+        "/api/v1/vacancy/": {
+            "get": {
+                "tags": [
+                    "Vacancy"
+                ],
+                "summary": "получение списка вакансий",
+                "description": "Возвращение JSON объекта",
+                "operationId": "c63bfeaf97668db7a5981e5785c1d953",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/visited/update": {
             "post": {
                 "tags": [
@@ -1525,8 +2828,36 @@
             "description": "Операции над посещениями"
         },
         {
+            "name": "Account",
+            "description": "Операции над юзерами для аккаунтами кандидата/безопасника"
+        },
+        {
+            "name": "Vacancy",
+            "description": "Операции над вакансиями"
+        },
+        {
+            "name": "MaritalStatus",
+            "description": "Операции над семейным положением"
+        },
+        {
+            "name": "CandidateProfiles",
+            "description": "Операции над анкетами кандидатов"
+        },
+        {
+            "name": "Export",
+            "description": "Операции экспорта"
+        },
+        {
+            "name": "Notification",
+            "description": "Операции над уведомлениями"
+        },
+        {
             "name": "Crm",
             "description": "Crm"
+        },
+        {
+            "name": "Event",
+            "description": "Event"
         }
     ]
 }

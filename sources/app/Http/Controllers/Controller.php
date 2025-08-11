@@ -19,7 +19,7 @@ use OpenApi\Annotations as OA;
  *      type="http",
  *      securityScheme="bearerAuth",
  *      scheme="bearer"
- * )
+ * ),
  * @OA\Tag(
  *      name="User",
  *      description="Операции над юзерами для админки"
@@ -75,12 +75,6 @@ use OpenApi\Annotations as OA;
  *       name="Сrm",
  *       description="Операции связанные с Энви ЦРМ"
  *  )
- *
- * @OA\SecurityScheme(
- *        type="http",
- *        securityScheme="bearerAuth",
- *        scheme="bearer"
- *  ),
  *
  * @OA\Tag(
  *       name="Account",

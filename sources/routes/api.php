@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
 use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
 use App\Http\Controllers\Api\V1\Apartments\ListApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
+use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
 use App\Http\Controllers\Api\V1\CbrController;
 use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
@@ -129,6 +130,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::post('/update', operation(UpdateApartmentController::class))
             ->name('api.v1.apartments.update')
             ->middleware('auth:api');
+        Route::get('/selections', operation(SelectionApartmentController::class))
+            ->name('api.v1.apartments.selections');
     });
     /// END
 

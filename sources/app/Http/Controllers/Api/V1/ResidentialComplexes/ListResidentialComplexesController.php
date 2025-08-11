@@ -76,6 +76,7 @@ class ListResidentialComplexesController extends AbstractOperations
     {
         $city = $request->input('city');
         $attributes = $this->residentialComplexRepository->list(!empty($city) ? ['city' => $city] : []);
+        $attributes->paginate(10);
         $collect = new ResidentialComplexesCollection($attributes);
 
         return new JsonResponse(

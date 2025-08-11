@@ -20,12 +20,21 @@ final class VisitedPageRepository implements VisitedPageRepositoryInterface
 
     }
 
-    public function findUniqueCode(int $userId, string $pageCode, Collection $codes): Collection
+    public function findUniqueCode(string $userKey, string $pageCode, Collection $codes): Collection
     {
-        return $this->model::where('user_id', $userId)
+        return $this->model::where('user_key', $userKey)
             ->where('page', $pageCode)
             ->whereNotIn('code', $codes->toArray())
             ->get()
             ->pluck('code');
+    }
+
+    public function getMetrics(string $userKey, string $pageCode, Collection $codes): Collection
+    {
+        if ($userKey != null) {
+            $extraCodesInTable =  $this->findUniqueCode($userKey, $pageCode, $codes);
+            $codes->push(...$extraCodesInTable);
+        }
+        return $codes;
     }
 }
