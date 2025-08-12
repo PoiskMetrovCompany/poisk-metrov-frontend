@@ -3,6 +3,7 @@
 namespace App\Core\Interfaces\Repositories;
 
 use App\Core\Interfaces\Repositories\Build\FindNotQueryBuilderInterface;
+use App\Core\Interfaces\Repositories\Build\FindQueryBuilderInterface;
 use App\Core\Interfaces\Repositories\Queries\FindByIdQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\FindInBuildingIdQueryInterface;
 use App\Core\Interfaces\Repositories\Queries\IsCodeQueryInterface;
@@ -24,12 +25,14 @@ interface ResidentialComplexRepositoryInterface extends
     FindInBuildingIdQueryInterface,
     FindByIdQueryInterface,
     FindNotQueryBuilderInterface,
-    FindHasQueryInterface
+    FindHasQueryInterface,
+    FindQueryBuilderInterface
 {
     /**
+     * @param string $cityCode
      * @return Collection
      */
-    public function getBestOffers(): Collection;
+    public function getBestOffers(string $cityCode): Collection;
 
     /**
      * @param string $cityCode

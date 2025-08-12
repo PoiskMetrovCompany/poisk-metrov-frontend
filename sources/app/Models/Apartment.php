@@ -157,7 +157,7 @@ class Apartment extends Model
 
     public function residentialComplex(): BelongsTo
     {
-        return $this->belongsTo(ResidentialComplex::class, 'complex_id');
+        return $this->belongsTo(ResidentialComplex::class, 'complex_id', 'id');
     }
 
     public function renovationUrl(): HasMany

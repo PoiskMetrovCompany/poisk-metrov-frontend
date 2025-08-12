@@ -28,6 +28,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gd \
     && docker-php-ext-install exif
 
+RUN docker-php-ext-install sockets
+
 RUN pecl install mongodb
 RUN docker-php-ext-enable mongodb
 
