@@ -497,6 +497,134 @@
                 ]
             }
         },
+        "/api/v1/auth/authentication/": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Определение аккаунта (сайт)",
+                "description": "Возвращение JSON объекта",
+                "operationId": "86172c1fa23f11f86edbe5e8950ca72a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (993) 952-00-85"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (993) 952-00-85"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/authorization/": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Авторизация профиля (Сайт)",
+                "description": "Возвращение JSON объекта",
+                "operationId": "53f22ac8c86268a3b36ebf1c7fda9c9e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    },
+                                    "pincode": {
+                                        "type": "string",
+                                        "example": "последние 6 цифр звонилки"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "+7 (999) 999-99-99"
+                                        },
+                                        "pincode": {
+                                            "type": "string",
+                                            "example": "код из СМС"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/candidates/": {
             "get": {
                 "tags": [
@@ -2440,13 +2568,13 @@
                 "operationId": "7cbb5be783fea6ee10cf1dc3c6dc8b7e",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "key",
                         "in": "query",
-                        "description": "ID для получения ЖК",
+                        "description": "Ключ для получения ЖК",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "example": "1"
+                            "type": "string",
+                            "example": ""
                         }
                     },
                     {
@@ -2783,6 +2911,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Auth",
+            "description": "Операции авторизации"
+        },
         {
             "name": "User",
             "description": "Операции над юзерами для админки"

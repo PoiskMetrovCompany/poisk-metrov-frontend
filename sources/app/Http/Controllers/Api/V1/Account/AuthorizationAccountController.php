@@ -33,6 +33,12 @@ use OpenApi\Annotations as OA;
  */
 class AuthorizationAccountController extends AbstractOperations
 {
+    /**
+     * @param AuthorizationCallRepositoryInterface $authorizationCallRepository
+     * @param ManagerRepositoryInterface $managerRepository
+     * @param UserRepositoryInterface $userRepository
+     * @param FavoritesServiceInterface $favoritesService
+     */
     public function __construct(
         protected AuthorizationCallRepositoryInterface $authorizationCallRepository,
         protected ManagerRepositoryInterface $managerRepository,

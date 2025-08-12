@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
 use App\Http\Controllers\Api\V1\Apartments\ListApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
+use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
+use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
 use App\Http\Controllers\Api\V1\CbrController;
 use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
@@ -70,6 +72,16 @@ Route::namespace('V1')->prefix('v1')->group(function () {
        Route::get('actual-date', [CbrController::class, 'actualDate'])->name('api.v1.cbr.actualDate');
     });
     /// END Cbr
+
+    /// Auth
+    Route::namespace('AUTH')->prefix('auth')->group(function () {
+        Route::post('/authentication', operation(AuthenticationController::class))
+            ->name('api.v1.user.authentication');
+
+        Route::post('/authorization', operation(AuthorizationController::class))
+            ->name('api.v1.user.authorization');
+    });
+    /// END Auth
 
     /// User
     Route::namespace('USER')->prefix('users')->group(function () {

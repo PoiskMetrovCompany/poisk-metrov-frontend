@@ -21,6 +21,10 @@ use OpenApi\Annotations as OA;
  *      scheme="bearer"
  * ),
  * @OA\Tag(
+ *    name="Auth",
+ *    description="Операции авторизации"
+ * ),
+ * @OA\Tag(
  *      name="User",
  *      description="Операции над юзерами для админки"
  *  ),

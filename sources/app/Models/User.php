@@ -207,4 +207,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(VisitedPage::class);
     }
+
+    static function createBearerToken($userAccount)
+    {
+        $userAccount->tokens()->delete();
+        return $userAccount->createToken('user_account_token')->plainTextToken;
+    }
+
+    static function deleteBearerToken($userAccount)
+    {
+        return $userAccount->tokens()->delete();
+    }
 }
