@@ -7,6 +7,7 @@ use App\Core\Interfaces\Repositories\BuilderRepositoryInterface;
 use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use App\Core\Interfaces\Repositories\ChatSessionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ChatTokenCRMLeadPairRepositoryInterface;
+use App\Core\Interfaces\Repositories\CityRepositoryInterface;
 use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\DeletedFavoriteBuildingRepositoryInterface;
 use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
@@ -71,6 +72,7 @@ use App\Repositories\BuilderRepository;
 use App\Repositories\CandidateProfilesRepository;
 use App\Repositories\ChatSessionRepository;
 use App\Repositories\ChatTokenCRMLeadPairRepository;
+use App\Repositories\CityRepository;
 use App\Repositories\ComplexRepository;
 use App\Repositories\DeletedFavoriteBuildingRepository;
 use App\Repositories\FeedRepository;
@@ -470,6 +472,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SpriteImagePositionRepositoryInterface::class, SpriteImagePositionRepository::class);
     }
 
+    final public function registerCitiesRepository(): void
+    {
+        $this->app->singleton(CityRepositoryInterface::class, CityRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -540,6 +547,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerAuthorizationCallRepository();
         $this->registerLocationRepository();
         $this->registerSpriteImagePositionRepository();
+        $this->registerCitiesRepository();
     }
 
     /**

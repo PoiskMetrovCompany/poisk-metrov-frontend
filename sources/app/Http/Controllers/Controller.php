@@ -109,6 +109,11 @@ use OpenApi\Annotations as OA;
  *            name="Notification",
  *            description="Операции над уведомлениями"
  * ),
+ *
+ * @OA\Tag(
+ *             name="City",
+ *             description="Операции над городами"
+ *  ),
  */
 class Controller extends BaseController
 {

@@ -1631,6 +1631,176 @@
                 ]
             }
         },
+        "/api/v1/city/": {
+            "get": {
+                "tags": [
+                    "City"
+                ],
+                "summary": "Получение списка городов",
+                "description": "Возвращает JSON объект",
+                "operationId": "94dcc651b32c981dcef0206b4ea87dc0",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/v1/city/read": {
+            "get": {
+                "tags": [
+                    "City"
+                ],
+                "summary": "Получение города по ключу",
+                "description": "Возвращение JSON объекта",
+                "operationId": "5cba67fc52543c5094189a8ceae99d0a",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ для получения города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван Иванов"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ivan@example.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/city/store": {
+            "post": {
+                "tags": [
+                    "City"
+                ],
+                "summary": "Создание города.",
+                "description": "Возвращение JSON объекта",
+                "operationId": "18f9c7cf5708ec0ed1cc1c5c7153c29c",
+                "requestBody": {
+                    "description": "Данные для создания города",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "slug": {
+                                            "type": "string",
+                                            "example": ""
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Ошибка отправки анкеты"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/crm/reset-ads-agreement": {
             "post": {
                 "tags": [
@@ -2602,6 +2772,23 @@
                                 ]
                             }
                         }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "фильтрация сущности указанной в includes",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "apartments.room"
+                                ]
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -2982,6 +3169,10 @@
         {
             "name": "Notification",
             "description": "Операции над уведомлениями"
+        },
+        {
+            "name": "City",
+            "description": "Операции над городами"
         },
         {
             "name": "Crm",

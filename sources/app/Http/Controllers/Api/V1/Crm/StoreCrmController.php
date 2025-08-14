@@ -60,17 +60,17 @@ class StoreCrmController extends AbstractOperations
         $createLead = new CreateLead($validated['name'], $validated['phone'], $validated['comment'], $validated['city']);
         $result = $createLead->execute();
         $result = json_decode($result);
-        $returned = new stdClass();
+//        $returned = new stdClass();
 
-        $this->copy($result, $returned, [
-            'message',
-            'status_code'
-        ]);
+//        $this->copy($result, $returned, [
+//            'message',
+//            'status_code'
+//        ]);
 
         return new JsonResponse(
             data: [
                 ...self::identifier(),
-                ...self::attributes($returned),
+                ...self::attributes($result),
                 ...self::metaData($request, $request->all()),
             ],
             status: Response::HTTP_CREATED

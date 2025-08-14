@@ -10,6 +10,9 @@ use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\City\ListCityController;
+use App\Http\Controllers\Api\V1\City\ReadCityController;
+use App\Http\Controllers\Api\V1\City\StoreCityController;
 use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
 use App\Http\Controllers\Api\V1\Crm\StoreWithoutNameController;
@@ -67,6 +70,18 @@ if (!function_exists('operation')) {
 /// Override API
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
+    /// City
+    Route::namespace('CITY')->prefix('city')->group(function () {
+        Route::get('/', operation(ListCityController::class))->name('api.v1.city.list');
+
+        Route::get('/read', operation(ReadCityController::class))->name('api.v1.city.read');
+
+        Route::post('/store', operation(StoreCityController::class))
+            ->name('api.v1.city.store')
+            ->middleware('auth:api');
+    });
+    /// END City
+
     /// Cbr
     Route::namespace('CBR')->prefix('cbr')->group(function () {
        Route::get('actual-date', [CbrController::class, 'actualDate'])->name('api.v1.cbr.actualDate');
@@ -291,6 +306,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::post('/store-without-name', operation(StoreWithoutNameController::class))
             ->name('api.v1.crm.store-without-name');
+
     });
     /// END
 

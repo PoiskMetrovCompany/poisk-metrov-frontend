@@ -11,7 +11,7 @@ trait RelationshipResponderTrait
         return [];
     }
 
-    public function relationshipListOperation(mixed $entity, $searchData, array $requestAttributes, array $entityRelationship): array
+    public function relationshipListOperation(mixed $entity, $searchData, array $requestAttributes, array $entityRelationship, string|null $filter=null): array
     {
         $includes = [];
 
@@ -24,9 +24,9 @@ trait RelationshipResponderTrait
                 $linkedTableValue = $entity::RELATIONSHIP[$relationshipName]['linked_table_value'];
                 $relatedData = $modelClass::where($linkedTableValue, $searchData);
 
-                // TODO: Если будет много фильтров вынести в репозитории
-                if ($filter) {
-                    $relatedData->orderBy('name')
+                // TODO: Если будет много фильтров вынести в репозитории и сделать его связнозависимым
+                if ($filter === 'apartments.room' && $relationshipName === 'Apartment') {
+                    $relatedData->orderBy('name');
                 }
 
                 $relatedData->get();
