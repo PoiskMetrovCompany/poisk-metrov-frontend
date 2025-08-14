@@ -154,41 +154,41 @@ Route::get('/news-cards', [NewsController::class, 'getNewsPage']);
 
 
 //Impotant to place redirects at end of file
-//Route::get('/', function () {
-//    $city = app()->get(CityService::class)->getUserCity();
-//    return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
-//})->name('home');
-
 Route::get('/', function () {
     $city = app()->get(CityService::class)->getUserCity();
-
-    $userAgent = \request()->header('User-Agent');
-
-    if (empty($userAgent)) {
-        return true;
-    }
-
-    $bots = [
-        'TelegramBot',
-        'WhatsApp',
-        'facebookexternalhit',
-        'LinkedInBot',
-        'Twitterbot',
-        'Discordbot',
-        'Googlebot',
-        'YandexBot',
-        'Bot',
-    ];
-
-    if (Str::contains($userAgent, $bots)) {
-        return view('bot-preview', [
-            'city' => $city,
-            'metaUrl' => url()->full(),
-        ]);
-    }
-
     return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
 })->name('home');
+
+//Route::get('/', function () {
+//    $city = app()->get(CityService::class)->getUserCity();
+//
+//    $userAgent = \request()->header('User-Agent');
+//
+//    if (empty($userAgent)) {
+//        return true;
+//    }
+//
+//    $bots = [
+//        'TelegramBot',
+//        'WhatsApp',
+//        'facebookexternalhit',
+//        'LinkedInBot',
+//        'Twitterbot',
+//        'Discordbot',
+//        'Googlebot',
+//        'YandexBot',
+//        'Bot',
+//    ];
+//
+//    if (Str::contains($userAgent, $bots)) {
+//        return view('bot-preview', [
+//            'city' => $city,
+//            'metaUrl' => url()->full(),
+//        ]);
+//    }
+//
+//    return redirect("/{$city}", 303)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
+//})->name('home');
 
 
 Route::get('/catalogue', function () {
