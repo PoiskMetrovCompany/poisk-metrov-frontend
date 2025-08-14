@@ -22,8 +22,14 @@ trait RelationshipResponderTrait
                 $modelClass = "App\Models\\" . $relationshipName;
                 $mainTableValue = $entity::RELATIONSHIP[$relationshipName]['main_table_value'];
                 $linkedTableValue = $entity::RELATIONSHIP[$relationshipName]['linked_table_value'];
-//                $mainTableValueData = $entity::query()->pluck($mainTableValue)->toArray();
-                $relatedData = $modelClass::where($linkedTableValue, $searchData)->get();
+                $relatedData = $modelClass::where($linkedTableValue, $searchData);
+
+                // TODO: Если будет много фильтров вынести в репозитории
+                if ($filter) {
+                    $relatedData->orderBy('name')
+                }
+
+                $relatedData->get();
 
                 $includes[] = [
                     'type' => strtolower($relationshipName),

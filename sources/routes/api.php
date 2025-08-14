@@ -142,8 +142,10 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::post('/update', operation(UpdateApartmentController::class))
             ->name('api.v1.apartments.update')
             ->middleware('auth:api');
+
         Route::get('/selections', operation(SelectionApartmentController::class))
             ->name('api.v1.apartments.selections');
+
     });
     /// END
 

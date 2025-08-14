@@ -63,6 +63,23 @@ class ReadResidentialComplexesController extends AbstractOperations
      *              )
      *          )
      *      ),
+     *      @OA\Parameter(
+     *           name="filter",
+     *           in="query",
+     *           description="фильтрация сущности указанной в includes",
+     *           required=false,
+     *           style="form",
+     *           explode=true,
+     *           @OA\Schema(
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *                   enum={
+     *                        "apartments.room",
+     *                    }
+     *               )
+     *           )
+     *      ),
      *      @OA\Response(response=200, description="УСПЕХ!"),
      *      @OA\Response(
      *          response=404,

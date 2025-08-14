@@ -8,6 +8,7 @@ use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Models\BestOffer;
 use App\Models\ResidentialComplex;
 use App\Repositories\Build\FindQueryBuilderTrait;
+use App\Repositories\Queries\FindByKeyQueryTrait;
 use App\Services\CityService;
 use Illuminate\Support\Collection as BasicCollection;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,6 +33,7 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
     use FindNotQueryBuilderTrait;
     use FindHasQueryTrait;
     use FindQueryBuilderTrait;
+    use FindByKeyQueryTrait;
 
     public function __construct(
         protected CityServiceInterface $cityService,
