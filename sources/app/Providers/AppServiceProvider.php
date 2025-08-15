@@ -7,6 +7,7 @@ use App\Core\Interfaces\Repositories\BuilderRepositoryInterface;
 use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use App\Core\Interfaces\Repositories\ChatSessionRepositoryInterface;
 use App\Core\Interfaces\Repositories\ChatTokenCRMLeadPairRepositoryInterface;
+use App\Core\Interfaces\Repositories\CityRepositoryInterface;
 use App\Core\Interfaces\Repositories\ComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\DeletedFavoriteBuildingRepositoryInterface;
 use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
@@ -58,6 +59,7 @@ use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
 use App\Core\Interfaces\Services\SearchServiceInterface;
+use App\Core\Interfaces\Services\SelectRecommendationsServiceInterface;
 use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
 use App\Core\Interfaces\Services\SmsServiceInterface;
 use App\Core\Interfaces\Services\TextServiceInterface;
@@ -70,6 +72,7 @@ use App\Repositories\BuilderRepository;
 use App\Repositories\CandidateProfilesRepository;
 use App\Repositories\ChatSessionRepository;
 use App\Repositories\ChatTokenCRMLeadPairRepository;
+use App\Repositories\CityRepository;
 use App\Repositories\ComplexRepository;
 use App\Repositories\DeletedFavoriteBuildingRepository;
 use App\Repositories\FeedRepository;
@@ -97,6 +100,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\VacancyRepository;
 use App\Repositories\VisitedPageRepository;
 use App\Services\AdsAgreementService;
+use App\Services\Apartment\SelectRecommendationsService;
 use App\Services\ApartmentService;
 use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
@@ -141,7 +145,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(BackupHistoryServiceInterface::class, BackupHistoryService::class);
     }
-    
+
     final public function registerBackupService(): void
     {
         $this->app->singleton(Disk::class, function () {
@@ -151,318 +155,328 @@ class AppServiceProvider extends ServiceProvider
             return new BackupService($app->make(Disk::class), $app->make(BackupHistoryServiceInterface::class));
         });
     }
-    
+
     final public function registerReservationService(): void
     {
         $this->app->singleton(ReservationServiceInterface::class, ReservationService::class);
     }
-    
+
     final public function registerInteractionService(): void
     {
         $this->app->singleton(InteractionRepositoryInterface::class, InteractionRepository::class);
     }
-    
+
     final public function registerSerializedCollectionService(): void
     {
         $this->app->singleton(SerializedCollectionServiceInterface::class, SerializedCollectionService::class);
     }
-    
+
     final public function registerFavoritesService(): void
     {
         $this->app->singleton(FavoritesServiceInterface::class, FavoritesService::class);
     }
-    
+
     final public function registerCityService(): void
     {
         $this->app->singleton(CityServiceInterface::class, CityService::class);
     }
-    
+
     final public function registerUserService(): void
     {
         $this->app->singleton(UserServiceInterface::class, UserService::class);
     }
-    
+
     final public function registerApartmentService(): void
     {
         $this->app->singleton(ApartmentServiceInterface::class, ApartmentService::class);
     }
-    
+
     final public function registerVisitedPagesService(): void
     {
         $this->app->singleton(VisitedPagesServiceInterface::class, VisitedPagesService::class);
     }
-    
+
     final public function registerRealEstateService(): void
     {
         $this->app->singleton(RealEstateServiceInterface::class, RealEstateService::class);
     }
-    
+
     final public function registerCachingService(): void
     {
         $this->app->singleton(CachingServiceInterface::class, CachingService::class);
     }
-    
+
     final public function registerPriceFormattingService(): void
     {
         $this->app->singleton(PriceFormattingServiceInterface::class, PriceFormattingService::class);
     }
-    
+
     final public function registerNewsService(): void
     {
         $this->app->singleton(NewsServiceInterface::class, NewsService::class);
     }
-    
+
     final public function registerManagersService(): void
     {
         $this->app->singleton(ManagersServiceInterface::class, ManagersService::class);
     }
-    
+
     final public function registerFeedService(): void
     {
         $this->app->singleton(FeedServiceInterface::class, FeedService::class);
     }
-    
+
     final public function registerChatService(): void
     {
         $this->app->singleton(ChatServiceInterface::class, ChatService::class);
     }
-    
+
     final public function registerCRMService(): void
     {
         $this->app->singleton(CRMServiceInterface::class, CRMService::class);
     }
-    
+
     final public function registerAdsAgreementService(): void
     {
         $this->app->singleton(AdsAgreementServiceInterface::class, AdsAgreementService::class);
     }
-    
+
     final public function registerTextService(): void
     {
         $this->app->singleton(TextServiceInterface::class, TextService::class);
     }
-    
+
     final public function registerSearchService(): void
     {
         $this->app->singleton(SearchServiceInterface::class, SearchService::class);
     }
-    
+
     final public function registerBankService(): void
     {
         $this->app->singleton(BankServiceInterface::class, BankService::class);
     }
-    
+
     final public function registerPDFService(): void
     {
         $this->app->singleton(PDFServiceInterface::class, PDFService::class);
     }
-    
+
     final public function registerSmsService(): void
     {
         $this->app->singleton(SmsServiceInterface::class, SmsService::class);
     }
-    
+
     final public function registerBuilderService(): void
     {
         $this->app->singleton(BuilderServiceInterface::class, BuilderService::class);
     }
-    
+
     final public function registerGoogleDriveService(): void
     {
         $this->app->singleton(GoogleDriveServiceInterface::class, GoogleDriveService::class);
     }
-    
+
     final public function registerExcelService(): void
     {
         $this->app->singleton(ExcelServiceInterface::class, ExcelService::class);
     }
-    
+
     final public function registerGeoCodeService(): void
     {
         $this->app->singleton(GeoCodeServiceInterface::class, GeoCodeService::class);
     }
-    
+
     final public function registerLocationService(): void
     {
         $this->app->singleton(LocationServiceInterface::class, LocationService::class);
     }
-    
+
     final public function registerPreloadService(): void
     {
         $this->app->singleton(PreloadServiceInterface::class, PreloadService::class);
     }
-    
+
     final public function registerYandexSearchService(): void
     {
         $this->app->singleton(YandexSearchServiceInterface::class, YandexSearchService::class);
     }
-    
+
     final public function registerCallService(): void
     {
         $this->app->singleton(CallServiceInterface::class, CallService::class);
     }
-    
+
+    final public function registerSelectRecommendationsService(): void
+    {
+        $this->app->singleton(SelectRecommendationsServiceInterface::class, SelectRecommendationsService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
         $this->app->singleton(ReservationRepositoryInterface::class, ReservationRepository::class);
     }
-    
+
     final public function registerInteractionRepository(): void
     {
         $this->app->singleton(InteractionRepositoryInterface::class, InteractionRepository::class);
     }
-    
+
     final public function registerUserRepository(): void
     {
         $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
     }
-    
+
     final public function registerApartmentRepository(): void
     {
         $this->app->singleton(ApartmentRepositoryInterface::class, ApartmentRepository::class);
     }
-    
+
     final public function registerManagerRepository(): void
     {
         $this->app->singleton(ManagerRepositoryInterface::class, ManagerRepository::class);
     }
-    
+
     final public function registerComplexRepository(): void
     {
         $this->app->singleton(ComplexRepositoryInterface::class, ComplexRepository::class);
     }
-    
+
     final public function registerUserAdsAgreementRepository(): void
     {
         $this->app->singleton(UserAdsAgreementRepositoryInterface::class, UserAdsAgreementRepository::class);
     }
-    
+
     final public function registerResidentialComplexRepository(): void
     {
         $this->app->singleton(ResidentialComplexRepositoryInterface::class, ResidentialComplexRepository::class);
     }
-    
+
     final public function registerFeedRepository(): void
     {
         $this->app->singleton(FeedRepositoryInterface::class, FeedRepository::class);
     }
-    
+
     final public function registerVacancyRepository(): void
     {
         $this->app->singleton(VacancyRepositoryInterface::class, VacancyRepository::class);
     }
-    
+
     final public function registerMaritalStatusesRepository(): void
     {
         $this->app->singleton(MaritalStatusesRepositoryInterface::class, MaritalStatusesRepository::class);
     }
-    
+
     final public function registerCandidateProfilesRepository(): void
     {
         $this->app->singleton(CandidateProfilesRepositoryInterface::class, CandidateProfilesRepository::class);
     }
-    
+
     final public function registerRelatedDataRepository(): void
     {
         $this->app->singleton(RelatedDataRepositoryInterface::class, RelatedDataRepository::class);
     }
-    
+
     final public function registerVisitedPageRepository(): void
     {
         $this->app->singleton(VisitedPageRepositoryInterface::class, VisitedPageRepository::class);
     }
-    
+
     final public function registerBuilderRepository(): void
     {
         $this->app->singleton(BuilderRepositoryInterface::class, BuilderRepository::class);
     }
-    
+
     final public function registerChatTokenCRMLeadPairRepository(): void
     {
         $this->app->singleton(ChatTokenCRMLeadPairRepositoryInterface::class, ChatTokenCRMLeadPairRepository::class);
     }
-    
+
     final public function registerChatSessionRepository(): void
     {
         $this->app->singleton(ChatSessionRepositoryInterface::class, ChatSessionRepository::class);
     }
-    
+
     final public function registerUserChatMessageRepository(): void
     {
         $this->app->singleton(UserChatMessageRepositoryInterface::class, UserChatMessageRepository::class);
     }
-    
+
     final public function registerManagerChatMessageRepository(): void
     {
         $this->app->singleton(ManagerChatMessageRepositoryInterface::class, ManagerChatMessageRepository::class);
     }
-    
+
     final public function registerGroupChatBotMessageRepository(): void
     {
         $this->app->singleton(GroupChatBotMessageRepositoryInterface::class, GroupChatBotMessageRepository::class);
     }
-    
+
     final public function registerUserFavoritePlanRepository(): void
     {
         $this->app->singleton(UserFavoritePlanRepositoryInterface::class, UserFavoritePlanRepository::class);
     }
-    
+
     final public function registerUserFavoriteBuildingRepository(): void
     {
         $this->app->singleton(UserFavoriteBuildingRepositoryInterface::class, UserFavoriteBuildingRepository::class);
     }
-    
+
     final public function registerDeletedFavoriteBuildingRepository(): void
     {
         $this->app->singleton(DeletedFavoriteBuildingRepositoryInterface::class, DeletedFavoriteBuildingRepository::class);
     }
-    
+
     final public function registerRealtyFeedEntryRepository(): void
     {
         $this->app->singleton(RealtyFeedEntryRepositoryInterface::class, RealtyFeedEntryRepository::class);
     }
-    
+
     final public function registerResidentialComplexFeedSiteNameRepository(): void
     {
         $this->app->singleton(ResidentialComplexFeedSiteNameRepositoryInterface::class, ResidentialComplexFeedSiteNameRepository::class);
     }
-    
+
     final public function registerNewsRepository(): void
     {
         $this->app->singleton(NewsRepositoryInterface::class, NewsRepository::class);
     }
-    
+
     final public function registerRenovationRepository(): void
     {
         $this->app->singleton(RenovationRepositoryInterface::class, RenovationRepository::class);
     }
-    
+
     final public function registerResidentialComplexCategoryRepository(): void
     {
         $this->app->singleton(ResidentialComplexCategoryRepositoryInterface::class, ResidentialComplexCategoryRepository::class);
     }
-    
+
     final public function registerRelationshipEntityRepository(): void
     {
         $this->app->singleton(RelationshipEntityRepositoryInterface::class, RelationshipEntityRepository::class);
     }
-    
+
     final public function registerAuthorizationCallRepository(): void
     {
         $this->app->singleton(AuthorizationCallRepositoryInterface::class, AuthorizationCallRepository::class);
     }
-    
+
     final public function registerLocationRepository(): void
     {
         $this->app->singleton(LocationRepositoryInterface::class, LocationRepository::class);
     }
-    
+
     final public function registerSpriteImagePositionRepository(): void
     {
         $this->app->singleton(SpriteImagePositionRepositoryInterface::class, SpriteImagePositionRepository::class);
     }
-    
+
+    final public function registerCitiesRepository(): void
+    {
+        $this->app->singleton(CityRepositoryInterface::class, CityRepository::class);
+    }
+
     public function register(): void
     {
         /// Services
@@ -498,7 +512,8 @@ class AppServiceProvider extends ServiceProvider
         $this->registerPreloadService();
         $this->registerYandexSearchService();
         $this->registerCallService();
-        
+        $this->registerSelectRecommendationsService();
+
         /// Repositories
         $this->registerReservationRepository();
         $this->registerInteractionRepository();
@@ -532,8 +547,9 @@ class AppServiceProvider extends ServiceProvider
         $this->registerAuthorizationCallRepository();
         $this->registerLocationRepository();
         $this->registerSpriteImagePositionRepository();
+        $this->registerCitiesRepository();
     }
-    
+
     /**
      * Bootstrap any application services.
      */
@@ -556,7 +572,7 @@ class AppServiceProvider extends ServiceProvider
             'managerService' => app()->make(ManagersService::class),
             'preloadService' => app()->make(PreloadService::class)
         ]);
-        
+
         Request::macro('isBot', function() {
             $userAgent = $this->header('User-Agent');
             if (empty($userAgent)) {

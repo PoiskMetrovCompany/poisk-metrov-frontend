@@ -7,6 +7,8 @@ use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Models\BestOffer;
 use App\Models\ResidentialComplex;
+use App\Repositories\Build\FindQueryBuilderTrait;
+use App\Repositories\Queries\FindByKeyQueryTrait;
 use App\Services\CityService;
 use Illuminate\Support\Collection as BasicCollection;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,7 +23,6 @@ use App\Repositories\Queries\IsExistsQueryTrait;
 use App\Repositories\Queries\ListQueryTrait;
 use App\Repositories\Build\FindNotQueryBuilderTrait;
 
-#[AllowDynamicProperties]
 final class ResidentialComplexRepository implements ResidentialComplexRepositoryInterface
 {
     use ListQueryTrait;
@@ -31,49 +32,58 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
     use FindInBuildingIdQueryTrait;
     use FindNotQueryBuilderTrait;
     use FindHasQueryTrait;
+    use FindQueryBuilderTrait;
+    use FindByKeyQueryTrait;
 
     public function __construct(
-        protected CityServiceInterface $cityService
+        protected CityServiceInterface $cityService,
+        protected ResidentialComplex $model
     ) {
     }
-
-    public function getBestOffers(): Collection
+    public function findByComplexId(int $complexId, bool $isAuthenticated = false): Collection
     {
-        $code = $this->cityService->getUserCity();
+        $apartments = $this->model::find($complexId);
 
-        $residentialComplexes = ResidentialComplex::where('on_main_page', true);
-
-        if (!Auth::user()) {
-            $residentialComplexes->whereNotIn('builder', ResidentialComplex::$privateBuilders);
-//        } else {
-//            $residentialComplexes->whereIn('builder', ResidentialComplex::$privateBuilders);
+        if (!$isAuthenticated) {
+            $apartments = $apartments->filter(function ($apartment) {
+                return !in_array($apartment->residentialComplex->builder, ResidentialComplex::$privateBuilders);
+            });
         }
 
-        $residentialComplexes->whereHas('location', function ($query) use ($code) {
-                return $query->where('code', $code);
-            })
+        return $apartments;
+    }
+    public function getBestOffers(string $cityCode): Collection
+    {
+        $residentialComplexes = $this->model::where('on_main_page', true);
+        $residentialComplexes->whereNotIn('builder', $this->model::$privateBuilders);
+        $residentialComplexes->whereHas('location', function ($query) use ($cityCode) {
+            return $query->where('code', $cityCode);
+        })
             ->with('apartments')
             ->withCount('apartments')
             ->orderBy('apartments_count', 'DESC')
             ->has('apartments');
 
-        if ($residentialComplexes->count() == 0) {
-            $request = BestOffer::where('location_code', $code);
+        $countQuery = clone $residentialComplexes;
+        $count = $countQuery->count();
+
+        if ($count == 0) {
+            $request = BestOffer::where('location_code', $cityCode);
             $complexCodes = $request->get()->pluck('complex_code')->toArray();
 
             if (count($complexCodes)) {
-                $residentialComplexes = ResidentialComplex::
-                    whereIn('code', $complexCodes)
-                    ->with('apartments')
+                $residentialComplexes = $this->model::whereIn('code', $complexCodes);
+
+                $residentialComplexes->with('apartments')
                     ->withCount('apartments')
                     ->orderBy('apartments_count', 'DESC')
                     ->has('apartments');
             } else {
-                $residentialComplexes = ResidentialComplex::
-                    whereHas('location', function ($query) use ($code) {
-                        return $query->where('code', $code);
-                    })
-                    ->with('apartments')
+                $residentialComplexes = $this->model::whereHas('location', function ($query) use ($cityCode) {
+                    return $query->where('code', $cityCode);
+                });
+
+                $residentialComplexes->with('apartments')
                     ->withCount('apartments')
                     ->orderBy('apartments_count', 'DESC')
                     ->limit(12)

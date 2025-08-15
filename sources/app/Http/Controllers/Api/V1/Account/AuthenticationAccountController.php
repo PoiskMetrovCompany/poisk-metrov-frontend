@@ -50,7 +50,6 @@ class AuthenticationAccountController extends AbstractOperations
         protected CallServiceInterface $callService,
     )
     {
-
         $this->apiKey = config('call.api_key');
         $this->campaignId = config('call.campaing_id');
         $this->flashCallURL = CallUrlEnum::FLASH_CALL_URL->value;
@@ -85,7 +84,7 @@ class AuthenticationAccountController extends AbstractOperations
      * )
      * )
      *
-     * @param ConfirmUserRequest $confirmUserRequest
+     * @param ConfirmUserRequest $request
      * @return JsonResponse
      */
     function __invoke(ConfirmUserRequest $request): JsonResponse

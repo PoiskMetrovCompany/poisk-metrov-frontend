@@ -19,7 +19,11 @@ use OpenApi\Annotations as OA;
  *      type="http",
  *      securityScheme="bearerAuth",
  *      scheme="bearer"
- * )
+ * ),
+ * @OA\Tag(
+ *    name="Auth",
+ *    description="Операции авторизации"
+ * ),
  * @OA\Tag(
  *      name="User",
  *      description="Операции над юзерами для админки"
@@ -76,12 +80,6 @@ use OpenApi\Annotations as OA;
  *       description="Операции связанные с Энви ЦРМ"
  *  )
  *
- * @OA\SecurityScheme(
- *        type="http",
- *        securityScheme="bearerAuth",
- *        scheme="bearer"
- *  ),
- *
  * @OA\Tag(
  *       name="Account",
  *       description="Операции над юзерами для аккаунтами кандидата/безопасника"
@@ -111,6 +109,11 @@ use OpenApi\Annotations as OA;
  *            name="Notification",
  *            description="Операции над уведомлениями"
  * ),
+ *
+ * @OA\Tag(
+ *             name="City",
+ *             description="Операции над городами"
+ *  ),
  */
 class Controller extends BaseController
 {

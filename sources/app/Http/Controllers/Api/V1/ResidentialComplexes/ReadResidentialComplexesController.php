@@ -31,11 +31,11 @@ class ReadResidentialComplexesController extends AbstractOperations
      *      summary="получение конкретного ЖК",
      *      description="Возвращение JSON объекта",
      *      @OA\Parameter(
-     *          name="id",
+     *          name="key",
      *          in="query",
      *          required=true,
-     *          description="ID для получения ЖК",
-     *          @OA\Schema(type="integer", example="1")
+     *          description="Ключ для получения ЖК",
+     *          @OA\Schema(type="string", example="")
      *      ),
      *      @OA\Parameter(
      *          name="includes",
@@ -63,6 +63,23 @@ class ReadResidentialComplexesController extends AbstractOperations
      *              )
      *          )
      *      ),
+     *      @OA\Parameter(
+     *           name="filter",
+     *           in="query",
+     *           description="фильтрация сущности указанной в includes",
+     *           required=false,
+     *           style="form",
+     *           explode=true,
+     *           @OA\Schema(
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *                   enum={
+     *                        "apartments.room",
+     *                    }
+     *               )
+     *           )
+     *      ),
      *      @OA\Response(response=200, description="УСПЕХ!"),
      *      @OA\Response(
      *          response=404,
@@ -74,8 +91,8 @@ class ReadResidentialComplexesController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $id = $request->input('id');
-        $attributes = $this->residentialComplexRepository->findById($id);
+        $key = $request->input('key');
+        $attributes = $this->residentialComplexRepository->findByKey($key);
         $collect = new ResidentialComplexesResource($attributes);
 
         return new JsonResponse(

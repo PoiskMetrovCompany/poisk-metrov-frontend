@@ -28,19 +28,4 @@ class Notification extends Model
         'created_at',
         'updated_at',
     ];
-
-    public function list()
-    {
-
-    }
-
-    public function store(array $attributes)
-    {
-
-    }
-
-    public function read(array $attributes)
-    {
-
-    }
 }

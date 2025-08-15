@@ -50,9 +50,9 @@ class CreateLead extends AbstractCRMCommand
     {
         $result = cURL::sendRequest($this->URL, $this->parameters);
 
-        if ($addParameters) {
-            $result->parameters = transliterator_create('Hex-Any')->transliterate($this->parameters);
-        }
+//        if ($addParameters) {
+//            $result->parameters = transliterator_create('Hex-Any')->transliterate($this->parameters);
+//        }
 
         if ($encode) {
             return json_encode($result);

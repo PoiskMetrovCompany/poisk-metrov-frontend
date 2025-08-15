@@ -14,10 +14,18 @@ interface VisitedPageRepositoryInterface extends
     FindQueryBuilderInterface
 {
     /**
-     * @param int $userId
+     * @param string $userKey
      * @param string $pageCode
      * @param Collection $codes
      * @return Collection
      */
-    public function findUniqueCode(int $userId, string $pageCode, Collection $codes): Collection;
+    public function findUniqueCode(string $userKey, string $pageCode, Collection $codes): Collection;
+
+    /**
+     * @param string $userKey
+     * @param string $pageCode
+     * @param Collection $codes
+     * @return Collection
+     */
+    public function getMetrics(string $userKey, string $pageCode, Collection $codes): Collection;
 }

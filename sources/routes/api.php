@@ -6,8 +6,15 @@ use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
 use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
 use App\Http\Controllers\Api\V1\Apartments\ListApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
+use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
+use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
+use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\City\ListCityController;
+use App\Http\Controllers\Api\V1\City\ReadCityController;
+use App\Http\Controllers\Api\V1\City\StoreCityController;
 use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
+use App\Http\Controllers\Api\V1\Crm\StoreClientTransferController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
 use App\Http\Controllers\Api\V1\Crm\StoreWithoutNameController;
 use App\Http\Controllers\Api\V1\Favorite\CountFavoritesController;
@@ -64,11 +71,33 @@ if (!function_exists('operation')) {
 /// Override API
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
+    /// City
+    Route::namespace('CITY')->prefix('city')->group(function () {
+        Route::get('/', operation(ListCityController::class))->name('api.v1.city.list');
+
+        Route::get('/read', operation(ReadCityController::class))->name('api.v1.city.read');
+
+        Route::post('/store', operation(StoreCityController::class))
+            ->name('api.v1.city.store')
+            ->middleware('auth:api');
+    });
+    /// END City
+
     /// Cbr
     Route::namespace('CBR')->prefix('cbr')->group(function () {
        Route::get('actual-date', [CbrController::class, 'actualDate'])->name('api.v1.cbr.actualDate');
     });
     /// END Cbr
+
+    /// Auth
+    Route::namespace('AUTH')->prefix('auth')->group(function () {
+        Route::post('/authentication', operation(AuthenticationController::class))
+            ->name('api.v1.user.authentication');
+
+        Route::post('/authorization', operation(AuthorizationController::class))
+            ->name('api.v1.user.authorization');
+    });
+    /// END Auth
 
     /// User
     Route::namespace('USER')->prefix('users')->group(function () {
@@ -112,8 +141,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// RealEstate
     Route::namespace('REAL-ESTATE')->prefix('real-estate')->group(function () {
-        Route::get('/get-all', operation(GetAllRealEstateController::class))
-            ->name('api.v1.real-estate.get-all');
+        Route::get('/', operation(GetAllRealEstateController::class))
+            ->name('api.v1.real-estate');
 
         Route::post('/update', operation(UpdateRealEstateController::class))
             ->name('api.v1.real-estate.update')
@@ -129,6 +158,10 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::post('/update', operation(UpdateApartmentController::class))
             ->name('api.v1.apartments.update')
             ->middleware('auth:api');
+
+        Route::get('/selections', operation(SelectionApartmentController::class))
+            ->name('api.v1.apartments.selections');
+
     });
     /// END
 
@@ -264,7 +297,6 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 
     /// CRM
-    // TODO: добавить в Swagger
     Route::namespace('CRM')->prefix('crm')->group(function () {
         Route::post('/reset-ads-agreement', operation(ResetAdsAgreementController::class))
             ->name('api.v1.crm.reset-ads-agreement');
@@ -274,6 +306,9 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::post('/store-without-name', operation(StoreWithoutNameController::class))
             ->name('api.v1.crm.store-without-name');
+
+        Route::post('/client-transfer', operation(StoreClientTransferController::class))
+            ->name('api.v1.crm.client-transfer');
     });
     /// END
 

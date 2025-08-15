@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\ResidentialComplexes;
 
 use App\Core\Abstracts\AbstractOperations;
+use App\Core\Interfaces\Repositories\LocationRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ResidentialComplexes\ResidentialComplexesCollection;
@@ -14,11 +15,17 @@ use OpenApi\Annotations as OA;
 
 /**
  * @see ResidentialComplexRepositoryInterface
+ * @see LocationRepositoryInterface
  */
 class ListResidentialComplexesController extends AbstractOperations
 {
+    /**
+     * @param ResidentialComplexRepositoryInterface $residentialComplexRepository
+     * @param LocationRepositoryInterface $locationRepository
+     */
     public function __construct(
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
+        protected LocationRepositoryInterface $locationRepository
     )
     {
 
@@ -30,6 +37,13 @@ class ListResidentialComplexesController extends AbstractOperations
      *      path="/api/v1/residential-complex/",
      *      summary="получение списка ЖК",
      *      description="Возвращение JSON объекта",
+     *      @OA\Parameter(
+     *          name="city",
+     *          in="query",
+     *          required=true,
+     *          description="Имя города",
+     *          @OA\Schema(type="string", example="novosibirsk")
+     *      ),
      *      @OA\Parameter(
      *          name="includes",
      *          in="query",
@@ -67,7 +81,11 @@ class ListResidentialComplexesController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $attributes = $this->residentialComplexRepository->list([]);
+        $cityName = $request->input('city');
+        $location = $this->locationRepository->find(['code' => $cityName]);
+        // TODO: вернуть проверку по ключу
+        $attributes = $this->residentialComplexRepository->list(!empty($city) ? ['location_id' => $location->id] : []);
+
         $collect = new ResidentialComplexesCollection($attributes);
 
         return new JsonResponse(
