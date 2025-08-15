@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\City\ListCityController;
 use App\Http\Controllers\Api\V1\City\ReadCityController;
 use App\Http\Controllers\Api\V1\City\StoreCityController;
 use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
+use App\Http\Controllers\Api\V1\Crm\StoreClientTransferController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
 use App\Http\Controllers\Api\V1\Crm\StoreWithoutNameController;
 use App\Http\Controllers\Api\V1\Favorite\CountFavoritesController;
@@ -140,8 +141,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// RealEstate
     Route::namespace('REAL-ESTATE')->prefix('real-estate')->group(function () {
-        Route::get('/get-all', operation(GetAllRealEstateController::class))
-            ->name('api.v1.real-estate.get-all');
+        Route::get('/', operation(GetAllRealEstateController::class))
+            ->name('api.v1.real-estate');
 
         Route::post('/update', operation(UpdateRealEstateController::class))
             ->name('api.v1.real-estate.update')
@@ -296,7 +297,6 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 
     /// CRM
-    // TODO: добавить в Swagger
     Route::namespace('CRM')->prefix('crm')->group(function () {
         Route::post('/reset-ads-agreement', operation(ResetAdsAgreementController::class))
             ->name('api.v1.crm.reset-ads-agreement');
@@ -307,6 +307,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::post('/store-without-name', operation(StoreWithoutNameController::class))
             ->name('api.v1.crm.store-without-name');
 
+        Route::post('/client-transfer', operation(StoreClientTransferController::class))
+            ->name('api.v1.crm.client-transfer');
     });
     /// END
 

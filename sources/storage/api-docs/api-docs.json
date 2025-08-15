@@ -1840,6 +1840,72 @@
                 ]
             }
         },
+        "/api/v1/crm/client-transfer": {
+            "post": {
+                "tags": [
+                    "Crm"
+                ],
+                "summary": "Отправка заявки на передачу клиента в ЦРМ",
+                "description": "Возвращение JSON объекта",
+                "operationId": "63e8c3c2659bbf4e21273fc923c002b0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "middle_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "client_last_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "client_first_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "client_middle_name": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "client_phone": {
+                                        "type": "string",
+                                        "example": ""
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/crm/store": {
             "post": {
                 "tags": [
@@ -2499,14 +2565,26 @@
                 ]
             }
         },
-        "/api/v1/real-estate/get-all": {
+        "/api/v1/real-estate/": {
             "get": {
                 "tags": [
                     "RealEstate"
                 ],
-                "summary": "получение списка планировок",
+                "summary": "Фильтр недвижимости",
                 "description": "Возвращение JSON объекта",
-                "operationId": "97e305b8dc4f1413746616ef9728a921",
+                "operationId": "9db4b8cc12440574e8e0bb2a554c5ad2",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Имя города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "novosibirsk"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!"
