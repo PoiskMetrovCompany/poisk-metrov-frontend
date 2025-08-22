@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use OpenApi\Annotations as OA;
+use ZipArchive;
 
 /**
  * @OA\Get(
@@ -50,28 +50,25 @@ class ExportToPDFFormatController extends Controller
     public function __invoke(Request $request)
     {
         $keys = $request->input('keys');
-
         $query = DB::table('candidate_profiles')
-            ->select('*')
             ->join('vacancies', 'vacancies.key', '=', 'candidate_profiles.vacancies_key')
-            ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key');
+            ->join('marital_statuses', 'marital_statuses.key', '=', 'candidate_profiles.marital_statuses_key')
+            ->select(
+                'candidate_profiles.*',
+                'vacancies.title as vacancy_name',
+                'marital_statuses.title as marital_status_name',
+                DB::raw("COALESCE(JSON_UNQUOTE(JSON_EXTRACT(candidate_profiles.family_partner, '$.name')), '') AS family_partner_name"),
+                DB::raw("COALESCE(JSON_UNQUOTE(JSON_EXTRACT(candidate_profiles.family_partner, '$.age')), '') AS family_partner_age"),
+                DB::raw("COALESCE(JSON_UNQUOTE(JSON_EXTRACT(candidate_profiles.family_partner, '$.relation')), '') AS family_partner_relation")
+            );
 
         if ($keys) {
             $keys = urldecode($keys);
             $keys = array_map('trim', explode(',', $keys));
             $keys = array_filter($keys);
-
             if (empty($keys)) {
                 abort(400, 'Не указаны ключи.');
             }
-
-            $profiles = $query->whereIn('candidate_profiles.key', $keys)->get();
-        } else {
-            $profiles = $query->get();
-        }
-
-        if ($profiles->isEmpty()) {
-            abort(404, 'Не найдено ни одной анкеты.');
         }
 
         $cleanUtf8 = function ($text) {
@@ -81,46 +78,139 @@ class ExportToPDFFormatController extends Controller
             return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
         };
 
-        $html = '';
+        if ($keys && count($keys) === 1) {
+            $profile = $query->where('candidate_profiles.key', $keys[0])->first();
 
-        $html .= '
-            <h1 style="text-align: center;">Анкеты кандидатов</h1>
-            <p style="text-align: center; color: #555;">Всего: ' . $profiles->count() . '</p>
-            <hr>
-            <div style="page-break-before: always;"></div>
-        ';
+            if (!$profile) {
+                abort(404, 'Анкета не найдена.');
+            }
 
-        foreach ($profiles as $profile) {
             $dataArray = json_decode(json_encode($profile), true);
             array_walk_recursive($dataArray, function (&$item) use ($cleanUtf8) {
                 if (is_string($item)) {
                     $item = $cleanUtf8($item);
                 }
             });
+
+            $familyPartner = [
+                'name' => $dataArray['family_partner_name'] ?? '',
+                'age' => $dataArray['family_partner_age'] ?? '',
+                'relation' => $dataArray['family_partner_relation'] ?? '',
+            ];
+
+            $adultChildren = [];
+            if (!empty($dataArray['adult_children'])) {
+                $decoded = json_decode($dataArray['adult_children'], true);
+                if (is_array($decoded)) {
+                    $adultChildren = $decoded;
+                }
+            }
+
+            $adultFamilyMembers = [];
+            if (!empty($dataArray['adult_family_members'])) {
+                $decoded = json_decode($dataArray['adult_family_members'], true);
+                if (is_array($decoded)) {
+                    $adultFamilyMembers = $decoded;
+                }
+            }
+
             $data = (object)$dataArray;
 
-            $html .= view('export-pdf.candidate-profiles.index', compact('data'))->render();
+            $html = view('export-pdf.candidate-profiles.index', compact('data', 'familyPartner', 'adultChildren', 'adultFamilyMembers'))->render();
 
-            $html .= '<div style="page-break-before: always;"></div>';
-        }
+            try {
+                $mpdf = new Mpdf([
+                    'mode' => 'utf-8',
+                    'format' => 'A4',
+                    'margin_top' => 10,
+                    'margin_bottom' => 10,
+                    'margin_left' => 15,
+                    'margin_right' => 15,
+                    'tempDir' => storage_path('app/temp/mpdf'),
+                    'default_font' => 'dejavusans',
+                ]);
+                $mpdf->WriteHTML($html);
+                $mpdf->Output('Anketa_Kandidata.pdf', 'D');
+            } catch (MpdfException $e) {
+                abort(500, 'Ошибка генерации PDF.');
+            }
+        }  else {
+            $profiles = $keys
+                ? $query->whereIn('candidate_profiles.key', $keys)->get()
+                : $query->get();
 
-        try {
-            $mpdf = new Mpdf([
-                'mode' => 'utf-8',
-                'format' => 'A4',
-                'margin_top' => 10,
-                'margin_bottom' => 10,
-                'margin_left' => 15,
-                'margin_right' => 15,
-                'tempDir' => storage_path('app/temp/mpdf'),
-                'default_font' => 'dejavusans',
-            ]);
+            if ($profiles->isEmpty()) {
+                abort(404, 'Не найдено ни одной анкеты.');
+            }
 
-            $mpdf->SetDisplayMode('fullpage');
-            $mpdf->WriteHTML($html);
-            $mpdf->Output('Ankety_Kandidatov.pdf', 'D');
-        } catch (MpdfException $e) {
-            abort(500, 'Ошибка генерации PDF.');
+            $zip = new ZipArchive();
+            $zipFileName = tempnam(sys_get_temp_dir(), 'zip_');
+
+            if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
+                abort(500, 'Не удалось создать ZIP-архив.');
+            }
+
+            try {
+                foreach ($profiles as $profile) {
+                    $dataArray = json_decode(json_encode($profile), true);
+                    array_walk_recursive($dataArray, function (&$item) use ($cleanUtf8) {
+                        if (is_string($item)) {
+                            $item = $cleanUtf8($item);
+                        }
+                    });
+
+                    $familyPartner = [
+                        'name' => $dataArray['family_partner_name'] ?? '',
+                        'age' => $dataArray['family_partner_age'] ?? '',
+                        'relation' => $dataArray['family_partner_relation'] ?? '',
+                    ];
+
+                    $adultChildren = [];
+                    if (!empty($dataArray['adult_children'])) {
+                        $decoded = json_decode($dataArray['adult_children'], true);
+                        if (is_array($decoded)) {
+                            $adultChildren = $decoded;
+                        }
+                    }
+
+                    $adultFamilyMembers = [];
+                    if (!empty($dataArray['adult_family_members'])) {
+                        $decoded = json_decode($dataArray['adult_family_members'], true);
+                        if (is_array($decoded)) {
+                            $adultFamilyMembers = $decoded;
+                        }
+                    }
+
+                    $data = (object)$dataArray;
+
+                    $html = view('export-pdf.candidate-profiles.index', compact('data', 'familyPartner', 'adultChildren', 'adultFamilyMembers'))->render();
+
+                    $mpdf = new Mpdf([
+                        'mode' => 'utf-8',
+                        'format' => 'A4',
+                        'margin_top' => 10,
+                        'margin_bottom' => 10,
+                        'margin_left' => 15,
+                        'margin_right' => 15,
+                        'tempDir' => storage_path('app/temp/mpdf'),
+                        'default_font' => 'dejavusans',
+                    ]);
+                    $mpdf->WriteHTML($html);
+                    $pdfContent = $mpdf->Output('', 'S');
+
+                    $zip->addFromString("anketa_{$profile->key}.pdf", $pdfContent);
+                }
+
+                $zip->close();
+
+                return response()->download($zipFileName, 'Ankety_Kandidatov.zip')->deleteFileAfterSend(true);
+
+            } catch (\Exception $e) {
+                if (file_exists($zipFileName)) {
+                    unlink($zipFileName);
+                }
+                abort(500, 'Ошибка при создании архива: ' . $e->getMessage());
+            }
         }
     }
 }

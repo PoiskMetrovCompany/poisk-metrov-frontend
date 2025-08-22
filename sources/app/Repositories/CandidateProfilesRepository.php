@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Core\Common\CandidateProfileExportColumnsConst;
 use App\Core\Interfaces\Repositories\CandidateProfilesRepositoryInterface;
 use App\Models\CandidateProfiles;
+use App\Repositories\Build\FindQueryBuilderTrait;
 use App\Repositories\Queries\DestroyQueryTrait;
 use App\Repositories\Queries\FindByIdQueryTrait;
 use App\Repositories\Queries\FindByKeyQueryTrait;
@@ -22,6 +23,7 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
     use FindByKeyQueryTrait;
     use UpdateQueryTrait;
     use DestroyQueryTrait;
+    use FindQueryBuilderTrait;
 
     public function __construct(
         protected CandidateProfiles $model,
@@ -53,7 +55,6 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
         $query->orderBy('candidate_profiles.updated_at', 'desc');
 
         $results = $query->get();
-        Log::info($results);
 
         $processedResults = $results->map(function($item) {
             $item->serviceman = $item->serviceman ? 'Да' : 'Нет';

@@ -1,6 +1,7 @@
 <?php
 // TODO: переименовать в "0000_00_00_000000_init_tables.php"
 use App\Core\Common\DocumentTypeEnum;
+use App\Core\Common\VacancyStatusesEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,6 +29,9 @@ return new class extends Migration {
             $table->timestampTz('deleted_at')->nullable(true)->default(null);
             $table->uuid('key')->unique();
             $table->enum('role', ['security-guard', 'candidate']);
+            $table->string('last_name', 255)->nullable();
+            $table->string('first_name', 255)->nullable();
+            $table->string('middle_name', 255)->nullable();
             $table->string('phone', 255)->nullable();
             $table->string('email', 255)->nullable();
             $table->string('secret', 255)->nullable();
@@ -690,8 +694,18 @@ return new class extends Migration {
             $table->uuid('key');
             $table->uuid('vacancies_key');
             $table->uuid('marital_statuses_key');
+            $table->string('work_team')->default('Административный состав');
             $table->string('city_work', 255)->nullable();
-            $table->enum('status', ['Новая анкета', 'Проверен', 'Нужна доработка', 'Отклонен'])->default('Новая анкета');
+            $table->enum('status', [
+                VacancyStatusesEnum::New->value,
+                VacancyStatusesEnum::Verified->value,
+                VacancyStatusesEnum::Rejected->value,
+                VacancyStatusesEnum::NeedsImprovement->value,
+                VacancyStatusesEnum::Accepted->value,
+                VacancyStatusesEnum::NotAccepted->value,
+                VacancyStatusesEnum::CameOut->value,
+                VacancyStatusesEnum::NotCameOut->value,
+            ])->default('Новая анкета');
             $table->string('first_name', 255);
             $table->string('last_name', 255);
             $table->string('middle_name', 255);

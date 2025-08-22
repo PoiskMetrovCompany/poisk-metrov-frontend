@@ -1,15 +1,29 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Account\AccountAuthorizationController;
+use App\Http\Controllers\Api\V1\Account\AccountSetCodeController;
 use App\Http\Controllers\Api\V1\Account\AuthenticationAccountController;
 use App\Http\Controllers\Api\V1\Account\AuthorizationAccountController;
 use App\Http\Controllers\Api\V1\Account\LogoutAccountController;
 use App\Http\Controllers\Api\V1\Account\UpdateAccountController;
+use App\Http\Controllers\Api\V1\Accounts\AccountDeleteController;
+use App\Http\Controllers\Api\V1\Accounts\AccountListController;
+use App\Http\Controllers\Api\V1\Accounts\AccountStoreController;
+use App\Http\Controllers\Api\V1\Accounts\AccountUpdateController;
 use App\Http\Controllers\Api\V1\Apartments\ListApartmentController;
-use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
+use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStatusesController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileUpdateController;
 use App\Http\Controllers\Api\V1\CbrController;
+use App\Http\Controllers\Api\V1\Chat\GetChatHistoryController;
+use App\Http\Controllers\Api\V1\Chat\GetUserChatTokenController;
+use App\Http\Controllers\Api\V1\Chat\SendChatMessageController;
 use App\Http\Controllers\Api\V1\City\ListCityController;
 use App\Http\Controllers\Api\V1\City\ReadCityController;
 use App\Http\Controllers\Api\V1\City\StoreCityController;
@@ -17,31 +31,31 @@ use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
 use App\Http\Controllers\Api\V1\Crm\StoreClientTransferController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
 use App\Http\Controllers\Api\V1\Crm\StoreWithoutNameController;
+use App\Http\Controllers\Api\V1\Export\ExportToPDFFormatController;
+use App\Http\Controllers\Api\V1\Export\ExportToXlsxFormatController;
 use App\Http\Controllers\Api\V1\Favorite\CountFavoritesController;
 use App\Http\Controllers\Api\V1\Favorite\GetFavoriteBuildingViewsControllers;
 use App\Http\Controllers\Api\V1\Favorite\GetFavoritePlanViewsController;
 use App\Http\Controllers\Api\V1\Favorite\SwitchLikeController;
 use App\Http\Controllers\Api\V1\Feeds\CreateFeedController;
-use App\Http\Controllers\Api\V1\Feeds\ReadFeedController;
+use App\Http\Controllers\Api\V1\Feeds\DeleteFeedController;
 use App\Http\Controllers\Api\V1\Feeds\GetFeedNamesController;
+use App\Http\Controllers\Api\V1\Feeds\ReadFeedController;
 use App\Http\Controllers\Api\V1\Feeds\UpdateFeedController;
 use App\Http\Controllers\Api\V1\Feeds\UpdateFeedNamesController;
-use App\Http\Controllers\Api\V1\Feeds\DeleteFeedController;
 use App\Http\Controllers\Api\V1\File\CreateFilesController;
 use App\Http\Controllers\Api\V1\File\DeleteFileController;
 use App\Http\Controllers\Api\V1\File\DownloadFilesController;
 use App\Http\Controllers\Api\V1\File\Folders\CreateFolderController;
 use App\Http\Controllers\Api\V1\File\Folders\DeleteFolderController;
-use App\Http\Controllers\Api\V1\Chat\GetChatHistoryController;
-use App\Http\Controllers\Api\V1\Chat\GetUserChatTokenController;
-use App\Http\Controllers\Api\V1\Chat\SendChatMessageController;
 use App\Http\Controllers\Api\V1\File\ReadFileController;
 use App\Http\Controllers\Api\V1\File\UpdateFilesController;
 use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsController;
+use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsWithoutManagerController;
 use App\Http\Controllers\Api\V1\Managers\Chat\SendMessageToSessionController;
 use App\Http\Controllers\Api\V1\Managers\Chat\TryStartSessionController;
 use App\Http\Controllers\Api\V1\Managers\ListManagerController;
-use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsWithoutManagerController;
+use App\Http\Controllers\Api\V1\Notification\NewCandidatesController;
 use App\Http\Controllers\Api\V1\RealEstate\GetAllRealEstateController;
 use App\Http\Controllers\Api\V1\RealEstate\UpdateRealEstateController;
 use App\Http\Controllers\Api\V1\ResidentialComplexes\ListResidentialComplexesController;
@@ -50,11 +64,12 @@ use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
 use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateUserController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyDestroyController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyReadController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyStoreController;
+use App\Http\Controllers\Api\V1\Vacancies\VacancyUpdateController;
 use App\Http\Controllers\Api\V1\Visited\UpdatePagesVisitedController;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\PhoneController;
-use App\Http\Controllers\TelegramController;
-use App\Http\Controllers\TelegramSurveyController;
 use Illuminate\Support\Facades\Route;
 
 if (!function_exists('operation')) {
@@ -320,6 +335,52 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.residential-complex.read');
     });
     /// END
+
+    /// CANDIDATES
+    Route::prefix('candidates')->group(function () {
+        Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('/store', [CandidateProfileStoreController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('/get-statuses', [CandidateProfileStatusesController::class, '__invoke'])->middleware('auth:sanctum');
+    });
+    /// END
+
+    /// ACCOUNT
+    Route::prefix('account')->group(function () {
+        Route::post('set-code', [AccountSetCodeController::class, 'setCode']);
+        Route::post('auth', [AccountAuthorizationController::class, '__invoke']);
+        Route::get('list', [AccountListController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('store', [AccountStoreController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('update', [AccountUpdateController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::delete('delete', [AccountDeleteController::class, '__invoke'])->middleware('auth:sanctum');
+    });
+    /// END
+
+    /// VACANCY
+    Route::prefix('vacancy')->group(function () {
+        Route::get('/', [VacancyListController::class, '__invoke']);
+        Route::post('/store', [VacancyStoreController::class, '__invoke']);
+        Route::get('/read', [VacancyReadController::class, '__invoke']);
+        Route::post('/update', [VacancyUpdateController::class, '__invoke']);
+        Route::delete('/destroy', [VacancyDestroyController::class, '__invoke']);
+    });
+    /// END
+
+    /// EXPORT
+    Route::prefix('export')->group(function () {
+        /// NOTE: эти маршруты могуп принимать гет параметр "keys"
+        Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke'])->middleware('auth:sanctum');
+        /// END
+    });
+    /// END
+
+    /// NOTIFICATION
+    Route::prefix('notification')->group(function () {
+        Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']); //->middleware('auth:sanctum');
+    });
+    /// END
 });
 /// END Api Version 1
 
@@ -329,19 +390,19 @@ Route::namespace('V1')->prefix('v1')->group(function () {
  * TODO: ВЕРНУТЬСЯ ПРИ ПОСТУПЛЕНИИ ЗАДАЧ ПО АДМИНКЕ И АКТУАЛИЗИРОВАТЬ МАРШРУТЫ В АДМИНКЕ!!!
  * TODO: Или предложить https://orchid.software/ru/
  * */
-Route::middleware('auth:api')->group(function () {
-    Route::post('/update-article', [NewsController::class, 'createOrUpdateArticle']); // TODO: когда появится задача по новостям вернуться
-    Route::delete('/delete-article', [NewsController::class, 'deleteArticle']); // TODO: когда появится задача по новостям вернуться
-
-});
-
-Route::get('/get-article', [NewsController::class, 'getArticle']); // TODO: когда появится задача по новостям вернуться
-Route::get('/get-news', [NewsController::class, 'getNews']); // TODO: когда появится задача по новостям вернуться
-Route::post('/call-confirmed', [PhoneController::class, 'onCallConfirmed']); // TODO: не реализованно
-Route::post('/call-failed', [PhoneController::class, 'onCallFailed']); // TODO: не реализованно
-
-
-Route::post('/faweik3w4pofja23zcn23p1qpjzxkcnelrjq', [TelegramController::class, 'callbackRegister']);
-Route::post('/ziudGBZDikfuwAGD3ioruGSBFDofyafh873nabFXGorf3', [TelegramSurveyController::class, 'callbackNovosibirsk']);
-Route::post('/ivujfiBXZDFsodjBXD483uf98shGZDFahis398af3', [TelegramSurveyController::class, 'callbackStPetersburg']);
+//Route::middleware('auth:api')->group(function () {
+//    Route::post('/update-article', [NewsController::class, 'createOrUpdateArticle']); // TODO: когда появится задача по новостям вернуться
+//    Route::delete('/delete-article', [NewsController::class, 'deleteArticle']); // TODO: когда появится задача по новостям вернуться
+//
+//});
+//
+//Route::get('/get-article', [NewsController::class, 'getArticle']); // TODO: когда появится задача по новостям вернуться
+//Route::get('/get-news', [NewsController::class, 'getNews']); // TODO: когда появится задача по новостям вернуться
+//Route::post('/call-confirmed', [PhoneController::class, 'onCallConfirmed']); // TODO: не реализованно
+//Route::post('/call-failed', [PhoneController::class, 'onCallFailed']); // TODO: не реализованно
+//
+//
+//Route::post('/faweik3w4pofja23zcn23p1qpjzxkcnelrjq', [TelegramController::class, 'callbackRegister']);
+//Route::post('/ziudGBZDikfuwAGD3ioruGSBFDofyafh873nabFXGorf3', [TelegramSurveyController::class, 'callbackNovosibirsk']);
+//Route::post('/ivujfiBXZDFsodjBXD483uf98shGZDFahis398af3', [TelegramSurveyController::class, 'callbackStPetersburg']);
 

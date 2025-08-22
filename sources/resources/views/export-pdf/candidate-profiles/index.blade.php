@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h1>Кандидат на вакансию - {{ $data->title }}</h1>
+<h1>Кандидат на вакансию - {{ $data->vacancy_name }}</h1>
 <h1><strong>{{ $data->last_name }} {{ $data->first_name }} {{ $data->middle_name }}</strong></h1>
 
 @if ($data->reason_for_changing_surnames)
@@ -34,7 +34,7 @@
 <hr>
 
 <h3>Партнёр</h3>
-@if (!empty($familyPartner))
+@if (!empty($familyPartner) && (isset($familyPartner['name']) || isset($familyPartner['age']) || isset($familyPartner['relation'])))
     <p><strong>Имя:</strong> {{ $familyPartner['name'] }}</p>
     <p><strong>Возраст:</strong> {{ $familyPartner['age'] }}</p>
     <p><strong>Отношение:</strong> {{ $familyPartner['relation'] }}</p>

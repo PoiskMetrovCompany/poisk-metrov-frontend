@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Core\Common;
+
+enum VacancyStatusesEnum: string
+{
+        case New ='Новая анкета';
+        case Verified = 'Проверен';
+        case Rejected = 'Отклонен';
+        case NeedsImprovement = 'Нужна доработка';
+        case Accepted = 'Принят';
+        case NotAccepted = 'Не принят';
+        case CameOut = 'Вышел';
+        case NotCameOut = 'Не вышел';
+
+}
