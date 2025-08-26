@@ -19,7 +19,7 @@ class Location extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['country', 'region', 'code', 'capital', 'district', 'locality'];
+    protected $fillable = ['key', 'country', 'region', 'code', 'capital', 'district', 'locality'];
 
     public static $searchableFields = ['locality', 'locality-not', 'district', 'region', 'capital'];
 }

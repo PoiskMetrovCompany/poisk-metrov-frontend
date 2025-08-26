@@ -4,6 +4,7 @@ networks:
   app:
   jenkins-network:
     driver: 'bridge'
+    enable_ipv6: true
 
 services:
   nginx:

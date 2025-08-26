@@ -9,7 +9,7 @@ trait ComplexAndApartmentFilterQueryTrait
 {
     public function complexAndApartmentFilter(mixed $locationsInCity): array
     {
-        $buildingData = ResidentialComplex::select()->whereIn('location_id', $locationsInCity)->has('apartments')->get();
+        $buildingData = ResidentialComplex::select()->whereIn('location_key', $locationsInCity)->has('apartments')->get();
         $names = $buildingData->pluck('name');
         $builders = $buildingData->pluck('builder')->unique();
         $addresses = $buildingData->pluck('address')->unique();

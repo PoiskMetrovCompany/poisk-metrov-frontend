@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 set_time_limit(0);
 
-use App\Core\Common\FeedFromTrendAgentFileCoRConst;
 use App\Core\Common\FeedFromTrendAgentFileCoREnum;
-use App\Core\Interfaces\Repositories\FeedRepositoryInterface;
 use App\Models\Journal;
 use App\Services\Handlers\FeedBuilderService;
 use App\Services\Handlers\FeedCheckHandlerService;
@@ -15,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use JsonMachine\JsonDecoder;
 use ZipArchive;
 
 class LoadingFeedFromTrendAgentCommand extends Command

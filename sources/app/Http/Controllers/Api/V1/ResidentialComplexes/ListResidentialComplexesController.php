@@ -11,6 +11,8 @@ use App\Models\ResidentialComplex;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use OpenApi\Annotations as OA;
 
 /**
@@ -36,13 +38,27 @@ class ListResidentialComplexesController extends AbstractOperations
      *      tags={"ResidentialComplex"},
      *      path="/api/v1/residential-complex/",
      *      summary="получение списка ЖК",
-     *      description="Возвращение JSON объекта",
+     *      description="Возвращение JSON объекта с пагинацией",
      *      @OA\Parameter(
      *          name="city",
      *          in="query",
      *          required=true,
      *          description="Имя города",
      *          @OA\Schema(type="string", example="novosibirsk")
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          required=false,
+     *          description="Номер страницы",
+     *          @OA\Schema(type="integer", example=1)
+     *      ),
+     *      @OA\Parameter(
+     *          name="per_page",
+     *          in="query",
+     *          required=false,
+     *          description="Количество элементов на странице",
+     *          @OA\Schema(type="integer", example=15)
      *      ),
      *      @OA\Parameter(
      *          name="includes",
@@ -81,18 +97,47 @@ class ListResidentialComplexesController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $cityName = $request->input('city');
-        $location = $this->locationRepository->find(['code' => $cityName]);
-        // TODO: вернуть проверку по ключу
-        $attributes = $this->residentialComplexRepository->list(!empty($city) ? ['location_id' => $location->id] : []);
+        $cityName = strtoupper($request->get('city'));
+        $residentialComplexesCacheName = "residentialComplexes{$cityName}";
+        $attributes = Cache::get($residentialComplexesCacheName) ?: [];
 
-        $collect = new ResidentialComplexesCollection($attributes);
+        $collection = collect($attributes);
+
+        $perPage = $request->get('per_page', 15);
+        $currentPage = $request->get('page', 1);
+
+        $paginatedItems = new LengthAwarePaginator(
+            $collection->forPage($currentPage, $perPage),
+            $collection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'pageName' => 'page']
+        );
+
+        $paginatedItems->appends($request->except('page'));
+
+        $collect = new ResidentialComplexesCollection($paginatedItems->items());
 
         return new JsonResponse(
             data: [
                 ...self::identifier(),
                 ...self::attributes($collect->resource),
-                ...self::metaData($request, $request->all()),
+                'meta' => array_merge(
+                    self::metaData($request, $request->all())['meta'],
+                    [
+                        'pagination' => [
+                            'current_page' => $paginatedItems->currentPage(),
+                            'per_page' => $paginatedItems->perPage(),
+                            'total' => $paginatedItems->total(),
+                            'last_page' => $paginatedItems->lastPage(),
+                            'from' => $paginatedItems->firstItem(),
+                            'to' => $paginatedItems->lastItem(),
+                            'has_more_pages' => $paginatedItems->hasMorePages(),
+                            'prev_page_url' => $paginatedItems->previousPageUrl(),
+                            'next_page_url' => $paginatedItems->nextPageUrl(),
+                        ]
+                    ]
+                ),
             ],
             status: Response::HTTP_OK
         );

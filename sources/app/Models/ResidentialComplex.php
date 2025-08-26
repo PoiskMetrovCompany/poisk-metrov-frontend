@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\ResidentialComplexObserver;
 use App\Services\CityService;
 use App\Http\Resources\GalleryResource;
 use App\TextFormatters\PriceTextFormatter;
@@ -17,6 +18,7 @@ use App\DropdownData\RoomsDropdownData;
 use App\DropdownData\ToiletDropdownData;
 use App\DropdownData\YearsDropdownData;
 use App\DropdownData\CorpusDropdownData;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +31,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 
+#[ObservedBy([ResidentialComplexObserver::class])]
 class ResidentialComplex extends Model
 {
     use HasFactory;
@@ -47,7 +50,7 @@ class ResidentialComplex extends Model
         'ResidentialComplexCategoryPivot' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
         'SpriteImagePosition' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
         'UserFavoriteBuilding' => ['main_table_value' => 'code', 'linked_table_value' => 'complex_code'],
-        'Location' => ['main_table_value' => 'location_id', 'linked_table_value' => 'code'],
+        'Location' => ['main_table_value' => 'location_key', 'linked_table_value' => 'key'],
     ];
 
     /**
@@ -65,7 +68,7 @@ class ResidentialComplex extends Model
         'description',
         'latitude',
         'longitude',
-        'location_id',
+        'location_key',
         'address',
         'metro_station',
         'metro_time',
@@ -329,7 +332,7 @@ class ResidentialComplex extends Model
 
     public function location(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(Location::class, 'location_key', 'key');
     }
 
     public function apartments(): HasMany

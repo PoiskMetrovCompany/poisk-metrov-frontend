@@ -12,6 +12,6 @@ final class FeedCheckHandlerService extends AbstractHandler
     public function handle(?array $attributes): ?array
     {
         $apartments = app(\App\Core\Interfaces\Repositories\FeedRepositoryInterface::class);
-        return parent::handle( ['apartments' => $attributes]);
+        return parent::handle( ['apartments' => $apartments]);
     }
 }

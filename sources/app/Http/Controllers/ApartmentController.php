@@ -71,7 +71,7 @@ class ApartmentController extends Controller
         }
 
         $complex = $this->residentialComplexRepository->findById($apartment->complex_id);
-        $location = $this->locationRepository->findById($complex->location_id);
+        $location = $this->locationRepository->findById($complex->location_key);
 
         $apartments = $this->apartmentRepository->find([
             'apartment_type' => $apartment->apartment_type,

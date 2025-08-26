@@ -12,6 +12,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Annotations as OA;
 
 /**
@@ -33,7 +36,28 @@ class ListApartmentController extends AbstractOperations
      *      tags={"Apartment"},
      *      path="/api/v1/apartments/list",
      *      summary="получение списка планировок",
-     *      description="Возвращение JSON объекта",
+     *      description="Возвращение JSON объекта с пагинацией",
+     *      @OA\Parameter(
+     *          name="city",
+     *          in="query",
+     *          required=true,
+     *          description="Имя города",
+     *          @OA\Schema(type="string", example="novosibirsk")
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          required=false,
+     *          description="Номер страницы",
+     *          @OA\Schema(type="integer", example=1)
+     *      ),
+     *      @OA\Parameter(
+     *          name="per_page",
+     *          in="query",
+     *          required=false,
+     *          description="Количество элементов на странице",
+     *          @OA\Schema(type="integer", example=15)
+     *      ),
      *      @OA\Parameter(
      *          name="includes",
      *          in="query",
@@ -72,24 +96,48 @@ class ListApartmentController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $allBuildings = $this->residentialComplexRepository->list([]);
-        $apartments = new Collection();
+        $cityName = strtoupper($request->get('city'));
+        $apartmentsCacheName = "apartments{$cityName}";
+        $attributes = Cache::get($apartmentsCacheName) ?: [];
 
-        foreach ($allBuildings as $building) {
-            $apartmentsInBuilding = $building->apartments()->get();
+        // Преобразуем массив в коллекцию для пагинации
+        $collection = collect($attributes);
 
-            foreach ($apartmentsInBuilding as $apartment) {
-                $apartment->residentialComplexName = $building->name;
-            }
+        // Параметры пагинации
+        $perPage = $request->get('per_page', 15);
+        $currentPage = $request->get('page', 1);
 
-            $apartments = $apartments->merge($apartmentsInBuilding);
-        }
+        // Создаем пагинацию
+        $paginatedItems = new LengthAwarePaginator(
+            $collection->forPage($currentPage, $perPage),
+            $collection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'pageName' => 'page']
+        );
+
+        $paginatedItems->appends($request->except('page'));
 
         return new JsonResponse(
             data: [
                 ...self::identifier(),
-                ...self::attributes($apartments),
-                ...self::metaData($request, $request->all()),
+                ...self::attributes($paginatedItems->items()),
+                'meta' => array_merge(
+                    self::metaData($request, $request->all())['meta'],
+                    [
+                        'pagination' => [
+                            'current_page' => $paginatedItems->currentPage(),
+                            'per_page' => $paginatedItems->perPage(),
+                            'total' => $paginatedItems->total(),
+                            'last_page' => $paginatedItems->lastPage(),
+                            'from' => $paginatedItems->firstItem(),
+                            'to' => $paginatedItems->lastItem(),
+                            'has_more_pages' => $paginatedItems->hasMorePages(),
+                            'prev_page_url' => $paginatedItems->previousPageUrl(),
+                            'next_page_url' => $paginatedItems->nextPageUrl(),
+                        ]
+                    ]
+                ),
             ],
             status: Response::HTTP_OK
         );

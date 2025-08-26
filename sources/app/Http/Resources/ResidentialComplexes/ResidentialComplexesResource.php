@@ -18,7 +18,8 @@ class ResidentialComplexesResource extends AbstractResource
     {
         return [
             'id' => $this->id,
-            'location_id' => $this->location_id,
+            'location_key' => $this->location_key,
+            'key' => $this->key,
             'code' => $this->code,
             'old_code' => $this->old_code,
             'name' => $this->name,

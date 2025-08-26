@@ -17,6 +17,7 @@ use App\Core\Interfaces\Repositories\Queries\FindByInComplexIdQueryInterface;
  * @template TRepository
  */
 interface ApartmentRepositoryInterface extends
+
     ListQueryInterface,
     FindByIdQueryInterface,
     FindByKeyQueryInterface,

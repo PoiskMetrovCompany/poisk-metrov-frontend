@@ -40,6 +40,7 @@ use App\Core\Interfaces\Services\BackupHistoryServiceInterface;
 use App\Core\Interfaces\Services\BackupServiceInterface;
 use App\Core\Interfaces\Services\BankServiceInterface;
 use App\Core\Interfaces\Services\BuilderServiceInterface;
+use App\Core\Interfaces\Services\CacheServiceInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CallServiceInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
@@ -106,6 +107,7 @@ use App\Services\Backup\BackupHistoryService;
 use App\Services\Backup\BackupService;
 use App\Services\BankService;
 use App\Services\BuilderService;
+use App\Services\Cache\CacheService;
 use App\Services\CachingService;
 use App\Services\CallService;
 use App\Services\ChatService;
@@ -311,6 +313,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SelectRecommendationsServiceInterface::class, SelectRecommendationsService::class);
     }
 
+    final public function registerCacheService(): void
+    {
+        $this->app->singleton(CacheServiceInterface::class, CacheService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -513,6 +520,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerYandexSearchService();
         $this->registerCallService();
         $this->registerSelectRecommendationsService();
+        $this->registerCacheService();
 
         /// Repositories
         $this->registerReservationRepository();
