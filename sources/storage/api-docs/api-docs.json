@@ -625,6 +625,75 @@
                 }
             }
         },
+        "/api/v1/candidates/destroy": {
+            "delete": {
+                "tags": [
+                    "CandidateProfiles"
+                ],
+                "summary": "Удаление анкеты кандидата по ключу",
+                "description": "Возвращение JSON объекта",
+                "operationId": "3209f54330664878a4611bfadcf6b2b3",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключи для удаления анкет(ы)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0,53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Иван Иванов"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ivan@example.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/candidates/": {
             "get": {
                 "tags": [
@@ -797,6 +866,42 @@
                 ]
             }
         },
+        "/api/v1/candidates/get-statuses": {
+            "get": {
+                "tags": [
+                    "CandidateProfiles"
+                ],
+                "summary": "Получение статусов для анкеты кандидата",
+                "description": "Возвращение JSON объекта",
+                "operationId": "9f475a43786b93e17a52ac8f68ab30c3",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Анкета не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/candidates/store": {
             "post": {
                 "tags": [
@@ -819,6 +924,10 @@
                                     "marital_statuses_key": {
                                         "type": "string",
                                         "example": ""
+                                    },
+                                    "work_team": {
+                                        "type": "string",
+                                        "example": "Административный состав"
                                     },
                                     "status": {
                                         "type": "string",
@@ -954,6 +1063,10 @@
                                             "example": ""
                                         },
                                         "marital_statuses_key": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "work_team": {
                                             "type": "string",
                                             "example": ""
                                         },

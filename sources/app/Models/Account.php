@@ -16,6 +16,9 @@ class Account extends Model
      */
     protected $fillable = [
         'key',
+        'last_name',
+        'first_name',
+        'middle_name',
         'role',
         'phone',
         'email',

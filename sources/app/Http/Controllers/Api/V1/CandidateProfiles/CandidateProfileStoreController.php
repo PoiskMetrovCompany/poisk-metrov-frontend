@@ -26,6 +26,7 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(
  *             @OA\Property(property="vacancies_key", type="string", example=""),
  *             @OA\Property(property="marital_statuses_key", type="string", example=""),
+ *             @OA\Property(property="work_team", type="string", example="Административный состав"),
  *             @OA\Property(property="status", type="string", example=""),
  *             @OA\Property(property="first_name", type="string", example=""),
  *             @OA\Property(property="last_name", type="string", example=""),
@@ -63,6 +64,7 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(
  *             @OA\Property(property="vacancies_key", type="string", example=""),
  *              @OA\Property(property="marital_statuses_key", type="string", example=""),
+ *              @OA\Property(property="work_team", type="string", example=""),
  *              @OA\Property(property="status", type="string", example=""),
  *              @OA\Property(property="first_name", type="string", example=""),
  *              @OA\Property(property="last_name", type="string", example=""),
