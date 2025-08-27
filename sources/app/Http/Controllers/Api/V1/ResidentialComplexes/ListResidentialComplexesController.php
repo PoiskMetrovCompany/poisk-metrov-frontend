@@ -124,19 +124,7 @@ class ListResidentialComplexesController extends AbstractOperations
                 ...self::attributes($collect->resource),
                 'meta' => array_merge(
                     self::metaData($request, $request->all())['meta'],
-                    [
-                        'pagination' => [
-                            'current_page' => $paginatedItems->currentPage(),
-                            'per_page' => $paginatedItems->perPage(),
-                            'total' => $paginatedItems->total(),
-                            'last_page' => $paginatedItems->lastPage(),
-                            'from' => $paginatedItems->firstItem(),
-                            'to' => $paginatedItems->lastItem(),
-                            'has_more_pages' => $paginatedItems->hasMorePages(),
-                            'prev_page_url' => $paginatedItems->previousPageUrl(),
-                            'next_page_url' => $paginatedItems->nextPageUrl(),
-                        ]
-                    ]
+                    self::paginate($paginatedItems)
                 ),
             ],
             status: Response::HTTP_OK

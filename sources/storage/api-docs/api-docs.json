@@ -367,9 +367,39 @@
                     "Apartment"
                 ],
                 "summary": "получение списка планировок",
-                "description": "Возвращение JSON объекта",
+                "description": "Возвращение JSON объекта с пагинацией",
                 "operationId": "80d77721b0ffc035e0381293825bd313",
                 "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Имя города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "novosibirsk"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Номер страницы",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Количество элементов на странице",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 15
+                        }
+                    },
                     {
                         "name": "includes",
                         "in": "query",
@@ -621,6 +651,24 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/cache-rewrite/": {
+            "get": {
+                "tags": [
+                    "Cache"
+                ],
+                "summary": "Жесткое обновление кэша",
+                "description": "Ничего не возвращает",
+                "operationId": "6ca1407451f3b3ba67931a49900c862e",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
                     }
                 }
             }
@@ -2869,7 +2917,7 @@
                     "ResidentialComplex"
                 ],
                 "summary": "получение списка ЖК",
-                "description": "Возвращение JSON объекта",
+                "description": "Возвращение JSON объекта с пагинацией",
                 "operationId": "910c7705f281b9cfa4ec32183d2e2bae",
                 "parameters": [
                     {
@@ -2880,6 +2928,26 @@
                         "schema": {
                             "type": "string",
                             "example": "novosibirsk"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Номер страницы",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Количество элементов на странице",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 15
                         }
                     },
                     {
@@ -3269,6 +3337,17 @@
     },
     "components": {
         "schemas": {
+            "Cache/Rewrite": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "Cbr/ActualDate": {
                 "properties": {
                     "status": {
@@ -3364,6 +3443,10 @@
         {
             "name": "City",
             "description": "Операции над городами"
+        },
+        {
+            "name": "Cache",
+            "description": "Cache"
         },
         {
             "name": "Crm",

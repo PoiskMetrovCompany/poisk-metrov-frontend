@@ -100,14 +100,11 @@ class ListApartmentController extends AbstractOperations
         $apartmentsCacheName = "apartments{$cityName}";
         $attributes = Cache::get($apartmentsCacheName) ?: [];
 
-        // Преобразуем массив в коллекцию для пагинации
         $collection = collect($attributes);
 
-        // Параметры пагинации
         $perPage = $request->get('per_page', 15);
         $currentPage = $request->get('page', 1);
 
-        // Создаем пагинацию
         $paginatedItems = new LengthAwarePaginator(
             $collection->forPage($currentPage, $perPage),
             $collection->count(),
@@ -124,19 +121,7 @@ class ListApartmentController extends AbstractOperations
                 ...self::attributes($paginatedItems->items()),
                 'meta' => array_merge(
                     self::metaData($request, $request->all())['meta'],
-                    [
-                        'pagination' => [
-                            'current_page' => $paginatedItems->currentPage(),
-                            'per_page' => $paginatedItems->perPage(),
-                            'total' => $paginatedItems->total(),
-                            'last_page' => $paginatedItems->lastPage(),
-                            'from' => $paginatedItems->firstItem(),
-                            'to' => $paginatedItems->lastItem(),
-                            'has_more_pages' => $paginatedItems->hasMorePages(),
-                            'prev_page_url' => $paginatedItems->previousPageUrl(),
-                            'next_page_url' => $paginatedItems->nextPageUrl(),
-                        ]
-                    ]
+                    self::paginate($paginatedItems)
                 ),
             ],
             status: Response::HTTP_OK

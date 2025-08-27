@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
+use App\Http\Controllers\Api\V1\Cache\RewriteCacheController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStatusesController;
@@ -86,6 +87,12 @@ if (!function_exists('operation')) {
 /// Override API
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
+    /// Cache
+    Route::namespace('CACHE')
+        ->get('/cache-rewrite', [RewriteCacheController::class, 'index'])
+        ->name('api.v1.cache-rewrite');;
+    /// End Cache
+
     /// City
     Route::namespace('CITY')->prefix('city')->group(function () {
         Route::get('/', operation(ListCityController::class))->name('api.v1.city.list');
