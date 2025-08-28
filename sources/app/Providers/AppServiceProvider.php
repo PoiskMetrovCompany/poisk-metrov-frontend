@@ -49,6 +49,7 @@ use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\Core\Interfaces\Services\ExcelServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
 use App\Core\Interfaces\Services\FeedServiceInterface;
+use App\Core\Interfaces\Services\FilterServiceInterface;
 use App\Core\Interfaces\Services\GeoCodeServiceInterface;
 use App\Core\Interfaces\Services\GoogleDriveServiceInterface;
 use App\Core\Interfaces\Services\LocationServiceInterface;
@@ -117,6 +118,7 @@ use App\Services\ExcelService;
 use App\Services\FavoritesService;
 use App\Services\FeedService;
 use App\Services\FileService;
+use App\Services\Filter\FilterService;
 use App\Services\GeoCodeService;
 use App\Services\GoogleDriveService;
 use App\Services\LocationService;
@@ -316,6 +318,11 @@ class AppServiceProvider extends ServiceProvider
     final public function registerCacheService(): void
     {
         $this->app->singleton(CacheServiceInterface::class, CacheService::class);
+    }
+
+    final public function registerFilterService(): void
+    {
+        $this->app->singleton(FilterServiceInterface::class, FilterService::class);
     }
 
     /// REPOSITORIES
@@ -521,6 +528,8 @@ class AppServiceProvider extends ServiceProvider
         $this->registerCallService();
         $this->registerSelectRecommendationsService();
         $this->registerCacheService();
+        $this->registerCacheService();
+        $this->registerFilterService();
 
         /// Repositories
         $this->registerReservationRepository();

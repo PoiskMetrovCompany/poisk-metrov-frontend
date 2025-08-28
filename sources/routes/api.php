@@ -51,6 +51,7 @@ use App\Http\Controllers\Api\V1\File\Folders\CreateFolderController;
 use App\Http\Controllers\Api\V1\File\Folders\DeleteFolderController;
 use App\Http\Controllers\Api\V1\File\ReadFileController;
 use App\Http\Controllers\Api\V1\File\UpdateFilesController;
+use App\Http\Controllers\Api\V1\Filters\FilterController;
 use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsController;
 use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsWithoutManagerController;
 use App\Http\Controllers\Api\V1\Managers\Chat\SendMessageToSessionController;
@@ -100,8 +101,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/read', operation(ReadCityController::class))->name('api.v1.city.read');
 
         Route::post('/store', operation(StoreCityController::class))
-            ->name('api.v1.city.store')
-            ->middleware('auth:api');
+            ->name('api.v1.city.store');
     });
     /// END City
 
@@ -187,6 +187,12 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     });
     /// END
 
+    /// FILTER
+    Route::namespace('FILTER')->prefix('filters')->group(function () {
+        Route::get('/', operation(FilterController::class))->name('api.v1.filter');
+    });
+    /// END
+
     /// MANAGER
     Route::namespace('MANAGER')->prefix('managers')->group(function () {
         Route::get('/list', operation(ListManagerController::class))
@@ -194,7 +200,6 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->middleware('auth:api');
     });
     /// END
-
 
     /// FEED
     // TODO: убрать текущую реализацию из свагера и из тестов

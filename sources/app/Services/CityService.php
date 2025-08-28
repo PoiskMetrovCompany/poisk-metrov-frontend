@@ -47,7 +47,6 @@ final class CityService extends AbstractService implements CityServiceInterface
     {
         $selectedCity = CityService::DEFAULT_CITY;
 
-        //Если есть город, то проверяем не битые ли куки и если нет,
         if (key_exists('selectedCity', $_COOKIE)) {
             $selectedCity = strtolower($_COOKIE['selectedCity']);
 
@@ -66,7 +65,9 @@ final class CityService extends AbstractService implements CityServiceInterface
 
         $userIP = $_SERVER['REMOTE_ADDR'];
         $address = "https://geolocation-db.com/json/{$userIP}";
-        $request = Http::get($address);
+
+
+        $request = Http::timeout(3)->retry(0, 0)->get($address);
 
         if ($request->successful()) {
             $geolocationData = $request->json();
@@ -83,10 +84,9 @@ final class CityService extends AbstractService implements CityServiceInterface
             } else {
                 $selectedCity = CityService::DEFAULT_CITY;
             }
-        } else {
-            $selectedCity = CityService::DEFAULT_CITY;
         }
-
+        $selectedCity = CityService::DEFAULT_CITY;
+        
         $this->setCityCookie($selectedCity);
 
         return $selectedCity;
@@ -120,6 +120,7 @@ final class CityService extends AbstractService implements CityServiceInterface
     {
         return array_values(array_diff($this->possibleCityCodes, [$city]));
     }
+
 
     public static function getFromApp(): CityService
     {

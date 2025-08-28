@@ -15,7 +15,7 @@ class CityRepository implements CityRepositoryInterface
     use StoreQueryTrait;
 
     public function __construct(
-        protected Cities $cities,
+        protected Cities $model,
     )
     {
 

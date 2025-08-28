@@ -27,7 +27,7 @@ class StoreCityController extends AbstractOperations
      *     path="/api/v1/city/store",
      *     summary="Создание города.",
      *     description="Возвращение JSON объекта",
-     *     security={{"bearerAuth":{}}},
+
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -57,7 +57,7 @@ class StoreCityController extends AbstractOperations
     {
         $attributes = $request->validated();
         $attributes['key'] = Str::uuid()->toString();
-        $attributes['slug'] = Str::slug($attributes['name']);
+        $attributes['slug'] = Str::slug($attributes['title']);
 
         $city = $this->repository->store($attributes);
         $collect = new CitiesResource($city);

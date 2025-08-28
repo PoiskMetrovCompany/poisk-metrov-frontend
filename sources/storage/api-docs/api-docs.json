@@ -1954,12 +1954,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/crm/reset-ads-agreement": {
@@ -2462,6 +2457,539 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/v1/filters/catalog": {
+            "get": {
+                "tags": [
+                    "Catalog Filters"
+                ],
+                "summary": "Фильтрация каталога недвижимости",
+                "description": "Выполняет фильтрацию квартир или жилых комплексов по заданным критериям с поддержкой пагинации",
+                "operationId": "filterCatalogLegacy",
+                "parameters": [
+                    {
+                        "name": "entity_type",
+                        "in": "query",
+                        "description": "Тип сущности для фильтрации",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ЖК",
+                                "Квартиры"
+                            ],
+                            "example": "Квартиры"
+                        }
+                    },
+                    {
+                        "name": "count_rooms",
+                        "in": "query",
+                        "description": "Количество комнат",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 2
+                        }
+                    },
+                    {
+                        "name": "pricing",
+                        "in": "query",
+                        "description": "Цена или диапазон цен (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "1000000-3000000"
+                        }
+                    },
+                    {
+                        "name": "floors",
+                        "in": "query",
+                        "description": "Этаж",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 5
+                        }
+                    },
+                    {
+                        "name": "area_total",
+                        "in": "query",
+                        "description": "Общая площадь или диапазон площадей (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "50-80"
+                        }
+                    },
+                    {
+                        "name": "living_area",
+                        "in": "query",
+                        "description": "Жилая площадь или диапазон жилых площадей (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "30-50"
+                        }
+                    },
+                    {
+                        "name": "ceiling_height",
+                        "in": "query",
+                        "description": "Высота потолков или диапазон высот (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "2.7-3.0"
+                        }
+                    },
+                    {
+                        "name": "finishing",
+                        "in": "query",
+                        "description": "Тип отделки",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Чистовая"
+                        }
+                    },
+                    {
+                        "name": "parking",
+                        "in": "query",
+                        "description": "Наличие парковки",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Есть"
+                        }
+                    },
+                    {
+                        "name": "elevator",
+                        "in": "query",
+                        "description": "Наличие лифта",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Есть"
+                        }
+                    },
+                    {
+                        "name": "to_metro",
+                        "in": "query",
+                        "description": "Максимальное расстояние до метро (в минутах)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 15
+                        }
+                    },
+                    {
+                        "name": "layout",
+                        "in": "query",
+                        "description": "Планировка",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bathroom",
+                        "in": "query",
+                        "description": "Санузел",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "apartments",
+                        "in": "query",
+                        "description": "Тип квартиры",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "peculiarities",
+                        "in": "query",
+                        "description": "Особенности",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "montage_type",
+                        "in": "query",
+                        "description": "Тип монтажа",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "developer",
+                        "in": "query",
+                        "description": "Застройщик",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "due_date",
+                        "in": "query",
+                        "description": "Срок сдачи",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "floor_counts",
+                        "in": "query",
+                        "description": "Количество этажей",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Свободный текстовый поиск: район, метро, улица, застройщик, ЖК",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Ленинский"
+                        }
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Алиас параметра search",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Брусника"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная фильтрация"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации данных",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "errors": {
+                                            "description": "Объект с ошибками валидации",
+                                            "type": "object",
+                                            "example": {
+                                                "entity_type": "Тип сущности обязателен",
+                                                "pricing": "Неверный формат цены"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ошибка валидации данных фильтра"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": true
+            }
+        },
+        "/api/v1/filters": {
+            "get": {
+                "tags": [
+                    "Catalog Filters"
+                ],
+                "summary": "Фильтрация каталога недвижимости",
+                "description": "Выполняет фильтрацию квартир или жилых комплексов по заданным критериям с поддержкой пагинации",
+                "operationId": "filterCatalog",
+                "parameters": [
+                    {
+                        "name": "entity_type",
+                        "in": "query",
+                        "description": "Тип сущности для фильтрации",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ЖК",
+                                "Квартиры"
+                            ],
+                            "example": "Квартиры"
+                        }
+                    },
+                    {
+                        "name": "count_rooms",
+                        "in": "query",
+                        "description": "Количество комнат",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 2
+                        }
+                    },
+                    {
+                        "name": "pricing",
+                        "in": "query",
+                        "description": "Цена или диапазон цен (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "1000000-3000000"
+                        }
+                    },
+                    {
+                        "name": "floors",
+                        "in": "query",
+                        "description": "Этаж",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 5
+                        }
+                    },
+                    {
+                        "name": "area_total",
+                        "in": "query",
+                        "description": "Общая площадь или диапазон площадей (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "50-80"
+                        }
+                    },
+                    {
+                        "name": "living_area",
+                        "in": "query",
+                        "description": "Жилая площадь или диапазон жилых площадей (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "30-50"
+                        }
+                    },
+                    {
+                        "name": "ceiling_height",
+                        "in": "query",
+                        "description": "Высота потолков или диапазон высот (формат: число или 'мин-макс')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "2.7-3.0"
+                        }
+                    },
+                    {
+                        "name": "finishing",
+                        "in": "query",
+                        "description": "Тип отделки",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Чистовая"
+                        }
+                    },
+                    {
+                        "name": "parking",
+                        "in": "query",
+                        "description": "Наличие парковки",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Есть"
+                        }
+                    },
+                    {
+                        "name": "elevator",
+                        "in": "query",
+                        "description": "Наличие лифта",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Есть"
+                        }
+                    },
+                    {
+                        "name": "to_metro",
+                        "in": "query",
+                        "description": "Максимальное расстояние до метро (в минутах)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 15
+                        }
+                    },
+                    {
+                        "name": "layout",
+                        "in": "query",
+                        "description": "Планировка",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bathroom",
+                        "in": "query",
+                        "description": "Санузел",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "apartments",
+                        "in": "query",
+                        "description": "Тип квартиры",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "peculiarities",
+                        "in": "query",
+                        "description": "Особенности",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "montage_type",
+                        "in": "query",
+                        "description": "Тип монтажа",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "developer",
+                        "in": "query",
+                        "description": "Застройщик",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "due_date",
+                        "in": "query",
+                        "description": "Срок сдачи",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "floor_counts",
+                        "in": "query",
+                        "description": "Количество этажей",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Свободный текстовый поиск: район, метро, улица, застройщик, ЖК",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Ленинский"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная фильтрация"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации данных",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "errors": {
+                                            "description": "Объект с ошибками валидации",
+                                            "type": "object",
+                                            "example": {
+                                                "entity_type": "Тип сущности обязателен",
+                                                "pricing": "Неверный формат цены"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ошибка валидации данных фильтра"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/v1/chats/read": {
@@ -3455,6 +3983,10 @@
         {
             "name": "Event",
             "description": "Event"
+        },
+        {
+            "name": "Catalog Filters",
+            "description": "Catalog Filters"
         }
     ]
 }
