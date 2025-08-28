@@ -43,8 +43,6 @@ class ApartmentService extends AbstractService implements ApartmentServiceInterf
         $visitedApartments->join('residential_complexes', 'residential_complexes.id', '=', 'apartments.complex_id');
         if (!Auth::user()) {
             $visitedApartments->whereNotIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
-//        } else {
-//            $visitedApartments->whereIn('residential_complexes.builder', ResidentialComplex::$privateBuilders);
         }
         $visitedApartments->get();
         $mediumPrice = 10000000;

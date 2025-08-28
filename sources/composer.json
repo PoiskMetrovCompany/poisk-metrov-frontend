@@ -21,7 +21,6 @@
         "jenssegers/mongodb": "^5.4",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
-        "laravel/telescope": "^5.10",
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1",
         "mpdf/mpdf": "^8.2",
