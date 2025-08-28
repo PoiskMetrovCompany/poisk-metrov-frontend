@@ -2,7 +2,6 @@
 
 namespace App\Core\Abstracts\Trait\Responders;
 
-use App\Models\User;
 
 trait RelationshipResponderTrait
 {
@@ -29,11 +28,11 @@ trait RelationshipResponderTrait
                     $relatedData->orderBy('name');
                 }
 
-                $relatedData->get();
+                $records = $relatedData->get();
 
                 $includes[] = [
                     'type' => strtolower($relationshipName),
-                    'attributes' => $relatedData->toArray(),
+                    'attributes' => $records->toArray(),
                 ];
             }
         }

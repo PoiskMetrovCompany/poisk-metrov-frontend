@@ -97,9 +97,16 @@ class ListResidentialComplexesController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $cityName = strtoupper($request->get('city'));
-        $residentialComplexesCacheName = "residentialComplexes{$cityName}";
-        $attributes = Cache::get($residentialComplexesCacheName) ?: [];
+        $cityName = strtolower((string)$request->get('city'));
+        $residentialComplexesCacheName = "residentialComplexes_{$cityName}";
+        $attributes = Cache::get($residentialComplexesCacheName);
+
+        if ($attributes === null) {
+            // Фоллбэк: получаем из репозитория и кешируем
+            $collectionFromRepo = $this->residentialComplexRepository->getCatalogueForCity($cityName);
+            $attributes = $collectionFromRepo->toArray();
+            Cache::put($residentialComplexesCacheName, $attributes, now()->addMinutes(30));
+        }
 
         $collection = collect($attributes);
 
