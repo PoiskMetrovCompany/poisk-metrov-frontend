@@ -7,6 +7,7 @@ use App\Core\Interfaces\Services\FilterServiceInterface;
 use App\Core\Mapper\CatalogFilterMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
 
 class FilterController extends AbstractOperations
@@ -26,6 +27,17 @@ class FilterController extends AbstractOperations
      *     description="Выполняет фильтрацию квартир или жилых комплексов по заданным критериям с поддержкой пагинации",
      *     operationId="filterCatalog",
      *     tags={"Catalog Filters"},
+     *
+     *    @OA\Parameter(
+     *          name="city",
+     *          in="query",
+     *          required=true,
+     *          description="имя города на латинице",
+     *          @OA\Schema(
+     *              type="string",
+     *              example="novosibirsk"
+     *          )
+     *      ),
      *
      *     @OA\Parameter(
      *         name="entity_type",
@@ -222,7 +234,14 @@ class FilterController extends AbstractOperations
 
         $filterResult = $this->filterService->execute($dto);
 
-        return new JsonResponse($filterResult);
+        return new JsonResponse(
+            data: [
+                ...self::identifier(),
+                ...$filterResult,
+                ...self::metaData($request, $request->all()),
+            ],
+            status: Response::HTTP_OK
+        );
     }
 
     public function getEntityClass(): string

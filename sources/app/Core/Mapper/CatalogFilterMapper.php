@@ -36,6 +36,7 @@ final class CatalogFilterMapper
         $dto->parking = self::getValidatedValue($attributes, 'parking');
         $dto->count_rooms = self::convertToInt(self::getValidatedValue($attributes, 'count_rooms'));
         $dto->search = self::getValidatedValue($attributes, 'search');
+        $dto->city = self::getValidatedValue($attributes, 'city');
 
         return $dto;
     }

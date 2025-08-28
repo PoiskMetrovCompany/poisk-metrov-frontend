@@ -27,6 +27,7 @@ final class CatalogFilterDTO
     public ?string $parking = null;
     public ?string $count_rooms = null;
     public ?string $search = null;
+    public ?string $city = null;
 
     /**
      * @return Collection<string, string>
@@ -75,6 +76,11 @@ final class CatalogFilterDTO
 
         if ($this->toMetro !== null && $this->toMetro < 0) {
             $errors->put('to_metro', 'Расстояние до метро не может быть отрицательным');
+        }
+
+        // Город обязателен
+        if (!$this->city) {
+            $errors->put('city', 'Код города обязателен');
         }
 
         return $errors;

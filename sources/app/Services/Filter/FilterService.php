@@ -25,6 +25,7 @@ use App\Services\Filter\Commands\DeveloperFilterCommand;
 use App\Services\Filter\Commands\FloorCountsFilterCommand;
 use App\Services\Filter\Commands\MontageTypeFilterCommand;
 use App\Services\Filter\Commands\SearchFilterCommand;
+use App\Services\Filter\Commands\CityFilterCommand;
 use App\Services\Filter\Traits\GetAreaTotalTrait;
 use App\Services\Filter\Traits\GetCeilingHeightTrait;
 use App\Services\Filter\Traits\GetCountRoomsTrait;
@@ -57,6 +58,8 @@ final class FilterService extends AbstractFilter implements FilterServiceInterfa
     private function initializeCommands(): void
     {
         $this->commandInvoker
+            // Сначала обязательный фильтр города
+            ->addCommand(new CityFilterCommand())
             ->addCommand(new PriceFilterCommand())
             ->addCommand(new RoomCountFilterCommand())
             ->addCommand(new AreaFilterCommand())
@@ -98,19 +101,13 @@ final class FilterService extends AbstractFilter implements FilterServiceInterfa
         $results = $filteredQuery->paginate(20);
 
         $response = [
-            'data' => $results->items(),
+            'attributes' => $results->items(),
             'pagination' => [
                 'current_page' => $results->currentPage(),
                 'last_page' => $results->lastPage(),
                 'per_page' => $results->perPage(),
                 'total' => $results->total(),
             ],
-            'filters_applied' => $this->getAppliedFilters($filterValues),
-            'debug' => [
-                'total_in_repository' => $totalCount,
-                'filtered_count' => $filteredCount,
-                'entity_type' => $attributes->entityType
-            ]
         ];
 
 
@@ -149,6 +146,7 @@ final class FilterService extends AbstractFilter implements FilterServiceInterfa
     private function convertDtoToFilterArray(CatalogFilterDTO $dto): array
     {
         return [
+            'city' => $dto->city,
             'price' => $dto->pricing,
             'room_count' => $dto->countRooms,
             'area' => $dto->areaTotal,
