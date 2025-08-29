@@ -2,7 +2,6 @@
 
 namespace App\Core\Abstracts\Trait\Responders;
 
-use App\Models\User;
 
 trait RelationshipResponderTrait
 {
@@ -29,11 +28,23 @@ trait RelationshipResponderTrait
                     $relatedData->orderBy('name');
                 }
 
-                $relatedData->get();
+                $records = $relatedData->get();
+
+                // Fallback: если по id нет данных, пытаемся связать по key → complex_key (актуально для Apartment)
+                if ($records->isEmpty() && $relationshipName === 'Apartment') {
+                    try {
+                        $entityKey = $entity::query()->where('id', $searchData)->value('key');
+                        if ($entityKey) {
+                            $records = $modelClass::query()->where('complex_key', $entityKey)->get();
+                        }
+                    } catch (\Throwable $e) {
+                        // silent fallback
+                    }
+                }
 
                 $includes[] = [
                     'type' => strtolower($relationshipName),
-                    'attributes' => $relatedData->toArray(),
+                    'attributes' => $records->toArray(),
                 ];
             }
         }

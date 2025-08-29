@@ -340,6 +340,11 @@ class ResidentialComplex extends Model
         return $this->hasMany(Apartment::class, 'complex_id');
     }
 
+    public function apartmentsByKey(): HasMany
+    {
+        return $this->hasMany(Apartment::class, 'complex_key', 'key');
+    }
+
     public function apartmentSpecifics(): HasMany
     {
         return $this->hasMany(ResidentialComplexApartmentSpecifics::class, 'building_id');

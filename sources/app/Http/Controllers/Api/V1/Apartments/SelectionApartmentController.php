@@ -9,6 +9,7 @@ use App\Services\Apartment\SelectRecommendationsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 
 /**
  * @see SelectRecommendationsService
@@ -22,6 +23,34 @@ class SelectionApartmentController extends AbstractOperations
 
     }
 
+    /**
+     * @OA\Get(
+     *       tags={"Apartment"},
+     *       path="/api/v1/apartments/selections",
+     *       summary="получение списка ...",
+     *       description="Возвращение JSON объекта с пагинацией",
+     *       @OA\Parameter(
+     *           name="city_code",
+     *           in="query",
+     *           required=true,
+     *           description="Код города",
+     *           @OA\Schema(type="string", example="novosibirsk")
+     *       ),
+     *       @OA\Parameter(
+     *           name="user_key",
+     *           in="query",
+     *           required=false,
+     *           description="Ключ юзера"
+     *       ),
+     *       @OA\Response(response=200, description="УСПЕХ!"),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Resource not found"
+     *       )
+     *  )
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $attributes = $request->input('city_code') && $request->input('user_key')

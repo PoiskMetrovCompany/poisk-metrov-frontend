@@ -438,6 +438,42 @@
                 }
             }
         },
+        "/api/v1/apartments/selections": {
+            "get": {
+                "tags": [
+                    "Apartment"
+                ],
+                "summary": "получение списка ...",
+                "description": "Возвращение JSON объекта с пагинацией",
+                "operationId": "3ac872c3dc86a51c9bbbaf3de46f5e99",
+                "parameters": [
+                    {
+                        "name": "city_code",
+                        "in": "query",
+                        "description": "Код города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "novosibirsk"
+                        }
+                    },
+                    {
+                        "name": "user_key",
+                        "in": "query",
+                        "description": "Ключ юзера",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/apartments/update/": {
             "post": {
                 "tags": [

@@ -6,6 +6,7 @@ use App\Core\Interfaces\Repositories\ApartmentRepositoryInterface;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Core\Interfaces\Repositories\VisitedPageRepositoryInterface;
 use App\Core\Interfaces\Services\SelectRecommendationsServiceInterface;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -39,24 +40,38 @@ final class SelectRecommendationsService implements SelectRecommendationsService
 
     public function getPersonalRecommendations(string $userKey, string $cityCode, bool $isAuthenticated = false): array
     {
-        $visitedApartments = $this->visitedPageRepository->find(['user_key' => $userKey, 'type' => 'plan'])->get();
-        $visitedBuildings = $this->visitedPageRepository->find(['user_key' => $userKey, 'type' => 'real-estate'])->get();
+        $userId = User::query()->where('key', $userKey)->value('id');
+        if (!$userId) {
+            return $this->getGeneralRecommendations($cityCode);
+        }
 
-        $visitedApartmentOffers = $visitedApartments->pluck('offer_id');
-        $visitedBuildingCodes = $visitedBuildings->pluck('complex_code');
+        $visitedApartments = $this->visitedPageRepository->find(['user_id' => $userId, 'page' => 'plan'])->get();
+        $visitedBuildings = $this->visitedPageRepository->find(['user_id' => $userId, 'page' => 'real-estate'])->get();
 
-        $apartments = $this->apartmentRepository->find(['offer_id' => $visitedApartmentOffers]);
+        if ($visitedApartments->isEmpty() && $visitedBuildings->isEmpty()) {
+            return $this->getGeneralRecommendations($cityCode);
+        }
 
-        if (!empty($apartments)) {
-            self::$mediumPrice = (int) $apartments->average('price');
-            self::$mediumArea = (int) $apartments->average('area');
-            self::$mediumRoomCount = (int) floor($apartments->average('room_count'));
+        $visitedApartmentOffers = $visitedApartments->pluck('offer_id')->filter()->values();
+        $visitedBuildingCodes = $visitedBuildings->pluck('complex_code')->filter()->values();
+
+        if ($visitedApartmentOffers->isNotEmpty()) {
+            $apartmentsQuery = $this->apartmentRepository->find(['offer_id' => $visitedApartmentOffers->toArray()]);
+            $avgPrice = $apartmentsQuery->average('price');
+            $avgArea = $apartmentsQuery->average('area');
+            $avgRooms = $apartmentsQuery->average('room_count');
+
+            if ($avgPrice) self::$mediumPrice = (int) $avgPrice;
+            if ($avgArea) self::$mediumArea = (int) $avgArea;
+            if ($avgRooms) self::$mediumRoomCount = (int) floor($avgRooms);
         }
         $bestOffers = $this->residentialComplexRepository->getBestOffers($cityCode);
-        $preferredBuildings = $this->residentialComplexRepository->find([
-            'code' => $visitedBuildingCodes->toArray(),
-            'location.code' => $cityCode
-        ]);
+        $preferredBuildings = $visitedBuildingCodes->isNotEmpty()
+            ? $this->residentialComplexRepository->find([
+                'code' => $visitedBuildingCodes->toArray(),
+                'location.code' => $cityCode
+            ])
+            : collect();
 
         if ($visitedApartments->count() < 10 && $visitedBuildings->count() < 5) {
             $preferredBuildings = $bestOffers;
@@ -68,6 +83,11 @@ final class SelectRecommendationsService implements SelectRecommendationsService
         foreach ($preferredBuildings as $building) {
             $buildingApartments = $this->apartmentRepository->findByInComplexId([$building->id]);
 
+            $testFirst = (clone $buildingApartments)->first();
+            if (!$testFirst) {
+                $buildingApartments = $this->apartmentRepository->find(['complex_key' => $building->key]);
+            }
+
             $recommendedApartment = $buildingApartments
                 ->where('price', '>=', self::$mediumPrice - self::$priceRange)
                 ->where('price', '<=', self::$mediumPrice + self::$priceRange)
@@ -76,6 +96,12 @@ final class SelectRecommendationsService implements SelectRecommendationsService
                 ->where('room_count', '>=', self::$mediumRoomCount - self::$roomCountRange)
                 ->where('room_count', '<=', self::$mediumRoomCount + self::$roomCountRange)
                 ->first();
+
+            if (!$recommendedApartment) {
+                $recommendedApartment = (clone $buildingApartments)
+                    ->whereNotIn('offer_id', $recommendations->pluck('offer_id'))
+                    ->first();
+            }
 
             if ($recommendedApartment) {
                 $recommendations->push($recommendedApartment);
@@ -93,12 +119,23 @@ final class SelectRecommendationsService implements SelectRecommendationsService
             }
 
             $buildingApartments = $this->apartmentRepository->findByInComplexId([$building->id]);
+            // Fallback по complex_key
+            $testFirst = (clone $buildingApartments)->first();
+            if (!$testFirst) {
+                $buildingApartments = $this->apartmentRepository->find(['complex_key' => $building->key]);
+            }
 
             $recommendedApartment = $buildingApartments
                 ->where('room_count', '>=', self::$mediumRoomCount - self::$roomCountRange)
                 ->where('room_count', '<=', self::$mediumRoomCount + self::$roomCountRange)
                 ->whereNotIn('offer_id', $recommendations->pluck('offer_id'))
                 ->first();
+
+            if (!$recommendedApartment) {
+                $recommendedApartment = (clone $buildingApartments)
+                    ->whereNotIn('offer_id', $recommendations->pluck('offer_id'))
+                    ->first();
+            }
 
             if ($recommendedApartment) {
                 $recommendations->push($recommendedApartment);
@@ -114,7 +151,8 @@ final class SelectRecommendationsService implements SelectRecommendationsService
         $recommendations = new Collection();
 
         foreach ($bestOffers as $building) {
-            $apartmentsInBuilding = $this->apartmentRepository->find(['key' => $building->key]);
+            // Берем квартиры по принадлежности к комплексу
+            $apartmentsInBuilding = $this->apartmentRepository->findByInComplexId([$building->id]);
 
             $recommendedApartment = $apartmentsInBuilding
                 ->where('price', '>=', self::$mediumPrice - self::$priceRange)
@@ -138,7 +176,8 @@ final class SelectRecommendationsService implements SelectRecommendationsService
             $building = $bestOffers->shift();
             if (!$building) continue;
 
-            $apartmentsInBuilding = $this->apartmentRepository->findByKey($building->key);
+            // Берем квартиры по принадлежности к комплексу
+            $apartmentsInBuilding = $this->apartmentRepository->findByInComplexId([$building->id]);
             $recommendedApartment = $apartmentsInBuilding
                 ->where('room_count', '>=', self::$mediumRoomCount - self::$roomCountRange)
                 ->where('room_count', '<=', self::$mediumRoomCount + self::$roomCountRange)
