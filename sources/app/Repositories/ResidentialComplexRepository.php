@@ -62,7 +62,9 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
             ->with('apartments')
             ->withCount('apartments')
             ->orderBy('apartments_count', 'DESC')
-            ->has('apartments');
+            ->where(function (Builder $q) {
+                $q->has('apartments')->orHas('apartmentsByKey');
+            });
 
         $countQuery = clone $residentialComplexes;
         $count = $countQuery->count();
@@ -77,7 +79,9 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
                 $residentialComplexes->with('apartments')
                     ->withCount('apartments')
                     ->orderBy('apartments_count', 'DESC')
-                    ->has('apartments');
+                    ->where(function (Builder $q) {
+                        $q->has('apartments')->orHas('apartmentsByKey');
+                    });
             } else {
                 $residentialComplexes = $this->model::whereHas('location', function ($query) use ($cityCode) {
                     return $query->where('code', $cityCode);
@@ -87,7 +91,9 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
                     ->withCount('apartments')
                     ->orderBy('apartments_count', 'DESC')
                     ->limit(12)
-                    ->has('apartments');
+                    ->where(function (Builder $q) {
+                        $q->has('apartments')->orHas('apartmentsByKey');
+                    });
             }
         }
 
@@ -106,11 +112,16 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
 
     public function getCityQueryBuilder(string $cityCode): Builder
     {
-        return ResidentialComplex::query()
+        $query = ResidentialComplex::query()
             ->whereHas('location', function ($query) use ($cityCode) {
                 return $query->where('code', $cityCode);
-            })
-            ->has('apartments');
+            });
+
+        // Если есть связка по key, используем её, иначе по id
+        return $query->where(function (Builder $q) {
+            $q->has('apartments')
+              ->orHas('apartmentsByKey');
+        });
     }
 
     public function getSortedNamesForCity(string $cityCode)

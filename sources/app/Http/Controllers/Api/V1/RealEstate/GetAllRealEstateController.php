@@ -52,10 +52,11 @@ class GetAllRealEstateController extends AbstractOperations
         $locale = $this->locationRepository->find(['code' => $city])->first();
         $residentialComplexes = $this->residentialComplexRepository->find(['location_key' => $locale->key])->get();
 
+        $apartments = [];
         foreach ($residentialComplexes as $residentialComplex) {
             $apartments = array_merge(
                 $apartments,
-                $this->apartmentRepository->find(['residential_complex_key' => $residentialComplex->key])->get()->toArray()
+                $this->apartmentRepository->find(['complex_key' => $residentialComplex->key])->get()->toArray()
             );
         }
 

@@ -99,22 +99,24 @@ class ListResidentialComplexesController extends AbstractOperations
     {
         $cityName = strtolower((string)$request->get('city'));
         $residentialComplexesCacheName = "residentialComplexes_{$cityName}";
-        $attributes = Cache::get($residentialComplexesCacheName);
+        $cached = Cache::get($residentialComplexesCacheName);
 
-        if ($attributes === null) {
-            // Фоллбэк: получаем из репозитория и кешируем
-            $collectionFromRepo = $this->residentialComplexRepository->getCatalogueForCity($cityName);
-            $attributes = $collectionFromRepo->toArray();
-            Cache::put($residentialComplexesCacheName, $attributes, now()->addMinutes(30));
+        if ($cached === null) {
+            // Фоллбэк: получаем из репозитория и кешируем (как массивы)
+            $collection = $this->residentialComplexRepository->getCatalogueForCity($cityName);
+            Cache::put($residentialComplexesCacheName, $collection->toArray(), now()->addMinutes(30));
+        } else {
+            // Гидратируем модели из массива для корректной работы ресурсов
+            $collection = ResidentialComplex::hydrate($cached);
         }
-
-        $collection = collect($attributes);
 
         $perPage = $request->get('per_page', 15);
         $currentPage = $request->get('page', 1);
 
+        $pageItems = $collection->forPage($currentPage, $perPage)->values();
+
         $paginatedItems = new LengthAwarePaginator(
-            $collection->forPage($currentPage, $perPage),
+            $pageItems,
             $collection->count(),
             $perPage,
             $currentPage,
@@ -123,7 +125,7 @@ class ListResidentialComplexesController extends AbstractOperations
 
         $paginatedItems->appends($request->except('page'));
 
-        $collect = new ResidentialComplexesCollection($paginatedItems->items());
+        $collect = new ResidentialComplexesCollection($pageItems);
 
         return new JsonResponse(
             data: [
