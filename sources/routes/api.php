@@ -415,13 +415,6 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']); //->middleware('auth:sanctum');
     });
     /// END
-
-    /// Map
-    Route::namespace('MAP')->prefix('map')->group(function () {
-        Route::get('/', [GetMapController::class, '__invoke']);
-        Route::get('/favorites', [GetFavoriteMapController::class, '__invoke']);
-    });
-    /// END
 });
 /// END Api Version 1
 

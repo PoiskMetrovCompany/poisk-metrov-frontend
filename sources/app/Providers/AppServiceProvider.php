@@ -60,6 +60,7 @@ use App\Core\Interfaces\Services\PreloadServiceInterface;
 use App\Core\Interfaces\Services\PriceFormattingServiceInterface;
 use App\Core\Interfaces\Services\RealEstateServiceInterface;
 use App\Core\Interfaces\Services\ReservationServiceInterface;
+use App\Core\Interfaces\Services\ResidentialComplexPriceServiceInterface;
 use App\Core\Interfaces\Services\SearchServiceInterface;
 use App\Core\Interfaces\Services\SelectRecommendationsServiceInterface;
 use App\Core\Interfaces\Services\SerializedCollectionServiceInterface;
@@ -129,6 +130,7 @@ use App\Services\PreloadService;
 use App\Services\PriceFormattingService;
 use App\Services\RealEstateService;
 use App\Services\ReservationService;
+use App\Services\ResidentialComplexPriceService;
 use App\Services\SearchService;
 use App\Services\SerializedCollection\SerializedCollectionService;
 use App\Services\SmsService;
@@ -213,6 +215,11 @@ class AppServiceProvider extends ServiceProvider
     final public function registerPriceFormattingService(): void
     {
         $this->app->singleton(PriceFormattingServiceInterface::class, PriceFormattingService::class);
+    }
+
+    final public function registerResidentialComplexPriceService(): void
+    {
+        $this->app->singleton(ResidentialComplexPriceServiceInterface::class, ResidentialComplexPriceService::class);
     }
 
     final public function registerNewsService(): void
@@ -507,6 +514,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerRealEstateService();
         $this->registerCachingService();
         $this->registerPriceFormattingService();
+        $this->registerResidentialComplexPriceService();
         $this->registerNewsService();
         $this->registerManagersService();
         $this->registerFeedService();

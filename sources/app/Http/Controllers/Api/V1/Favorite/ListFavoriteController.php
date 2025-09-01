@@ -12,6 +12,7 @@ use App\Models\UserFavoriteBuilding;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+use App\Core\Interfaces\Services\ResidentialComplexPriceServiceInterface;
 
 class ListFavoriteController extends AbstractOperations
 {
@@ -20,6 +21,7 @@ class ListFavoriteController extends AbstractOperations
         protected UserFavoriteBuildingRepositoryInterface $userFavoriteBuildingRepository,
         protected ResidentialComplexRepositoryInterface $residentialComplexRepository,
         protected ApartmentRepositoryInterface $apartmentRepository,
+        protected ResidentialComplexPriceServiceInterface $rcPriceService,
     ) {
     }
 
@@ -35,6 +37,13 @@ class ListFavoriteController extends AbstractOperations
      *           required=true,
      *           description="Ключ юзера",
      *           @OA\Schema(type="string", example="")
+     *       ),
+     *       @OA\Parameter(
+     *           name="map_mode",
+     *           in="query",
+     *           required=false,
+     *           description="Режим карты. При значении read в ЖК добавляется поле price_from (минимальная стоимость квартиры)",
+     *           @OA\Schema(type="string", enum={"read"})
      *       ),
      *       @OA\Response(response=200, description="УСПЕХ!"),
      *       @OA\Response(
@@ -121,11 +130,17 @@ class ListFavoriteController extends AbstractOperations
             })
             ->values();
 
+        // Добавляем price_from для ЖК при map_mode=read
+        $residentialComplexesArray = $residentialComplexes->toArray();
+        if ($request->query('map_mode') === 'read') {
+            $residentialComplexesArray = $this->rcPriceService->augmentPriceFrom($residentialComplexesArray);
+        }
+
         return new JsonResponse(
             data: [
                 ...self::identifier(),
                 ...self::attributes([
-                    'residential_complexes' => $residentialComplexes->toArray(),
+                    'residential_complexes' => $residentialComplexesArray,
                     'apartments' => $apartments->toArray(),
                 ]),
                 ...self::metaData($request, $request->all())
