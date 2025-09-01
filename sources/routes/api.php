@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\V1\Export\ExportToXlsxFormatController;
 use App\Http\Controllers\Api\V1\Favorite\CountFavoritesController;
 use App\Http\Controllers\Api\V1\Favorite\GetFavoriteBuildingViewsControllers;
 use App\Http\Controllers\Api\V1\Favorite\GetFavoritePlanViewsController;
+use App\Http\Controllers\Api\V1\Favorite\ListFavoriteController;
 use App\Http\Controllers\Api\V1\Favorite\SwitchLikeController;
 use App\Http\Controllers\Api\V1\Feeds\CreateFeedController;
 use App\Http\Controllers\Api\V1\Feeds\DeleteFeedController;
@@ -61,6 +62,8 @@ use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsWithoutManagerController;
 use App\Http\Controllers\Api\V1\Managers\Chat\SendMessageToSessionController;
 use App\Http\Controllers\Api\V1\Managers\Chat\TryStartSessionController;
 use App\Http\Controllers\Api\V1\Managers\ListManagerController;
+use App\Http\Controllers\Api\V1\Maps\GetFavoriteMapController;
+use App\Http\Controllers\Api\V1\Maps\GetMapController;
 use App\Http\Controllers\Api\V1\Notification\NewCandidatesController;
 use App\Http\Controllers\Api\V1\RealEstate\GetAllRealEstateController;
 use App\Http\Controllers\Api\V1\RealEstate\UpdateRealEstateController;
@@ -139,7 +142,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.user.get-current');
 
         Route::get('/list', operation(ListUserController::class))
-
+            ->middleware('auth:api')
             ->name('api.v1.user.list');
 
         Route::post('/update-role', operation(UpdateRoleUserController::class))
@@ -321,14 +324,17 @@ Route::namespace('V1')->prefix('v1')->group(function () {
                 ->withoutMiddleware('api');
 
             // TODO: искоренить это
-            Route::get('/get-plan-views', operation(GetFavoritePlanViewsController::class))
-                ->name('api.v1.favorites.get-plan-views')
-                ->withoutMiddleware('api');
-
-            Route::get('/building-views', operation(GetFavoriteBuildingViewsControllers::class))
-                ->name('api.v1.favorites.building-views')
-                ->withoutMiddleware('api');
+//            Route::get('/get-plan-views', operation(GetFavoritePlanViewsController::class))
+//                ->name('api.v1.favorites.get-plan-views')
+//                ->withoutMiddleware('api');
+//
+//            Route::get('/building-views', operation(GetFavoriteBuildingViewsControllers::class))
+//                ->name('api.v1.favorites.building-views')
+//                ->withoutMiddleware('api');
             // TODO: END
+            Route::get('/', operation(ListFavoriteController::class))
+                ->name('api.v1.favorites');
+
         });
     });
     /// END
@@ -415,6 +421,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// NOTIFICATION
     Route::prefix('notification')->group(function () {
         Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']); //->middleware('auth:sanctum');
+    });
+    /// END
+
+    /// Map
+    Route::namespace('MAP')->prefix('map')->group(function () {
+        Route::get('/', [GetMapController::class, '__invoke']);
+        Route::get('/favorites', [GetFavoriteMapController::class, '__invoke']);
     });
     /// END
 });
