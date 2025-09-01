@@ -102,11 +102,9 @@ class ListResidentialComplexesController extends AbstractOperations
         $cached = Cache::get($residentialComplexesCacheName);
 
         if ($cached === null) {
-            // Фоллбэк: получаем из репозитория и кешируем (как массивы)
             $collection = $this->residentialComplexRepository->getCatalogueForCity($cityName);
             Cache::put($residentialComplexesCacheName, $collection->toArray(), now()->addMinutes(30));
         } else {
-            // Гидратируем модели из массива для корректной работы ресурсов
             $collection = ResidentialComplex::hydrate($cached);
         }
 

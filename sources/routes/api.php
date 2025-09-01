@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Apartments\SimilarApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
+use App\Http\Controllers\Api\V1\BestOffers\ListBestOfferController;
 use App\Http\Controllers\Api\V1\Cache\RewriteCacheController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
@@ -353,6 +354,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->name('api.v1.residential-complex.list');
         Route::get('/read', operation(ReadResidentialComplexesController::class))
             ->name('api.v1.residential-complex.read');
+
+        /// BEST OFFERS
+        Route::namespace('BEST-OFFERS')->prefix('best-offers')->group(function () {
+            Route::get('/', operation(ListBestOfferController::class))
+                ->name('api.v1.residential-complex.best-offers.list');
+        });
+        /// END
     });
     /// END
 

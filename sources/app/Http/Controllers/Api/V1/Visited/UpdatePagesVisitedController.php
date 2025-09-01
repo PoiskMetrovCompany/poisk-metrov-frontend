@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use OpenApi\Annotations as OA;
 
 
@@ -34,6 +35,13 @@ class UpdatePagesVisitedController extends AbstractOperations
      *       summary="Фиксация посещения страницы",
      *       description="Возвращение JSON объекта",
      *       security={{"bearerAuth":{}}},
+     *       @OA\Parameter(
+     *           name="user_id",
+     *           in="query",
+     *           required=false,
+     *           description="ID пользователя (если нет авторизации)",
+     *           @OA\Schema(type="integer", example=123)
+     *       ),
      *       @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
@@ -56,9 +64,9 @@ class UpdatePagesVisitedController extends AbstractOperations
         $page = $request->validated('page');
         $code = $request->validated('code');
 
-        $userId = Auth::id();
+        $userId = $request->query('user_id');
 
-        if ($userId == null) {
+        if ($userId === null) {
             return new JsonResponse(
                 data: [
                     ...self::identifier(),
@@ -66,6 +74,16 @@ class UpdatePagesVisitedController extends AbstractOperations
                     ...self::metaData($request, $request->all())
                 ],
                 status: 500
+            );
+        }
+        if (!User::query()->where('id', $userId)->exists()) {
+            return new JsonResponse(
+                data: [
+                    ...self::identifier(),
+                    ...self::attributes(['status' => "User not found"]),
+                    ...self::metaData($request, $request->all())
+                ],
+                status: 404
             );
         }
 
