@@ -166,6 +166,11 @@ class Apartment extends Model
         return $this->belongsTo(ResidentialComplex::class, 'complex_id', 'id');
     }
 
+    public function residentialComplexByKey(): BelongsTo
+    {
+        return $this->belongsTo(ResidentialComplex::class, 'complex_key', 'key');
+    }
+
     public function renovationUrl(): HasMany
     {
         return $this->hasMany(Renovation::class, 'offer_id', 'offer_id');

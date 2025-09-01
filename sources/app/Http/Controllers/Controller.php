@@ -114,6 +114,10 @@ use OpenApi\Annotations as OA;
  *             name="City",
  *             description="Операции над городами"
  *  ),
+ * @OA\Tag(
+ *      name="BestOffers",
+ *      description="Операции над лучшими предложениями"
+ *   ),
  */
 class Controller extends BaseController
 {
