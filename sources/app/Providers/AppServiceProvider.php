@@ -45,6 +45,7 @@ use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CallServiceInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
+use App\Core\Interfaces\Services\ComparisonServiceInterface;
 use App\Core\Interfaces\Services\CRMServiceInterface;
 use App\Core\Interfaces\Services\ExcelServiceInterface;
 use App\Core\Interfaces\Services\FavoritesServiceInterface;
@@ -113,6 +114,7 @@ use App\Services\CachingService;
 use App\Services\CallService;
 use App\Services\ChatService;
 use App\Services\CityService;
+use App\Services\ComparisonService;
 use App\Services\CRMService;
 use App\Services\ExcelService;
 use App\Services\FavoritesService;
@@ -325,6 +327,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(FilterServiceInterface::class, FilterService::class);
     }
 
+    final public function registerComparisonService(): void
+    {
+        $this->app->singleton(ComparisonServiceInterface::class, ComparisonService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -530,6 +537,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerCacheService();
         $this->registerCacheService();
         $this->registerFilterService();
+        $this->registerComparisonService();
 
         /// Repositories
         $this->registerReservationRepository();

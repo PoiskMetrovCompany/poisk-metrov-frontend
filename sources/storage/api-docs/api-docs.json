@@ -2219,6 +2219,46 @@
                 }
             }
         },
+        "/api/v1/comparison": {
+            "get": {
+                "tags": [
+                    "Comparsion"
+                ],
+                "summary": "Сравнение ЖК и КВ",
+                "description": "Возвращение JSON объекта",
+                "operationId": "aafee0bf716d8b878d3e6a9bb31708c9",
+                "parameters": [
+                    {
+                        "name": "user_key",
+                        "in": "query",
+                        "description": "Ключ юзера",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                        }
+                    },
+                    {
+                        "name": "type_comparison",
+                        "in": "query",
+                        "description": "Принимает 'Apartments' или 'ResidentialComplexes'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Apartments"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/crm/reset-ads-agreement": {
             "post": {
                 "tags": [
@@ -4245,6 +4285,10 @@
         {
             "name": "Cache",
             "description": "Cache"
+        },
+        {
+            "name": "Comparsion",
+            "description": "Comparsion"
         },
         {
             "name": "Crm",
