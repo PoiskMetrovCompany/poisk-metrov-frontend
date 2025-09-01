@@ -8,12 +8,14 @@ use App\Core\Mapper\CatalogFilterMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+use App\Core\Interfaces\Services\ResidentialComplexPriceServiceInterface;
 
 class FilterController extends AbstractOperations
 {
     public function __construct(
         protected FilterServiceInterface $filterService,
         protected CatalogFilterMapper $mapper,
+        protected ResidentialComplexPriceServiceInterface $rcPriceService,
     )
     {
 
@@ -171,6 +173,13 @@ class FilterController extends AbstractOperations
      *         description="Свободный текстовый поиск: район, метро, улица, застройщик, ЖК",
      *         @OA\Schema(type="string", example="Ленинский")
      *     ),
+     *     @OA\Parameter(
+     *         name="map_mode",
+     *         in="query",
+     *         required=false,
+     *         description="Режим карты. При значении read в ЖК добавляется поле price_from (минимальная стоимость квартиры)",
+     *         @OA\Schema(type="string", enum={"read"})
+     *     ),
      *
      *     @OA\Response(
      *         response=200,
@@ -221,6 +230,11 @@ class FilterController extends AbstractOperations
         }
 
         $filterResult = $this->filterService->execute($dto);
+
+        if (($request->query('map_mode') === 'read') && ($dto->entityType === 'ЖК')) {
+            $data = $filterResult['data'] ?? [];
+            $filterResult['data'] = $this->rcPriceService->augmentPriceFrom($data);
+        }
 
         return new JsonResponse($filterResult);
     }

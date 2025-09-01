@@ -2686,6 +2686,18 @@
                             "type": "string",
                             "example": ""
                         }
+                    },
+                    {
+                        "name": "map_mode",
+                        "in": "query",
+                        "description": "Режим карты. При значении read в ЖК добавляется поле price_from (минимальная стоимость квартиры)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "read"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -3270,6 +3282,18 @@
                         "schema": {
                             "type": "string",
                             "example": "Ленинский"
+                        }
+                    },
+                    {
+                        "name": "map_mode",
+                        "in": "query",
+                        "description": "Режим карты. При значении read в ЖК добавляется поле price_from (минимальная стоимость квартиры)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "read"
+                            ]
                         }
                     }
                 ],
