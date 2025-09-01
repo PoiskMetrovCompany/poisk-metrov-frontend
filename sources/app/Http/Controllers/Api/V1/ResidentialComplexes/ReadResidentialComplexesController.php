@@ -49,16 +49,8 @@ class ReadResidentialComplexesController extends AbstractOperations
      *              @OA\Items(
      *                  type="string",
      *                  enum={
-     *                       "Amenity",
      *                       "Apartment",
-     *                       "BestOffer",
-     *                       "BuildingProcess",
-     *                       "Doc",
-     *                       "Gallery",
-     *                       "ResidentialComplexCategoryPivot",
-     *                       "SpriteImagePosition",
-     *                       "UserFavoriteBuilding",
-     *                       "Location",
+     *                       "Building"
      *                   }
      *              )
      *          )

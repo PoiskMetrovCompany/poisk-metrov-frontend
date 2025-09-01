@@ -438,6 +438,55 @@
                 }
             }
         },
+        "/api/v1/apartments/read": {
+            "get": {
+                "tags": [
+                    "Apartment"
+                ],
+                "summary": "получение конкретной квартиры",
+                "description": "Возвращение JSON объекта с пагинацией",
+                "operationId": "898ebd6266f2768b6a635cd220f95a9d",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ квартиры",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Указывает, какие связанные данные нужно включить",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ResidentialComplex",
+                                    "Doc",
+                                    "Building"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/apartments/selections": {
             "get": {
                 "tags": [
@@ -3582,16 +3631,8 @@
                             "items": {
                                 "type": "string",
                                 "enum": [
-                                    "Amenity",
                                     "Apartment",
-                                    "BestOffer",
-                                    "BuildingProcess",
-                                    "Doc",
-                                    "Gallery",
-                                    "ResidentialComplexCategoryPivot",
-                                    "SpriteImagePosition",
-                                    "UserFavoriteBuilding",
-                                    "Location"
+                                    "Building"
                                 ]
                             }
                         }

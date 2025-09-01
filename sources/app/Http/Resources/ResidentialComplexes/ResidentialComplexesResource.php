@@ -16,6 +16,19 @@ class ResidentialComplexesResource extends AbstractResource
      */
     public function toArray(Request $request): array
     {
+        // Определяем корректное значение searchData для includes (поддержка разных main_table_value)
+        $searchData = $this->id;
+        $includesParam = $request->get('includes');
+        if (!empty($includesParam)) {
+            $first = trim(explode(',', $includesParam)[0]);
+            if ($first !== '' && isset(ResidentialComplex::RELATIONSHIP[$first]['main_table_value'])) {
+                $mainField = ResidentialComplex::RELATIONSHIP[$first]['main_table_value'];
+                if (isset($this->{$mainField})) {
+                    $searchData = $this->{$mainField};
+                }
+            }
+        }
+
         return [
             'id' => $this->id,
             'location_key' => $this->location_key,
@@ -34,7 +47,7 @@ class ResidentialComplexesResource extends AbstractResource
             'meta' => $this->meta,
             'head_title' => $this->head_title,
             'h1' => $this->h1,
-            ...self::relationshipListOperation(ResidentialComplex::class, $this->id, $request->all(), ResidentialComplex::RELATIONSHIP)
+            ...self::relationshipListOperation(ResidentialComplex::class, $searchData, $request->all(), ResidentialComplex::RELATIONSHIP)
         ];
     }
 }

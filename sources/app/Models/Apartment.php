@@ -18,12 +18,18 @@ class Apartment extends Model
      * @var array
      */
     const RELATIONSHIP = [
-        'ResidentialComplex' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
+        'ResidentialComplex' => ['main_table_value' => 'complex_key', 'linked_table_value' => 'key'],
         'ApartmentHistory' => ['main_table_value' => 'id', 'linked_table_value' => 'apartment_id'],
         'Interaction' => ['main_table_value' => 'id', 'linked_table_value' => 'apartment_id'],
         'MortgageType' => ['main_table_value' => 'id', 'linked_table_value' => 'apartment_id'],
         'Renovation' => ['main_table_value' => 'id', 'linked_table_value' => 'offer_id'],
         'UserFavoritePlan' => ['main_table_value' => 'id', 'linked_table_value' => 'offer_id'],
+        'Doc' => ['main_table_value' => 'complex_key', 'linked_table_value' => 'complex_key'],
+        'Building' => [
+            'model' => \App\Models\Building::class,
+            'main_table_value' => 'complex_key',
+            'linked_table_value' => 'complex_key',
+        ],
     ];
 
     /**

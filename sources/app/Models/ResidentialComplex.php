@@ -40,13 +40,12 @@ class ResidentialComplex extends Model
      * @var array
      */
     const RELATIONSHIP = [
-        'Amenity' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
         'Apartment' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
-        'BestOffer' => ['main_table_value' => 'code', 'linked_table_value' => 'complex_code'],
-        'BuildingProcess' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
-        'Doc' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
-        'Gallery' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
-        'ResidentialComplex' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
+        'Building' => [
+            'model' => \App\Models\Building::class,
+            'main_table_value' => 'key',
+            'linked_table_value' => 'complex_key',
+        ],
         'ResidentialComplexCategoryPivot' => ['main_table_value' => 'id', 'linked_table_value' => 'complex_id'],
         'SpriteImagePosition' => ['main_table_value' => 'id', 'linked_table_value' => 'building_id'],
         'UserFavoriteBuilding' => ['main_table_value' => 'code', 'linked_table_value' => 'complex_code'],
