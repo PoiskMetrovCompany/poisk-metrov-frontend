@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\Chat\SendChatMessageController;
 use App\Http\Controllers\Api\V1\City\ListCityController;
 use App\Http\Controllers\Api\V1\City\ReadCityController;
 use App\Http\Controllers\Api\V1\City\StoreCityController;
+use App\Http\Controllers\Api\V1\Comparsion\ListComparisonController;
 use App\Http\Controllers\Api\V1\Crm\ResetAdsAgreementController;
 use App\Http\Controllers\Api\V1\Crm\StoreClientTransferController;
 use App\Http\Controllers\Api\V1\Crm\StoreCrmController;
@@ -91,6 +92,13 @@ if (!function_exists('operation')) {
 /// Override API
 /// V1
 Route::namespace('V1')->prefix('v1')->group(function () {
+    /// COMPARISON
+    Route::namespace('COMPARISON')->prefix('comparison')->group(function () {
+        Route::get('/', operation(ListComparisonController::class))
+            ->name('api.v1.comparison.list');
+    });
+    /// END
+
     /// Cache
     Route::namespace('CACHE')
         ->get('/cache-rewrite', [RewriteCacheController::class, 'index'])
