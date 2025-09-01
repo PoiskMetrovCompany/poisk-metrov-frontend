@@ -2628,6 +2628,36 @@
                 ]
             }
         },
+        "/api/v1/favorites/": {
+            "get": {
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "Выборка по избранному",
+                "description": "Возвращение JSON объекта",
+                "operationId": "7ffd5c30ad2492b7d506be0ad841aa58",
+                "parameters": [
+                    {
+                        "name": "user_key",
+                        "in": "query",
+                        "description": "Ключ юзера",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/v1/favorites/switch-like": {
             "post": {
                 "tags": [
