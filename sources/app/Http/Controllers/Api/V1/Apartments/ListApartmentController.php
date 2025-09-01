@@ -96,11 +96,36 @@ class ListApartmentController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $cityName = strtoupper($request->get('city'));
-        $apartmentsCacheName = "apartments{$cityName}";
-        $attributes = Cache::get($apartmentsCacheName) ?: [];
+        $cityRaw = (string)$request->get('city');
+        $cityUpper = strtoupper($cityRaw);
+        $cityCode = strtolower($cityRaw);
+        $apartmentsCacheName = "apartments{$cityUpper}";
 
-        $collection = collect($attributes);
+        $cached = Cache::get($apartmentsCacheName);
+
+        if ($cached === null || (is_array($cached) && count($cached) === 0)) {
+            // Фоллбэк: собираем квартиры из репозитория по городу (учитываем обе связи: apartments и apartmentsByKey)
+            $complexes = $this->residentialComplexRepository
+                ->getCityQueryBuilder($cityCode)
+                ->with(['apartments', 'apartmentsByKey'])
+                ->get();
+
+            $byId = $complexes->pluck('apartments')->flatten();
+            $byKey = $complexes->pluck('apartmentsByKey')->flatten();
+            $apartmentModels = $byId->concat($byKey)->values();
+
+            // Приводим к массивам для единообразия с кэшем
+            $collection = $apartmentModels->map(function ($item) {
+                return is_array($item) ? $item : $item->toArray();
+            });
+        } else {
+            // Поддержка случаев, когда в кэше коллекция или массив
+            if ($cached instanceof \Illuminate\Support\Collection) {
+                $collection = $cached;
+            } else {
+                $collection = collect($cached);
+            }
+        }
 
         $perPage = $request->get('per_page', 15);
         $currentPage = $request->get('page', 1);
