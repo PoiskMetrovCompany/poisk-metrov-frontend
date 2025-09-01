@@ -11,7 +11,9 @@ use App\Http\Controllers\Api\V1\Account\AccountListController;
 use App\Http\Controllers\Api\V1\Account\AccountStoreController;
 use App\Http\Controllers\Api\V1\Account\AccountUpdateController;
 use App\Http\Controllers\Api\V1\Apartments\ListApartmentController;
+use App\Http\Controllers\Api\V1\Apartments\ReadApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
+use App\Http\Controllers\Api\V1\Apartments\SimilarApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
@@ -177,12 +179,18 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/list', operation(ListApartmentController::class))
             ->name('api.v1.apartments.list');
 
+        Route::get('/read', operation(ReadApartmentController::class))
+            ->name('api.v1.apartments.read');
+
         Route::post('/update', operation(UpdateApartmentController::class))
             ->name('api.v1.apartments.update')
             ->middleware('auth:api');
 
         Route::get('/selections', operation(SelectionApartmentController::class))
             ->name('api.v1.apartments.selections');
+
+        Route::get('/similar', operation(SimilarApartmentController::class))
+            ->name('api.v1.apartments.similar');
 
     });
     /// END

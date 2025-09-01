@@ -18,7 +18,7 @@ trait RelationshipResponderTrait
 
         foreach (explode(',', $requestAttributes['includes']) as $relationshipName) {
             if (!empty($relationshipName)) {
-                $modelClass = "App\Models\\" . $relationshipName;
+                $modelClass = $entityRelationship[$relationshipName]['model'] ?? ("App\\Models\\" . $relationshipName);
                 $mainTableValue = $entity::RELATIONSHIP[$relationshipName]['main_table_value'];
                 $linkedTableValue = $entity::RELATIONSHIP[$relationshipName]['linked_table_value'];
                 $relatedData = $modelClass::where($linkedTableValue, $searchData);
@@ -42,10 +42,40 @@ trait RelationshipResponderTrait
                     }
                 }
 
-                $includes[] = [
-                    'type' => strtolower($relationshipName),
-                    'attributes' => $records->toArray(),
-                ];
+                // Специальная группировка по комнатности для apartments.room
+                $filterParam = $requestAttributes['filter'] ?? null;
+                if ($relationshipName === 'Apartment' && $filterParam === 'apartments.room') {
+                    $grouped = [
+                        'study' => [],
+                    ];
+
+                    foreach ($records as $apartment) {
+                        $isStudy = (isset($apartment->apartment_type) && $apartment->apartment_type === 'Студия')
+                            || (isset($apartment->room_count) && (int)$apartment->room_count === 0);
+
+                        if ($isStudy) {
+                            $grouped['study'][] = $apartment->toArray();
+                            continue;
+                        }
+
+                        $rooms = (int)($apartment->room_count ?? 0);
+                        $key = "{$rooms}_rooms";
+                        if (!array_key_exists($key, $grouped)) {
+                            $grouped[$key] = [];
+                        }
+                        $grouped[$key][] = $apartment->toArray();
+                    }
+
+                    $includes[] = [
+                        'type' => strtolower($relationshipName),
+                        'attributes' => [$grouped],
+                    ];
+                } else {
+                    $includes[] = [
+                        'type' => strtolower($relationshipName),
+                        'attributes' => $records->toArray(),
+                    ];
+                }
             }
         }
 
