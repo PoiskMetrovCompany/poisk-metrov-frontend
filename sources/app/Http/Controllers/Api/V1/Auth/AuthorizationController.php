@@ -17,6 +17,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
+use OpenApi\Annotations as OA;
 
 class AuthorizationController extends AbstractOperations
 {
@@ -40,8 +42,8 @@ class AuthorizationController extends AbstractOperations
      * @OA\Post(
      * tags={"Auth"},
      * path="/api/v1/auth/authorization/",
-     * summary="Авторизация профиля (Сайт)",
-     * description="Возвращение JSON объекта",
+     * summary="Авторизация профиля: выдаёт пользователя и Bearer токен",
+     * description="Возвращает информацию о профиле и Bearer токен",
      * @OA\RequestBody(
      * required=true,
      * @OA\JsonContent(
@@ -50,19 +52,22 @@ class AuthorizationController extends AbstractOperations
      * )
      * ),
      * @OA\Response(
-     * response=201,
+     * response=200,
      * description="УСПЕХ!",
      * @OA\JsonContent(
-     * @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
-     * @OA\Property(property="pincode", type="string", example="код из СМС")
+     *   @OA\Property(property="attributes", type="object",
+     *     @OA\Property(property="status", type="string", example="Authorization success"),
+     *     @OA\Property(property="user", type="object"),
+     *     @OA\Property(property="token", type="object",
+     *       @OA\Property(property="type", type="string", example="Bearer"),
+     *       @OA\Property(property="access_token", type="string", example="1|eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...")
+     *     )
+     *   )
      * )
      * ),
      * @OA\Response(
      * response=404,
-     * description="Resource not found",
-     * @OA\JsonContent(
-     * @OA\Property(property="error", type="string", example="Resource not found")
-     * )
+     * description="Resource not found"
      * )
      * )
      *
@@ -72,14 +77,28 @@ class AuthorizationController extends AbstractOperations
      */
     public function __invoke(AuthorizeUserRequest $request): JsonResponse
     {
-        $user = Auth::user();
+        $user = $this->userRepository->findByPhone($request->phone);
 
         $returnData = [];
 
         if (!empty($user)) {
-            $returnData['status'] = 'Already logged in';
             $user->connectWithManager();
             $managerForUser = $this->managerRepository->findByPhone($request->validated('phone'));
+
+            if (!isset($user->api_token)) {
+                $user->api_token = User::createBearerToken($user);
+                $user->save();
+            }
+            $token = $user->api_token;
+
+            $returnData = [
+                'status' => 'Already logged in',
+                'user' => $user,
+                'token' => [
+                    'type' => 'Bearer',
+                    'access_token' => $token,
+                ],
+            ];
 
             if (
                 isset($request->returnApiKey) &&
@@ -154,7 +173,7 @@ class AuthorizationController extends AbstractOperations
         }
 
         if (! isset($user->api_token)) {
-            $user->api_token = Str::random(80);
+            $user->api_token = User::createBearerToken($user);
             $user->save();
         }
 
@@ -166,13 +185,29 @@ class AuthorizationController extends AbstractOperations
         $this->createLeadForUser($user);
         $user->syncWithLead();
 
-        $returnData['status'] = 'Authorization success';
+        $user->connectWithManager();
+
+        // Всегда создаем Bearer токен
+        if (!isset($user->api_token)) {
+            $user->api_token = User::createBearerToken($user);
+            $user->save();
+        }
+        $token = $user->api_token;
 
         $managerForUser = $this->managerRepository->findByPhone($request->validated('phone'));
 
+        $returnData = [
+            'status' => 'Authorization success',
+            'user' => $user,
+            'token' => [
+                'type' => 'Bearer',
+                'access_token' => $token,
+            ],
+        ];
+
         if (
-            isset($authorizeUserRequest->returnApiKey) &&
-            $authorizeUserRequest->returnApiKey == 'true' &&
+            isset($request->returnApiKey) &&
+            $request->returnApiKey == 'true' &&
             ($user->role == RoleEnum::Admin->value || $managerForUser !== null)
         ) {
             $returnData['api_token'] = $user->api_token;
@@ -182,12 +217,10 @@ class AuthorizationController extends AbstractOperations
                 : RoleEnum::Admin->value;
         }
 
-        $user->connectWithManager();
-
         return response()->json(
             data: [
                 ...self::identifier(),
-                ...self::attributes($returnData), // TODO: респонс что то должен возвращать
+                ...self::attributes($returnData),
                 ...self::metaData($request, $request->all()),
             ],
             status: Response::HTTP_OK

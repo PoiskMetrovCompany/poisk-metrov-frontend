@@ -824,22 +824,26 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Авторизация профиля (Сайт)",
-                "description": "Возвращение JSON объекта",
+                "summary": "Авторизация (API): выдаёт пользователя и Bearer токен",
+                "description": "Проверяет телефон и пинкод, создаёт Sanctum токен. В ответе: user + token",
                 "operationId": "53f22ac8c86268a3b36ebf1c7fda9c9e",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "phone",
+                                    "pincode"
+                                ],
                                 "properties": {
                                     "phone": {
                                         "type": "string",
-                                        "example": "+7 (999) 999-99-99"
+                                        "example": "+7 (993) 952-00-85"
                                     },
                                     "pincode": {
                                         "type": "string",
-                                        "example": "последние 6 цифр звонилки"
+                                        "example": "4510"
                                     }
                                 },
                                 "type": "object"
@@ -848,19 +852,71 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "УСПЕХ!",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "phone": {
+                                        "attributes": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "Authorization success"
+                                                },
+                                                "user": {
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "properties": {
+                                                        "type": {
+                                                            "type": "string",
+                                                            "example": "Bearer"
+                                                        },
+                                                        "access_token": {
+                                                            "type": "string",
+                                                            "example": "1|eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "+7 (999) 999-99-99"
+                                            "example": "The phone field is required. (and 1 more error)"
                                         },
-                                        "pincode": {
-                                            "type": "string",
-                                            "example": "код из СМС"
+                                        "errors": {
+                                            "properties": {
+                                                "phone": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The phone field is required."
+                                                    }
+                                                },
+                                                "pincode": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The pincode field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -869,20 +925,7 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Resource not found"
                     }
                 }
             }
