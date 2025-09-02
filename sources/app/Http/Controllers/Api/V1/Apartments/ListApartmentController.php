@@ -104,7 +104,6 @@ class ListApartmentController extends AbstractOperations
         $cached = Cache::get($apartmentsCacheName);
 
         if ($cached === null || (is_array($cached) && count($cached) === 0)) {
-            // Фоллбэк: собираем квартиры из репозитория по городу (учитываем обе связи: apartments и apartmentsByKey)
             $complexes = $this->residentialComplexRepository
                 ->getCityQueryBuilder($cityCode)
                 ->with(['apartments', 'apartmentsByKey'])
@@ -114,12 +113,10 @@ class ListApartmentController extends AbstractOperations
             $byKey = $complexes->pluck('apartmentsByKey')->flatten();
             $apartmentModels = $byId->concat($byKey)->values();
 
-            // Приводим к массивам для единообразия с кэшем
             $collection = $apartmentModels->map(function ($item) {
                 return is_array($item) ? $item : $item->toArray();
             });
         } else {
-            // Поддержка случаев, когда в кэше коллекция или массив
             if ($cached instanceof \Illuminate\Support\Collection) {
                 $collection = $cached;
             } else {

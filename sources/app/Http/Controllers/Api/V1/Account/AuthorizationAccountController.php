@@ -199,7 +199,6 @@ class AuthorizationAccountController extends AbstractOperations
 
         $user->connectWithManager();
 
-        // Всегда создаем Bearer токен
         if (!isset($user->api_token)) {
             $user->api_token = 'bearer_' . Str::random(60);
             $user->save();
@@ -217,14 +216,12 @@ class AuthorizationAccountController extends AbstractOperations
             ],
         ];
 
-        // Для обратной совместимости добавляем api_token если запрошено
         if (
             isset($request->returnApiKey) &&
             $request->returnApiKey == 'true' &&
             ($user->role == RoleEnum::Admin->value || $managerForUser !== null)
         ) {
             $returnData['api_token'] = $user->api_token;
-            //TODO: сделать нормальные роли
             $returnData['role'] = $managerForUser !== null && $user->role != RoleEnum::Admin->value
                 ? RoleEnum::Manager->value
                 : RoleEnum::Admin->value;

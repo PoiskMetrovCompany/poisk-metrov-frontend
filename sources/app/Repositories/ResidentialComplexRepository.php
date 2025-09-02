@@ -117,7 +117,6 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
                 return $query->where('code', $cityCode);
             });
 
-        // Если есть связка по key, используем её, иначе по id
         return $query->where(function (Builder $q) {
             $q->has('apartments')
               ->orHas('apartmentsByKey');

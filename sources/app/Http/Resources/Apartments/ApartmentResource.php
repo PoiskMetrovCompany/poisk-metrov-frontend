@@ -15,7 +15,6 @@ class ApartmentResource extends AbstractResource
     {
         $base = parent::toArray($request);
 
-        // Определяем корректное значение searchData для includes
         $searchData = $this->id;
         $includesParam = $request->get('includes');
         if (!empty($includesParam)) {

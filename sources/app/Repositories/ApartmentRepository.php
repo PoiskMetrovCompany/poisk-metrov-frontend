@@ -96,11 +96,11 @@ final class ApartmentRepository implements ApartmentRepositoryInterface
             whereHas('location', function ($query) use ($cityCode) {
                 return $query->where('code', $cityCode);
             })
-            ->with('apartments')
-            ->has('apartments')
+            ->with('apartmentsByKey')
+            ->has('apartmentsByKey')
             ->get()
             ->each(function (ResidentialComplex $complex) use (&$count) {
-                $count += $complex->apartments()->count();
+                $count += $complex->apartmentsByKey()->count();
             });
 
 

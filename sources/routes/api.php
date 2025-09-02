@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStatusesController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStoreController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileUpdateController;
+use App\Http\Controllers\Api\V1\CatalogueStatistic\ListCatalogueStatisticController;
 use App\Http\Controllers\Api\V1\CbrController;
 use App\Http\Controllers\Api\V1\Chat\GetChatHistoryController;
 use App\Http\Controllers\Api\V1\Chat\GetUserChatTokenController;
@@ -421,6 +422,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// NOTIFICATION
     Route::prefix('notification')->group(function () {
         Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']); //->middleware('auth:sanctum');
+    });
+    /// END
+
+    /// RealEstate
+    Route::namespace('CATALOGUE_STATISTIC')->prefix('catalogue-statistic')->group(function () {
+        Route::get('/', operation(ListCatalogueStatisticController::class))
+            ->name('api.v1.catalogue-statistic');
     });
     /// END
 });
