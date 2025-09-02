@@ -201,8 +201,8 @@
                 "tags": [
                     "UserAccount"
                 ],
-                "summary": "Авторизация профиля",
-                "description": "Возвращение JSON объекта",
+                "summary": "Авторизация профиля: выдаёт пользователя и Bearer токен",
+                "description": "Возвращает информацию о профиле и Bearer токен",
                 "operationId": "33630a95cb7594b61737497402796b7b",
                 "requestBody": {
                     "required": true,
@@ -225,19 +225,36 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "УСПЕХ!",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "phone": {
-                                            "type": "string",
-                                            "example": "+7 (999) 999-99-99"
-                                        },
-                                        "pincode": {
-                                            "type": "string",
-                                            "example": "код из СМС"
+                                        "attributes": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "Authorization success"
+                                                },
+                                                "user": {
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "properties": {
+                                                        "type": {
+                                                            "type": "string",
+                                                            "example": "Bearer"
+                                                        },
+                                                        "access_token": {
+                                                            "type": "string",
+                                                            "example": "1|eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -246,20 +263,7 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Resource not found"
                     }
                 }
             }
@@ -824,26 +828,22 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Авторизация (API): выдаёт пользователя и Bearer токен",
-                "description": "Проверяет телефон и пинкод, создаёт Sanctum токен. В ответе: user + token",
+                "summary": "Авторизация профиля: выдаёт пользователя и Bearer токен",
+                "description": "Возвращает информацию о профиле и Bearer токен",
                 "operationId": "53f22ac8c86268a3b36ebf1c7fda9c9e",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "phone",
-                                    "pincode"
-                                ],
                                 "properties": {
                                     "phone": {
                                         "type": "string",
-                                        "example": "+7 (993) 952-00-85"
+                                        "example": "+7 (999) 999-99-99"
                                     },
                                     "pincode": {
                                         "type": "string",
-                                        "example": "4510"
+                                        "example": "последние 6 цифр звонилки"
                                     }
                                 },
                                 "type": "object"
@@ -879,41 +879,6 @@
                                                         }
                                                     },
                                                     "type": "object"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Ошибка валидации",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The phone field is required. (and 1 more error)"
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "phone": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "The phone field is required."
-                                                    }
-                                                },
-                                                "pincode": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "The pincode field is required."
-                                                    }
                                                 }
                                             },
                                             "type": "object"
@@ -1964,6 +1929,115 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/v1/catalogue-statistic": {
+            "get": {
+                "tags": [
+                    "CatalogueStatistic"
+                ],
+                "summary": "Получить статистику каталога по городам",
+                "description": "Возвращает статистику ЖК и квартир для указанного города или для всех городов",
+                "operationId": "getCatalogueStatistic",
+                "parameters": [
+                    {
+                        "name": "city_code",
+                        "in": "query",
+                        "description": "Код города для фильтрации статистики (например: novosibirsk, moscow)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "novosibirsk"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ со статистикой каталога",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "identifier": {
+                                            "description": "Уникальный идентификатор запроса",
+                                            "type": "string",
+                                            "format": "uuid"
+                                        },
+                                        "attributes": {
+                                            "description": "Массив статистики по типам объектов",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "type": {
+                                                        "description": "Тип объекта",
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "ЖК",
+                                                            "Квартиры"
+                                                        ]
+                                                    },
+                                                    "meta": {
+                                                        "description": "Метаданные со счетчиками",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "title": {
+                                                                    "description": "Название категории",
+                                                                    "type": "string"
+                                                                },
+                                                                "count": {
+                                                                    "description": "Количество объектов",
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "copyright": {
+                                                    "description": "Копирайт",
+                                                    "type": "string"
+                                                },
+                                                "request": {
+                                                    "properties": {
+                                                        "identifier": {
+                                                            "type": "string",
+                                                            "format": "uuid"
+                                                        },
+                                                        "method": {
+                                                            "type": "string"
+                                                        },
+                                                        "path": {
+                                                            "type": "string"
+                                                        },
+                                                        "attributes": {
+                                                            "type": "object"
+                                                        },
+                                                        "timestamp": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера"
+                    }
+                }
             }
         },
         "/api/v1/cbr/actual-date/": {
@@ -4382,6 +4456,10 @@
         {
             "name": "Cache",
             "description": "Cache"
+        },
+        {
+            "name": "CatalogueStatistic",
+            "description": "CatalogueStatistic"
         },
         {
             "name": "Comparsion",

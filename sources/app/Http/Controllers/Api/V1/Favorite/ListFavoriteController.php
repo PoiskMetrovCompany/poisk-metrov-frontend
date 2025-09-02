@@ -130,7 +130,6 @@ class ListFavoriteController extends AbstractOperations
             })
             ->values();
 
-        // Добавляем price_from для ЖК при map_mode=read
         $residentialComplexesArray = $residentialComplexes->toArray();
         if ($request->query('map_mode') === 'read') {
             $residentialComplexesArray = $this->rcPriceService->augmentPriceFrom($residentialComplexesArray);

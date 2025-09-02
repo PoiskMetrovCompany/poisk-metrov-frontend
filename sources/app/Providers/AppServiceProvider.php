@@ -43,6 +43,7 @@ use App\Core\Interfaces\Services\BuilderServiceInterface;
 use App\Core\Interfaces\Services\CacheServiceInterface;
 use App\Core\Interfaces\Services\CachingServiceInterface;
 use App\Core\Interfaces\Services\CallServiceInterface;
+use App\Core\Interfaces\Services\CatalogueStatisticServiceInterface;
 use App\Core\Interfaces\Services\ChatServiceInterface;
 use App\Core\Interfaces\Services\CityServiceInterface;
 use App\Core\Interfaces\Services\ComparisonServiceInterface;
@@ -339,6 +340,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ComparisonServiceInterface::class, ComparisonService::class);
     }
 
+    final public function registerCatalogueStatisticService(): void
+    {
+        $this->app->singleton(CatalogueStatisticServiceInterface::class, \App\Services\CatalogueStatisticService::class);
+    }
+
     /// REPOSITORIES
     final public function registerReservationRepository(): void
     {
@@ -546,6 +552,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerCacheService();
         $this->registerFilterService();
         $this->registerComparisonService();
+        $this->registerCatalogueStatisticService();
 
         /// Repositories
         $this->registerReservationRepository();
