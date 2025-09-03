@@ -2,170 +2,119 @@ version: "3.8"
 
 networks:
   app:
-  jenkins-network:
-    driver: 'bridge'
-    enable_ipv6: true
-    driver_opts:
-      com.docker.network.driver.mtu: 1450
 
 services:
   nginx:
-    container_name: ${NAME}_nginx
-    hostname: ${NAME}_nginx
-    restart: always
+    image: nginx:alpine
+    container_name: nginx
     ports:
-      - ${HTTP_PORT}:80
-    build:
-      context: ${DOCKER_PATH}/nginx
-      dockerfile: Dockerfile
+      - "1080:80"
     volumes:
-      - ${HTTP_LOCAL_CONFIG_PATH}:${HTTP_CONTAINER_CONFIG_PATH}:ro
-      - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./sources:/var/www/sources
     networks:
       - app
+    depends_on:
+      - php-fpm
 
-  mongodb:
-    container_name: ${NAME}_mongodb
-    hostname: ${NAME}_mongodb
-    ports:
-      - ${MONGO_PORT}:27017
+  php-fpm:
     build:
-      context: ${DOCKER_PATH}/mongodb
+      context: docker/php-fpm
       dockerfile: Dockerfile
-    environment:
-      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    container_name: php-fpm
     volumes:
-      - logging:${MONGO_DATA}
+      - ./sources:/var/www/sources
     networks:
       - app
 
   mysql:
-    container_name: ${NAME}_mysql
-    hostname: ${NAME}_mysql
-    restart: always
+    image: mysql:8.0
+    container_name: mysql
     ports:
-      - ${MYSQL_PORT}:3306
-    build:
-      context: ${DOCKER_PATH}/mysql
-      dockerfile: Dockerfile
+      - "3306:3306"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: poiskmetrov
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./:/docker-entrypoint-initdb.d
     networks:
       - app
-  
+
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: poiskmetrov
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - logging:/data/db
+    networks:
+      - app
+
   memcached:
-    container_name: ${NAME}_memcached
-    hostname: ${NAME}_memcached
-    restart: always
+    image: memcached:alpine
+    container_name: memcached
     ports:
-      - ${MEMCACHED_PORT}:5000
-    build:
-      context: ${DOCKER_PATH}/memcached
-      dockerfile: Dockerfile
-    volumes:
-      - cachedata:${MEMCACHED_CACHEDATA}
-    depends_on:
-      - nginx
-      - mongodb
-      - mysql
+      - "11211:11211"
     networks:
       - app
 
-  rabbitmq:
-    container_name: ${NAME}_rabbitmq
-    hostname: ${NAME}_rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
-      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
-    build:
-      context: ${DOCKER_PATH}/rabbitmq
-      dockerfile: Dockerfile
+  # Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
     ports:
-      - ${RABBITMQ_PORT_CLIENT}:5672
-      - ${RABBITMQ_PORT}:15672
+      - "9090:9090"
     volumes:
-      - ./${DOCKER_PATH}/${RABBITMQ_CONFIG_PATH}:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./docker/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
       - app
 
-  php-fpm:
-    container_name: ${NAME}_php-fpm
-    hostname: ${NAME}_php-fpm
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
     environment:
-      docker: "true"
-    extra_hosts:
-      - ${PHP_FPM_EXTRA_HOST}
-    build:
-      context: ${DOCKER_PATH}/php-fpm
-      dockerfile: Dockerfile
-      args:
-        - LOCALE=${LOCALE_DEFAULT}
-        - TIMEZONE=${TIMEZONE_DEFAULT}
-        - PUID=${PUID}
-        - PGID=${PGID}
-    env_file:
-      - ${DOCKER_PATH}/php-fpm/conf/xdebug.env
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
-      - ./${DOCKER_PATH}/php-fpm/conf/php.ini:${PHP_FPM_CONFIG_PATH}:ro
-    depends_on:
-      - nginx
-      - mongodb
-      - mysql
-      - rabbitmq
+      - grafana-storage:/var/lib/grafana
     networks:
       - app
 
-  jenkins:
-    build:
-      context: ${DOCKER_PATH}/jenkins
-      dockerfile: jenkins-master.Dockerfile
-    container_name: ${NAME}_jenkins
-    hostname: ${NAME}_jenkins
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
     ports:
-      - ${JENKINS_PORT}:8080
-      - ${JENKINS_WEB_PORT}:5010
+      - "9100:9100"
     volumes:
-      - jenkins_home:${JENKINS_DATA:-/var/jenkins_home}
-      - ./app/rsa:/var/jenkins_home/.ssh
-    environment:
-      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     networks:
-      - jenkins-network
-    restart: unless-stopped
+      - app
 
-  jenkins-agent:
-    build:
-      context: ${DOCKER_PATH}/jenkins
-      dockerfile: jenkins-agent.Dockerfile
-    container_name: ${NAME}_jenkins-agent
-    hostname: ${NAME}_jenkins-agent
-    environment:
-      - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=${JENKINS_SECRET}
-      - JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME:-custom-agent}
-      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
-    volumes:
-      - agent_workdir:/home/jenkins/agent
-    depends_on:
-      - jenkins
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    ports:
+      - "9113:9113"
+    command:
+      - -nginx.scrape-uri=http://nginx/stub_status
     networks:
-      - jenkins-network
-    restart: unless-stopped
+      - app
 
 volumes:
-  database:
-  logging:
-  jenkins_home:
-  agent_workdir:
   mysql_data:
-  cachedata:
+  logging:
+  grafana-storage:
