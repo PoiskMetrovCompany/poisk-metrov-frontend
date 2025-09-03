@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Apartments\SimilarApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
+use App\Http\Controllers\Api\V1\Auth\RegisterProfileController;
 use App\Http\Controllers\Api\V1\BestOffers\ListBestOfferController;
 use App\Http\Controllers\Api\V1\Cache\RewriteCacheController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
@@ -133,6 +134,9 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::post('/authorization', operation(AuthorizationController::class))
             ->name('api.v1.user.authorization');
+
+        Route::post('/registration', operation(RegisterProfileController::class))
+            ->name('api.v1.user.registration');
     });
     /// END Auth
 

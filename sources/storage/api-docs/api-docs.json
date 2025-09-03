@@ -895,6 +895,49 @@
                 }
             }
         },
+        "/api/v1/auth/registration/": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Регистрация профиля",
+                "description": "Возвращает информацию о профиле",
+                "operationId": "477a1c23b5ddf8b4f1adb96d7024703c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+7 (999) 999-99-99"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Иван"
+                                    },
+                                    "surname": {
+                                        "type": "string",
+                                        "example": "Колосков"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "novosibirsk"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
         "/api/v1/residential-complex/best-offers/": {
             "get": {
                 "tags": [
@@ -4363,6 +4406,11 @@
                     }
                 },
                 "type": "object"
+            }
+        },
+        "responses": {
+            "404": {
+                "description": "Resource not found"
             }
         },
         "securitySchemes": {

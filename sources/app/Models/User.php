@@ -50,7 +50,8 @@ class User extends Authenticatable
         'crm_city',
         'api_token',
         'chat_token',
-        'is_test'
+        'is_test',
+        'key'
     ];
 
     /**

@@ -95,6 +95,14 @@ class AuthenticationController extends AbstractOperations
 
         if ($isUserAds == null) {
             $this->adsAgreementService->setAdsAgreement($phone, null);
+            return new JsonResponse(
+                data: [
+                    ...self::identifier(),
+                    ...self::attributes(['data' => "Нет аккаунта"]),
+                    ...self::metaData($request, $request->all()),
+                ],
+                status: Response::HTTP_OK
+            );
         }
 
         $fields['phone'] = $phone;
