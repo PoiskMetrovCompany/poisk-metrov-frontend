@@ -94,7 +94,7 @@ class AuthenticationController extends AbstractOperations
         $isUserAds = $this->adsAgreementRepository->findByPhone($phone);
 
         if ($isUserAds == null) {
-            $this->adsAgreementService->setAdsAgreement($phone, null);
+            // $this->adsAgreementService->setAdsAgreement($phone, null);
             return new JsonResponse(
                 data: [
                     ...self::identifier(),
