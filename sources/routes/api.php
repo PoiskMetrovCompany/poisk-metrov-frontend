@@ -154,12 +154,12 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             ->middleware('auth:api')
             ->name('api.v1.user.update-role');
 
-        Route::group(['middleware' => ['web']], function () {
+        // Route::group(['middleware' => ['web']], function () {
         /// TODO: работает в админке
             Route::post('/update', operation(UpdateUserController::class))
-                ->middleware('auth:api')
+                // ->middleware('auth:api')
                 ->name('api.v1.user.update');
-        });
+        // });
 
         /// Account
         Route::namespace('ACCOUNT')->prefix('account')->group(function () {

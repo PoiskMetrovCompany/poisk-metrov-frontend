@@ -34,8 +34,11 @@ class UpdateUserController extends AbstractOperations
      *         description="Данные для обновления пользователя",
      *         @OA\JsonContent(
      *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *             @OA\Property(property="key", type="string", example="e8ff11fa-822b-11f0-8411-10f60a82b815"),
      *             @OA\Property(property="name", type="string", example="Андрей"),
-     *             @OA\Property(property="surname", type="string", example="Шихавцов")
+     *             @OA\Property(property="surname", type="string", example="Шихавцов"),
+                * @OA\Property(property="patronymic", type="string", example="Александрович"),
+                * @OA\Property(property="email", type="string", example="mail@mail.ru"),
      *         )
      *     ),
      *     @OA\Response(
@@ -56,9 +59,9 @@ class UpdateUserController extends AbstractOperations
      */
     public function __invoke(UpdateUserRequest $request): JsonResponse
     {
-        return new JsonResponse([123]);
+        // return new JsonResponse([123]);
         $user = $request->validated();
-        $repository = $this->userRepository->findByPhone($user['phone']);
+        $repository = $this->userRepository->findByKey($user['key']);
 
         if (empty($repository->id)) {
 
@@ -70,7 +73,7 @@ class UpdateUserController extends AbstractOperations
 //                    ),
                     ...self::metaData($request, $request->all()),
                 ],
-                status: Response::HTTP_CREATED
+                status: Response::HTTP_NOT_FOUND
             );
         }
 
