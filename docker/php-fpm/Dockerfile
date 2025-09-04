@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.1-fpm-bullseye
 
 ENV PUID=${PUID}
 ENV PGID=${PGID}
