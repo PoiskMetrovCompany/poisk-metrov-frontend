@@ -12,26 +12,32 @@ ENV LC_ALL=${LOCALE}
 
 RUN apt update
 
-RUN apt install -y \
-    zlib1g-dev \
-    libpq-dev \
+RUN apt update && apt install -y \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libmemcached-dev \
-    curl \
-    vim \
-    git \
-    zip \
-    unzip \
-    graphviz \
-    libssl-dev \
-    libcurl4-openssl-dev \
+    libjpeg-dev \
     libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libwebp-dev
+    libwebp-dev \
+    libmemcached-dev \
+    zlib1g-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg \
+    --with-webp \
+    && docker-php-ext-install gd
+
+RUN pecl install memcached \
+    && docker-php-ext-enable memcached
+
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install opcache
+#RUN docker-php-ext-install pdo
+#RUN docker-php-ext-install pdo_mysql
+#RUN docker-php-ext-install mysqli
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install exif
