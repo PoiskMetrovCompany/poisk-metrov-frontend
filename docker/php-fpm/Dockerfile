@@ -59,7 +59,7 @@ RUN #echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug
 
 WORKDIR /var/www/sources
 
-RUN chown -R www-data:www-data /var/www/sources
+#RUN chown -R www-data:www-data /var/www/sources
 
 # Открываем порт
 EXPOSE 9000
