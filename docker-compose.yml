@@ -59,43 +59,43 @@ services:
       - ./:/docker-entrypoint-initdb.d
     networks:
       - app
-#
-#  memcached:
-#    container_name: ${NAME}_memcached
-#    hostname: ${NAME}_memcached
-#    restart: always
-#    ports:
-#      - ${MEMCACHED_PORT}:5000
-#    build:
-#      context: ${DOCKER_PATH}/memcached
-#      dockerfile: Dockerfile
-#    volumes:
-#      - cachedata:${MEMCACHED_CACHEDATA}
-#    depends_on:
-#      - nginx
-#      - mongodb
-#      - mysql
-#    networks:
-#      - app
-#
-#  rabbitmq:
-#    container_name: ${NAME}_rabbitmq
-#    hostname: ${NAME}_rabbitmq
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-#      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
-#      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
-#    build:
-#      context: ${DOCKER_PATH}/rabbitmq
-#      dockerfile: Dockerfile
-#    ports:
-#      - ${RABBITMQ_PORT_CLIENT}:5672
-#      - ${RABBITMQ_PORT}:15672
-#    volumes:
-#      - ./${DOCKER_PATH}/${RABBITMQ_CONFIG_PATH}:/etc/rabbitmq/rabbitmq.conf:ro
-#    networks:
-#      - app
-#
+
+  memcached:
+    container_name: ${NAME}_memcached
+    hostname: ${NAME}_memcached
+    restart: always
+    ports:
+      - ${MEMCACHED_PORT}:5000
+    build:
+      context: ${DOCKER_PATH}/memcached
+      dockerfile: Dockerfile
+    volumes:
+      - cachedata:${MEMCACHED_CACHEDATA}
+    depends_on:
+      - nginx
+      - mongodb
+      - mysql
+    networks:
+      - app
+
+  rabbitmq:
+    container_name: ${NAME}_rabbitmq
+    hostname: ${NAME}_rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
+    build:
+      context: ${DOCKER_PATH}/rabbitmq
+      dockerfile: Dockerfile
+    ports:
+      - ${RABBITMQ_PORT_CLIENT}:5672
+      - ${RABBITMQ_PORT}:15672
+    volumes:
+      - ./${DOCKER_PATH}/${RABBITMQ_CONFIG_PATH}:/etc/rabbitmq/rabbitmq.conf:ro
+    networks:
+      - app
+
 #  php-fpm:
 #    container_name: ${NAME}_php-fpm
 #    hostname: ${NAME}_php-fpm
