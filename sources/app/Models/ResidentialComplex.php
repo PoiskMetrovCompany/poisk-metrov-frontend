@@ -378,4 +378,19 @@ class ResidentialComplex extends Model
     {
         return $this->belongsToMany(ResidentialComplexCategory::class, 'residential_complex_category_pivots', 'complex_id', 'category_id');
     }
+
+    public function buildings(): HasMany
+    {
+        return $this->hasMany(Building::class, 'complex_key', 'key');
+    }
+
+    public function getBuildingReadyQuarter()
+    {
+        return $this->buildings->pluck('ready_quarter')->filter()->first();
+    }
+
+    public function getBuildingBuiltYear()
+    {
+        return $this->buildings->pluck('built_year')->filter()->first();
+    }
 }

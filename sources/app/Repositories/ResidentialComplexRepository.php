@@ -140,4 +140,10 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
             })
             ->get();
     }
+
+    public function findByKey(mixed $attributes)
+    {
+        $params = gettype($attributes) === 'string' ? ['key' => $attributes] : $attributes;
+        return $this->model::with('buildings')->where($params)->first();
+    }
 }
