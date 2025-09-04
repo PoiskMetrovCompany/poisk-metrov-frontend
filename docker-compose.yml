@@ -125,42 +125,42 @@ services:
     networks:
       - app
 
-  jenkins:
-    build:
-      context: ${DOCKER_PATH}/jenkins
-      dockerfile: jenkins-master.Dockerfile
-    container_name: ${NAME}_jenkins
-    hostname: ${NAME}_jenkins
-    ports:
-      - ${JENKINS_PORT}:8080
-      - ${JENKINS_WEB_PORT}:5010
-    volumes:
-      - jenkins_home:${JENKINS_DATA:-/var/jenkins_home}
-      - ./app/rsa:/var/jenkins_home/.ssh
-    environment:
-      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
-    networks:
-      - jenkins-network
-    restart: unless-stopped
-
-  jenkins-agent:
-    build:
-      context: ${DOCKER_PATH}/jenkins
-      dockerfile: jenkins-agent.Dockerfile
-    container_name: ${NAME}_jenkins-agent
-    hostname: ${NAME}_jenkins-agent
-    environment:
-      - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=${JENKINS_SECRET}
-      - JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME:-custom-agent}
-      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
-    volumes:
-      - agent_workdir:/home/jenkins/agent
-    depends_on:
-      - jenkins
-    networks:
-      - jenkins-network
-    restart: unless-stopped
+#  jenkins:
+#    build:
+#      context: ${DOCKER_PATH}/jenkins
+#      dockerfile: jenkins-master.Dockerfile
+#    container_name: ${NAME}_jenkins
+#    hostname: ${NAME}_jenkins
+#    ports:
+#      - ${JENKINS_PORT}:8080
+#      - ${JENKINS_WEB_PORT}:5010
+#    volumes:
+#      - jenkins_home:${JENKINS_DATA:-/var/jenkins_home}
+#      - ./app/rsa:/var/jenkins_home/.ssh
+#    environment:
+#      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+#    networks:
+#      - jenkins-network
+#    restart: unless-stopped
+#
+#  jenkins-agent:
+#    build:
+#      context: ${DOCKER_PATH}/jenkins
+#      dockerfile: jenkins-agent.Dockerfile
+#    container_name: ${NAME}_jenkins-agent
+#    hostname: ${NAME}_jenkins-agent
+#    environment:
+#      - JENKINS_URL=http://jenkins:8080
+#      - JENKINS_SECRET=${JENKINS_SECRET}
+#      - JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME:-custom-agent}
+#      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+#    volumes:
+#      - agent_workdir:/home/jenkins/agent
+#    depends_on:
+#      - jenkins
+#    networks:
+#      - jenkins-network
+#    restart: unless-stopped
 
 volumes:
   database:
