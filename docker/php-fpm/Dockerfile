@@ -11,6 +11,25 @@ ENV LC_ALL=${LOCALE}
 
 RUN apt update
 
+RUN apt update && \
+    apt install -y \
+        zlib1g-dev \
+        libpq-dev \
+        libpng-dev \
+        libonig-dev \
+        libxml2-dev \
+        libmemcached-dev \
+        curl \
+        vim \
+        git \
+        zip \
+        unzip \
+        graphviz \
+        libssl-dev \
+        libcurl4-openssl-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libwebp-dev
 RUN #apt install -y \
 #    zlib1g-dev \
 #    libpq-dev \
