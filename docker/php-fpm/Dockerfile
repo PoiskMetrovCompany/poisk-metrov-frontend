@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-bullseye  # Используем стабильную версию Debian
+FROM php:8.1-fpm-bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
