@@ -11,31 +11,29 @@ ENV LC_ALL=${LOCALE}
 
 RUN apt update
 
-RUN #apt install -y zlib1g-dev
-RUN apt install -y libpq-dev
-RUN apt install -y libpng-dev
-RUN apt install -y libonig-dev
-RUN apt install -y libxml2-dev
-RUN apt install -y libmemcached-dev
-RUN apt install -y curl
-RUN apt install -y vim
-RUN apt install -y git
-RUN apt install -y zip
-RUN apt install -y unzip
-RUN apt install -y graphviz
-RUN apt install -y libssl-dev
-RUN apt install -y libcurl4-openssl-dev
-RUN apt install -y libfreetype6-dev
-RUN apt install -y libjpeg62-turbo-dev
-RUN apt install -y libwebp-dev
+RUN #apt install -y \
+#    zlib1g-dev \
+#    libpq-dev \
+#    libpng-dev \
+#    libonig-dev \
+#    libxml2-dev \
+#    libmemcached-dev \
+#    curl \
+#    vim \
+#    git \
+#    zip \
+#    unzip \
+#    graphviz \
+#    libssl-dev \
+#    libcurl4-openssl-dev \
+#    libfreetype6-dev \
+#    libjpeg62-turbo-dev \
+#    libwebp-dev
 
 RUN docker-php-ext-install pdo pdo_mysql mysqli
-
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install gd
-
 RUN docker-php-ext-install exif
-
 RUN docker-php-ext-install sockets
 
 RUN pecl install mongodb && \
