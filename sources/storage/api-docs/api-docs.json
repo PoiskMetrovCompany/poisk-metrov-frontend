@@ -2813,6 +2813,18 @@
                 "summary": "получение уоличества понравившихся планировок",
                 "description": "Возвращение JSON объекта",
                 "operationId": "13a8bc89daa85695065006c52a03f2a5",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!"
@@ -2820,12 +2832,7 @@
                     "404": {
                         "description": "Resource not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/favorites/": {
@@ -4266,6 +4273,10 @@
                                     "phone": {
                                         "type": "string",
                                         "example": "+7 (999) 999-99-99"
+                                    },
+                                    "key": {
+                                        "type": "string",
+                                        "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
                                     },
                                     "name": {
                                         "type": "string",
