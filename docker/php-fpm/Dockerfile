@@ -9,8 +9,8 @@ ENV PUID=${PUID}
 ENV PGID=${PGID}
 ENV LC_ALL=${LOCALE}
 
-RUN apt-get update \
-    apt-get install -y \
+RUN apt update \
+    apt install -y \
     zlib1g-dev \
     libpq-dev \
     libpng-dev \
