@@ -11,7 +11,7 @@ ENV LC_ALL=${LOCALE}
 
 RUN apt update
 
-RUN apt install -y zlib1g-dev
+RUN #apt install -y zlib1g-dev
 RUN apt install -y libpq-dev
 RUN apt install -y libpng-dev
 RUN apt install -y libonig-dev
