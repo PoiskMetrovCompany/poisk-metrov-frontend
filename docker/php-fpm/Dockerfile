@@ -5,7 +5,10 @@ ENV PGID=${PGID}
 ARG LOCALE=POSIX
 ENV LC_ALL=${LOCALE}
 
-RUN apt update && apt install -y \
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
     zlib1g-dev \
     libpq-dev \
     libpng-dev \
