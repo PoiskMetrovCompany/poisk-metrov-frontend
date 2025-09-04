@@ -1,18 +1,9 @@
 version: "3.8"
 
 networks:
-  macvlan_net:
-    driver: macvlan
-    driver_opts:
-      parent: ens3
-      macvlan_mode: bridge
-    ipam:
-      config:
-        - subnet: 192.168.1.0/24
-          gateway: 192.168.1.1
   app:
     driver: 'bridge'
-    enable_ipv6: true
+#    enable_ipv6: true
     driver_opts:
       com.docker.network.driver.mtu: 1450
 
