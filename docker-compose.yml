@@ -99,13 +99,6 @@ services:
   php-fpm:
     container_name: ${NAME}_php-fpm
     hostname: ${NAME}_php-fpm
-    environment:
-      docker: "true"
-    extra_hosts:
-      - ${PHP_FPM_EXTRA_HOST}
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
     build:
       context: ${DOCKER_PATH}/php-fpm
       dockerfile: Dockerfile
