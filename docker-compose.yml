@@ -125,7 +125,7 @@ services:
       - mysql
       - rabbitmq
     networks:
-      - macvlan_net
+      - app
 
 volumes:
   database:
