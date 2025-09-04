@@ -5,7 +5,7 @@ ENV PGID=${PGID}
 ARG LOCALE=POSIX
 ENV LC_ALL=${LOCALE}
 
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     zlib1g-dev \
     libpq-dev \
     libpng-dev \
@@ -45,7 +45,7 @@ RUN apt install -y libzip-dev \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Очистка
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt clean && rm -rf /var/lib/apt/lists/*
 
 # Установка php-extension-installer (если нужен, но у тебя уже COPY)
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
