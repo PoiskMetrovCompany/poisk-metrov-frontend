@@ -40,12 +40,12 @@ RUN pecl install mongodb && \
 RUN pecl install xdebug && \
     docker-php-ext-enable xdebug
 
-RUN apt-get install -y --no-install-recommends libzip-dev && \
+RUN apt install -y --no-install-recommends libzip-dev && \
     docker-php-ext-install zip
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN apt-get clean && \
+RUN apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
