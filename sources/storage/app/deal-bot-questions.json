@@ -1,0 +1,111 @@
+[
+    {
+        "tag": "approximate_name",
+        "text": "Введите ваше имя или фамилию. Вам будет предложен список подходящих ФИО.",
+        "type": "text",
+        "ignoreWaitConfirmation": true
+    },
+    {
+        "tag": "agent_fio",
+        "text": "Выберите ваше имя из списка.",
+        "type": "inline",
+        "baseTable": "managers",
+        "withTable": true
+    },
+    {
+        "tag": "client",
+        "text": "Введите ФИО Клиента.",
+        "type": "text"
+    },
+    {
+        "tag": "is_first",
+        "text": "Первичка или вторичка",
+        "type": "inline",
+        "fromColumn": "Тип сделки",
+        "withTable": false,
+        "values": [
+            "Первичка",
+            "Вторичка",
+            "Коммерция"
+        ],
+        "ignoreWaitConfirmation": true
+    },
+    {
+        "tag": "approximate_construction",
+        "text": "Введите название стройки.",
+        "type": "text",
+        "ignoreWaitConfirmation": true
+    },
+    {
+        "tag": "construction",
+        "text": "Выберите стройку из списка или нажмите \"Ввести название\" если стройки нет в списке",
+        "type": "inline",
+        "baseTable": "builders",
+        "withTable": true,
+        "ignoreWaitConfirmation": true
+    },
+    {
+        "tag": "approximate_builder",
+        "text": "Введите название застройщика.",
+        "type": "text",
+        "ignoreWaitConfirmation": true
+    },
+    {
+        "tag": "builder",
+        "text": "Выберите застройщика из списка или нажмите \"Ввести название\" если застройщика нет в списке.",
+        "type": "inline",
+        "baseTable": "builders",
+        "withTable": true
+    },
+    {
+        "tag": "address",
+        "text": "Введите адрес объекта.",
+        "type": "text"
+    },
+    {
+        "tag": "is_lead",
+        "text": "Лид или рекомендация",
+        "type": "inline",
+        "fromColumn": "Лид или рекомендация",
+        "withTable": false,
+        "values": [
+            "Лид",
+            "Рекомендация"
+        ]
+    },
+    {
+        "tag": "price",
+        "text": "Введите стоимость объекта. Пример: 6500000",
+        "type": "text"
+    },
+    {
+        "tag": "builder_percent",
+        "text": "Введите процент или \"фикс\" если комиссия фиксированная. Пример: 3,5%",
+        "type": "text",
+        "ignoreWaitConfirmation": true
+    },
+    {
+        "tag": "commission",
+        "text": "Введите сумму комиссии. Пример: 150000",
+        "type": "text"
+    },
+    {
+        "tag": "place",
+        "text": "Куда выставлять?",
+        "type": "inline",
+        "fromColumn": "Куда выставляем",
+        "withTable": false,
+        "values": [
+            "Напрямую",
+            "Нмаркет",
+            "Домклик"
+        ]
+    },
+    {
+        "tag": "document",
+        "textreal": "Приложите документ через опцию Документ или напишите \"Пропуск\" чтобы перейти к завершению.",
+        "text": "Приложите документ через опцию Документ.",
+        "type": "file",
+        "fileFolder": "documents"
+    }
+]
