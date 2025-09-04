@@ -9,7 +9,7 @@ ENV PUID=${PUID}
 ENV PGID=${PGID}
 ENV LC_ALL=${LOCALE}
 
-RUN apt update \
+RUN apt update && \
     apt install -y \
     zlib1g-dev \
     libpq-dev \
