@@ -25,6 +25,9 @@ class UpdateUserRequest extends FormRequest
             'phone' => ['required', 'string', 'exists:users,phone'],
             'name' => ['required', 'string'],
             'surname' => ['required', 'string'],
+            'patronymic' => ['required', 'string'],
+            'email' => ['required', 'string', 'email'],
+            "key" => ['required', 'exists:users,key'],
         ];
     }
 }

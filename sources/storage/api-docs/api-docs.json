@@ -4274,6 +4274,14 @@
                                     "surname": {
                                         "type": "string",
                                         "example": "Шихавцов"
+                                    },
+                                    "patronymic": {
+                                        "type": "string",
+                                        "example": "Александрович"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "mail@mail.ru"
                                     }
                                 },
                                 "type": "object"
