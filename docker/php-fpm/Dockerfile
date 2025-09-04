@@ -31,8 +31,8 @@ RUN #apt install -y \
 #    libwebp-dev
 
 RUN docker-php-ext-install pdo pdo_mysql mysqli
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
-RUN docker-php-ext-install gd
+#RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+#RUN docker-php-ext-install gd
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install sockets
 
