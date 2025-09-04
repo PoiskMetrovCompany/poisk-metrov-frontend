@@ -16,6 +16,11 @@ class ResidentialComplexesResource extends AbstractResource
      */
     public function toArray(Request $request): array
     {
+        // Проверяем, что объект существует
+        if (!$this->resource) {
+            return [];
+        }
+        
         // Определяем корректное значение searchData для includes (поддержка разных main_table_value)
         $searchData = $this->id;
         $includesParam = $request->get('includes');

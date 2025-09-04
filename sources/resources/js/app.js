@@ -30,9 +30,9 @@ import './customElements/index';
 
 import.meta.glob(['../assets/**'])
 
-import { createApp } from 'vue';
-import ExampleComponent from './components/ExampleComponent.vue';
+// import { createApp } from 'vue';
+// import ExampleComponent from './components/ExampleComponent.vue';
 
-const app = createApp({});
-app.component('example-component', ExampleComponent);
-app.mount('#app');
+// const app = createApp({});
+// app.component('example-component', ExampleComponent);
+// app.mount('#app');

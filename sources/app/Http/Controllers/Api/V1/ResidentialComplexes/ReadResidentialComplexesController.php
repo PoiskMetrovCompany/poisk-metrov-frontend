@@ -85,6 +85,19 @@ class ReadResidentialComplexesController extends AbstractOperations
     {
         $key = $request->input('key');
         $attributes = $this->residentialComplexRepository->findByKey($key);
+        
+        // Проверяем, найден ли ЖК
+        if (!$attributes) {
+            return new JsonResponse(
+                data: [
+                    ...self::identifier(),
+                    'error' => 'Residential complex not found',
+                    'message' => "ЖК с ключом '{$key}' не найден"
+                ],
+                status: Response::HTTP_NOT_FOUND,
+            );
+        }
+        
         $collect = new ResidentialComplexesResource($attributes);
 
         return new JsonResponse(

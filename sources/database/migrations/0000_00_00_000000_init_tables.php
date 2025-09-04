@@ -10,17 +10,17 @@ return new class extends Migration {
     public function up()
     {
         // Tables
-        Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent();
-            $table->timestampTz('deleted_at')->nullable(true)->default(null);
-            $table->uuid('key')->unique();
-            $table->string('title', 255)->nullable();
-            $table->string('slug', 255)->nullable();
-            // Indexes
-            $table->unique('slug');
-        });
+        // Schema::create('cities', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->timestampTz('created_at')->useCurrent();
+        //     $table->timestampTz('updated_at')->useCurrent();
+        //     $table->timestampTz('deleted_at')->nullable(true)->default(null);
+        //     $table->uuid('key')->unique();
+        //     $table->string('title', 255)->nullable();
+        //     $table->string('slug', 255)->nullable();
+        //     // Indexes
+        //     $table->unique('slug');
+        // });
 
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
