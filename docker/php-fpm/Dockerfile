@@ -7,12 +7,12 @@ ENV LC_ALL=${LOCALE}
 
 RUN apt update && \
     apt install -y --no-install-recommends \
-    zlib1g-dev \
-    libpq-dev \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libmemcached-dev
+    zlib1g-dev
+#    libpq-dev \
+#    libpng-dev \
+#    libonig-dev \
+#    libxml2-dev \
+#    libmemcached-dev \
 #    curl \
 #    vim \
 #    git \
