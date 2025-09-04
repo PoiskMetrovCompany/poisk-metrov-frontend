@@ -12,16 +12,6 @@ ENV LC_ALL=${LOCALE}
 
 RUN apt update
 
-RUN apt update && apt install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libwebp-dev \
-    libmemcached-dev \
-    zlib1g-dev \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN docker-php-ext-configure gd \
     --with-freetype \
     --with-jpeg \
