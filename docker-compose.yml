@@ -96,33 +96,33 @@ services:
     networks:
       - app
 
-#  php-fpm:
-#    container_name: ${NAME}_php-fpm
-#    hostname: ${NAME}_php-fpm
-#    environment:
-#      docker: "true"
-#    extra_hosts:
-#      - ${PHP_FPM_EXTRA_HOST}
-#    build:
-#      context: ${DOCKER_PATH}/php-fpm
-#      dockerfile: Dockerfile
-#      args:
-#        - LOCALE=${LOCALE_DEFAULT}
-#        - TIMEZONE=${TIMEZONE_DEFAULT}
-#        - PUID=${PUID}
-#        - PGID=${PGID}
-#    env_file:
-#      - ${DOCKER_PATH}/php-fpm/conf/xdebug.env
-#    volumes:
-#      - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
-#      - ./${DOCKER_PATH}/php-fpm/conf/php.ini:${PHP_FPM_CONFIG_PATH}:ro
-#    depends_on:
-#      - nginx
-#      - mongodb
-#      - mysql
-#      - rabbitmq
-#    networks:
-#      - app
+  php-fpm:
+    container_name: ${NAME}_php-fpm
+    hostname: ${NAME}_php-fpm
+    environment:
+      docker: "true"
+    extra_hosts:
+      - ${PHP_FPM_EXTRA_HOST}
+    build:
+      context: ${DOCKER_PATH}/php-fpm
+      dockerfile: Dockerfile
+      args:
+        - LOCALE=${LOCALE_DEFAULT}
+        - TIMEZONE=${TIMEZONE_DEFAULT}
+        - PUID=${PUID}
+        - PGID=${PGID}
+    env_file:
+      - ${DOCKER_PATH}/php-fpm/conf/xdebug.env
+    volumes:
+      - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
+      - ./${DOCKER_PATH}/php-fpm/conf/php.ini:${PHP_FPM_CONFIG_PATH}:ro
+    depends_on:
+      - nginx
+      - mongodb
+      - mysql
+      - rabbitmq
+    networks:
+      - app
 
 volumes:
   database:
