@@ -2,8 +2,8 @@ version: "3.8"
 
 networks:
   app:
-    driver: 'bridge'
-#    enable_ipv6: true
+    driver: "bridge"
+    #    enable_ipv6: true
     driver_opts:
       com.docker.network.driver.mtu: 1450
 
@@ -65,7 +65,7 @@ services:
     hostname: ${NAME}_memcached
     restart: always
     ports:
-      - ${MEMCACHED_PORT}:5000
+      - ${MEMCACHED_PORT}:5001
     build:
       context: ${DOCKER_PATH}/memcached
       dockerfile: Dockerfile

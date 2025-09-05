@@ -1,4 +1,4 @@
-FROM mysql:8.0.3
+FROM mysql:8.3
 
 WORKDIR /var/www/data/database
 
