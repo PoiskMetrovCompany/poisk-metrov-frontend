@@ -42,11 +42,14 @@ trait RelationshipResponderTrait
                     }
                 }
 
-                // Специальная группировка по комнатности для apartments.room
+
                 $filterParam = $requestAttributes['filter'] ?? null;
                 if ($relationshipName === 'Apartment' && $filterParam === 'apartments.room') {
                     $grouped = [
                         'study' => [],
+                    ];
+                    $minPrices = [
+                        'study' => null,
                     ];
 
                     foreach ($records as $apartment) {
@@ -55,6 +58,10 @@ trait RelationshipResponderTrait
 
                         if ($isStudy) {
                             $grouped['study'][] = $apartment->toArray();
+
+                            if ($apartment->price !== null && ($minPrices['study'] === null || $apartment->price < $minPrices['study'])) {
+                                $minPrices['study'] = $apartment->price;
+                            }
                             continue;
                         }
 
@@ -62,8 +69,17 @@ trait RelationshipResponderTrait
                         $key = "{$rooms}_rooms";
                         if (!array_key_exists($key, $grouped)) {
                             $grouped[$key] = [];
+                            $minPrices[$key] = null;
                         }
                         $grouped[$key][] = $apartment->toArray();
+
+                        if ($apartment->price !== null && ($minPrices[$key] === null || $apartment->price < $minPrices[$key])) {
+                            $minPrices[$key] = $apartment->price;
+                        }
+                    }
+
+                    foreach ($grouped as $roomType => &$apartments) {
+                        array_unshift($apartments, ['min_price' => $minPrices[$roomType]]);
                     }
 
                     $includes[] = [
