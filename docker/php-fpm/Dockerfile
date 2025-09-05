@@ -11,19 +11,19 @@ ENV PGID=${PGID}
 ENV LC_ALL=${LOCALE}
 
 RUN apt update && \
-    apt install -y bash
-#    apt install -y \
-#        zlib1g-dev \
-#        libpq-dev \
-#        libpng-dev \
-#        libxml2-dev \
-#        libssl-dev \
-#        libcurl4-openssl-dev \
-#        libzip-dev \
-#        libwebp-dev \
-#        libfreetype6-dev \
-#        libjpeg62-turbo-dev \
-#        libmemcached-dev
+    apt install -y \
+        bash \
+        zlib1g-dev \
+        libpq-dev \
+        libpng-dev \
+        libxml2-dev \
+        libssl-dev \
+        libcurl4-openssl-dev \
+        libzip-dev \
+        libwebp-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmemcached-dev
 
 #RUN docker-php-ext-configure gd \
 #    --with-freetype \
