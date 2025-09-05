@@ -296,36 +296,23 @@ final class FavoritesService implements FavoritesServiceInterface
         ]);
     }
 
-    public function countFavorites(): int
+    public function countFavorites(string $key): int
     {
-        $favPlans = $this->countFavoritePlans();
-        $favBuildings = $this->countFavoriteBuildings();
+        $favPlans = $this->countFavoritePlans($key);
+        $favBuildings = $this->countFavoriteBuildings($key);
         $count = $favPlans + $favBuildings;
 
         return $count;
     }
 
-    public function countFavoritePlans(): int
+    public function countFavoritePlans(string $key): int
     {
-        $cachedFavoritePlansCount = Cookie::get('cachedFavoritePlansCount', null);
-
-        if ($cachedFavoritePlansCount == null) {
-            $cachedFavoritePlansCount = count($this->getFavoritePlanOfferIds());
-            setrawcookie('cachedFavoritePlansCount', $cachedFavoritePlansCount, time() + 31536000, '/');
-        }
-
-        return $cachedFavoritePlansCount;
+        return $this->userFavoritePlanRepository->find(['user_key' => $key])->count();
     }
 
-    public function countFavoriteBuildings(): int
+    public function countFavoriteBuildings(string $key): int
     {
-        $cachedFavoriteBuildingsCount = Cookie::get('cachedFavoriteBuildingsCount', null);
-
-        if ($cachedFavoriteBuildingsCount == null) {
-            $cachedFavoriteBuildingsCount = count($this->getFavoriteBuildingCodes());
-            setrawcookie('cachedFavoriteBuildingsCount', $cachedFavoriteBuildingsCount, time() + 31536000, '/');
-        }
-
-        return $cachedFavoriteBuildingsCount;
+        return $this->userFavoriteBuildingRepository->find(['user_key'=>$key])->count();
     }
+
 }

@@ -82,6 +82,7 @@ use App\Http\Controllers\Api\V1\Vacancies\VacancyStoreController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyUpdateController;
 use App\Http\Controllers\Api\V1\Visited\UpdatePagesVisitedController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\MaritalStatuses\MaritalStatusListController;
 
 if (!function_exists('operation')) {
     /**
@@ -386,7 +387,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// CANDIDATES
     Route::prefix('candidates')->group(function () {
         Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::post('/store', [CandidateProfileStoreController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
         Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
         Route::post('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
         Route::post('/get-statuses', [CandidateProfileStatusesController::class, '__invoke'])->middleware('auth:sanctum');
@@ -423,6 +424,11 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     });
     /// END
 
+    /// MARITAL_STATUSES
+    Route::prefix('marital-statuses')->group(function () {
+        Route::get('/', [MaritalStatusListController::class, '__invoke']);
+    });
+    /// END
     /// NOTIFICATION
     Route::prefix('notification')->group(function () {
         Route::get('/new-candidates', [NewCandidatesController::class, '__invoke']); //->middleware('auth:sanctum');

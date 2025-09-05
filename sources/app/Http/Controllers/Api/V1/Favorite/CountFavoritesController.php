@@ -28,7 +28,13 @@ class CountFavoritesController extends AbstractOperations
      *      path="/api/v1/favorites/count",
      *      summary="получение уоличества понравившихся планировок",
      *      description="Возвращение JSON объекта",
-     *      security={{"bearerAuth":{}}},
+     *       @OA\Parameter(
+     *          name="key",
+     *          in="query",
+     *          required=true,
+     *          description="Ключ пользователя",
+     *          @OA\Schema(type="string", example="")
+     *      ),
      *      @OA\Response(response=200, description="УСПЕХ!"),
      *      @OA\Response(
      *          response=404,
@@ -39,7 +45,9 @@ class CountFavoritesController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $data = $this->favoritesService->countFavorites();
+        $key = $request->input('key');
+        $data = $this->favoritesService->countFavorites($key);
+        
         return new JsonResponse(
             data: [
                 ...self::identifier(),

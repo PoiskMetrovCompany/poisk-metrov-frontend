@@ -72,17 +72,19 @@ interface FavoritesServiceInterface
     public function countFavoritesDetailed(): JsonResponse;
 
     /**
+     * @param string $key
      * @return int
      */
-    public function countFavorites(): int;
+
+    public function countFavorites(string $key): int;
 
     /**
      * @return int
      */
-    public function countFavoritePlans(): int;
+    public function countFavoritePlans(string $key): int;
 
     /**
      * @return int
      */
-    public function countFavoriteBuildings(): int;
+    public function countFavoriteBuildings(string $key): int;
 }
