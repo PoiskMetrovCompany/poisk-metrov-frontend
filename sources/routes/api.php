@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Apartments\ListApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\ReadApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\SelectionApartmentController;
 use App\Http\Controllers\Api\V1\Apartments\SimilarApartmentController;
+use App\Http\Controllers\Api\V1\Apartments\FilterOptionsController;
 use App\Http\Controllers\Api\V1\Apartments\UpdateApartmentController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
@@ -209,6 +210,9 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
         Route::get('/similar', operation(SimilarApartmentController::class))
             ->name('api.v1.apartments.similar');
+
+        Route::get('/filter-options', operation(FilterOptionsController::class))
+            ->name('api.v1.apartments.filter-options');
 
     });
     /// END
