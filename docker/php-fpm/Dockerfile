@@ -52,10 +52,9 @@ RUN docker-php-ext-install \
 RUN pecl install mongodb && \
     docker-php-ext-enable mongodb
 
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 RUN apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
