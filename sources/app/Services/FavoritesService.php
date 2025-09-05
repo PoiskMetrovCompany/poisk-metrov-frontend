@@ -286,8 +286,17 @@ final class FavoritesService implements FavoritesServiceInterface
 
     public function countFavoritesDetailed(): JsonResponse
     {
-        $favoritePlans = $this->countFavoritePlans();
-        $favoriteBuildings = $this->countFavoriteBuildings();
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'plans' => 0,
+                'buildings' => 0,
+                'total' => 0
+            ]);
+        }
+
+        $favoritePlans = $this->countFavoritePlans($user->key);
+        $favoriteBuildings = $this->countFavoriteBuildings($user->key);
 
         return response()->json([
             'plans' => $favoritePlans,
@@ -296,8 +305,16 @@ final class FavoritesService implements FavoritesServiceInterface
         ]);
     }
 
-    public function countFavorites(string $key): int
+    public function countFavorites(string $key = null): int
     {
+        if ($key === null) {
+            $user = Auth::user();
+            if (!$user) {
+                return 0;
+            }
+            $key = $user->key;
+        }
+
         $favPlans = $this->countFavoritePlans($key);
         $favBuildings = $this->countFavoriteBuildings($key);
         $count = $favPlans + $favBuildings;
