@@ -8,93 +8,93 @@ networks:
       com.docker.network.driver.mtu: 1450
 
 services:
-#  nginx:
-#    container_name: ${NAME}_nginx
-#    hostname: ${NAME}_nginx
-#    restart: always
-#    ports:
-#      - ${HTTP_PORT}:80
-#    build:
-#      context: ${DOCKER_PATH}/nginx
-#      dockerfile: Dockerfile
-#    volumes:
-#      - ${HTTP_LOCAL_CONFIG_PATH}:${HTTP_CONTAINER_CONFIG_PATH}:ro
-#      - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
-#    networks:
-#      - app
-#
-#  mongodb:
-#    container_name: ${NAME}_mongodb
-#    hostname: ${NAME}_mongodb
-#    ports:
-#      - ${MONGO_PORT}:27017
-#    build:
-#      context: ${DOCKER_PATH}/mongodb
-#      dockerfile: Dockerfile
-#    environment:
-#      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
-#      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-#      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-#    volumes:
-#      - logging:${MONGO_DATA}
-#    networks:
-#      - app
-#
-#  mysql:
-#    container_name: ${NAME}_mysql
-#    hostname: ${NAME}_mysql
-#    restart: always
-#    ports:
-#      - ${MYSQL_PORT}:3306
-#    build:
-#      context: ${DOCKER_PATH}/mysql
-#      dockerfile: Dockerfile
-#    environment:
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-#    volumes:
-#      - mysql_data:/var/lib/mysql
-#      - ./:/docker-entrypoint-initdb.d
-#    networks:
-#      - app
-#
-#  memcached:
-#    container_name: ${NAME}_memcached
-#    hostname: ${NAME}_memcached
-#    restart: always
-#    ports:
-#      - ${MEMCACHED_PORT}:5001
-#    build:
-#      context: ${DOCKER_PATH}/memcached
-#      dockerfile: Dockerfile
-#    volumes:
-#      - cachedata:${MEMCACHED_CACHEDATA}
-#    depends_on:
-#      - nginx
-#      - mongodb
-#      - mysql
-#    networks:
-#      - app
-#
-#  rabbitmq:
-#    container_name: ${NAME}_rabbitmq
-#    hostname: ${NAME}_rabbitmq
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-#      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
-#      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
-#    build:
-#      context: ${DOCKER_PATH}/rabbitmq
-#      dockerfile: Dockerfile
-#    ports:
-#      - ${RABBITMQ_PORT_CLIENT}:5672
-#      - ${RABBITMQ_PORT}:15672
-#    volumes:
-#      - ./${DOCKER_PATH}/${RABBITMQ_CONFIG_PATH}:/etc/rabbitmq/rabbitmq.conf:ro
-#    networks:
-#      - app
+  nginx:
+    container_name: ${NAME}_nginx
+    hostname: ${NAME}_nginx
+    restart: always
+    ports:
+      - ${HTTP_PORT}:80
+    build:
+      context: ${DOCKER_PATH}/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ${HTTP_LOCAL_CONFIG_PATH}:${HTTP_CONTAINER_CONFIG_PATH}:ro
+      - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
+    networks:
+      - app
+
+  mongodb:
+    container_name: ${NAME}_mongodb
+    hostname: ${NAME}_mongodb
+    ports:
+      - ${MONGO_PORT}:27017
+    build:
+      context: ${DOCKER_PATH}/mongodb
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - logging:${MONGO_DATA}
+    networks:
+      - app
+
+  mysql:
+    container_name: ${NAME}_mysql
+    hostname: ${NAME}_mysql
+    restart: always
+    ports:
+      - ${MYSQL_PORT}:3306
+    build:
+      context: ${DOCKER_PATH}/mysql
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./:/docker-entrypoint-initdb.d
+    networks:
+      - app
+
+  memcached:
+    container_name: ${NAME}_memcached
+    hostname: ${NAME}_memcached
+    restart: always
+    ports:
+      - ${MEMCACHED_PORT}:5001
+    build:
+      context: ${DOCKER_PATH}/memcached
+      dockerfile: Dockerfile
+    volumes:
+      - cachedata:${MEMCACHED_CACHEDATA}
+    depends_on:
+      - nginx
+      - mongodb
+      - mysql
+    networks:
+      - app
+
+  rabbitmq:
+    container_name: ${NAME}_rabbitmq
+    hostname: ${NAME}_rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
+    build:
+      context: ${DOCKER_PATH}/rabbitmq
+      dockerfile: Dockerfile
+    ports:
+      - ${RABBITMQ_PORT_CLIENT}:5672
+      - ${RABBITMQ_PORT}:15672
+    volumes:
+      - ./${DOCKER_PATH}/${RABBITMQ_CONFIG_PATH}:/etc/rabbitmq/rabbitmq.conf:ro
+    networks:
+      - app
 
   php-fpm:
     container_name: ${NAME}_php-fpm
@@ -112,11 +112,11 @@ services:
     volumes:
       - ./${APP_LOCAL_PATH}:${APP_CONTAINER_PATH}
       - ./${DOCKER_PATH}/php-fpm/conf/php.ini:${PHP_FPM_CONFIG_PATH}:ro
-#    depends_on:
-#      - nginx
-#      - mongodb
-#      - mysql
-#      - rabbitmq
+    depends_on:
+      - nginx
+      - mongodb
+      - mysql
+      - rabbitmq
     networks:
       - app
 

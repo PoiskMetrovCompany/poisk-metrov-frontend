@@ -10,8 +10,10 @@ ENV PUID=${PUID}
 ENV PGID=${PGID}
 ENV LC_ALL=${LOCALE}
 
-RUN apt update && \
-    apt install -y \
+RUN sed -i 's/deb.debian.org/mirror.yandex.ru/g' /etc/apt/sources.list && \
+    sed -i 's/security.debian.org/mirror.yandex.ru/g' /etc/apt/sources.list && \
+    apt-get update --allow-releaseinfo-change && \
+    apt-get install -y --no-install-recommends \
         bash \
         zlib1g-dev \
         libpq-dev \
@@ -23,7 +25,9 @@ RUN apt update && \
         libwebp-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libmemcached-dev
+        libmemcached-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 #RUN docker-php-ext-configure gd \
 #    --with-freetype \
