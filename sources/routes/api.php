@@ -75,6 +75,7 @@ use App\Http\Controllers\Api\V1\Users\GetCurrentUserDataController;
 use App\Http\Controllers\Api\V1\Users\ListUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateRoleUserController;
 use App\Http\Controllers\Api\V1\Users\UpdateUserController;
+use App\Http\Controllers\Api\V1\UserFilters\StoreUserFilterController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyDestroyController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyListController;
 use App\Http\Controllers\Api\V1\Vacancies\VacancyReadController;
@@ -180,6 +181,13 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         /// END Account
     });
     /// END User
+
+    /// User Filters
+    Route::namespace('USER-FILTERS')->prefix('user-filters')->group(function () {
+        Route::post('/store', operation(StoreUserFilterController::class))
+            ->name('api.v1.user-filters.store');
+    });
+    /// END User Filters
 
     /// RealEstate
     Route::namespace('REAL-ESTATE')->prefix('real-estate')->group(function () {

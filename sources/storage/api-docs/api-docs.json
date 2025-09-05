@@ -4026,6 +4026,23 @@
                                 ]
                             }
                         }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "фильтрация сущности указанной в includes",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "apartments.room"
+                                ]
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -4099,6 +4116,266 @@
                     },
                     "404": {
                         "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/user-filters/store": {
+            "post": {
+                "tags": [
+                    "User Filters"
+                ],
+                "summary": "Сохранить фильтр пользователя",
+                "description": "Сохранение фильтра пользователя для поиска недвижимости. ВАЖНО: Параметр user_key должен быть передан в URL как query parameter. В Swagger UI необходимо вручную добавить ?user_key=ВАШ_UUID к URL в поле запроса. Пример: /api/v1/user-filters/store?user_key=06cf3c62-83c2-11f0-a013-10f60a82b815",
+                "operationId": "abffa166b24f1880108654103c2b9b3f",
+                "parameters": [
+                    {
+                        "name": "user_key",
+                        "in": "query",
+                        "description": "UUID ключ пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "06cf3c62-83c2-11f0-a013-10f60a82b815"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type": {
+                                        "description": "Тип недвижимости",
+                                        "type": "string",
+                                        "example": "apartment"
+                                    },
+                                    "rooms": {
+                                        "description": "Количество комнат",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "description": "Диапазон цен",
+                                        "type": "string",
+                                        "example": "5000000-10000000"
+                                    },
+                                    "floors": {
+                                        "description": "Диапазон этажей",
+                                        "type": "string",
+                                        "example": "1-5"
+                                    },
+                                    "area_full": {
+                                        "description": "Полная площадь",
+                                        "type": "string",
+                                        "example": "50-80"
+                                    },
+                                    "area_living": {
+                                        "description": "Жилая площадь",
+                                        "type": "string",
+                                        "example": "30-60"
+                                    },
+                                    "area_plot": {
+                                        "description": "Площадь участка",
+                                        "type": "string",
+                                        "example": "6-10"
+                                    },
+                                    "ceiling_height": {
+                                        "description": "Высота потолков",
+                                        "type": "string",
+                                        "example": "2.7-3.0"
+                                    },
+                                    "house_type": {
+                                        "description": "Тип дома",
+                                        "type": "string",
+                                        "example": "panel"
+                                    },
+                                    "finishing": {
+                                        "description": "Отделка",
+                                        "type": "string",
+                                        "example": "with"
+                                    },
+                                    "bathroom": {
+                                        "description": "Санузел",
+                                        "type": "string",
+                                        "example": "combined"
+                                    },
+                                    "features": {
+                                        "description": "Особенности",
+                                        "type": "string",
+                                        "example": "balcony"
+                                    },
+                                    "security": {
+                                        "description": "Охрана",
+                                        "type": "string",
+                                        "example": "concierge"
+                                    },
+                                    "water_supply": {
+                                        "description": "Водоснабжение",
+                                        "type": "string",
+                                        "example": "central"
+                                    },
+                                    "electricity": {
+                                        "description": "Электричество",
+                                        "type": "string",
+                                        "example": "central"
+                                    },
+                                    "sewerage": {
+                                        "description": "Канализация",
+                                        "type": "string",
+                                        "example": "central"
+                                    },
+                                    "heating": {
+                                        "description": "Отопление",
+                                        "type": "string",
+                                        "example": "central"
+                                    },
+                                    "gasification": {
+                                        "description": "Газоснабжение",
+                                        "type": "string",
+                                        "example": "central"
+                                    },
+                                    "to_metro": {
+                                        "description": "До метро (мин)",
+                                        "type": "string",
+                                        "example": "5-15"
+                                    },
+                                    "to_center": {
+                                        "description": "До центра (мин)",
+                                        "type": "string",
+                                        "example": "10-30"
+                                    },
+                                    "to_busstop": {
+                                        "description": "До остановки (мин)",
+                                        "type": "string",
+                                        "example": "1-5"
+                                    },
+                                    "to_train": {
+                                        "description": "До вокзала (мин)",
+                                        "type": "string",
+                                        "example": "5-20"
+                                    },
+                                    "near": {
+                                        "description": "Рядом с",
+                                        "type": "string",
+                                        "example": "park,school"
+                                    },
+                                    "garden_community": {
+                                        "description": "Загородный поселок",
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_city": {
+                                        "description": "В черте города",
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "payment_method": {
+                                        "description": "Способ оплаты",
+                                        "type": "string",
+                                        "example": "cash"
+                                    },
+                                    "mortgage": {
+                                        "description": "Ипотека",
+                                        "type": "string",
+                                        "example": "available"
+                                    },
+                                    "installment_plan": {
+                                        "description": "Рассрочка",
+                                        "type": "string",
+                                        "example": "available"
+                                    },
+                                    "down_payment": {
+                                        "description": "Первоначальный взнос (%)",
+                                        "type": "string",
+                                        "example": "10-20"
+                                    },
+                                    "mortgage_programs": {
+                                        "description": "Ипотечные программы",
+                                        "type": "string",
+                                        "example": "family"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Фильтр успешно сохранен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "identifier": {
+                                            "type": "string",
+                                            "example": "uuid"
+                                        },
+                                        "attributes": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "apartment"
+                                                },
+                                                "rooms": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "user_key": {
+                                                    "type": "string",
+                                                    "example": "06cf3c62-83c2-11f0-a013-10f60a82b815"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "copyright": {
+                                                    "type": "string",
+                                                    "example": "ПОИСК МЕТРОВ © 2025"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "user_key": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -4543,6 +4820,10 @@
         {
             "name": "Catalog Filters",
             "description": "Catalog Filters"
+        },
+        {
+            "name": "User Filters",
+            "description": "User Filters"
         }
     ]
 }

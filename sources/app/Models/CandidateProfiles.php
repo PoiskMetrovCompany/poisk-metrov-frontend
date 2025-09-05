@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CandidateProfiles extends Model
 {
     use HasFactory;
+    protected $table = "candidate_profiles";
 
     /**
      * @var string[]

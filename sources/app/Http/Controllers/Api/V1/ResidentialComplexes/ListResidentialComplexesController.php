@@ -60,32 +60,49 @@ class ListResidentialComplexesController extends AbstractOperations
      *          description="Количество элементов на странице",
      *          @OA\Schema(type="integer", example=15)
      *      ),
-     *      @OA\Parameter(
-     *          name="includes",
-     *          in="query",
-     *          description="Указывает, какие связанные данные нужно включить",
-     *          required=false,
-     *          style="form",
-     *          explode=true,
-     *          @OA\Schema(
-     *              type="array",
-     *              @OA\Items(
-     *                  type="string",
-     *                  enum={
-     *                       "Amenity",
-     *                       "Apartment",
-     *                       "BestOffer",
-     *                       "BuildingProcess",
-     *                       "Doc",
-     *                       "Gallery",
-     *                       "ResidentialComplexCategoryPivot",
-     *                       "SpriteImagePosition",
-     *                       "UserFavoriteBuilding",
-     *                       "Location",
-     *                   }
-     *              )
-     *          )
-     *      ),
+           *      @OA\Parameter(
+      *          name="includes",
+      *          in="query",
+      *          description="Указывает, какие связанные данные нужно включить",
+      *          required=false,
+      *          style="form",
+      *          explode=true,
+      *          @OA\Schema(
+      *              type="array",
+      *              @OA\Items(
+      *                  type="string",
+      *                  enum={
+      *                       "Amenity",
+      *                       "Apartment",
+      *                       "BestOffer",
+      *                       "BuildingProcess",
+      *                       "Doc",
+      *                       "Gallery",
+      *                       "ResidentialComplexCategoryPivot",
+      *                       "SpriteImagePosition",
+      *                       "UserFavoriteBuilding",
+      *                       "Location",
+      *                   }
+      *              )
+      *          )
+      *      ),
+      *      @OA\Parameter(
+      *           name="filter",
+      *           in="query",
+      *           description="фильтрация сущности указанной в includes",
+      *           required=false,
+      *           style="form",
+      *           explode=true,
+      *           @OA\Schema(
+      *               type="array",
+      *               @OA\Items(
+      *                   type="string",
+      *                   enum={
+      *                        "apartments.room",
+      *                    }
+      *               )
+      *           )
+      *      ),
      *      @OA\Response(response=200, description="УСПЕХ!"),
      *      @OA\Response(
      *          response=404,

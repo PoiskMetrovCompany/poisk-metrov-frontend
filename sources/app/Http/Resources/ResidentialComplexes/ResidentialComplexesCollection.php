@@ -14,6 +14,17 @@ class ResidentialComplexesCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+
+        if ($this->collection && count($this->collection) > 0) {
+            foreach ($data as $key => $item) {
+                if (isset($item['includes'])) {
+                    $resource = new \App\Http\Resources\ResidentialComplexes\ResidentialComplexesResource($this->collection[$key]);
+                    $data[$key] = $resource->toArray($request);
+                }
+            }
+        }
+
+        return $data;
     }
 }
