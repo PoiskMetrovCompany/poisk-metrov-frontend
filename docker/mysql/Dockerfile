@@ -11,15 +11,7 @@ RUN mkdir -p /var/log/mysql /var/run/mysqld && \
 
 COPY ./conf/my.cnf /etc/mysql/conf.d/my.cnf
 
-COPY ./backup/poiskmetrov.sql.tar.gz /docker-entrypoint-initdb.d/poiskmetrov.sql.tar.gz
-
-RUN echo '#!/bin/bash\n\
-set -e\n\
-[ -d "/var/lib/mysql/mysql" ] && echo "Database already initialized" && exit 0\n\
-tar -xzf /docker-entrypoint-initdb.d/poiskmetrov.sql.tar.gz -C /docker-entrypoint-initdb.d/\n\
-mv /docker-entrypoint-initdb.d/poiskmetrov.sql /docker-entrypoint-initdb.d/init.sql\n\
-rm /docker-entrypoint-initdb.d/poiskmetrov.sql.tar.gz' > /docker-entrypoint-initdb.d/01-import.sh && \
-chmod +x /docker-entrypoint-initdb.d/01-import.sh
+COPY init-mysql.sql /docker-entrypoint-initdb.d/init-mysql.sql
 
 RUN echo '#!/bin/bash\n\
 set -e\n\
