@@ -11,16 +11,6 @@ RUN mkdir -p /var/log/mysql /var/run/mysqld && \
 
 COPY ./conf/my.cnf /etc/mysql/conf.d/my.cnf
 
-COPY init-mysql.sql /docker-entrypoint-initdb.d/init-mysql.sql
-
-RUN echo '#!/bin/bash\n\
-set -e\n\
-# Удаляем старый сокет если он существует\n\
-rm -f /var/lib/mysql/mysql.sock\n\
-# Создаем символическую ссылку для сокета\n\
-ln -sf /var/run/mysqld/mysqld.sock /var/lib/mysql/mysql.sock\n\
-# Запускаем оригинальный entrypoint\n\
-exec /entrypoint.sh "$@"' > /custom-entrypoint.sh && \
-chmod +x /custom-entrypoint.sh
+COPY ./backup/poiskmetrov.sql.tar.gz /var/poiskmetrov.sql.tar.gz
 
 EXPOSE 3306
