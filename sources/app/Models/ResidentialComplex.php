@@ -219,6 +219,18 @@ class ResidentialComplex extends Model
         return $pricesPerMeter->min();
     }
 
+    public function getResidentialMinPrice()
+    {
+
+        $apartmentsById = $this->apartments()->get();
+        $apartmentsByKey = $this->apartmentsByKey()->get();
+
+
+        $allApartments = $apartmentsById->concat($apartmentsByKey)->unique('id');
+
+        return $allApartments->pluck('price')->min();
+    }
+
     public function getSearchData()
     {
         $apartmentData = $this->apartments()->get();
