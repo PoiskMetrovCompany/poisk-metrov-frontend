@@ -15,7 +15,6 @@ use OpenApi\Annotations as OA;
  *     path="/api/v1/candidates/get-statuses",
  *     summary="Получение статусов для анкеты кандидата",
  *     description="Возвращение JSON объекта",
- *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="УСПЕХ!",

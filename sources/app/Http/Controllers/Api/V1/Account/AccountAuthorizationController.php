@@ -15,40 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
 
-/**
- * @OA\Post(
- *     tags={"Account"},
- *     path="/api/v1/account/auth",
- *     summary="Отправка кода для кандидата.",
- *     description="Возвращение JSON объекта",
- *     @OA\RequestBody(
- *         required=true,
- *         description="Данные для входа кандидата и безопасника",
- *         @OA\JsonContent(
- *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
- *             @OA\Property(property="code", type="string", example="000000")
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="УСПЕХ!",
- *         @OA\JsonContent(
- *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
- *             @OA\Property(property="code", type="string", example="000000")
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Resource not found",
- *         @OA\JsonContent(
- *             @OA\Property(property="error", type="string", example="Пользователь не найден")
- *         )
- *     )
- * )
- *
- * @param AccountLoginRequest $request
- * @return JsonResponse
- */
 class AccountAuthorizationController extends Controller
 {
     public function __construct(
@@ -58,6 +24,37 @@ class AccountAuthorizationController extends Controller
 
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Account"},
+     *     path="/api/v1/account/auth",
+     *     summary="Отправка кода для кандидата.",
+     *     description="Возвращение JSON объекта",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Данные для входа кандидата и безопасника",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *             @OA\Property(property="code", type="string", example="000000")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="УСПЕХ!",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *             @OA\Property(property="code", type="string", example="000000")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Пользователь не найден")
+     *         )
+     *     )
+     * )
+     */
     public function __invoke(AccountLoginRequest $request)
     {
         $attributes = $request->validated();

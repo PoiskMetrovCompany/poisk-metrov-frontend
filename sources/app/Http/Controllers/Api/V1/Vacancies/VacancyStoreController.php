@@ -19,6 +19,26 @@ class VacancyStoreController extends Controller
 
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Vacancy"},
+     *     path="/api/v1/vacancy/store",
+     *     summary="Создание вакансии",
+     *     description="Возвращение JSON объекта",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Данные для создания вакансии",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="title", type="string", example="Вакансия"),
+     *             @OA\Property(property="description", type="string", example="Описание вакансии"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="УСПЕХ!",
+     *     )
+     * )
+     */
     public function __invoke(VacancyStoreRequest $request): JsonResponse
     {
         $vacancy = $request->validated();

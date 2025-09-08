@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestampTz('created_at')->useCurrent();
             $table->timestampTz('updated_at')->useCurrent();
             $table->timestampTz('deleted_at')->nullable(true)->default(null);
-            $table->uuid('key')->unique();
+            $table->uuid('key');
             $table->uuid('user_key');
 
             $table->string('type', 255)->nullable();

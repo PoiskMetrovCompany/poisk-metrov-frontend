@@ -710,11 +710,11 @@ return new class extends Migration {
             $table->string('last_name', 255);
             $table->string('middle_name', 255);
             $table->string('reason_for_changing_surnames', 255)->nullable();
+            $table->text('courses')->nullable();
             $table->date('birth_date');
             $table->string('country_birth', 255);
             $table->string('city_birth', 255);
             $table->enum('level_educational', ['Высшее', 'Неоконченное высшее', 'Среднее специальное', 'Среднее общее'])->nullable();
-            $table->json('courses')->nullable();
             $table->json('educational_institution');
             $table->string('organization_name', 255)->nullable();
             $table->string('organization_phone', 255)->nullable();
@@ -744,6 +744,7 @@ return new class extends Migration {
             $table->string('legal_entity', 255);
             $table->boolean('is_data_processing')->default(false);
             $table->text('comment');
+            
             // Indexes
             $table->unique('inn');
             $table->unique('passport_number');

@@ -394,11 +394,11 @@ Route::namespace('V1')->prefix('v1')->group(function () {
 
     /// CANDIDATES
     Route::prefix('candidates')->group(function () {
-        Route::get('/', [CandidateProfileListController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/', [CandidateProfileListController::class, '__invoke']);
         Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
-        Route::get('/read', [CandidateProfileReadController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::post('/update', [CandidateProfileUpdateController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::post('/get-statuses', [CandidateProfileStatusesController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/read', [CandidateProfileReadController::class, '__invoke']);
+        Route::post('/update', [CandidateProfileUpdateController::class, '__invoke']);
+        Route::post('/get-statuses', [CandidateProfileStatusesController::class, '__invoke']);
     });
     /// END
 
@@ -406,10 +406,10 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     Route::prefix('account')->group(function () {
         Route::post('set-code', [AccountSetCodeController::class, 'setCode']);
         Route::post('auth', [AccountAuthorizationController::class, '__invoke']);
-        Route::get('list', [AccountListController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::post('store', [AccountStoreController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::post('update', [AccountUpdateController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::delete('delete', [AccountDeleteController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('list', [AccountListController::class, '__invoke']);
+        Route::post('store', [AccountStoreController::class, '__invoke']);
+        Route::post('update', [AccountUpdateController::class, '__invoke']);
+        Route::delete('delete', [AccountDeleteController::class, '__invoke']);
     });
     /// END
 
@@ -426,8 +426,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// EXPORT
     Route::prefix('export')->group(function () {
         /// NOTE: эти маршруты могуп принимать гет параметр "keys"
-        Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke'])->middleware('auth:sanctum');
-        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke'])->middleware('auth:sanctum');
+        Route::get('/xlsx-format', [ExportToXlsxFormatController::class, '__invoke']);
+        Route::get('/pdf-format', [ExportToPDFFormatController::class, '__invoke']);
         /// END
     });
     /// END
