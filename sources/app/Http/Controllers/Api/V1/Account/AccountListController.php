@@ -21,7 +21,7 @@ class AccountListController extends Controller
     /**
      * @OA\Get(
      *     tags={"Account"},
-     *     path="/api/v1/accounts/list",
+     *     path="/api/v1/account/list",
      *     summary="Список аккаунтов",
      *     description="Возвращение JSON объекта",
      *     @OA\Response(
@@ -38,7 +38,7 @@ class AccountListController extends Controller
                 'request' => true,
                 'attributes' => $accounts,
             ],
-            status: Response::HTTP_CREATED
+            status: Response::HTTP_OK
         );
     }
 }
