@@ -16,7 +16,6 @@ use ZipArchive;
  *     path="/api/v1/export/pdf-format",
  *     summary="Экспорт анкет кандидатов в PDF",
  *     description="Экспорт одной или нескольких анкет кандидатов в одном PDF-документе. Ключи передаются через запятую в параметре 'keys'.",
- *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="keys",
  *         in="query",

@@ -17,38 +17,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
 
-/**
- * @OA\Post(
- *     tags={"Account"},
- *     path="/api/v1/account/set-code",
- *     summary="Вход для кандидата.",
- *     description="Возвращение JSON объекта",
- *     @OA\RequestBody(
- *         required=true,
- *         description="Данные для отправки кода",
- *         @OA\JsonContent(
- *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="УСПЕХ!",
- *         @OA\JsonContent(
- *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Resource not found",
- *         @OA\JsonContent(
- *             @OA\Property(property="error", type="string", example="Пользователь не найден")
- *         )
- *     )
- * )
- *
- * @param AccountSetCodeRequest $request
- * @return JsonResponse
- */
 class AccountSetCodeController extends Controller
 {
     private string $apiKey;
@@ -66,6 +34,34 @@ class AccountSetCodeController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     tags={"Account"},
+     *     path="/api/v1/account/set-code",
+     *     summary="Вход для кандидата.",
+     *     description="Возвращение JSON объекта",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Данные для отправки кода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="УСПЕХ!",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="+7 (999) 999-99-99"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Пользователь не найден")
+     *         )
+     *     )
+     * )
+     *
      * @param AccountSetCodeRequest $request
      * @return JsonResponse
      */

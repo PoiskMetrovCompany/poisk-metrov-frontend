@@ -55,17 +55,11 @@ class StoreCrmController extends AbstractOperations
             'city' => 'required'
         ]);
 
-        $this->adsService->setAdsAgreement($validated['phone'], $validated['name']);
+        // $this->adsService->setAdsAgreement($validated['phone'], $validated['name']);
 
         $createLead = new CreateLead($validated['name'], $validated['phone'], $validated['comment'], $validated['city']);
         $result = $createLead->execute();
         $result = json_decode($result);
-//        $returned = new stdClass();
-
-//        $this->copy($result, $returned, [
-//            'message',
-//            'status_code'
-//        ]);
 
         return new JsonResponse(
             data: [

@@ -18,7 +18,6 @@ use OpenApi\Annotations as OA;
  *     path="/api/v1/export/xlsx-format",
  *     summary="Экспорт анкет кандидата в таблицу (если передать ключ кандидата, то экспортирует анкету по ключу. Ключи нужно перечислять через запятую)",
  *     description="Возвращение JSON объекта",
- *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="keys",
  *         in="query",

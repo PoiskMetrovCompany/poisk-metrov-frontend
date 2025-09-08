@@ -13,7 +13,7 @@
                 ],
                 "summary": "Отправка кода для кандидата.",
                 "description": "Возвращение JSON объекта",
-                "operationId": "d47fafab3d59bc6a183f5c82301c4e3a",
+                "operationId": "44f774f500ad59cc6f1ebb7ff2089888",
                 "requestBody": {
                     "description": "Данные для входа кандидата и безопасника",
                     "required": true,
@@ -75,6 +75,48 @@
                 }
             }
         },
+        "/api/v1/account/delete": {
+            "delete": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Удаление аккаунта",
+                "description": "Возвращение JSON объекта",
+                "operationId": "f8ef4ea644ed03ce7b4e9cf870c0973d",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ аккаунта",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
+        "/api/v1/account/list": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Список аккаунтов",
+                "description": "Возвращение JSON объекта",
+                "operationId": "fd8c0ab5df75dc74a1b50efcd6e4b3eb",
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
         "/api/v1/account/set-code": {
             "post": {
                 "tags": [
@@ -82,7 +124,7 @@
                 ],
                 "summary": "Вход для кандидата.",
                 "description": "Возвращение JSON объекта",
-                "operationId": "872ecd99d487f1e4bf6af71411be0afe",
+                "operationId": "65967bfcba29c1cec23328a2062d0aab",
                 "requestBody": {
                     "description": "Данные для отправки кода",
                     "required": true,
@@ -116,6 +158,134 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Пользователь не найден"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/store": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Создание аккаунта",
+                "description": "Возвращение JSON объекта",
+                "operationId": "05457050a2b2cfca5b836182193618b5",
+                "requestBody": {
+                    "description": "Данные для создания аккаунта",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "key": {
+                                        "type": "string",
+                                        "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Шихавцов"
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Андрей"
+                                    },
+                                    "middle_name": {
+                                        "type": "string",
+                                        "example": "Александрович"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "mail@mail.ru"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/update": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Обновление аккаунта",
+                "description": "Возвращение JSON объекта",
+                "operationId": "4fc33b8eeba4fb7858058c814ac625d7",
+                "requestBody": {
+                    "description": "Данные для обновления аккаунта",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "key": {
+                                        "type": "string",
+                                        "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Шихавцов"
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Андрей"
+                                    },
+                                    "middle_name": {
+                                        "type": "string",
+                                        "example": "Александрович"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "mail@mail.ru"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!"
                     },
                     "404": {
                         "description": "Resource not found",
@@ -1255,12 +1425,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/candidates/store": {
@@ -2728,12 +2893,7 @@
                     "404": {
                         "description": "Анкеты не найдены"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/export/xlsx-format": {
@@ -2797,12 +2957,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/favorites/count": {
@@ -3715,19 +3870,7 @@
                 ],
                 "summary": "Получения лога анкет кандидатов по ключу",
                 "description": "Возвращение JSON объекта",
-                "operationId": "9e9ecff868a364fbde29f3d93bee1690",
-                "parameters": [
-                    {
-                        "name": "profile_key",
-                        "in": "query",
-                        "description": "Ключ для записи",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
-                        }
-                    }
-                ],
+                "operationId": "94032336c1e43d85990ca6b2ae517fb1",
                 "responses": {
                     "200": {
                         "description": "УСПЕХ!",
@@ -3769,12 +3912,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/real-estate/": {
@@ -4605,6 +4743,33 @@
                 ]
             }
         },
+        "/api/v1/vacancy/destroy": {
+            "delete": {
+                "tags": [
+                    "Vacancy"
+                ],
+                "summary": "Удаление вакансии",
+                "description": "Возвращение JSON объекта",
+                "operationId": "386804a46c923cc185e2197f95c2db59",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ вакансии",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
         "/api/v1/vacancy/": {
             "get": {
                 "tags": [
@@ -4619,6 +4784,109 @@
                     },
                     "404": {
                         "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/vacancy/read": {
+            "get": {
+                "tags": [
+                    "Vacancy"
+                ],
+                "summary": "Получение вакансии",
+                "description": "Возвращение JSON объекта",
+                "operationId": "4e1249a7f9f37071a553469a56dfab9f",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ вакансии",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
+        "/api/v1/vacancy/store": {
+            "post": {
+                "tags": [
+                    "Vacancy"
+                ],
+                "summary": "Создание вакансии",
+                "description": "Возвращение JSON объекта",
+                "operationId": "8a49c3d219303e2f575841732709141c",
+                "requestBody": {
+                    "description": "Данные для создания вакансии",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Вакансия"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Описание вакансии"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!"
+                    }
+                }
+            }
+        },
+        "/api/v1/vacancy/update": {
+            "post": {
+                "tags": [
+                    "Vacancy"
+                ],
+                "summary": "Обновление вакансии",
+                "description": "Возвращение JSON объекта",
+                "operationId": "8945c8510c407e8f73ce3e20c56d6677",
+                "requestBody": {
+                    "description": "Данные для обновления вакансии",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "key": {
+                                        "type": "string",
+                                        "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Вакансия"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Описание вакансии"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "УСПЕХ!"
                     }
                 }
             }

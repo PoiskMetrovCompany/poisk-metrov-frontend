@@ -18,6 +18,18 @@ class AccountListController extends Controller
 
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"Account"},
+     *     path="/api/v1/account/list",
+     *     summary="Список аккаунтов",
+     *     description="Возвращение JSON объекта",
+     *     @OA\Response(
+     *         response=200,
+     *         description="УСПЕХ!",
+     *     )
+     * )
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $accounts = $this->account::where(['role' => 'РОП']);
@@ -26,7 +38,7 @@ class AccountListController extends Controller
                 'request' => true,
                 'attributes' => $accounts,
             ],
-            status: Response::HTTP_CREATED
+            status: Response::HTTP_OK
         );
     }
 }

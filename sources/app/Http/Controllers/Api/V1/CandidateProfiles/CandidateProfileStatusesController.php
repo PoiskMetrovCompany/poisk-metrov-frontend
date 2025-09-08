@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1\CandidateProfiles;
 
 use App\Core\Common\VacancyStatusesEnum;
-use App\Http\Controllers\Api\V1\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +14,6 @@ use OpenApi\Annotations as OA;
  *     path="/api/v1/candidates/get-statuses",
  *     summary="Получение статусов для анкеты кандидата",
  *     description="Возвращение JSON объекта",
- *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="УСПЕХ!",
@@ -47,7 +45,7 @@ class CandidateProfileStatusesController extends Controller
                 VacancyStatusesEnum::CameOut->value,
                 VacancyStatusesEnum::NotCameOut->value,
             ],
-            status: Response::HTTP_CREATED
+            status: 201
         );
     }
 }
