@@ -398,7 +398,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::post('/store', [CandidateProfileStoreController::class, '__invoke']);
         Route::get('/read', [CandidateProfileReadController::class, '__invoke']);
         Route::post('/update', [CandidateProfileUpdateController::class, '__invoke']);
-        Route::post('/get-statuses', [CandidateProfileStatusesController::class, '__invoke']);
+        Route::get('/get-statuses', [CandidateProfileStatusesController::class, '__invoke']);
     });
     /// END
 

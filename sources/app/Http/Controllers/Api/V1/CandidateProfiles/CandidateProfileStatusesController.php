@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1\CandidateProfiles;
 
 use App\Core\Common\VacancyStatusesEnum;
-use App\Http\Controllers\Api\V1\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,7 +45,7 @@ class CandidateProfileStatusesController extends Controller
                 VacancyStatusesEnum::CameOut->value,
                 VacancyStatusesEnum::NotCameOut->value,
             ],
-            status: Response::HTTP_CREATED
+            status: 201
         );
     }
 }
