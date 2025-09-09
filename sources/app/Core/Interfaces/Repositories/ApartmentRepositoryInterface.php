@@ -29,5 +29,9 @@ interface ApartmentRepositoryInterface extends
     FindQueryBuilderInterface,
     FindByInComplexIdQueryInterface
 {
-
+    /**
+     * @param string $cityCode
+     * @return array
+     */
+    public function getDefaultSelections(string $cityCode): array;
 }

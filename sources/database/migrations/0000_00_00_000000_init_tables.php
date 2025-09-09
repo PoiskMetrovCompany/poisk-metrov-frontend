@@ -744,7 +744,7 @@ return new class extends Migration {
             $table->string('legal_entity', 255);
             $table->boolean('is_data_processing')->default(false);
             $table->text('comment');
-            
+
             // Indexes
             $table->unique('inn');
             $table->unique('passport_number');

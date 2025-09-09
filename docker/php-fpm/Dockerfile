@@ -58,6 +58,9 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 COPY composer.phar /usr/local/bin/composer
 RUN chmod +x /usr/local/bin/composer
 
+# Copy PHP-FPM configuration
+COPY conf/www.conf /usr/local/etc/php-fpm.d/www.conf
+
 RUN apt-get clean && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

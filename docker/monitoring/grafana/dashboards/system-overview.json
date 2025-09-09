@@ -1,0 +1,201 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "System Overview - Poisk Metrov (Exporters)",
+    "tags": ["poisk-metrov", "monitoring"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Nginx Active Connections",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "nginx_connections_active",
+            "legendFormat": "Active"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Nginx Requests Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(nginx_http_requests_total[5m])",
+            "legendFormat": "Requests/sec"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "MySQL Threads Connected",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "mysql_threads_connected",
+            "legendFormat": "Connected Threads"
+          },
+          {
+            "expr": "mysql_threads_running",
+            "legendFormat": "Running Threads"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "MySQL Queries",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(mysql_queries_total[5m])",
+            "legendFormat": "Queries/sec"
+          },
+          {
+            "expr": "mysql_connections_total",
+            "legendFormat": "Total Connections"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 5,
+        "title": "PHP-FPM Active Processes",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "phpfpm_active_processes",
+            "legendFormat": "Active"
+          },
+          {
+            "expr": "phpfpm_idle_processes",
+            "legendFormat": "Idle"
+          },
+          {
+            "expr": "phpfpm_total_processes",
+            "legendFormat": "Total"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "RabbitMQ Connections",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rabbitmq_connections",
+            "legendFormat": "Connections"
+          },
+          {
+            "expr": "rabbitmq_channels",
+            "legendFormat": "Channels"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        }
+      },
+      {
+        "id": 7,
+        "title": "RabbitMQ Messages",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rabbitmq_queue_messages",
+            "legendFormat": "Total Messages"
+          },
+          {
+            "expr": "rabbitmq_queue_messages_ready",
+            "legendFormat": "Ready Messages"
+          },
+          {
+            "expr": "rabbitmq_queue_messages_unacknowledged",
+            "legendFormat": "Unacknowledged"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 24
+        }
+      },
+      {
+        "id": 8,
+        "title": "System Uptime",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "up{job=\"nginx\"}",
+            "legendFormat": "Nginx"
+          },
+          {
+            "expr": "up{job=\"mysql\"}",
+            "legendFormat": "MySQL"
+          },
+          {
+            "expr": "up{job=\"php-fpm\"}",
+            "legendFormat": "PHP-FPM"
+          },
+          {
+            "expr": "up{job=\"rabbitmq\"}",
+            "legendFormat": "RabbitMQ"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 24
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "templating": {
+      "list": []
+    },
+    "annotations": {
+      "list": []
+    },
+    "refresh": "30s",
+    "schemaVersion": 27,
+    "version": 0,
+    "links": []
+  }
+}
