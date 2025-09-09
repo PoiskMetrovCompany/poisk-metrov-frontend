@@ -9,6 +9,7 @@ use App\Services\Apartment\SelectRecommendationsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Annotations as OA;
 
 /**
@@ -27,8 +28,8 @@ class SelectionApartmentController extends AbstractOperations
      * @OA\Get(
      *       tags={"Apartment"},
      *       path="/api/v1/apartments/selections",
-     *       summary="получение списка ...",
-     *       description="Возвращение JSON объекта с пагинацией",
+     *       summary="Подборка квартир для авторизованного и неавторизованного пользователя",
+     *       description="Возвращает подборку рекомендованных квартир. Для авторизованных пользователей используются персональные рекомендации (если доступны). Для неавторизованных или при ошибке - общая подборка.",
      *       @OA\Parameter(
      *           name="city_code",
      *           in="query",
@@ -53,9 +54,27 @@ class SelectionApartmentController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $attributes = $request->input('city_code') && $request->input('user_key')
-            ? $this->recommendationsService->getPersonalRecommendations($request->input('user_key'), $request->input('city_code'))
-            : $this->recommendationsService->getGeneralRecommendations($request->input('city_code'));
+        if (!$request->input('city_code')) {
+            return new JsonResponse(
+                data: [
+                    'error' => 'Параметр city_code обязателен',
+                    ...self::identifier(),
+                    ...self::metaData($request, $request->all()),
+                ],
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($request->input('city_code') && $request->input('user_key')) {
+            try {
+                $attributes = $this->recommendationsService->getPersonalRecommendations($request->input('user_key'), $request->input('city_code'));
+            } catch (\Exception $e) {
+                Log::info("Не удалось получить персональные рекомендации, используем дефолтную подборку: " . $e->getMessage());
+                $attributes = $this->getDefaultSelections($request->input('city_code'));
+            }
+        } else {
+            $attributes = $this->getDefaultSelections($request->input('city_code'));
+        }
 
         return new JsonResponse(
             data: [
@@ -65,6 +84,53 @@ class SelectionApartmentController extends AbstractOperations
             ],
             status: Response::HTTP_OK
         );
+    }
+
+    private function getDefaultSelections(string $cityCode): array
+    {
+        $minPrice = 4000000;
+        $targetFloor = 5;
+        $allowedRooms = [1, 2];
+
+        $apartments = Apartment::query()
+            ->where('price', '>=', $minPrice)
+            ->where('floor', '=', $targetFloor)
+            ->whereIn('room_count', $allowedRooms)
+            ->whereNotNull('complex_key')
+            ->where('complex_key', '!=', '')
+            ->orderBy('price', 'asc')
+            ->limit(20)
+            ->get();
+
+        if ($apartments->count() < 10) {
+            $apartments = Apartment::query()
+                ->where('price', '>=', $minPrice)
+                ->whereIn('room_count', $allowedRooms)
+                ->whereNotNull('complex_key')
+                ->where('complex_key', '!=', '')
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        if ($apartments->count() < 5) {
+            $apartments = Apartment::query()
+                ->where('price', '>=', $minPrice)
+                ->whereNotNull('complex_key')
+                ->where('complex_key', '!=', '')
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        if ($apartments->count() === 0) {
+            $apartments = Apartment::query()
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        return $apartments->toArray();
     }
 
     public function getEntityClass(): string
