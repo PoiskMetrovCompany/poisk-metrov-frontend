@@ -7,6 +7,8 @@ use App\Http\Requests\Accounts\AccountStoreRequest;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AccountStoreController extends Controller
 {
@@ -20,14 +22,13 @@ class AccountStoreController extends Controller
     /**
      * @OA\Post(
      *     tags={"Account"},
-     *     path="/api/v1/accounts/store",
+     *     path="/api/v1/account/store",
      *     summary="Создание аккаунта",
      *     description="Возвращение JSON объекта",
      *     @OA\RequestBody(
      *         required=true,
      *         description="Данные для создания аккаунта",
      *         @OA\JsonContent(
-     *             @OA\Property(property="key", type="string", example="e8ff11fa-822b-11f0-8411-10f60a82b815"),
      *             @OA\Property(property="last_name", type="string", example="Шихавцов"),
      *             @OA\Property(property="first_name", type="string", example="Андрей"),
      *             @OA\Property(property="middle_name", type="string", example="Александрович"),
@@ -45,6 +46,14 @@ class AccountStoreController extends Controller
     public function __invoke(AccountStoreRequest $request): JsonResponse
     {
         $attributes = $request->validated();
+
+        // Преобразуем password в secret и хэшируем
+        if (isset($attributes['password'])) {
+            $attributes['secret'] = Hash::make($attributes['password']);
+            unset($attributes['password']);
+        }
+
+        $attributes['key'] = Str::uuid()->toString();
 
         $account = $this->account::create($attributes);
 

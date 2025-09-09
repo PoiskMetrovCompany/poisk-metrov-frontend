@@ -178,14 +178,14 @@
                 }
             }
         },
-        "/api/v1/accounts/store": {
+        "/api/v1/account/store": {
             "post": {
                 "tags": [
                     "Account"
                 ],
                 "summary": "Создание аккаунта",
                 "description": "Возвращение JSON объекта",
-                "operationId": "05457050a2b2cfca5b836182193618b5",
+                "operationId": "0fc8b7ae211bbc4d6b4a8f4fe353ac87",
                 "requestBody": {
                     "description": "Данные для создания аккаунта",
                     "required": true,
@@ -193,10 +193,6 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "key": {
-                                        "type": "string",
-                                        "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
-                                    },
                                     "last_name": {
                                         "type": "string",
                                         "example": "Шихавцов"
@@ -234,14 +230,14 @@
                 }
             }
         },
-        "/api/v1/accounts/update": {
+        "/api/v1/account/update": {
             "post": {
                 "tags": [
                     "Account"
                 ],
                 "summary": "Обновление аккаунта",
                 "description": "Возвращение JSON объекта",
-                "operationId": "4fc33b8eeba4fb7858058c814ac625d7",
+                "operationId": "956192f88b76495801ebac0ab595f739",
                 "requestBody": {
                     "description": "Данные для обновления аккаунта",
                     "required": true,
@@ -251,7 +247,7 @@
                                 "properties": {
                                     "key": {
                                         "type": "string",
-                                        "example": "e8ff11fa-822b-11f0-8411-10f60a82b815"
+                                        "example": ""
                                     },
                                     "last_name": {
                                         "type": "string",
@@ -666,8 +662,8 @@
                 "tags": [
                     "Apartment"
                 ],
-                "summary": "получение списка ...",
-                "description": "Возвращение JSON объекта с пагинацией",
+                "summary": "Подборка квартир для авторизованного и неавторизованного пользователя",
+                "description": "Возвращает подборку рекомендованных квартир. Для авторизованных пользователей используются персональные рекомендации (если доступны). Для неавторизованных или при ошибке - общая подборка.",
                 "operationId": "3ac872c3dc86a51c9bbbaf3de46f5e99",
                 "parameters": [
                     {

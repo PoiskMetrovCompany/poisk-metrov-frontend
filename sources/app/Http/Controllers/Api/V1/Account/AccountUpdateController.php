@@ -22,14 +22,14 @@ class AccountUpdateController extends Controller
     /**
      * @OA\Post(
      *     tags={"Account"},
-     *     path="/api/v1/accounts/update",
+     *     path="/api/v1/account/update",
      *     summary="Обновление аккаунта",
      *     description="Возвращение JSON объекта",
      *     @OA\RequestBody(
      *         required=true,
      *         description="Данные для обновления аккаунта",
      *         @OA\JsonContent(
-     *             @OA\Property(property="key", type="string", example="e8ff11fa-822b-11f0-8411-10f60a82b815"),
+     *             @OA\Property(property="key", type="string", example=""),
      *             @OA\Property(property="last_name", type="string", example="Шихавцов"),
      *             @OA\Property(property="first_name", type="string", example="Андрей"),
      *             @OA\Property(property="middle_name", type="string", example="Александрович"),
@@ -59,7 +59,9 @@ class AccountUpdateController extends Controller
     {
         $attributes = $request->validated();
 
-        $account = $this->account::update($attributes);
+        $account = $this->account::where('key', $attributes['key'])->first();
+
+        $account->update($attributes);
 
         return new JsonResponse(
             data: [

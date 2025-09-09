@@ -32,7 +32,7 @@ class AccountListController extends Controller
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $accounts = $this->account::where(['role' => 'РОП']);
+        $accounts = $this->account::where(['role' => 'РОП'])->get();
         return new JsonResponse(
             data: [
                 'request' => true,
