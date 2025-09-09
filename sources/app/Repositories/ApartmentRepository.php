@@ -106,5 +106,53 @@ final class ApartmentRepository implements ApartmentRepositoryInterface
 
         return $count;
     }
+    
+    public function getDefaultSelections(string $cityCode): array
+    {
+        $minPrice = 4000000;
+        $targetFloor = 5;
+        $allowedRooms = [1, 2];
+
+        $apartments = Apartment::query()
+            ->where('price', '>=', $minPrice)
+            ->where('floor', '=', $targetFloor)
+            ->whereIn('room_count', $allowedRooms)
+            ->whereNotNull('complex_key')
+            ->where('complex_key', '!=', '')
+            ->orderBy('price', 'asc')
+            ->limit(20)
+            ->get();
+
+        if ($apartments->count() < 10) {
+            $apartments = Apartment::query()
+                ->where('price', '>=', $minPrice)
+                ->whereIn('room_count', $allowedRooms)
+                ->whereNotNull('complex_key')
+                ->where('complex_key', '!=', '')
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        if ($apartments->count() < 5) {
+            $apartments = Apartment::query()
+                ->where('price', '>=', $minPrice)
+                ->whereNotNull('complex_key')
+                ->where('complex_key', '!=', '')
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        if ($apartments->count() === 0) {
+            $apartments = Apartment::query()
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        return $apartments->toArray();
+    }
+
     /* ----------------- END ----------------- */
 }

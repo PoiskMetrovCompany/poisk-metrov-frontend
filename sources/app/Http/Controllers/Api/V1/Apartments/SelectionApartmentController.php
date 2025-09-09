@@ -86,99 +86,51 @@ class SelectionApartmentController extends AbstractOperations
         );
     }
 
-    /**
-     * Получить дефолтную подборку квартир для неавторизованного пользователя
-     *
-     * Критерии (захардкожены):
-     * - Цена от 4 млн рублей
-     * - Этаж 5
-     * - Количество комнат: 1 или 2
-     *
-     * @param string $cityCode
-     * @return array
-     */
     private function getDefaultSelections(string $cityCode): array
     {
-        try {
-            // Захардкоженные критерии
-            $minPrice = 4000000; // 4 млн рублей
-            $targetFloor = 5; // Этаж 5
-            $allowedRooms = [1, 2]; // 1 или 2 комнаты
+        $minPrice = 4000000;
+        $targetFloor = 5;
+        $allowedRooms = [1, 2];
 
-            Log::info("Получаем дефолтную подборку квартир по критериям: цена >= {$minPrice}, этаж = {$targetFloor}, комнаты = " . implode(',', $allowedRooms));
+        $apartments = Apartment::query()
+            ->where('price', '>=', $minPrice)
+            ->where('floor', '=', $targetFloor)
+            ->whereIn('room_count', $allowedRooms)
+            ->whereNotNull('complex_key')
+            ->where('complex_key', '!=', '')
+            ->orderBy('price', 'asc')
+            ->limit(20)
+            ->get();
 
-            // Основной запрос по строгим критериям
+        if ($apartments->count() < 10) {
             $apartments = Apartment::query()
                 ->where('price', '>=', $minPrice)
-                ->where('floor', '=', $targetFloor)
                 ->whereIn('room_count', $allowedRooms)
                 ->whereNotNull('complex_key')
                 ->where('complex_key', '!=', '')
                 ->orderBy('price', 'asc')
                 ->limit(20)
                 ->get();
-
-            Log::info("Найдено квартир по строгим критериям: " . $apartments->count());
-
-            // Если недостаточно результатов, расширяем критерии (убираем этаж)
-            if ($apartments->count() < 10) {
-                Log::info("Расширяем критерии - убираем этаж");
-                $apartments = Apartment::query()
-                    ->where('price', '>=', $minPrice)
-                    ->whereIn('room_count', $allowedRooms)
-                    ->whereNotNull('complex_key')
-                    ->where('complex_key', '!=', '')
-                    ->orderBy('price', 'asc')
-                    ->limit(20)
-                    ->get();
-
-                Log::info("Найдено квартир без учета этажа: " . $apartments->count());
-            }
-
-            // Если все еще мало результатов, берем любые квартиры от 4 млн
-            if ($apartments->count() < 5) {
-                Log::info("Расширяем критерии - убираем комнаты");
-                $apartments = Apartment::query()
-                    ->where('price', '>=', $minPrice)
-                    ->whereNotNull('complex_key')
-                    ->where('complex_key', '!=', '')
-                    ->orderBy('price', 'asc')
-                    ->limit(20)
-                    ->get();
-
-                Log::info("Найдено любых квартир от {$minPrice}: " . $apartments->count());
-            }
-
-            // Если совсем ничего нет, берем самые дешевые квартиры
-            if ($apartments->count() === 0) {
-                Log::info("Берем самые дешевые квартиры");
-                $apartments = Apartment::query()
-                    ->orderBy('price', 'asc')
-                    ->limit(20)
-                    ->get();
-
-                Log::info("Найдено самых дешевых квартир: " . $apartments->count());
-            }
-
-            $result = $apartments->toArray();
-
-            if (!empty($result)) {
-                $first = $result[0];
-                Log::info("Пример квартиры:", [
-                    'id' => $first['id'] ?? 'N/A',
-                    'price' => $first['price'] ?? 'N/A',
-                    'floor' => $first['floor'] ?? 'N/A',
-                    'room_count' => $first['room_count'] ?? 'N/A',
-                ]);
-            }
-
-            return $result;
-
-        } catch (\Exception $e) {
-            Log::error("Ошибка в getDefaultSelections: " . $e->getMessage());
-            // В случае ошибки возвращаем пустой массив
-            return [];
         }
+
+        if ($apartments->count() < 5) {
+            $apartments = Apartment::query()
+                ->where('price', '>=', $minPrice)
+                ->whereNotNull('complex_key')
+                ->where('complex_key', '!=', '')
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        if ($apartments->count() === 0) {
+            $apartments = Apartment::query()
+                ->orderBy('price', 'asc')
+                ->limit(20)
+                ->get();
+        }
+
+        return $apartments->toArray();
     }
 
     public function getEntityClass(): string
