@@ -137,15 +137,15 @@ class CandidateProfileStoreController extends Controller
 
         // SetChangesCandidatesQuestionnaireQueue::dispatch($candidateProfile);
 
-        DB::connection('pm-log')
-            ->table('candidate_profiles_has')
-            ->insert([
-                'profile_key' => $attributes['key'],
-                'title' => 'Новая анкета',
-                'is_visible' => false,
-                'meta_attributes' => $attributes,
-                'created_at' => $candidateProfile->created_at
-            ]);
+        // DB::connection('pm-log')
+        //     ->table('candidate_profiles_has')
+        //     ->insert([
+        //         'profile_key' => $attributes['key'],
+        //         'title' => 'Новая анкета',
+        //         'is_visible' => false,
+        //         'meta_attributes' => $attributes,
+        //         'created_at' => $candidateProfile->created_at
+        //     ]);
 
         $dataCollection = new CandidateProfileResource($candidateProfile);
 
