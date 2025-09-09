@@ -10,17 +10,17 @@ return new class extends Migration {
     public function up()
     {
         // Tables
-        // Schema::create('cities', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->timestampTz('created_at')->useCurrent();
-        //     $table->timestampTz('updated_at')->useCurrent();
-        //     $table->timestampTz('deleted_at')->nullable(true)->default(null);
-        //     $table->uuid('key')->unique();
-        //     $table->string('title', 255)->nullable();
-        //     $table->string('slug', 255)->nullable();
-        //     // Indexes
-        //     $table->unique('slug');
-        // });
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->timestampTz('created_at')->useCurrent();
+            $table->timestampTz('updated_at')->useCurrent();
+            $table->timestampTz('deleted_at')->nullable(true)->default(null);
+            $table->uuid('key')->unique();
+            $table->string('title', 255)->nullable();
+            $table->string('slug', 255)->nullable();
+            // Indexes
+            $table->unique('slug');
+        });
 
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
@@ -28,10 +28,7 @@ return new class extends Migration {
             $table->timestampTz('updated_at')->useCurrent();
             $table->timestampTz('deleted_at')->nullable(true)->default(null);
             $table->uuid('key')->unique();
-            $table->enum('role', ['security-guard', 'candidate']);
-            $table->string('last_name', 255)->nullable();
-            $table->string('first_name', 255)->nullable();
-            $table->string('middle_name', 255)->nullable();
+            $table->string('role', 255)->nullable();
             $table->string('phone', 255)->nullable();
             $table->string('email', 255)->nullable();
             $table->string('secret', 255)->nullable();

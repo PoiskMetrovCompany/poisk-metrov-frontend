@@ -11,7 +11,7 @@ class AccountStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,12 @@ class AccountStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'last_name' => ['required'],
-            'first_name' => ['required'],
-            'middle_name' => ['required'],
-            'email' => ['required'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:accounts,email'],
             'role' => ['required'],
-            'password' => ['required'],
+            'password' => ['required', 'string', 'min:8'],
         ];
     }
 }
