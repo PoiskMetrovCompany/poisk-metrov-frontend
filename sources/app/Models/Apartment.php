@@ -68,7 +68,9 @@ class Apartment extends Model
         'meta',
         'head_title',
         'h1',
-        'feed_source'
+        'feed_source',
+        'complex_key',
+        'building_key'
     ];
 
     public static $searchableFields = [
