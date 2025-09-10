@@ -183,6 +183,7 @@ return [
         App\Providers\RepositoryServiceProvider::class,
 
         App\Providers\PrometheusServiceProvider::class,
+        App\Providers\TrendAgentScrapperServiceProvider::class,
     ])->toArray(),
 
     /*

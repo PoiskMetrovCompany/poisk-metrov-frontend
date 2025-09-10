@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\Auth\AuthorizationController;
 use App\Http\Controllers\Api\V1\Auth\RegisterProfileController;
 use App\Http\Controllers\Api\V1\BestOffers\ListBestOfferController;
 use App\Http\Controllers\Api\V1\Cache\RewriteCacheController;
+use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileDestroyController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileListController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileReadController;
 use App\Http\Controllers\Api\V1\CandidateProfiles\CandidateProfileStatusesController;
@@ -399,6 +400,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
         Route::get('/read', [CandidateProfileReadController::class, '__invoke']);
         Route::post('/update', [CandidateProfileUpdateController::class, '__invoke']);
         Route::get('/get-statuses', [CandidateProfileStatusesController::class, '__invoke']);
+        Route::delete('/destroy', [CandidateProfileDestroyController::class, '__invoke']);
     });
     /// END
 
