@@ -22,6 +22,7 @@ class CandidateProfileResource extends JsonResource
                 'key' => $this->marital_statuses_key,
                 'attributes' => MaritalStatuses::where(['key' => $this->marital_statuses_key])->first(),
             ],
+            'work_team' => $this->work_team,
             'status' => $this->status,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
