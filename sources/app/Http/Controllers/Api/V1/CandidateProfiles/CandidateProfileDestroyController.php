@@ -21,8 +21,8 @@ use OpenApi\Annotations as OA;
  *         name="key",
  *         in="query",
  *         required=true,
- *         description="Ключи для удаления анкет(ы)",
- *         @OA\Schema(type="string", example="53cbb9a9-4bab-30ce-98f5-ed0277f4ada0,53cbb9a9-4bab-30ce-98f5-ed0277f4ada0")
+ *         description="Ключ для удаления анкеты",
+ *         @OA\Schema(type="string", example="53cbb9a9-4bab-30ce-98f5-ed0277f4ada0")
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -56,14 +56,36 @@ class CandidateProfileDestroyController extends Controller
 
     public function __invoke(Request $request)
     {
-        $keys = explode(',', $request->input('keys'));
-        $candidateProfile = $this->candidateProfilesRepository->find(['key' => $keys]);
+        $key = $request->input('key');
+
+        if (!$key) {
+            return new JsonResponse(
+                data: [
+                    'response' => false,
+                    'message' => 'Ключ кандидата обязателен'
+                ],
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $candidateProfile = $this->candidateProfilesRepository->findByKey($key);
+
+        if (!$candidateProfile) {
+            return new JsonResponse(
+                data: [
+                    'response' => false,
+                    'message' => 'Анкета кандидата не найдена'
+                ],
+                status: Response::HTTP_NOT_FOUND
+            );
+        }
+
         $dataCollection = new CandidateProfileResource($candidateProfile);
-        $repository = $candidateProfile->delete();
+        $deleteResult = $candidateProfile->delete();
 
         return new JsonResponse(
             data: [
-                'response' => $repository,
+                'response' => $deleteResult,
                 'attributes' => $dataCollection,
             ],
             status: Response::HTTP_OK
