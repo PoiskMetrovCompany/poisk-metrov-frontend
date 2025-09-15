@@ -89,10 +89,9 @@ pipeline {
                             echo 'TODO: добавить "docker-compose run php-fpm php artisan migrate &&"'
                             docker-compose run php-fpm php artisan cache:clear &&
                             docker-compose run php-fpm php artisan optimize:clear &&
-                            docker-compose run php-fpm php artisan l5-swagger:generate
+                            docker-compose run php-fpm php artisan l5-swagger:generate &&
                             docker-compose run php-fpm php artisan app:update-cache-application-command
                         "
-                    """
                 }
             }
         }
