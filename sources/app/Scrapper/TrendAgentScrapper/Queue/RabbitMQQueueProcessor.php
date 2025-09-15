@@ -5,6 +5,7 @@ namespace App\Scrapper\TrendAgentScrapper\Queue;
 use App\Core\Interfaces\Scrapper\TrendAgent\QueueProcessorInterface;
 use App\Jobs\TrendAgent\ProcessApartmentsChunk;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use Exception;
@@ -21,20 +22,6 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function __construct()
     {
-        try {
-            $this->connection = new AMQPStreamConnection(
-                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
-                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
-                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
-                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
-                config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
-            );
-
-            $this->setupExchangesAndQueues();
-
-        } catch (Exception $e) {
-            throw $e;
-        }
     }
 
     private function setupExchangesAndQueues(): void
@@ -73,6 +60,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function addToQueue(array $data, string $type, array $metadata = []): void
     {
+        $this->ensureConnection();
         $channel = $this->connection->channel();
 
         $chunks = array_chunk($data, 1000);
@@ -105,6 +93,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function processQueue(string $type): void
     {
+        $this->ensureConnection();
         $channel = $this->connection->channel();
 
         $channel->basic_consume(
@@ -252,6 +241,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function getQueueStatus(): array
     {
+        $this->ensureConnection();
         $channel = $this->connection->channel();
         $status = [];
 

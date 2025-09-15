@@ -2,51 +2,48 @@ version: "3.8"
 
 networks:
   app:
+  
     driver: "bridge"
     enable_ipv6: true
     driver_opts:
       com.docker.network.driver.mtu: 1450
+  jenkins-network:
+    driver: "bridge"
 
 services:
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   container_name: prometheus
-  #   volumes:
-  #     - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-  #   ports:
-  #     - "${PROMETHEUS_PORT}:9090"
-  #   networks:
-  #     - app
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: ${NAME}_jenkins
+    hostname: ${NAME}_jenkins
+    profiles:
+      - debug
+    ports:
+      - ${JENKINS_PORT}:8080
+      - ${JENKINS_WEB_PORT}:5000
+    volumes:
+      - jenkins_home:${JENKINS_DATA}
+      - ./app/rsa:/var/jenkins_home/.ssh
+    networks:
+      - jenkins-network
 
-  # nginx-exporter:
-  #   image: nginx/nginx-prometheus-exporter:latest
-  #   container_name: ${NAME}_nginx-exporter
-  #   ports:
-  #     - "9114:9113"
-  #   command:
-  #     - -nginx.scrape-uri=http://${NAME}_nginx/stub_status
-  #   networks:
-  #     - app
-  #   depends_on:
-  #     - nginx
-
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: grafana
-  #   ports:
-  #     - "3001:3000"
-  #   environment:
-  #     - GF_SECURITY_ADMIN_PASSWORD=admin
-  #     - GF_USERS_ALLOW_SIGN_UP=false
-  #   volumes:
-  #     - grafana-storage:/var/lib/grafana
-  #     - ./docker/monitoring/grafana/provisioning:/etc/grafana/provisioning
-  #     - ./docker/monitoring/grafana/dashboards:/var/lib/grafana/dashboards
-  #   networks:
-  #     - app
-  #   depends_on:
-  #     - prometheus
-
+  jenkins-agent:
+    image: jenkins/inbound-agent
+    container_name: ${NAME}_jenkins-agent
+    hostname: ${NAME}_jenkins-agent
+    profiles:
+      - debug
+    environment:
+      - JENKINS_URL=${JENKINS_URL}
+      - JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME}
+      - JENKINS_AGENT_WORKDIR=${JENKINS_AGENT_WORKDIR}
+      - JENKINS_SECRET=${JENKINS_SECRET}
+    volumes:
+      - agent_workdir:${JENKINS_AGENT_WORKDIR}
+    depends_on:
+      - jenkins
+    networks:
+      - jenkins-network
+      
   nginx:
     container_name: ${NAME}_nginx
     hostname: ${NAME}_nginx
@@ -122,6 +119,7 @@ services:
   rabbitmq:
     container_name: ${NAME}_rabbitmq
     hostname: ${NAME}_rabbitmq
+    restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
@@ -140,6 +138,7 @@ services:
   php-fpm:
     container_name: ${NAME}_php-fpm
     hostname: ${NAME}_php-fpm
+    restart: always
     build:
       context: ./docker/php-fpm
       dockerfile: Dockerfile
@@ -167,3 +166,5 @@ volumes:
   mysql_data:
   cachedata:
   grafana-storage:
+  jenkins_home:
+  agent_workdir:

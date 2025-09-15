@@ -107,9 +107,14 @@ abstract class AbstractHandler implements HandlerInterface
         $data = json_decode($file, true);
 
         foreach ($subway as $item) {
+            $subwayData = $this->findByKeySearch($data, $item['subway_id']);
             $arr[] = [
-                ...$this->findByKeySearch($data, $item['subway_id']),
-                ...$item
+                '_id' => $subwayData['_id'] ?? null,
+                'name' => $subwayData['name'] ?? null, // Явно извлекаем name
+                'crm_id' => $subwayData['crm_id'] ?? null,
+                'subway_id' => $item['subway_id'],
+                'distance_time' => $item['distance_time'] ?? null,
+                'distance_type' => $item['distance_type'] ?? null,
             ];
         }
 
