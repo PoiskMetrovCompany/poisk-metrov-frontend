@@ -24,6 +24,11 @@ class CacheService implements CacheServiceInterface
     {
         foreach (array_keys(CityConst::CITY_CODES) as $cityName) {
             $location = $this->locationRepository->find(['code' => $cityName])->first();
+
+            if (!$location) {
+                continue;
+            }
+
             $residentialComplexes = $this->residentialComplexRepository->list(['location_key' => $location->key]);
             $complexIds = $residentialComplexes->pluck('id')->toArray();
 
@@ -86,7 +91,13 @@ class CacheService implements CacheServiceInterface
     {
         foreach (array_keys(CityConst::CITY_CODES) as $cityName) {
             $location = $this->locationRepository->find(['code' => $cityName])->first();
-            $attributes = $this->residentialComplexRepository->list(!empty($cityName) ? ['location_key' => $location->key] : []);
+
+            $filter = [];
+            if ($location) {
+                $filter = ['location_key' => $location->key];
+            }
+
+            $attributes = $this->residentialComplexRepository->list($filter);
             $cacheCityName = strtoupper($cityName);
 
             if (Cache::has("residentialComplexes{$cacheCityName}")) {

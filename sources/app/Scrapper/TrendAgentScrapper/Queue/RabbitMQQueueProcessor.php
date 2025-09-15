@@ -23,10 +23,10 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     {
         try {
             $this->connection = new AMQPStreamConnection(
-                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', '127.0.0.1')),
-                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT', 5672)),
-                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'guest')),
-                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'guest')),
+                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
+                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
+                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
+                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
                 config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
             );
 
@@ -143,10 +143,10 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     {
         if (!isset($this->connection) || !$this->connection->isConnected()) {
             $this->connection = new AMQPStreamConnection(
-                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', '127.0.0.1')),
-                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT', 5672)),
-                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'guest')),
-                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'guest')),
+                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
+                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
+                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
+                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
                 config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
             );
         }

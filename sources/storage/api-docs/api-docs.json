@@ -1164,11 +1164,11 @@
                     {
                         "name": "key",
                         "in": "query",
-                        "description": "Ключи для удаления анкет(ы)",
+                        "description": "Ключ для удаления анкеты",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0,53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
                         }
                     }
                 ],

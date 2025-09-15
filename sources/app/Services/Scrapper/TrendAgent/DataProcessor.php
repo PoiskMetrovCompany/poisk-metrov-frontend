@@ -325,7 +325,6 @@ class DataProcessor extends AbstractService
             'complex_key' => $complexKey,
             'building_materials' => $buildingMaterials,
             'building_state' => null,
-            'building_phase' => null,
             'building_section' => 'Корпус 1',
             'floors_total' => null,
             'latitude' => $latitude,
@@ -335,10 +334,10 @@ class DataProcessor extends AbstractService
         ];
     }
 
-    private function findLocationKey(?string $districtId): string
+    private function findLocationKey(?string $districtId): ?string
     {
         if (!$districtId) {
-            return '5983801cd07ed144bb7cca26';
+            return null;
         }
 
         $location = Location::where('key', $districtId)->first();
@@ -346,7 +345,7 @@ class DataProcessor extends AbstractService
             return $location->key;
         }
 
-        return '5983801cd07ed144bb7cca26';
+        return null;
     }
 
     private function findBuilderNameForComplex(array $complexData): string
