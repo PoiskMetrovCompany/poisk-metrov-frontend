@@ -22,7 +22,6 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function __construct()
     {
-        // Ленивая инициализация - подключение к RabbitMQ будет выполнено только при необходимости
     }
 
     private function setupExchangesAndQueues(): void
@@ -132,21 +131,13 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     private function ensureConnection(): void
     {
         if (!isset($this->connection) || !$this->connection->isConnected()) {
-            try {
-                $this->connection = new AMQPStreamConnection(
-                    config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', '127.0.0.1')),
-                    config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT', 5672)),
-                    config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'guest')),
-                    config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'guest')),
-                    config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
-                );
-                
-                $this->setupExchangesAndQueues();
-            } catch (Exception $e) {
-                // Логируем ошибку, но не прерываем выполнение
-                Log::warning('RabbitMQ connection failed: ' . $e->getMessage());
-                throw $e;
-            }
+            $this->connection = new AMQPStreamConnection(
+                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
+                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
+                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
+                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
+                config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
+            );
         }
     }
 

@@ -7,9 +7,9 @@ use App\Services\TextService;
 use App\Services\GeoCodeService;
 use App\Services\YandexSearchService;
 use App\Traits\KeyValueHelper;
-use Log;
+use Illuminate\Support\Facades\Log;
 use SimpleXMLElement;
-use Str;
+use Illuminate\Support\Str;
 
 abstract class AbstractBuildingDataParser
 {
@@ -59,6 +59,69 @@ abstract class AbstractBuildingDataParser
         'Таиланд' => 'thailand'
     ];
 
+    /**
+     * Маппинг сокращений городов на полные названия на латинице
+     */
+    protected array $cityAbbreviations = [
+        'СПБ' => 'st-petersburg',
+        'НСК' => 'novosibirsk', 
+        'МСК' => 'moscow',
+        'КРД' => 'krasnodar',
+        'РСТ' => 'rostov',
+        'КЗН' => 'kazan',
+        'ЕКБ' => 'ekaterinburg',
+        'ЧЛБ' => 'chelyabinsk',
+        'КЛГ' => 'kaliningrad',
+        'ВРН' => 'voronezh',
+        'КРМ' => 'crimea',
+        'СЧ' => 'black-sea',
+        'УФА' => 'ufa',
+        'ДВ' => 'far-east',
+        'ТАЙ' => 'thailand'
+    ];
+
+    /**
+     * Маппинг сокращений на полные названия регионов
+     */
+    protected array $regionAbbreviations = [
+        'СПБ' => 'Санкт-Петербург',
+        'НСК' => 'Новосибирская область',
+        'МСК' => 'Москва', 
+        'КРД' => 'Краснодарский край',
+        'РСТ' => 'Ростовская область',
+        'КЗН' => 'Республика Татарстан',
+        'ЕКБ' => 'Свердловская область',
+        'ЧЛБ' => 'Челябинская область',
+        'КЛГ' => 'Калининградская область',
+        'ВРН' => 'Воронежская область',
+        'КРМ' => 'Республика Крым',
+        'СЧ' => 'Сочи',
+        'УФА' => 'Башкортостан Республика',
+        'ДВ' => 'Приморский край',
+        'ТАЙ' => 'Таиланд'
+    ];
+
+    /**
+     * Маппинг сокращений на полные названия столиц
+     */
+    protected array $capitalAbbreviations = [
+        'СПБ' => 'Санкт-Петербург',
+        'НСК' => 'Новосибирск',
+        'МСК' => 'Москва',
+        'КРД' => 'Краснодар', 
+        'РСТ' => 'Ростов-на-Дону',
+        'КЗН' => 'Казань',
+        'ЕКБ' => 'Екатеринбург',
+        'ЧЛБ' => 'Челябинск',
+        'КЛГ' => 'Калининград',
+        'ВРН' => 'Воронеж',
+        'КРМ' => 'Симферополь',
+        'СЧ' => 'Сочи',
+        'УФА' => 'Уфа',
+        'ДВ' => 'Владивосток',
+        'ТАЙ' => 'Пхукет'
+    ];
+
     // Not used in standart data parser
     protected array $defaultDistricts = [
         'Новосибирск' => 'Новосибирский',
@@ -80,6 +143,29 @@ abstract class AbstractBuildingDataParser
 
     abstract public function parse(SimpleXMLElement $apartment);
     abstract public function finish();
+
+    /**
+     * Преобразует сокращения в полные названия
+     */
+    public function expandAbbreviations(string $value): string
+    {
+        // Проверяем сокращения городов
+        if (isset($this->cityAbbreviations[$value])) {
+            return $this->cityAbbreviations[$value];
+        }
+
+        // Проверяем сокращения регионов
+        if (isset($this->regionAbbreviations[$value])) {
+            return $this->regionAbbreviations[$value];
+        }
+
+        // Проверяем сокращения столиц
+        if (isset($this->capitalAbbreviations[$value])) {
+            return $this->capitalAbbreviations[$value];
+        }
+
+        return $value;
+    }
 
     protected function getClearResidentialComplexName(string $name): string
     {
@@ -120,6 +206,9 @@ abstract class AbstractBuildingDataParser
     {
         $region = (string) $apartment->location->region;
 
+        // Преобразуем сокращения в полные названия
+        $region = $this->expandAbbreviations($region);
+
         if (
             ! key_exists($region, $this->regionCodes) ||
             ! key_exists($region, $this->regionCapitals)
@@ -131,6 +220,10 @@ abstract class AbstractBuildingDataParser
         $location['region'] = $region;
         $location['code'] = $this->regionCodes[$region];
         $location['capital'] = $this->regionCapitals[$region];
+        
+        // Преобразуем сокращения в столице
+        $location['capital'] = $this->expandAbbreviations($location['capital']);
+        
         $location['district'] = (string) $apartment->location->{'non-admin-sub-locality'};
         $location['locality'] = (string) $apartment->location->{'locality-name'};
 
