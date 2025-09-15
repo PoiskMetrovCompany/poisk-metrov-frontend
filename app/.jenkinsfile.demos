@@ -92,6 +92,7 @@ pipeline {
                             docker-compose run php-fpm php artisan l5-swagger:generate &&
                             docker-compose run php-fpm php artisan app:update-cache-application-command
                         "
+                    """
                 }
             }
         }
