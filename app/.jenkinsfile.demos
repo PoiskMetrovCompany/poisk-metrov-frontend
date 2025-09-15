@@ -1,0 +1,25 @@
+#!groovy
+properties([disableConcurrentBuilds()])
+pipeline {
+    agent any
+    options {
+        timestamps()
+    }
+
+    stages {
+        stage('Проверка статуса') {
+            steps {
+                sh "ssh -o StrictHostKeyChecking=no root@89.111.153.73 'cd poisk-metrov-frontend && git status'"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Развертывание из development прошло успешно!'
+        }
+        failure {
+            echo 'Ошибка развёртывания!'
+        }
+    }
+}
