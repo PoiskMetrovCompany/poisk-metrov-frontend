@@ -5,6 +5,7 @@ namespace App\Scrapper\TrendAgentScrapper\Queue;
 use App\Core\Interfaces\Scrapper\TrendAgent\QueueProcessorInterface;
 use App\Jobs\TrendAgent\ProcessApartmentsChunk;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use Exception;
@@ -21,20 +22,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function __construct()
     {
-        try {
-            $this->connection = new AMQPStreamConnection(
-                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', '127.0.0.1')),
-                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT', 5672)),
-                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'guest')),
-                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'guest')),
-                config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
-            );
-
-            $this->setupExchangesAndQueues();
-
-        } catch (Exception $e) {
-            throw $e;
-        }
+        // Ленивая инициализация - подключение к RabbitMQ будет выполнено только при необходимости
     }
 
     private function setupExchangesAndQueues(): void
@@ -73,6 +61,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function addToQueue(array $data, string $type, array $metadata = []): void
     {
+        $this->ensureConnection();
         $channel = $this->connection->channel();
 
         $chunks = array_chunk($data, 1000);
@@ -105,6 +94,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function processQueue(string $type): void
     {
+        $this->ensureConnection();
         $channel = $this->connection->channel();
 
         $channel->basic_consume(
@@ -142,13 +132,21 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     private function ensureConnection(): void
     {
         if (!isset($this->connection) || !$this->connection->isConnected()) {
-            $this->connection = new AMQPStreamConnection(
-                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', '127.0.0.1')),
-                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT', 5672)),
-                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'guest')),
-                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'guest')),
-                config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
-            );
+            try {
+                $this->connection = new AMQPStreamConnection(
+                    config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', '127.0.0.1')),
+                    config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT', 5672)),
+                    config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'guest')),
+                    config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'guest')),
+                    config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
+                );
+                
+                $this->setupExchangesAndQueues();
+            } catch (Exception $e) {
+                // Логируем ошибку, но не прерываем выполнение
+                Log::warning('RabbitMQ connection failed: ' . $e->getMessage());
+                throw $e;
+            }
         }
     }
 
@@ -252,6 +250,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     public function getQueueStatus(): array
     {
+        $this->ensureConnection();
         $channel = $this->connection->channel();
         $status = [];
 
