@@ -54,18 +54,18 @@ pipeline {
             }
         }
 
-            stage('Запуск тестов') {
-                steps {
-                    withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh """
-                            sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${DEPLOY_SERVER} "
-                                cd ${DEPLOY_PATH} &&
-                                echo 'TODO: необходимо реализовать ТЕСТЫ'
-                            "
-                        """
-                    }
+        stage('Запуск тестов') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh """
+                        sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${DEPLOY_SERVER} "
+                            cd ${DEPLOY_PATH} &&
+                            echo 'TODO: необходимо реализовать ТЕСТЫ'
+                        "
+                    """
                 }
             }
+        }
 
         stage('Проверка статуса окружения') {
             steps {
