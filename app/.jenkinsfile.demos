@@ -17,7 +17,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
                         sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USERNAME}@${DEPLOY_SERVER} "
-                            cd ${DEPLOY_PATH} && 
+                            cd ${DEPLOY_PATH} &&
+                            git checkout develop &&
                             git status &&
                             docker ps &&
                             echo 'Сервер доступен и готов к развертыванию'
@@ -26,9 +27,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
         stage('Стягивание изменений') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -41,9 +40,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
         stage('Перезапуск окружения') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -56,9 +53,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
             stage('Запуск тестов') {
                 steps {
                     withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -71,9 +66,7 @@ pipeline {
                     }
                 }
             }
-        }
 
-    stages {
         stage('Проверка статуса окружения') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -86,9 +79,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
         stage('Обновление миграций, сброс кэша, генерация документации') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'server-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
