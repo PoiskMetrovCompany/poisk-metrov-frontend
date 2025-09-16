@@ -1157,18 +1157,23 @@
                 "tags": [
                     "CandidateProfiles"
                 ],
-                "summary": "Удаление анкеты кандидата по ключу",
-                "description": "Возвращение JSON объекта",
+                "summary": "Удаление анкет кандидатов по ключам",
+                "description": "Возвращение JSON объекта с результатами удаления",
                 "operationId": "3209f54330664878a4611bfadcf6b2b3",
                 "parameters": [
                     {
-                        "name": "key",
+                        "name": "keys",
                         "in": "query",
-                        "description": "Ключ для удаления анкеты",
+                        "description": "Массив ключей для удаления анкет. Можно передавать несколькими способами:\n *                      1) Через запятую: keys=value1,value2,value3\n *                      2) С квадратными скобками: keys[]=value1&keys[]=value2&keys[]=value3\n *                      3) Одиночный ключ: keys=value1",
                         "required": true,
+                        "style": "form",
+                        "explode": true,
                         "schema": {
-                            "type": "string",
-                            "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "example": "53cbb9a9-4bab-30ce-98f5-ed0277f4ada0"
+                            }
                         }
                     }
                 ],
@@ -1179,17 +1184,53 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "id": {
+                                        "response": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Удалено 2 из 2 анкет"
+                                        },
+                                        "deleted_count": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 2
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Иван Иванов"
+                                        "total_requested": {
+                                            "type": "integer",
+                                            "example": 2
                                         },
-                                        "email": {
+                                        "deleted_keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "not_found_keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "response": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
                                             "type": "string",
-                                            "example": "ivan@example.com"
+                                            "example": "Массив ключей обязателен"
                                         }
                                     },
                                     "type": "object"
@@ -1198,14 +1239,18 @@
                         }
                     },
                     "404": {
-                        "description": "Resource not found",
+                        "description": "Анкеты не найдены",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "error": {
+                                        "response": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
                                             "type": "string",
-                                            "example": "Анкета не найдена"
+                                            "example": "Ни одна из запрошенных анкет не найдена"
                                         }
                                     },
                                     "type": "object"
