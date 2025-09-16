@@ -12,16 +12,21 @@ use App\Repositories\ApartmentRepository;
 use App\Repositories\BuilderRepository;
 use App\Repositories\ResidentialComplexRepository;
 use App\Repositories\LocationRepository;
+use App\Core\Interfaces\Services\TrendAgentMappingServiceInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class DataProcessor extends AbstractService
 {
+    private array $processedLocationKeys = [];
+
     public function __construct(
         protected ApartmentRepository $apartmentRepository,
         protected BuilderRepository $builderRepository,
         protected ResidentialComplexRepository $residentialComplexRepository,
-        protected LocationRepository $locationRepository
+        protected LocationRepository $locationRepository,
+        protected TrendAgentMappingServiceInterface $mappingService
     ) {}
 
     public function processApartmentsBatch(array $apartments, array $metadata): void
@@ -64,7 +69,7 @@ class DataProcessor extends AbstractService
         }
     }
 
-    public function processComplexesBatch(array $complexes, array $metadata): void
+    public function processComplexesBatch(array $complexes, array $metadata, array $processedLocationKeys = []): void
     {
         DB::beginTransaction();
 
@@ -72,7 +77,7 @@ class DataProcessor extends AbstractService
             $processedCount = 0;
 
             foreach ($complexes as $complexData) {
-                $this->processComplex($complexData, $metadata);
+                $this->processComplex($complexData, $metadata, $processedLocationKeys);
                 $processedCount++;
             }
 
@@ -104,19 +109,25 @@ class DataProcessor extends AbstractService
         }
     }
 
-    public function processLocationsBatch(array $locations, array $metadata): void
+    public function processLocationsBatch(array $locations, array $metadata): array
     {
         DB::beginTransaction();
+        $processedKeys = [];
 
         try {
             $processedCount = 0;
 
             foreach ($locations as $locationData) {
-                $this->processLocation($locationData, $metadata);
+                $processedKey = $this->processLocation($locationData, $metadata);
+                if ($processedKey) {
+                    $processedKeys[] = $processedKey;
+                }
                 $processedCount++;
             }
 
             DB::commit();
+            
+            return $processedKeys;
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -144,15 +155,32 @@ class DataProcessor extends AbstractService
         }
     }
 
-    private function processComplex(array $complexData, array $metadata): void
+    private function processComplex(array $complexData, array $metadata, array $processedLocationKeys = []): void
     {
         try {
-            $formattedData = $this->formatComplexData($complexData, $metadata);
+            $formattedData = $this->formatComplexData($complexData, $metadata, $processedLocationKeys);
 
-            ResidentialComplex::updateOrCreate(
+            // Пропускаем комплексы без location_key
+            if (!$formattedData['location_key']) {
+                Log::warning('Skipping complex without location_key', [
+                    'complex_key' => $formattedData['key'],
+                    'complex_name' => $formattedData['name'],
+                    'district_id' => $complexData['district'] ?? null
+                ]);
+                return;
+            }
+
+            $complex = ResidentialComplex::updateOrCreate(
                 ['key' => $formattedData['key']],
                 $formattedData
             );
+            
+            // Принудительно обновляем поля, которые могут быть извлечены из описания
+            $complex->update([
+                'parking' => $formattedData['parking'],
+                'corpuses' => $formattedData['corpuses'],
+                'elevator' => $formattedData['elevator']
+            ]);
 
         } catch (Exception $e) {
 
@@ -164,6 +192,27 @@ class DataProcessor extends AbstractService
     {
         try {
             $formattedData = $this->formatBuildingData($buildingData, $metadata);
+
+            // Пропускаем здания без complex_key
+            if (!$formattedData['complex_key']) {
+                Log::warning('Skipping building without complex_key', [
+                    'building_key' => $formattedData['key'],
+                    'building_section' => $formattedData['building_section'],
+                    'complex_id' => $buildingData['complex'] ?? null
+                ]);
+                return;
+            }
+
+            // Проверяем, существует ли комплекс в базе данных
+            $complexExists = ResidentialComplex::where('key', $formattedData['complex_key'])->exists();
+            if (!$complexExists) {
+                Log::warning('Skipping building - complex not found', [
+                    'building_key' => $formattedData['key'],
+                    'complex_key' => $formattedData['complex_key'],
+                    'building_section' => $formattedData['building_section']
+                ]);
+                return;
+            }
 
             Building::updateOrCreate(
                 ['key' => $formattedData['key']],
@@ -192,7 +241,7 @@ class DataProcessor extends AbstractService
         }
     }
 
-    private function processLocation(array $locationData, array $metadata): void
+    private function processLocation(array $locationData, array $metadata): ?string
     {
         try {
             $formattedData = $this->formatLocationData($locationData, $metadata);
@@ -201,6 +250,9 @@ class DataProcessor extends AbstractService
                 ['key' => $formattedData['key']],
                 $formattedData
             );
+
+            // Возвращаем ключ обработанной локации
+            return $formattedData['key'];
 
         } catch (Exception $e) {
 
@@ -220,12 +272,18 @@ class DataProcessor extends AbstractService
             'building_key_found' => $buildingKey
         ];
 
+        // Получаем названия по ID
+        $renovationName = null;
+        if (isset($data['finishing'])) {
+            $renovationName = $this->mappingService->getFinishingNameById($data['finishing']);
+        }
+
         return [
             'key' => $data['_id'],
             'offer_id' => $data['_id'],
             'complex_id' => null,
             'apartment_type' => 'Квартира',
-            'renovation' => $data['finishing'] ?? null,
+            'renovation' => $renovationName ?? $data['finishing'] ?? null,
             'balcony' => !empty($data['area_balconies_total']),
             'bathroom_unit' => $data['wc_count'] ?? 1,
             'floor' => $data['floor'],
@@ -248,7 +306,7 @@ class DataProcessor extends AbstractService
         ];
     }
 
-    private function formatComplexData(array $data, array $metadata): array
+    private function formatComplexData(array $data, array $metadata, array $processedLocationKeys = []): array
     {
         $address = is_array($data['address']) ? implode(', ', $data['address']) : ($data['address'] ?? '');
         $coordinates = $data['geometry']['coordinates'] ?? [];
@@ -260,12 +318,16 @@ class DataProcessor extends AbstractService
         $metroType = null;
         
         if (isset($data['subway']) && is_array($data['subway']) && count($data['subway']) > 0) {
-            $metroStation = $data['subway'][0]['subway_name'] ?? $data['subway'][0]['subway_id'] ?? null;
+            $subwayId = $data['subway'][0]['subway_id'] ?? null;
+            if ($subwayId) {
+                // Получаем название метро по ID
+                $metroStation = $this->mappingService->getMetroNameById($subwayId);
+            }
             $metroTime = $data['subway'][0]['distance_time'] ?? null;
             $metroType = $data['subway'][0]['distance_type'] ?? null;
         }
 
-        $locationKey = $this->findLocationKey($data['district'] ?? null);
+        $locationKey = $this->findLocationKey($data['district'] ?? null, $processedLocationKeys);
         $builderName = $this->findBuilderNameForComplex($data);
         $infrastructure = $this->formatInfrastructure($data);
 
@@ -288,7 +350,7 @@ class DataProcessor extends AbstractService
             'panorama' => null,
             'corpuses' => $this->formatCorpuses($data),
             'meta' => json_encode($data),
-            'elevator' => null,
+            'elevator' => $this->formatElevator($data),
             'primary_material' => null,
             'floors' => null,
             'primary_ceiling_height' => null,
@@ -311,7 +373,8 @@ class DataProcessor extends AbstractService
             if (is_array($data['building_type'])) {
                 $buildingMaterials = $data['building_type']['name'] ?? $data['building_type'][0] ?? null;
             } else {
-                $buildingMaterials = $data['building_type'];
+                // Получаем название технологии строительства по ID
+                $buildingMaterials = $this->mappingService->getBuildingTypeNameById($data['building_type']);
             }
         }
         
@@ -334,12 +397,18 @@ class DataProcessor extends AbstractService
         ];
     }
 
-    private function findLocationKey(?string $districtId): ?string
+    private function findLocationKey(?string $districtId, array $processedLocationKeys = []): ?string
     {
         if (!$districtId) {
             return null;
         }
 
+        // Ищем ключ в массиве уже обработанных локаций
+        if (in_array($districtId, $processedLocationKeys)) {
+            return $districtId;
+        }
+
+        // Если не нашли в обработанных, на всякий случай проверяем в БД (для обратной совместимости)
         $location = Location::where('key', $districtId)->first();
         if ($location) {
             return $location->key;
@@ -406,6 +475,43 @@ class DataProcessor extends AbstractService
     {
         $infrastructure = [];
         
+        // Извлекаем информацию об инфраструктуре из описания
+        if (isset($data['description'])) {
+            $description = strip_tags($data['description']);
+            $infrastructure['description'] = $description;
+            
+            // Ищем упоминания инфраструктуры в тексте
+            $infrastructureItems = [];
+            
+            // Паттерны для поиска инфраструктуры
+            $patterns = [
+                'магазин' => 'магазин',
+                'аптека' => 'аптека', 
+                'школа' => 'школа',
+                'детский сад' => 'детский сад',
+                'поликлиника' => 'поликлиника',
+                'торговый центр' => 'торговый центр',
+                'кафе' => 'кафе',
+                'ресторан' => 'ресторан',
+                'банк' => 'банк',
+                'спорт' => 'спортивные площадки',
+                'парк' => 'парк',
+                'метро' => 'метро',
+                'транспорт' => 'общественный транспорт'
+            ];
+            
+            foreach ($patterns as $pattern => $label) {
+                if (stripos($description, $pattern) !== false) {
+                    $infrastructureItems[] = $label;
+                }
+            }
+            
+            if (!empty($infrastructureItems)) {
+                $infrastructure['items'] = array_unique($infrastructureItems);
+            }
+        }
+        
+        // Проверяем старые поля для обратной совместимости
         if (isset($data['amenities']) && is_array($data['amenities'])) {
             $infrastructure['amenities'] = $data['amenities'];
         }
@@ -419,8 +525,32 @@ class DataProcessor extends AbstractService
 
     private function formatParking(array $data): ?string
     {
+        // Проверяем старое поле для обратной совместимости
         if (isset($data['parking']) && !empty($data['parking'])) {
             return is_array($data['parking']) ? implode(', ', $data['parking']) : $data['parking'];
+        }
+        
+        // Извлекаем информацию о паркинге из описания
+        if (isset($data['description'])) {
+            $description = strip_tags($data['description']);
+            
+            // Паттерны для поиска информации о паркинге
+            $parkingPatterns = [
+                '/(\d+)\s*машиномест/' => '$1 машиномест',
+                '/(\d+)\s*место/' => '$1 место',
+                '/подземный паркинг/' => 'подземный паркинг',
+                '/наземный паркинг/' => 'наземный паркинг',
+                '/двухуровневый паркинг/' => 'двухуровневый паркинг',
+                '/многоуровневый паркинг/' => 'многоуровневый паркинг',
+                '/стоянка для авто/' => 'стоянка для авто',
+                '/парковка/' => 'парковка'
+            ];
+            
+            foreach ($parkingPatterns as $pattern => $replacement) {
+                if (preg_match($pattern, $description, $matches)) {
+                    return str_replace('$1', $matches[1] ?? '', $replacement);
+                }
+            }
         }
         
         return null;
@@ -428,6 +558,7 @@ class DataProcessor extends AbstractService
 
     private function formatCorpuses(array $data): int
     {
+        // Проверяем старые поля для обратной совместимости
         if (isset($data['corpuses']) && is_numeric($data['corpuses'])) {
             return (int) $data['corpuses'];
         }
@@ -436,7 +567,53 @@ class DataProcessor extends AbstractService
             return count($data['buildings']);
         }
         
+        // Извлекаем информацию о корпусах из описания
+        if (isset($data['description'])) {
+            $description = strip_tags($data['description']);
+            
+            // Паттерны для поиска информации о корпусах
+            $corpusesPatterns = [
+                '/(\d+)\s*корпус/' => '$1',
+                '/(\d+)\s*секци/' => '$1',
+                '/(\d+)\s*дом/' => '$1',
+                '/многосекционный/' => '2', // предполагаем минимум 2 секции
+                '/односекционный/' => '1'
+            ];
+            
+            foreach ($corpusesPatterns as $pattern => $replacement) {
+                if (preg_match($pattern, $description, $matches)) {
+                    return (int) str_replace('$1', $matches[1] ?? '', $replacement);
+                }
+            }
+        }
+        
         return 0;
+    }
+
+    private function formatElevator(array $data): ?string
+    {
+        // Извлекаем информацию о лифтах из описания
+        if (isset($data['description'])) {
+            $description = strip_tags($data['description']);
+            
+            // Паттерны для поиска информации о лифтах
+            $elevatorPatterns = [
+                '/(\d+)\s*лифт/' => '$1 лифт',
+                '/пассажирский и грузовой лифты/' => 'пассажирский и грузовой лифты',
+                '/пассажирский лифт/' => 'пассажирский лифт',
+                '/грузовой лифт/' => 'грузовой лифт',
+                '/современные лифты/' => 'современные лифты',
+                '/лифты/' => 'лифты'
+            ];
+            
+            foreach ($elevatorPatterns as $pattern => $replacement) {
+                if (preg_match($pattern, $description, $matches)) {
+                    return str_replace('$1', $matches[1] ?? '', $replacement);
+                }
+            }
+        }
+        
+        return null;
     }
 
     private function findComplexKeyForApartment(array $apartmentData): ?string
@@ -516,13 +693,22 @@ class DataProcessor extends AbstractService
 
     private function formatLocationData(array $data, array $metadata): array
     {
+        // Получаем название региона по ID, если есть
+        $regionName = $data['region'] ?? $metadata['city'];
+        if (isset($data['region']) && is_string($data['region'])) {
+            $mappedRegionName = $this->mappingService->getRegionNameById($data['region']);
+            if ($mappedRegionName) {
+                $regionName = $mappedRegionName;
+            }
+        }
+
         return [
             'key' => $data['_id'],
             'country' => 'Россия',
-            'region' => $data['region'] ?? $metadata['city'],
+            'region' => $regionName,
             'code' => $this->generateLocationCode($data),
             'capital' => $metadata['city'],
-            'district' => $data['district'] ?? '',
+            'district' => $data['name'] ?? '',
             'locality' => $data['locality'] ?? '',
         ];
     }

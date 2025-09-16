@@ -12,7 +12,8 @@ use Exception;
 
 class RabbitMQQueueProcessor implements QueueProcessorInterface
 {
-    private AMQPStreamConnection $connection;
+    private ?AMQPStreamConnection $connection = null;
+    private $channel = null; // Изменение: канал теперь является свойством класса
     private const EXCHANGE_NAME = 'trend_agent_exchange';
     private const APARTMENTS_QUEUE = 'trend_agent.apartments';
     private const COMPLEXES_QUEUE = 'trend_agent.complexes';
@@ -26,77 +27,92 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
 
     private function setupExchangesAndQueues(): void
     {
-        $channel = $this->connection->channel();
+        try {
+            if ($this->channel === null) {
+                 $this->ensureConnection(); // Убеждаемся, что соединение и канал установлены
+            }
 
-        $channel->exchange_declare(
-            self::EXCHANGE_NAME,
-            'direct',
-            false, true, false
-        );
-
-        $queues = [
-            self::APARTMENTS_QUEUE => 'apartments.process',
-            self::COMPLEXES_QUEUE => 'complexes.process',
-            self::BUILDERS_QUEUE => 'builders.process',
-            self::LOCATIONS_QUEUE => 'locations.process',
-            self::BUILDINGS_QUEUE => 'buildings.process'
-        ];
-
-        foreach ($queues as $queueName => $routingKey) {
-            $channel->queue_declare(
-                $queueName,
-                false, true, false, false
-            );
-
-            $channel->queue_bind(
-                $queueName,
+            $this->channel->exchange_declare( // Изменение: используем $this->channel
                 self::EXCHANGE_NAME,
-                $routingKey
+                'direct',
+                false, true, false
             );
-        }
 
-        $channel->close();
+            $queues = [
+                self::APARTMENTS_QUEUE => 'apartments.process',
+                self::COMPLEXES_QUEUE => 'complexes.process',
+                self::BUILDERS_QUEUE => 'builders.process',
+                self::LOCATIONS_QUEUE => 'locations.process',
+                self::BUILDINGS_QUEUE => 'buildings.process'
+            ];
+
+            foreach ($queues as $queueName => $routingKey) {
+                $this->channel->queue_declare( // Изменение: используем $this->channel
+                    $queueName,
+                    false, true, false, false
+                );
+
+                $this->channel->queue_bind( // Изменение: используем $this->channel
+                    $queueName,
+                    self::EXCHANGE_NAME,
+                    $routingKey
+                );
+            }
+        } catch (Exception $e) {
+            Log::error("Failed to setup RabbitMQ exchanges and queues: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e; // Перебрасываем исключение, так как без этого работать не сможем
+        }
     }
 
     public function addToQueue(array $data, string $type, array $metadata = []): void
     {
         $this->ensureConnection();
-        $channel = $this->connection->channel();
+
+        $jobClass = $this->getJobClassForQueue($this->getQueueNameByType($type));
+        if (!$jobClass) {
+            Log::warning('No job class found for type: ' . $type);
+            return;
+        }
+
+        $parameterName = $this->getParameterNameForQueue($this->getQueueNameByType($type));
 
         $chunks = array_chunk($data, 1000);
 
         foreach ($chunks as $chunkIndex => $chunk) {
-            $messageData = [
-                'data' => $chunk,
-                'metadata' => array_merge($metadata, [
-                    'type' => $type,
-                    'chunk_index' => $chunkIndex,
-                    'total_chunks' => count($chunks),
-                    'timestamp' => now()->toISOString()
-                ])
-            ];
+            $chunkMetadata = array_merge($metadata, [
+                'type' => $type,
+                'chunk_index' => $chunkIndex,
+                'total_chunks' => count($chunks),
+                'timestamp' => now()->toISOString()
+            ]);
 
-            $message = new AMQPMessage(
-                json_encode($messageData),
-                ['delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT]
-            );
+            $job = new $jobClass([
+                $parameterName => $chunk
+            ], $chunkMetadata);
 
-            $channel->basic_publish(
-                $message,
-                self::EXCHANGE_NAME,
-                $this->getRoutingKeyByType($type)
-            );
+            try {
+                Queue::push($job);
+            } catch (Exception $e) {
+                Log::error('Failed to push job to queue', [
+                    'job' => $jobClass,
+                    'error' => $e->getMessage(),
+                    'metadata' => $chunkMetadata,
+                ]);
+            }
         }
-
-        $channel->close();
     }
 
     public function processQueue(string $type): void
     {
         $this->ensureConnection();
-        $channel = $this->connection->channel();
+        // Изменение: channel теперь является свойством класса, не создаем новый
+        if ($this->channel === null) {
+            throw new Exception("RabbitMQ channel not initialized.");
+        }
 
-        $channel->basic_consume(
+        $this->channel->basic_consume( // Изменение: используем $this->channel
             self::APARTMENTS_QUEUE,
             '',
             false, false, false, false,
@@ -105,11 +121,11 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
             }
         );
 
-        while ($channel->is_consuming()) {
-            $channel->wait();
+        while ($this->channel->is_consuming()) { // Изменение: используем $this->channel
+            $this->channel->wait();
         }
 
-        $channel->close();
+        // Изменение: канал не закрывается здесь
     }
 
     private function processMessage(AMQPMessage $message, string $type): void
@@ -131,28 +147,44 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     private function ensureConnection(): void
     {
         if (!isset($this->connection) || !$this->connection->isConnected()) {
-            $this->connection = new AMQPStreamConnection(
-                config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
-                config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
-                config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
-                config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
-                config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
-            );
+            try {
+                $this->connection = new AMQPStreamConnection(
+                    config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
+                    config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
+                    config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
+                    config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
+                    config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
+                );
+                $this->channel = $this->connection->channel(); // Изменение: создаем канал при установлении соединения
+                $this->setupExchangesAndQueues(); // Изменение: вызываем setupExchangesAndQueues здесь
+            } catch (Exception $e) {
+                Log::error("Failed to connect to RabbitMQ: " . $e->getMessage(), [
+                    'host' => config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
+                    'port' => config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
+                    'user' => config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
+                    'vhost' => config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/')),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                throw $e; // Перебрасываем исключение, чтобы остановить процесс, если нет подключения
+            }
         }
     }
 
     public function processMessages(string $queueName, int $limit = 10): int
     {
         $this->ensureConnection();
-        $channel = $this->connection->channel();
+        // Изменение: channel теперь является свойством класса, не создаем новый
+        if ($this->channel === null) {
+            throw new Exception("RabbitMQ channel not initialized.");
+        }
         
         $processed = 0;
         
         try {
-            $channel->queue_declare($queueName, false, true, false, false);
+            $this->channel->queue_declare($queueName, false, true, false, false); // Изменение: используем $this->channel
             
             while ($processed < $limit) {
-                $message = $channel->basic_get($queueName, true);
+                $message = $this->channel->basic_get($queueName, true); // Изменение: используем $this->channel
                 
                 if (!$message) {
                     break;
@@ -165,7 +197,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
         } catch (\Exception $e) {
             throw $e;
         } finally {
-            $channel->close();
+            // Изменение: канал не закрывается здесь
         }
         
         return $processed;
@@ -215,14 +247,23 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
         };
     }
 
+    private function getQueueNameByType(string $type): string
+    {
+        return match ($type) {
+            'apartments' => self::APARTMENTS_QUEUE,
+            'blocks', 'complexes' => self::COMPLEXES_QUEUE,
+            'builders' => self::BUILDERS_QUEUE,
+            'regions', 'subways' => self::LOCATIONS_QUEUE,
+            'buildings' => self::BUILDINGS_QUEUE,
+            default => self::APARTMENTS_QUEUE,
+        };
+    }
+
     private function getParameterNameForQueue(string $queueName): string
     {
         return match ($queueName) {
             self::APARTMENTS_QUEUE => 'apartments',
-            self::COMPLEXES_QUEUE => 'complexes',
-            self::BUILDERS_QUEUE => 'builders',
             self::LOCATIONS_QUEUE => 'locations',
-            self::BUILDINGS_QUEUE => 'buildings',
             default => 'apartments'
         };
     }
@@ -231,10 +272,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     {
         return match ($queueName) {
             self::APARTMENTS_QUEUE => \App\Jobs\TrendAgent\ProcessApartmentsChunk::class,
-            self::COMPLEXES_QUEUE => \App\Jobs\TrendAgent\ProcessComplexesChunk::class,
-            self::BUILDERS_QUEUE => \App\Jobs\TrendAgent\ProcessBuildersChunk::class,
             self::LOCATIONS_QUEUE => \App\Jobs\TrendAgent\ProcessLocationsChunk::class,
-            self::BUILDINGS_QUEUE => \App\Jobs\TrendAgent\ProcessBuildingsChunk::class,
             default => null
         };
     }
@@ -242,7 +280,10 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
     public function getQueueStatus(): array
     {
         $this->ensureConnection();
-        $channel = $this->connection->channel();
+        // Изменение: channel теперь является свойством класса, не создаем новый
+        if ($this->channel === null) {
+            throw new Exception("RabbitMQ channel not initialized.");
+        }
         $status = [];
 
         $queues = [
@@ -254,21 +295,39 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
         ];
 
         foreach ($queues as $queueName) {
-            $queueInfo = $channel->queue_declare($queueName, true);
-            $status[$queueName] = [
-                'message_count' => $queueInfo[0],
-                'consumer_count' => $queueInfo[1]
-            ];
+            try {
+                list($queue, $messageCount, $consumerCount) = $this->channel->queue_declare($queueName, false, true, false, false);
+                $status[$queueName] = [
+                    'message_count' => $messageCount,
+                    'consumer_count' => $consumerCount,
+                ];
+            } catch (Exception $e) {
+                $status[$queueName] = [
+                    'message_count' => 'Error: ' . $e->getMessage(),
+                    'consumer_count' => 'Error',
+                ];
+            }
         }
 
-        $channel->close();
+        // Изменение: канал не закрывается здесь
         return $status;
     }
 
     public function __destruct()
     {
+        if (isset($this->channel) && $this->channel->is_open()) { // Изменение: закрываем канал, если он открыт
+            try {
+                $this->channel->close();
+            } catch (Exception $e) {
+                // Игнорируем ошибки при закрытии канала, так как они могут возникнуть, если соединение уже потеряно
+            }
+        }
         if (isset($this->connection) && $this->connection->isConnected()) {
-            $this->connection->close();
+            try {
+                $this->connection->close();
+            } catch (Exception $e) {
+                // Игнорируем ошибки при закрытии соединения
+            }
         }
     }
 }

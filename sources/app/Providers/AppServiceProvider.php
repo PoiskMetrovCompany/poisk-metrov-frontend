@@ -141,6 +141,8 @@ use App\Services\TextService;
 use App\Services\UserService;
 use App\Services\VisitedPagesService;
 use App\Services\YandexSearchService;
+use App\Services\TrendAgentMappingService;
+use App\Core\Interfaces\Services\TrendAgentMappingServiceInterface;
 use Arhitector\Yandex\Disk;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
@@ -343,6 +345,11 @@ class AppServiceProvider extends ServiceProvider
     final public function registerCatalogueStatisticService(): void
     {
         $this->app->singleton(CatalogueStatisticServiceInterface::class, \App\Services\CatalogueStatisticService::class);
+    }
+
+    final public function registerTrendAgentMappingService(): void
+    {
+        $this->app->singleton(TrendAgentMappingServiceInterface::class, TrendAgentMappingService::class);
     }
 
     /// REPOSITORIES
@@ -553,6 +560,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerFilterService();
         $this->registerComparisonService();
         $this->registerCatalogueStatisticService();
+        $this->registerTrendAgentMappingService();
 
         /// Repositories
         $this->registerReservationRepository();

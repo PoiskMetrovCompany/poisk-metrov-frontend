@@ -45,7 +45,8 @@ class TrendAgentScrapperServiceProvider extends ServiceProvider
                 $app->make(\App\Repositories\ApartmentRepository::class),
                 $app->make(\App\Repositories\BuilderRepository::class),
                 $app->make(\App\Repositories\ResidentialComplexRepository::class),
-                $app->make(\App\Repositories\LocationRepository::class)
+                $app->make(\App\Repositories\LocationRepository::class),
+                $app->make(\App\Core\Interfaces\Services\TrendAgentMappingServiceInterface::class)
             );
         });
 

@@ -21,13 +21,13 @@ class ProcessLocationsChunk implements ShouldQueue
     private array $locations;
     private array $metadata;
 
-    public function __construct(array $locations, array $metadata)
+    public function __construct(array $data, array $metadata)
     {
-        $this->locations = $locations;
+        $this->locations = $data['locations'];
         $this->metadata = $metadata;
 
-        $this->queue = 'trend-agent-locations';
-        $this->delay = $this->calculateDelay();
+        $this->onQueue('trend_agent.locations');
+        $this->delay($this->calculateDelay());
     }
 
     private function calculateDelay(): int

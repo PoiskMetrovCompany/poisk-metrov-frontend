@@ -7,6 +7,7 @@ use App\Scrapper\TrendAgentScrapper\Queue\RabbitMQQueueProcessor;
 use App\Scrapper\TrendAgentScrapper\TrendAgentUrlManager;
 use App\Core\Common\Feeds\TrendAgentFeedConst;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class TrendAgentScrapperService
@@ -39,6 +40,7 @@ class TrendAgentScrapperService
             'processed_urls' => [],
             'errors' => []
         ];
+        $processedLocationKeys = []; // Массив для хранения ключей обработанных локаций
 
         try {
 
@@ -53,7 +55,14 @@ class TrendAgentScrapperService
 
             foreach ($feedUrls as $feedType => $feedUrl) {
                 try {
-                    $this->processFeed($feedType, $feedUrl, $city, $sessionId);
+                    if ($feedType === 'regions') {
+                        $processedKeys = $this->processFeed($feedType, $feedUrl, $city, $sessionId);
+                        if (is_array($processedKeys)) {
+                            $processedLocationKeys = array_merge($processedLocationKeys, $processedKeys);
+                        }
+                    } else {
+                        $this->processFeed($feedType, $feedUrl, $city, $sessionId, $processedLocationKeys);
+                    }
                     $results['processed_urls'][] = $feedUrl;
 
                 } catch (Exception $e) {
@@ -95,27 +104,53 @@ class TrendAgentScrapperService
         return $allResults;
     }
 
-    private function processFeed(string $feedType, string $feedUrl, string $city, string $sessionId): void
+    private function processFeed(string $feedType, string $feedUrl, string $city, string $sessionId, array $processedLocationKeys = []): ?array
     {
 
         $feedData = $this->downloadManager->downloadJson($feedUrl);
 
-        $chunks = array_chunk($feedData, config('trend-agent.processing.chunk_size', 1000));
+        $metadata = [
+            'type' => $feedType,
+            'city' => $city,
+            'session_id' => $sessionId,
+            'timestamp' => now()->toISOString(),
+            'feed_url' => $feedUrl
+        ];
 
-        foreach ($chunks as $chunkIndex => $chunk) {
-            $metadata = [
-                'type' => $feedType,
-                'city' => $city,
-                'session_id' => $sessionId,
-                'chunk_index' => $chunkIndex,
-                'total_chunks' => count($chunks),
-                'timestamp' => now()->toISOString(),
-                'feed_url' => $feedUrl
-            ];
-
-            $this->queueProcessor->addToQueue($chunk, $feedType, $metadata);
+        // Обрабатываем все, кроме квартир, синхронно, чтобы обеспечить наличие данных для внешних ключей
+        if ($feedType === 'regions') {
+            return $this->dataProcessor->processLocationsBatch($feedData, $metadata);
         }
 
+        if ($feedType === 'builders') {
+            $this->dataProcessor->processBuildersBatch($feedData, $metadata);
+            return null;
+        }
+
+        if ($feedType === 'blocks') {
+            $this->dataProcessor->processComplexesBatch($feedData, $metadata, $processedLocationKeys);
+            return null;
+        }
+
+        if ($feedType === 'buildings') {
+            $this->dataProcessor->processBuildingsBatch($feedData, $metadata);
+            return null;
+        }
+
+        // В очередь отправляем только квартиры
+        if ($feedType === 'apartments') {
+            $chunks = array_chunk($feedData, config('trend-agent.processing.chunk_size', 1000));
+
+            foreach ($chunks as $chunkIndex => $chunk) {
+                $chunkMetadata = array_merge($metadata, [
+                    'chunk_index' => $chunkIndex,
+                    'total_chunks' => count($chunks),
+                ]);
+
+                $this->queueProcessor->addToQueue($chunk, $feedType, $chunkMetadata);
+            }
+        }
+        return null;
     }
 
     private function getCityUrl(string $city): ?string
@@ -149,7 +184,8 @@ class TrendAgentScrapperService
     private function extractFeedUrls(array $cityData): array
     {
         $feedUrls = [];
-        $allowedFeeds = ['apartments', 'blocks', 'builders', 'regions', 'buildings'];
+        // Изменение: 'regions' теперь первый в списке, чтобы локации обрабатывались раньше всего
+        $allowedFeeds = ['regions', 'builders', 'blocks', 'buildings', 'apartments'];
 
         foreach ($cityData as $feed) {
             if (isset($feed['name']) && isset($feed['url']) && in_array($feed['name'], $allowedFeeds)) {
