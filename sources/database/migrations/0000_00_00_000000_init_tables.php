@@ -839,5 +839,6 @@ return new class extends Migration {
         Schema::dropIfExists('builders');
         Schema::dropIfExists('authorization_calls');
         Schema::dropIfExists('accounts');
+        Schema::dropIfExists('cities');
     }
 };

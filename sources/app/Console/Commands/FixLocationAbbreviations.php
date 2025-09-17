@@ -23,82 +23,44 @@ class FixLocationAbbreviations extends Command
 
     /**
      * Маппинг сокращений на полные названия
+     * Поддерживает все города из TrendAgent
      */
     private array $abbreviations = [
+        // TrendAgent города
         'nsk' => [
             'region' => 'Новосибирская область',
             'capital' => 'Новосибирск',
             'code' => 'novosibirsk'
         ],
-        'СПБ' => [
+        'spb' => [
             'region' => 'Санкт-Петербург',
             'capital' => 'Санкт-Петербург', 
             'code' => 'st-petersburg'
         ],
-        'МСК' => [
+        'msk' => [
             'region' => 'Москва',
             'capital' => 'Москва',
             'code' => 'moscow'
         ],
-        'КРД' => [
+        'krd' => [
             'region' => 'Краснодарский край',
             'capital' => 'Краснодар',
             'code' => 'krasnodar'
         ],
-        'РСТ' => [
+        'rst' => [
             'region' => 'Ростовская область',
             'capital' => 'Ростов-на-Дону',
             'code' => 'rostov'
         ],
-        'КЗН' => [
+        'kzn' => [
             'region' => 'Республика Татарстан',
             'capital' => 'Казань',
             'code' => 'kazan'
         ],
-        'ЕКБ' => [
+        'ekb' => [
             'region' => 'Свердловская область',
             'capital' => 'Екатеринбург',
             'code' => 'ekaterinburg'
-        ],
-        'ЧЛБ' => [
-            'region' => 'Челябинская область',
-            'capital' => 'Челябинск',
-            'code' => 'chelyabinsk'
-        ],
-        'КЛГ' => [
-            'region' => 'Калининградская область',
-            'capital' => 'Калининград',
-            'code' => 'kaliningrad'
-        ],
-        'ВРН' => [
-            'region' => 'Воронежская область',
-            'capital' => 'Воронеж',
-            'code' => 'voronezh'
-        ],
-        'КРМ' => [
-            'region' => 'Республика Крым',
-            'capital' => 'Симферополь',
-            'code' => 'crimea'
-        ],
-        'СЧ' => [
-            'region' => 'Сочи',
-            'capital' => 'Сочи',
-            'code' => 'black-sea'
-        ],
-        'УФА' => [
-            'region' => 'Башкортостан Республика',
-            'capital' => 'Уфа',
-            'code' => 'ufa'
-        ],
-        'ДВ' => [
-            'region' => 'Приморский край',
-            'capital' => 'Владивосток',
-            'code' => 'far-east'
-        ],
-        'ТАЙ' => [
-            'region' => 'Таиланд',
-            'capital' => 'Пхукет',
-            'code' => 'thailand'
         ]
     ];
 

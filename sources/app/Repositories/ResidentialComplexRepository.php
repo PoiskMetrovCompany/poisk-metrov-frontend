@@ -54,50 +54,25 @@ final class ResidentialComplexRepository implements ResidentialComplexRepository
     }
     public function getBestOffers(string $cityCode): Collection
     {
-        $residentialComplexes = $this->model::where('on_main_page', true);
-        $residentialComplexes->whereNotIn('builder', $this->model::$privateBuilders);
-        $residentialComplexes->whereHas('location', function ($query) use ($cityCode) {
-            return $query->where('code', $cityCode);
-        })
-            ->with('apartments')
-            ->withCount('apartments')
-            ->orderBy('apartments_count', 'DESC')
-            ->where(function (Builder $q) {
-                $q->has('apartments')->orHas('apartmentsByKey');
-            });
+        $bestOfferComplexKeys = BestOffer::where('location_code', $cityCode)
+            ->whereNull('deleted_at')
+            ->pluck('complex_key')
+            ->filter()
+            ->toArray();
 
-        $countQuery = clone $residentialComplexes;
-        $count = $countQuery->count();
-
-        if ($count == 0) {
-            $request = BestOffer::where('location_code', $cityCode);
-            $complexCodes = $request->get()->pluck('complex_code')->toArray();
-
-            if (count($complexCodes)) {
-                $residentialComplexes = $this->model::whereIn('code', $complexCodes);
-
-                $residentialComplexes->with('apartments')
-                    ->withCount('apartments')
-                    ->orderBy('apartments_count', 'DESC')
-                    ->where(function (Builder $q) {
-                        $q->has('apartments')->orHas('apartmentsByKey');
-                    });
-            } else {
-                $residentialComplexes = $this->model::whereHas('location', function ($query) use ($cityCode) {
-                    return $query->where('code', $cityCode);
-                });
-
-                $residentialComplexes->with('apartments')
-                    ->withCount('apartments')
-                    ->orderBy('apartments_count', 'DESC')
-                    ->limit(12)
-                    ->where(function (Builder $q) {
-                        $q->has('apartments')->orHas('apartmentsByKey');
-                    });
-            }
+        if (count($bestOfferComplexKeys) > 0) {
+            return $this->model::whereIn('key', $bestOfferComplexKeys)
+                ->whereNotIn('builder', $this->model::$privateBuilders)
+                ->where(function (Builder $q) {
+                    $q->has('apartments')->orHas('apartmentsByKey');
+                })
+                ->with('apartmentsByKey')
+                ->withCount('apartmentsByKey')
+                ->orderBy('apartments_by_key_count', 'DESC')
+                ->get();
         }
 
-        return $residentialComplexes->get();
+        return $this->model::whereRaw('1 = 0')->get();
     }
 
     public function cityResidentialComplexCount(string $cityCode): int
