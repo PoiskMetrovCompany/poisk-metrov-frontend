@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources\CandidateProfiles;
 
+use App\Models\Account;
 use App\Models\MaritalStatuses;
+use App\Models\ROPCandidate;
 use App\Models\Vacancies;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,7 +24,7 @@ class CandidateProfileResource extends JsonResource
                 'key' => $this->marital_statuses_key,
                 'attributes' => MaritalStatuses::where(['key' => $this->marital_statuses_key])->first(),
             ],
-            'work_team' => $this->work_team,
+            'work_team' => $this->getWorkTeamString(),
             'status' => $this->status,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
@@ -67,5 +69,27 @@ class CandidateProfileResource extends JsonResource
             'comment' => $this->comment,
             'created_at' => $this->created_at,
         ];
+    }
+
+    /**
+     * Get work team string in format "LastName F."
+     */
+    private function getWorkTeamString()
+    {
+        $ropCandidate = $this->ropCandidates->first();
+
+        if (!$ropCandidate) {
+            return '';
+        }
+
+        $ropAccount = $ropCandidate->ropAccount;
+
+        if (!$ropAccount) {
+            return '';
+        }
+
+        $firstNameInitial = mb_substr($ropAccount->first_name, 0, 1);
+
+        return $ropAccount->last_name . ' ' . $firstNameInitial . '.';
     }
 }

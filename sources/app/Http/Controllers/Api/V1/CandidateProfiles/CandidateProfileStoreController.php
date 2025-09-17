@@ -8,6 +8,7 @@ use App\Http\Requests\Accounts\AccountLoginRequest;
 use App\Http\Requests\CandidateProfiles\CandidateProfilesStoreRequest;
 use App\Http\Resources\CandidateProfiles\CandidateProfileResource;
 use App\Jobs\SetChangesCandidatesQuestionnaireQueue;
+use App\Models\ROPCandidate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -135,6 +136,18 @@ class CandidateProfileStoreController extends Controller
         $attributes['key'] = Str::uuid()->toString();
         $candidateProfile = $this->candidateProfilesRepository->store($attributes);
 
+        // Получаем ключ РОПа из work_team (теперь там ключ вместо ФИО)
+        $ropKey = $attributes['work_team'] ?? null;
+
+        // Если есть ключ РОПа - создаем связь в rop_candidates
+        if ($ropKey) {
+            ROPCandidate::create([
+                'key' => Str::uuid()->toString(),
+                'rop_key' => $ropKey,
+                'candidate_key' => $candidateProfile->key,
+            ]);
+        }
+
         // SetChangesCandidatesQuestionnaireQueue::dispatch($candidateProfile);
 
         // DB::connection('pm-log')
@@ -147,7 +160,7 @@ class CandidateProfileStoreController extends Controller
         //         'created_at' => $candidateProfile->created_at
         //     ]);
 
-        $dataCollection = new CandidateProfileResource($candidateProfile);
+        $dataCollection = new CandidateProfileResource($candidateProfile->load('ropCandidates.ropAccount'));
 
         return new JsonResponse(
             data: $dataCollection,

@@ -59,7 +59,7 @@ class CandidateProfileReadController extends Controller
     public function __invoke(Request $request)
     {
         $candidateProfile = $this->candidateProfilesRepository->findByKey($request->key);
-        $dataCollection = new CandidateProfileResource($candidateProfile);
+        $dataCollection = new CandidateProfileResource($candidateProfile->load('ropCandidates.ropAccount'));
 
         return new JsonResponse(
             data: [

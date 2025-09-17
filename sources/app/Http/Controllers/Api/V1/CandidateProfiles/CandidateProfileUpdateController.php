@@ -131,7 +131,7 @@ class CandidateProfileUpdateController extends Controller
         $attributes = $request->validated();
         $candidateProfile =  $this->candidateProfilesRepository->findByKey($attributes['key']);
         $repository = $this->candidateProfilesRepository->update($candidateProfile, $attributes);
-        $dataCollection = new CandidateProfileResource($repository);
+        $dataCollection = new CandidateProfileResource($repository->load('ropCandidates.ropAccount'));
 
         return new JsonResponse(
             data: $dataCollection,

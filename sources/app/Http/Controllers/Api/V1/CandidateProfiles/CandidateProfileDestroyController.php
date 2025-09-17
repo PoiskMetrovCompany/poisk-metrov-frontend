@@ -80,7 +80,7 @@ class CandidateProfileDestroyController extends Controller
             );
         }
 
-        $dataCollection = new CandidateProfileResource($candidateProfile);
+        $dataCollection = new CandidateProfileResource($candidateProfile->load('ropCandidates.ropAccount'));
         $deleteResult = $candidateProfile->delete();
 
         return new JsonResponse(
