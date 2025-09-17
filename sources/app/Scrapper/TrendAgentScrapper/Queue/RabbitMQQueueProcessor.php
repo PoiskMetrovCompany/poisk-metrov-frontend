@@ -151,8 +151,8 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
                 $this->connection = new AMQPStreamConnection(
                     config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
                     config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
-                    config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
-                    config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'lama22')),
+                    config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'rq_raptor')),
+                    config('queue.connections.rabbitmq.password', env('RABBITMQ_PASSWORD', 'rq_lama22')),
                     config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/'))
                 );
                 $this->channel = $this->connection->channel(); // Изменение: создаем канал при установлении соединения
@@ -161,7 +161,7 @@ class RabbitMQQueueProcessor implements QueueProcessorInterface
                 Log::error("Failed to connect to RabbitMQ: " . $e->getMessage(), [
                     'host' => config('queue.connections.rabbitmq.host', env('RABBITMQ_HOST', 'poisk-metrov_rabbitmq')),
                     'port' => config('queue.connections.rabbitmq.port', env('RABBITMQ_PORT_CLIENT', 5672)),
-                    'user' => config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'raptor')),
+                    'user' => config('queue.connections.rabbitmq.username', env('RABBITMQ_USER', 'rq_raptor')),
                     'vhost' => config('queue.connections.rabbitmq.vhost', env('RABBITMQ_VHOST', '/')),
                     'trace' => $e->getTraceAsString()
                 ]);
