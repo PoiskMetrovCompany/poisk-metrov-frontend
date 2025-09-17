@@ -21,13 +21,13 @@ class ProcessApartmentsChunk implements ShouldQueue
     private array $apartments;
     private array $metadata;
 
-    public function __construct(array $apartments, array $metadata)
+    public function __construct(array $data, array $metadata)
     {
-        $this->apartments = $apartments;
+        $this->apartments = $data['apartments'];
         $this->metadata = $metadata;
 
-        $this->queue = 'trend-agent-apartments';
-        $this->delay = $this->calculateDelay();
+        $this->onQueue('trend_agent.apartments');
+        $this->delay($this->calculateDelay());
     }
 
     private function calculateDelay(): int

@@ -33,13 +33,29 @@ class UpdateCacheApplicationCommand extends Command
      */
     public function handle()
     {
+        $this->info('Начинаем обновление кэша приложения...');
+        
         $cacheApp = (new CacheAppService(
             app(ApartmentRepositoryInterface::class),
             app(LocationRepositoryInterface::class),
             app(ResidentialComplexRepositoryInterface::class)
         ));
 
+        $this->info('Обновляем кэш жилых комплексов...');
         $cacheApp->providerUpdateCacheResidentialComplexes();
+        $this->info('✓ Кэш жилых комплексов обновлен');
+        
+        // Проверяем результат
+        $this->info('Проверяем кэш...');
+        foreach (['NOVOSIBIRSK', 'ST-PETERSBURG'] as $city) {
+            $hasCache = Cache::has("residentialComplexes{$city}");
+            $this->line("residentialComplexes{$city}: " . ($hasCache ? 'YES' : 'NO'));
+        }
+
+        $this->info('Обновляем кэш квартир...');
         $cacheApp->providerUpdateApartments();
+        $this->info('✓ Кэш квартир обновлен');
+        
+        $this->info('Обновление кэша завершено!');
     }
 }

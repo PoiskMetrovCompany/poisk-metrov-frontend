@@ -6,6 +6,7 @@ use App\Core\Abstracts\AbstractOperations;
 use App\Core\Interfaces\Repositories\ResidentialComplexRepositoryInterface;
 use App\Http\Resources\BestOffers\BestOfferResource;
 use App\Models\BestOffer;
+use App\Models\ResidentialComplex;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
