@@ -36,14 +36,14 @@ class CandidateProfileStatusesController extends Controller
     {
         return new JsonResponse(
             data: [
-                VacancyStatusesEnum::New->value,
-                VacancyStatusesEnum::Verified->value,
-                VacancyStatusesEnum::Rejected->value,
-                VacancyStatusesEnum::NeedsImprovement->value,
-                VacancyStatusesEnum::Accepted->value,
-                VacancyStatusesEnum::NotAccepted->value,
-                VacancyStatusesEnum::CameOut->value,
-                VacancyStatusesEnum::NotCameOut->value,
+                'new',
+                'checked',
+                'rejected',
+                'needs-work',
+                'hired',
+                'not_hired',
+                'start_work',
+                'not_start_work',
             ],
             status: 201
         );

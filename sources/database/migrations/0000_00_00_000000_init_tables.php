@@ -702,6 +702,10 @@ return new class extends Migration {
                 VacancyStatusesEnum::NotAccepted->value,
                 VacancyStatusesEnum::CameOut->value,
                 VacancyStatusesEnum::NotCameOut->value,
+                'start_work',
+                'not_start_work',
+                'hired',
+                'not_hired',
             ])->default('Новая анкета');
             $table->string('first_name', 255);
             $table->string('last_name', 255);

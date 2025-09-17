@@ -12,5 +12,9 @@ enum VacancyStatusesEnum: string
         case NotAccepted = 'Не принят';
         case CameOut = 'Вышел';
         case NotCameOut = 'Не вышел';
+        case StartWork = 'Вышел';
+        case NotStartWork = 'Не вышел';
+        case Hired = 'Принят';
+        case NotHired = 'Не принят';
 
 }
