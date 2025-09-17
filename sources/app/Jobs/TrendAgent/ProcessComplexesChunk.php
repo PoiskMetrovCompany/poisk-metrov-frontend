@@ -8,26 +8,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
-class ProcessApartmentsChunk implements ShouldQueue
+class ProcessComplexesChunk implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
     public int $timeout = 300;
 
-    private array $apartments;
+    private array $complexes;
     private array $metadata;
 
-    public function __construct(array $data, array $metadata)
+    public function __construct(array $complexes, array $metadata)
     {
-        $this->apartments = $data['apartments'];
+        $this->complexes = $complexes;
         $this->metadata = $metadata;
 
-        $this->onQueue('trend_agent.apartments');
-        $this->delay($this->calculateDelay());
+        $this->queue = 'trend-agent-complexes';
+        $this->delay = $this->calculateDelay();
     }
 
     private function calculateDelay(): int
@@ -43,26 +43,20 @@ class ProcessApartmentsChunk implements ShouldQueue
     public function handle(DataProcessor $processor): void
     {
         try {
-            $processor->processApartmentsBatch($this->apartments, $this->metadata);
-
-            $this->updateProcessingStats();
+            $processor->processComplexesBatch($this->complexes, $this->metadata);
 
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    private function updateProcessingStats(): void
-    {
-        $key = "trend_agent:processing:{$this->metadata['session_id']}";
-
-        Cache::increment("{$key}:processed_apartments", count($this->apartments));
-        Cache::increment("{$key}:processed_chunks");
-    }
-
     public function failed(Exception $exception): void
     {
-        // уведомление администратору
-        // Notification::sendAdmins(new ChunkProcessingFailed($this->metadata, $exception));
+        Log::error('Complexes chunk processing failed permanently', [
+            'error' => $exception->getMessage(),
+            'chunk_index' => $this->metadata['chunk_index'],
+            'city' => $this->metadata['city'],
+            'session_id' => $this->metadata['session_id']
+        ]);
     }
 }
