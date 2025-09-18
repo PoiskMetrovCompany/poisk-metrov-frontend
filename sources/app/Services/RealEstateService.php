@@ -123,7 +123,26 @@ class RealEstateService implements RealEstateServiceInterface
             }
         };
 
+        // Обработка диапазонов для квартир
+        $this->applyRangeFilters($buildingsQuery, $validated, [
+            'price' => ['price-from', 'price-to'],
+            'area' => ['area-from', 'area-to'],
+            'floor' => ['floor-from', 'floor-to'],
+            'kitchen_space' => ['kitchen_space-from', 'kitchen_space-to'],
+            'built_year' => ['built_year-from', 'built_year-to']
+        ]);
+
         foreach ($validated as $key => $value) {
+            // Пропускаем диапазоны, так как они уже обработаны выше
+            if (str_ends_with($key, '-from') || str_ends_with($key, '-to')) {
+                continue;
+            }
+            
+            // Маппинг полей фронтенда в поля базы данных
+            if ($key === 'count_rooms') {
+                $key = 'room_count';
+            }
+            
             $searchableInApartments = in_array($key, Apartment::$searchableFields);
             $searchableInBuildings = in_array($key, ResidentialComplex::$searchableFields);
             $searchableInLocations = in_array($key, Location::$searchableFields);
@@ -214,7 +233,26 @@ class RealEstateService implements RealEstateServiceInterface
             }
         };
 
+        // Обработка диапазонов для квартир
+        $this->applyRangeFiltersForApartments($apartmentsQuery, $validated, [
+            'price' => ['price-from', 'price-to'],
+            'area' => ['area-from', 'area-to'],
+            'floor' => ['floor-from', 'floor-to'],
+            'kitchen_space' => ['kitchen_space-from', 'kitchen_space-to'],
+            'built_year' => ['built_year-from', 'built_year-to']
+        ]);
+
         foreach ($validated as $key => $value) {
+            // Пропускаем диапазоны, так как они уже обработаны выше
+            if (str_ends_with($key, '-from') || str_ends_with($key, '-to')) {
+                continue;
+            }
+            
+            // Маппинг полей фронтенда в поля базы данных
+            if ($key === 'count_rooms') {
+                $key = 'room_count';
+            }
+            
             $searchableInApartments = in_array($key, Apartment::$searchableFields);
 
             $field = $key;
@@ -279,5 +317,53 @@ class RealEstateService implements RealEstateServiceInterface
             'allCodes' => $allCodes,
             'fullfilledCount' => $fullfilled
         ];
+    }
+
+    /**
+     * Применить диапазонные фильтры для зданий через квартиры
+     */
+    private function applyRangeFilters(Builder $buildingsQuery, array $validated, array $rangeFields): void
+    {
+        foreach ($rangeFields as $field => $keys) {
+            $fromKey = $keys[0];
+            $toKey = $keys[1];
+            $fromValue = $validated[$fromKey] ?? null;
+            $toValue = $validated[$toKey] ?? null;
+            
+            if ($fromValue !== null || $toValue !== null) {
+                $buildingsQuery->whereHas('apartments', function (Builder $apartmentsQuery) use ($field, $fromValue, $toValue) {
+                    if ($fromValue !== null && $toValue !== null) {
+                        $apartmentsQuery->whereBetween($field, [$fromValue, $toValue]);
+                    } elseif ($fromValue !== null) {
+                        $apartmentsQuery->where($field, '>=', $fromValue);
+                    } elseif ($toValue !== null) {
+                        $apartmentsQuery->where($field, '<=', $toValue);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Применить диапазонные фильтры для квартир напрямую
+     */
+    private function applyRangeFiltersForApartments(Builder $apartmentsQuery, array $validated, array $rangeFields): void
+    {
+        foreach ($rangeFields as $field => $keys) {
+            $fromKey = $keys[0];
+            $toKey = $keys[1];
+            $fromValue = $validated[$fromKey] ?? null;
+            $toValue = $validated[$toKey] ?? null;
+            
+            if ($fromValue !== null || $toValue !== null) {
+                if ($fromValue !== null && $toValue !== null) {
+                    $apartmentsQuery->whereBetween($field, [$fromValue, $toValue]);
+                } elseif ($fromValue !== null) {
+                    $apartmentsQuery->where($field, '>=', $fromValue);
+                } elseif ($toValue !== null) {
+                    $apartmentsQuery->where($field, '<=', $toValue);
+                }
+            }
+        }
     }
 }

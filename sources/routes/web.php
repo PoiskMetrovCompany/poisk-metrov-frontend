@@ -91,7 +91,7 @@ use Illuminate\Support\Str;
 // });
 // /// END
 
-// Route::get('/catalogue-items', [CatalogueViewController::class, 'getFilteredCatalogueViews']);
+Route::get('/catalogue-items', [CatalogueViewController::class, 'getFilteredCatalogueViews']);
 // Route::get('/apartments-list/{complexCode}', [ApartmentController::class, 'getApartmentViewsWithFilters']);
 // Route::get('/switch-city', [CurrentCityController::class, 'setCityFromURL']);
 // Route::get('/filtered-mortgages', [BankController::class, 'getFilteredMortgages']);

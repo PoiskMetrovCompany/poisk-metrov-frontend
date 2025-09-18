@@ -20,6 +20,23 @@ class RenovationFilterCommand extends AbstractFilterCommand
             return $query;
         }
 
+        if (is_array($value)) {
+            $renovations = array_filter(array_map([$this, 'normalizeStringValue'], $value));
+            if (!empty($renovations)) {
+                return $query->whereIn('renovation', $renovations);
+            }
+            return $query;
+        }
+
+        if (is_string($value) && str_contains($value, ',')) {
+            $values = array_map('trim', explode(',', $value));
+            $renovations = array_filter(array_map([$this, 'normalizeStringValue'], $values));
+            if (!empty($renovations)) {
+                return $query->whereIn('renovation', $renovations);
+            }
+            return $query;
+        }
+
         $renovation = $this->normalizeStringValue($value);
 
         if ($renovation !== null) {

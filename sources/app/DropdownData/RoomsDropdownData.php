@@ -12,7 +12,7 @@ class RoomsDropdownData extends DropdownData
             ->pluck('room_count')
             ->toArray(),
             '=',
-            'room_count'
+            'count_rooms'
         );
 
         foreach ($this->data as &$dataUnit) {
