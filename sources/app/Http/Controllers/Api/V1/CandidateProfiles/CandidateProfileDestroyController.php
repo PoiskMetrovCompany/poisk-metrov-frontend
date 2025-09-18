@@ -132,6 +132,7 @@ class CandidateProfileDestroyController extends Controller
             );
         }
 
+
         $foundKeys = $candidateProfiles->pluck('key')->toArray();
 
         $notFoundKeys = array_diff($keys, $foundKeys);
