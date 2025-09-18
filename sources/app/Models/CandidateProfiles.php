@@ -18,6 +18,7 @@ class CandidateProfiles extends Model
         'vacancies_key',
         'marital_statuses_key',
         'work_team',
+        'status',
         'first_name',
         'last_name',
         'middle_name',
