@@ -95,4 +95,9 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
     {
         return $this->model::class;
     }
+
+    public function getModel(): CandidateProfiles
+    {
+        return $this->model;
+    }
 }
