@@ -49,13 +49,13 @@ class ListCityController extends AbstractOperations
     {
         // Загружаем все города со связанными отношениями
         $cities = Cities::with([
-            'builders',
-            // 'managers', 
-            // 'crmUsers',
-            'chatTokenCRMLeadPairs',
-            'bestOffers',
-            'locations',
-            'residentialComplexes'
+            // 'builders',
+            //  'managers', 
+            //  'crmUsers',
+            // 'chatTokenCRMLeadPairs',
+            // 'bestOffers',
+            // 'locations',
+            // 'residentialComplexes'
         ])->get();
         
         $collect = new CitiesCollection($cities);
