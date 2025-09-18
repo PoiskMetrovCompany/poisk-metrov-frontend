@@ -12,4 +12,5 @@ interface CandidateProfilesRepositoryInterface extends
     FindQueryBuilderInterface
 {
     public function getCandidateProfiles(?string $key, array $columnsToSelect);
+    public function getModel();
 }
