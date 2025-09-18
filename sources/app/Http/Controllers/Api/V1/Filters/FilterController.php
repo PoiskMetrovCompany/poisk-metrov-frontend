@@ -44,8 +44,15 @@ class FilterController extends AbstractOperations
      *         name="count_rooms",
      *         in="query",
      *         required=false,
-     *         description="Количество комнат",
-     *         @OA\Schema(type="integer", minimum=1, example=2)
+     *         description="Количество комнат. Поддерживает: одно число (2), массив ([1,2,3]), диапазон (5+) или значения через запятую (1,3,5+,2)",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="integer", minimum=1, example=2),
+     *                 @OA\Schema(type="array", @OA\Items(type="integer", minimum=1), example={1,2,3}),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+\+$", example="5+"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(,[0-9]+)*(\+)?(,[0-9]+)*$", example="1,3,5+,2")
+     *             }
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="pricing",
@@ -58,22 +65,45 @@ class FilterController extends AbstractOperations
      *         name="floors",
      *         in="query",
      *         required=false,
-     *         description="Этаж",
-     *         @OA\Schema(type="integer", minimum=1, example=5)
+     *         description="Этаж. Поддерживает: одно число (2), массив ([1,2,3]), диапазон (5+) или значения через запятую (1,3,5+,2)",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="integer", minimum=1, example=2),
+     *                 @OA\Schema(type="array", @OA\Items(type="integer", minimum=1), example={1,2,3}),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+\+$", example="5+"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(,[0-9]+)*(\+)?(,[0-9]+)*$", example="1,3,5+,2")
+     *             }
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="area_total",
      *         in="query",
      *         required=false,
-     *         description="Общая площадь или диапазон площадей (формат: число или 'мин-макс')",
-     *         @OA\Schema(type="string", example="50-80")
+     *         description="Общая площадь. Поддерживает: число (50), массив ([30,50,70]), диапазон (50-70), диапазон от (50+) или значения через запятую (30,50-70,80+)",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="number", minimum=0.1, example=50),
+     *                 @OA\Schema(type="array", @OA\Items(type="number", minimum=0.1), example={30,50,70}),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(\.[0-9]+)?-[0-9]+(\.[0-9]+)?$", example="50-70"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(\.[0-9]+)?\+$", example="50+"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(\.[0-9]+)?(,[0-9]+(\.[0-9]+)?)*([-+][0-9]+(\.[0-9]+)?)*$", example="30,50-70,80+")
+     *             }
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="living_area",
      *         in="query",
      *         required=false,
-     *         description="Жилая площадь или диапазон жилых площадей (формат: число или 'мин-макс')",
-     *         @OA\Schema(type="string", example="30-50")
+     *         description="Жилая площадь. Поддерживает: число (30), массив ([20,30,40]), диапазон (20-40), диапазон от (30+) или значения через запятую (20,30-40,50+)",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="number", minimum=0.1, example=30),
+     *                 @OA\Schema(type="array", @OA\Items(type="number", minimum=0.1), example={20,30,40}),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(\.[0-9]+)?-[0-9]+(\.[0-9]+)?$", example="20-40"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(\.[0-9]+)?\+$", example="30+"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(\.[0-9]+)?(,[0-9]+(\.[0-9]+)?)*([-+][0-9]+(\.[0-9]+)?)*$", example="20,30-40,50+")
+     *             }
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="ceiling_height",
@@ -86,8 +116,31 @@ class FilterController extends AbstractOperations
      *         name="finishing",
      *         in="query",
      *         required=false,
-     *         description="Тип отделки",
-     *         @OA\Schema(type="string", example="Чистовая")
+     *         description="Тип отделки. Поддерживает: строку (\"Чистовая\"), массив ([\"Чистовая\",\"Черновая\"]) или значения через запятую (\"Чистовая,Черновая\")",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="string", example="Чистовая"),
+     *                 @OA\Schema(type="array", @OA\Items(type="string"), example={"Чистовая","Черновая"}),
+     *                 @OA\Schema(type="string", pattern="^[^,]+(,[^,]+)*$", example="Чистовая,Черновая")
+     *             }
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="built_year",
+     *         in="query",
+     *         required=false,
+     *         description="Год сдачи. Поддерживает: год (2024), статус (\"Сдан\", \"Позднее\"), массив ([2024, \"Сдан\"]) или значения через запятую (\"2024,Сдан,Позднее\")",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="integer", minimum=1900, maximum=2100, example=2024),
+     *                 @OA\Schema(type="string", enum={"Сдан", "Позднее"}, example="Сдан"),
+     *                 @OA\Schema(type="array", @OA\Items(oneOf={
+     *                     @OA\Schema(type="integer", minimum=1900, maximum=2100),
+     *                     @OA\Schema(type="string", enum={"Сдан", "Позднее"})
+     *                 }), example={2024, "Сдан"}),
+     *                 @OA\Schema(type="string", pattern="^([0-9]{4}|Сдан|Позднее)(,([0-9]{4}|Сдан|Позднее))*$", example="2024,Сдан,Позднее")
+     *             }
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="parking",
@@ -107,8 +160,16 @@ class FilterController extends AbstractOperations
      *         name="to_metro",
      *         in="query",
      *         required=false,
-     *         description="Максимальное расстояние до метро (в минутах)",
-     *         @OA\Schema(type="integer", minimum=0, example=15)
+     *         description="Время до метро (в минутах). Поддерживает: число (15), массив ([5,10,15]), диапазон (5-15), диапазон от (10+) или значения через запятую (5,10-15,20+)",
+     *         @OA\Schema(
+     *             oneOf={
+     *                 @OA\Schema(type="integer", minimum=0, example=15),
+     *                 @OA\Schema(type="array", @OA\Items(type="integer", minimum=0), example={5,10,15}),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+-[0-9]+$", example="5-15"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+\+$", example="10+"),
+     *                 @OA\Schema(type="string", pattern="^[0-9]+(,[0-9]+)*([-+][0-9]+)*$", example="5,10-15,20+")
+     *             }
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="layout",
