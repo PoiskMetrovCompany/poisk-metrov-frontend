@@ -346,6 +346,14 @@ class ResidentialComplex extends Model
         return $this->belongsTo(Location::class, 'location_key', 'key');
     }
 
+    /**
+     * Получить город через локацию.
+     */
+    public function getCityAttribute()
+    {
+        return $this->location?->city;
+    }
+
     public function apartments(): HasMany
     {
         return $this->hasMany(Apartment::class, 'complex_id');

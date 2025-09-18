@@ -47,8 +47,18 @@ class ListCityController extends AbstractOperations
      */
     public function __invoke(Request $request)
     {
-        $attributes = $this->repository->list([]);
-        $collect = new CitiesCollection($attributes);
+        // Загружаем все города со связанными отношениями
+        $cities = Cities::with([
+            'builders',
+            // 'managers', 
+            // 'crmUsers',
+            'chatTokenCRMLeadPairs',
+            'bestOffers',
+            'locations',
+            'residentialComplexes'
+        ])->get();
+        
+        $collect = new CitiesCollection($cities);
 
         return new JsonResponse(
             data: [

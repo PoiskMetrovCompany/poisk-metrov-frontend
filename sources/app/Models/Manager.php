@@ -20,4 +20,12 @@ class Manager extends Model
         'user_id',
         'telegram_id'
     ];
+
+    /**
+     * Получить город, к которому относится менеджер.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(Cities::class, 'city', 'slug');
+    }
 }
