@@ -53,7 +53,8 @@ class ReadApartmentController extends AbstractOperations
      *                   enum={
      *                        "ResidentialComplex",
      *                        "Doc",
-     *                        "Building"
+     *                        "Building",
+     *                        "city"
      *                    }
      *               )
      *           )
@@ -71,7 +72,21 @@ class ReadApartmentController extends AbstractOperations
     public function __invoke(Request $request): JsonResponse
     {
         $key = $request->input('key') ?? '';
-        $apartment = $this->repository->find(['key' =>  $key])->first();
+        
+        // Получаем параметр includes и убеждаемся, что это массив
+        $includes = $request->get('includes', []);
+        if (!is_array($includes)) {
+            $includes = $includes ? [$includes] : [];
+        }
+        
+        $query = $this->repository->find(['key' => $key]);
+        
+        // Если в includes указан 'city', дополнительно загружаем город
+        if (in_array('city', $includes)) {
+            $query->with(['residentialComplex.location.city', 'residentialComplexByKey.location.city']);
+        }
+        
+        $apartment = $query->first();
 
         if (!$apartment) {
             return new JsonResponse(

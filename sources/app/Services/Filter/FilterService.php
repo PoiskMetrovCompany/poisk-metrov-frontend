@@ -25,6 +25,7 @@ use App\Services\Filter\Commands\DeveloperFilterCommand;
 use App\Services\Filter\Commands\FloorCountsFilterCommand;
 use App\Services\Filter\Commands\MontageTypeFilterCommand;
 use App\Services\Filter\Commands\SearchFilterCommand;
+use App\Services\Filter\Commands\BuiltYearFilterCommand;
 use App\Services\Filter\Traits\GetAreaTotalTrait;
 use App\Services\Filter\Traits\GetCeilingHeightTrait;
 use App\Services\Filter\Traits\GetCountRoomsTrait;
@@ -72,6 +73,7 @@ final class FilterService extends AbstractFilter implements FilterServiceInterfa
             ->addCommand(new DeveloperFilterCommand())
             ->addCommand(new FloorCountsFilterCommand())
             ->addCommand(new MontageTypeFilterCommand())
+            ->addCommand(new BuiltYearFilterCommand())
             ->addCommand(new SearchFilterCommand());
     }
 
@@ -164,6 +166,7 @@ final class FilterService extends AbstractFilter implements FilterServiceInterfa
             'developer' => $dto->developer,
             'floor_counts' => $dto->floorCounts,
             'montage_type' => $dto->montageType,
+            'built_year' => $dto->builtYear,
             'search' => $dto->search,
         ];
     }

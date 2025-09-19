@@ -168,6 +168,14 @@ class Apartment extends Model
         return $this->belongsTo(ResidentialComplex::class, 'complex_id', 'id');
     }
 
+    /**
+     * Получить город через жилой комплекс.
+     */
+    public function getCityAttribute()
+    {
+        return $this->residentialComplex?->location?->city;
+    }
+
     public function residentialComplexByKey(): BelongsTo
     {
         return $this->belongsTo(ResidentialComplex::class, 'complex_key', 'key');

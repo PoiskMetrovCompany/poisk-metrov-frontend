@@ -60,6 +60,7 @@ use App\Http\Controllers\Api\V1\File\Folders\DeleteFolderController;
 use App\Http\Controllers\Api\V1\File\ReadFileController;
 use App\Http\Controllers\Api\V1\File\UpdateFilesController;
 use App\Http\Controllers\Api\V1\Filters\FilterController;
+use App\Http\Controllers\Api\V1\Filters\ResidentialComplexFiltersController;
 use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsController;
 use App\Http\Controllers\Api\V1\Managers\Chat\GetChatsWithoutManagerController;
 use App\Http\Controllers\Api\V1\Managers\Chat\SendMessageToSessionController;
@@ -225,6 +226,8 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// FILTER
     Route::namespace('FILTER')->prefix('filters')->group(function () {
         Route::get('/', operation(FilterController::class))->name('api.v1.filter');
+        Route::get('/residential-complex', operation(ResidentialComplexFiltersController::class))
+            ->name('api.v1.filters.residential-complex');
     });
     /// END
 
@@ -329,11 +332,16 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 
     /// FAVORITE
+    // Старый роут для совместимости с JavaScript
+    Route::post('/switch-like', operation(SwitchLikeController::class))
+        ->name('api.switch-like')
+        ->middleware('auth:api');
+
     Route::namespace('FAVORITE')->prefix('favorites')->group(function () {
         Route::get('/count', operation(CountFavoritesController::class))
             ->name('api.v1.favorites.count');
 
-        Route::group(['middleware' => ['web']], function () {
+        // Route::group(['middleware' => ['web']], function () {
             Route::post('/switch-like', operation(SwitchLikeController::class))
                 ->name('api.v1.favorites.switch-like')
                 ->withoutMiddleware('api');
@@ -350,7 +358,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             Route::get('/', operation(ListFavoriteController::class))
                 ->name('api.v1.favorites');
 
-        });
+        // });
     });
     /// END
 

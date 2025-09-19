@@ -16,7 +16,7 @@ final class CatalogFilterMapper
 
         $dto->entityType = $attributes['entity_type'] ?? null;
 
-        $dto->countRooms = self::convertToInt(self::getValidatedValue($attributes, 'count_rooms'));
+        $dto->countRooms = self::getValidatedValue($attributes, 'count_rooms');
         $dto->pricing = self::getValidatedValue($attributes, 'pricing');
         $dto->floors = self::convertToInt(self::getValidatedValue($attributes, 'floors'));
         $dto->areaTotal = self::getValidatedValue($attributes, 'area_total');
@@ -34,7 +34,6 @@ final class CatalogFilterMapper
         $dto->elevator = self::getValidatedValue($attributes, 'elevator');
         $dto->floorCounts = self::getValidatedValue($attributes, 'floor_counts');
         $dto->parking = self::getValidatedValue($attributes, 'parking');
-        $dto->count_rooms = self::convertToInt(self::getValidatedValue($attributes, 'count_rooms'));
         $dto->search = self::getValidatedValue($attributes, 'search');
 
         return $dto;

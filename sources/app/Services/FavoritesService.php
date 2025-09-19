@@ -23,6 +23,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use App\Models\User;
 
 /**
  * @package App\Services
@@ -228,27 +229,28 @@ final class FavoritesService implements FavoritesServiceInterface
         setrawcookie('cachedFavoriteBuildingsCount', '-1', time() - 100000, '/');
     }
 
-    public function switchLike(string $type, string $code, string $action): JsonResponse
+    public function switchLike(string $type, string $code, string $action, string $key): JsonResponse
     {
-        $user = Auth::user();
+        $user = User::where('key', $key)->first();
 
-        if (! $user) {
-            return $this->countFavoritesDetailed();
+        if (!$user) {
+            return response()->json([
+                'error' => 'User not found',
+                'message' => 'Пользователь не найден'
+            ], 404);
         }
 
         switch ($type) {
             case 'apartment':
                 switch ($action) {
                     case 'add':
-                        if (!$this->userFavoritePlanRepository->isExists(['offer_id' => $code])) {
-                            $this->userFavoritePlanRepository->store(['user_id' => $user->id, 'offer_id' => $code]);
-                            setrawcookie('cachedFavoritePlansCount', '-1', time() - 100000, '/');
+                        if (!$this->userFavoritePlanRepository->isExists(['user_key' => $key, 'offer_id' => $code])) {
+                            $this->userFavoritePlanRepository->store(['user_id' => $user->id, 'user_key' => $key, 'offer_id' => $code]);
                         }
                         break;
                     case 'remove':
-                        if ($this->userFavoritePlanRepository->isExists(['offer_id' => $code])) {
-                            $builder = $this->userFavoritePlanRepository->find(['user_id' => $user->id, 'offer_id' => $code])->delete();
-                            setrawcookie('cachedFavoritePlansCount', '-1', time() - 100000, '/');
+                        if ($this->userFavoritePlanRepository->isExists(['user_key' => $key, 'offer_id' => $code])) {
+                            $this->userFavoritePlanRepository->find(['user_key' => $key, 'offer_id' => $code])->delete();
                         }
                         break;
                 }
@@ -256,23 +258,17 @@ final class FavoritesService implements FavoritesServiceInterface
             case 'building':
                 switch ($action) {
                     case 'add':
-                        if (!$this->userFavoriteBuildingRepository->isExists(['complex_code' => $code])) {
-                            $this->userFavoriteBuildingRepository->store(['user_id' => $user->id, 'complex_code' => $code]);
-                            setrawcookie('cachedFavoriteBuildingsCount', '-1', time() - 100000, '/');
+                        if (!$this->userFavoriteBuildingRepository->isExists(['user_key' => $key, 'complex_key' => $code])) {
+                            $this->userFavoriteBuildingRepository->store(['user_id' => $user->id, 'user_key' => $key, 'complex_key' => $code, 'complex_code' => $code]);
                         }
                         break;
                     case 'remove':
-                        if ($this->userFavoriteBuildingRepository->isExists(['complex_code' => $code])) {
-                            $this->userFavoriteBuildingRepository->find(['user_id' => $user->id, 'complex_code' => $code])->delete();
+                        if ($this->userFavoriteBuildingRepository->isExists(['user_key' => $key, 'complex_code' => $code])) {
+                            $this->userFavoriteBuildingRepository->find(['user_key' => $key, 'complex_code' => $code])->delete();
 
                             if (!$this->deletedFavoriteBuildingRepository->isExists(['user_id' => $user->id, 'complex_code' => $code])) {
-                                $this->deletedFavoriteBuildingRepository->store([
-                                    'user_id' => $user->id,
-                                    'complex_code' => $code
-                                ]);
+                                $this->deletedFavoriteBuildingRepository->store(['user_id' => $user->id, 'user_key' => $key, 'complex_key' => $code, 'complex_code' => $code]);
                             }
-
-                            setrawcookie('cachedFavoriteBuildingsCount', '-1', time() - 100000, '/');
                         }
                         break;
                 }
@@ -281,12 +277,13 @@ final class FavoritesService implements FavoritesServiceInterface
 
         CRMSyncRequiredForUser::createForCurrentUser();
 
-        return $this->countFavoritesDetailed();
+        return $this->countFavoritesDetailed($key);
     }
 
-    public function countFavoritesDetailed(): JsonResponse
+    public function countFavoritesDetailed(string $key): JsonResponse
     {
-        $user = Auth::user();
+        $user = User::where('key', $key)->first();
+        
         if (!$user) {
             return response()->json([
                 'plans' => 0,
@@ -295,8 +292,8 @@ final class FavoritesService implements FavoritesServiceInterface
             ]);
         }
 
-        $favoritePlans = $this->countFavoritePlans($user->key);
-        $favoriteBuildings = $this->countFavoriteBuildings($user->key);
+        $favoritePlans = $this->countFavoritePlans($key);
+        $favoriteBuildings = $this->countFavoriteBuildings($key);
 
         return response()->json([
             'plans' => $favoritePlans,
@@ -324,7 +321,8 @@ final class FavoritesService implements FavoritesServiceInterface
 
     public function countFavoritePlans(string $key): int
     {
-        return $this->userFavoritePlanRepository->find(['user_key' => $key])->count();
+        $user = User::where('key', $key)->first();
+        return $this->userFavoritePlanRepository->find(['user_id' => $user->id])->count();
     }
 
     public function countFavoriteBuildings(string $key): int

@@ -80,7 +80,8 @@ class ListApartmentController extends AbstractOperations
      *                       "VisitedPage",
      *                       "UserFavoritePlan",
      *                       "Manager",
-     *                       "Interaction"
+     *                       "Interaction",
+     *                       "city"
      *                   }
      *              )
      *          )
@@ -103,11 +104,24 @@ class ListApartmentController extends AbstractOperations
 
         $cached = Cache::get($apartmentsCacheName);
 
+        // Получаем параметр includes и убеждаемся, что это массив
+        $includes = $request->get('includes', []);
+        if (!is_array($includes)) {
+            $includes = $includes ? [$includes] : [];
+        }
+        
         if ($cached === null || (is_array($cached) && count($cached) === 0)) {
-            $complexes = $this->residentialComplexRepository
-                ->getCityQueryBuilder($cityCode)
-                ->with(['apartments', 'apartmentsByKey'])
-                ->get();
+            $query = $this->residentialComplexRepository->getCityQueryBuilder($cityCode);
+            
+            // Базовые связи всегда загружаем
+            $query->with(['apartments', 'apartmentsByKey']);
+            
+            // Если в includes указан 'city', дополнительно загружаем город
+            if (in_array('city', $includes)) {
+                $query->with(['apartments.residentialComplex.location.city', 'apartmentsByKey.residentialComplexByKey.location.city']);
+            }
+            
+            $complexes = $query->get();
 
             $byId = $complexes->pluck('apartments')->flatten();
             $byKey = $complexes->pluck('apartmentsByKey')->flatten();
@@ -121,6 +135,22 @@ class ListApartmentController extends AbstractOperations
                 $collection = $cached;
             } else {
                 $collection = collect($cached);
+            }
+            
+            // Если нужно загрузить город для кэшированных данных
+            if (in_array('city', $includes)) {
+                // Для кэшированных данных нужно перезагрузить с городом
+                $query = $this->residentialComplexRepository->getCityQueryBuilder($cityCode);
+                $query->with(['apartments.residentialComplex.location.city', 'apartmentsByKey.residentialComplexByKey.location.city']);
+                $complexes = $query->get();
+                
+                $byId = $complexes->pluck('apartments')->flatten();
+                $byKey = $complexes->pluck('apartmentsByKey')->flatten();
+                $apartmentModels = $byId->concat($byKey)->values();
+                
+                $collection = $apartmentModels->map(function ($item) {
+                    return is_array($item) ? $item : $item->toArray();
+                });
             }
         }
 

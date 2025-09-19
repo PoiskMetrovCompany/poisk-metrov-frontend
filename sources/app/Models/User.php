@@ -6,6 +6,7 @@ namespace App\Models;
 use App\CRM\Commands\UpdateLead;
 use App\TextFormatters\PriceTextFormatter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -218,5 +219,13 @@ class User extends Authenticatable
     static function deleteBearerToken($userAccount)
     {
         return $userAccount->tokens()->delete();
+    }
+
+    /**
+     * Получить город CRM, к которому относится пользователь.
+     */
+    public function crmCity(): BelongsTo
+    {
+        return $this->belongsTo(Cities::class, 'crm_city', 'slug');
     }
 }

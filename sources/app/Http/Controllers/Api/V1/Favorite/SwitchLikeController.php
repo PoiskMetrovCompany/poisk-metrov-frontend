@@ -33,6 +33,7 @@ class SwitchLikeController extends AbstractOperations
      *       @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
+     *              @OA\Property(property="user_key", type="string", example=""),
      *              @OA\Property(property="code", type="string", example=""),
      *              @OA\Property(property="type", type="string", example="..."),
      *              @OA\Property(property="action", type="string", example="..."),
@@ -50,22 +51,26 @@ class SwitchLikeController extends AbstractOperations
      */
     public function __invoke(LikeSwitchRequest $request): JsonResponse
     {
-        $user = Auth::user();
 
-        if ($user) {
-            $type = $request->validated('type');
-            $code = $request->validated('code');
-            $action = $request->validated('action');
-            $this->favoritesService->switchLike($type, $code, $action);
+        $type = $request->validated('type');
+        $code = $request->validated('code');
+        $action = $request->validated('action');
+        $user_key = $request->validated('user_key');
+
+        try {
+            $this->favoritesService->switchLike($type, $code, $action, $user_key);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Операция выполнена успешно',
+                'data' => $this->favoritesService->countFavoritesDetailed($user_key)->getData(true)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Operation failed',
+                'message' => 'Ошибка при выполнении операции: ' . $e->getMessage()
+            ], 500);
         }
-
-        return new JsonResponse(
-            data: [
-                ...self::identifier(),
-                ...self::attributes($this->favoritesService->countFavoritesDetailed()),
-                ...self::metaData($request, $request->all())
-            ]
-        );
     }
 
     public function getEntityClass(): string

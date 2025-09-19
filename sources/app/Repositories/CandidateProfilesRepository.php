@@ -91,8 +91,19 @@ final class CandidateProfilesRepository implements CandidateProfilesRepositoryIn
 
 
 
+    public function findByKey(mixed $attributes)
+    {
+        $params = gettype($attributes) === 'string' ? ['key' => $attributes] : $attributes;
+        return $this->model::with('ropCandidates.ropAccount')->where($params)->first();
+    }
+
     public function getType(): string
     {
         return $this->model::class;
+    }
+
+    public function getModel(): CandidateProfiles
+    {
+        return $this->model;
     }
 }

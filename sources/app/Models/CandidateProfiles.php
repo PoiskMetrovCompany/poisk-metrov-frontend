@@ -71,4 +71,8 @@ class CandidateProfiles extends Model
     public function maritalStatus() {
         return $this->belongsTo(MaritalStatuses::class, 'marital_statuses_key', 'key');
     }
+
+    public function ropCandidates() {
+        return $this->hasMany(ROPCandidate::class, 'candidate_key', 'key');
+    }
 }

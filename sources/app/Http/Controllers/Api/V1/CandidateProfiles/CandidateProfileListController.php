@@ -20,13 +20,20 @@ use Illuminate\Support\Facades\Log;
  *     description="Возвращает JSON объект со списком анкет кандидатов с возможностью фильтрации.",
  *     security={{"bearerAuth":{}}},
  *
- *     @OA\Parameter(
- *         name="city_work",
- *         in="query",
- *         description="Город работы кандидата",
- *         required=false,
- *         @OA\Schema(type="string")
- *     ),
+     *     @OA\Parameter(
+     *         name="city_work",
+     *         in="query",
+     *         description="Город работы кандидата",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="rop_key",
+     *         in="query",
+     *         description="UUID ключа РОПа для фильтрации кандидатов",
+     *         required=false,
+     *         @OA\Schema(type="string", format="uuid")
+     *     ),
  *     @OA\Parameter(
  *         name="candidate_statuses",
  *         in="query",
@@ -98,10 +105,16 @@ class CandidateProfileListController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        $candidateProfiles = CandidateProfiles::query();
+        $candidateProfiles = CandidateProfiles::with('ropCandidates.ropAccount');
 
         if ($cityWork = $request->input('city_work')) {
             $candidateProfiles->where('city_work', $cityWork);
+        }
+
+        if ($ropKey = $request->input('rop_key')) {
+            $candidateProfiles->whereHas('ropCandidates', function ($query) use ($ropKey) {
+                $query->where('rop_key', $ropKey);
+            });
         }
 
         if ($statuses = $request->input('candidate_statuses')) {
@@ -163,6 +176,12 @@ class CandidateProfileListController extends Controller
             ->latest()
             ->paginate($request->get('per_page', 8));
 
+
+        $data = $candidateProfiles->getCollection()->map(function ($candidate) {
+            return new \App\Http\Resources\CandidateProfiles\CandidateProfileResource($candidate);
+        });
+
+        $candidateProfiles->setCollection($data);
         $dataCollection = new CandidateProfileCollection($candidateProfiles);
 
         return new JsonResponse([
