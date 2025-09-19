@@ -22,6 +22,7 @@ class LikeSwitchRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_key' => 'string|required',
             'code' => 'string|required',
             'type' => 'string|required',
             'action' => 'string|required'

@@ -329,11 +329,16 @@ Route::namespace('V1')->prefix('v1')->group(function () {
     /// END
 
     /// FAVORITE
+    // Старый роут для совместимости с JavaScript
+    Route::post('/switch-like', operation(SwitchLikeController::class))
+        ->name('api.switch-like')
+        ->middleware('auth:api');
+
     Route::namespace('FAVORITE')->prefix('favorites')->group(function () {
         Route::get('/count', operation(CountFavoritesController::class))
             ->name('api.v1.favorites.count');
 
-        Route::group(['middleware' => ['web']], function () {
+        // Route::group(['middleware' => ['web']], function () {
             Route::post('/switch-like', operation(SwitchLikeController::class))
                 ->name('api.v1.favorites.switch-like')
                 ->withoutMiddleware('api');
@@ -350,7 +355,7 @@ Route::namespace('V1')->prefix('v1')->group(function () {
             Route::get('/', operation(ListFavoriteController::class))
                 ->name('api.v1.favorites');
 
-        });
+        // });
     });
     /// END
 

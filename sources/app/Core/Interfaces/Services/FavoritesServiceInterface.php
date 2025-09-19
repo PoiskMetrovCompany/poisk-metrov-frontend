@@ -62,14 +62,16 @@ interface FavoritesServiceInterface
      * @param string $type
      * @param string $code
      * @param string $action
+     * @param string $key
      * @return JsonResponse
      */
-    public function switchLike(string $type, string $code, string $action): JsonResponse;
+    public function switchLike(string $type, string $code, string $action, string $key): JsonResponse;
 
     /**
+     * @param string $key
      * @return JsonResponse
      */
-    public function countFavoritesDetailed(): JsonResponse;
+    public function countFavoritesDetailed(string $key): JsonResponse;
 
     /**
      * @param string|null $key
