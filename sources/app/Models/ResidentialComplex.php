@@ -231,6 +231,53 @@ class ResidentialComplex extends Model
         return $allApartments->pluck('price')->min();
     }
 
+    public function getMinPricesByRoomType()
+    {
+        $apartmentsById = $this->apartments()->get();
+        $apartmentsByKey = $this->apartmentsByKey()->get();
+        $allApartments = $apartmentsById->concat($apartmentsByKey)->unique('id');
+
+        $minPrices = [
+            'studio' => null,
+            '1_rooms' => null,
+            '2_rooms' => null,
+            '3_rooms' => null,
+            '4_plus_rooms' => null,
+        ];
+
+        foreach ($allApartments as $apartment) {
+            $isStudy = (isset($apartment->apartment_type) && $apartment->apartment_type === 'Студия')
+                || (isset($apartment->room_count) && (int)$apartment->room_count === 0);
+
+            if ($isStudy) {
+                if ($apartment->price !== null && ($minPrices['studio'] === null || $apartment->price < $minPrices['studio'])) {
+                    $minPrices['studio'] = $apartment->price;
+                }
+                continue;
+            }
+
+            $rooms = (int)($apartment->room_count ?? 0);
+
+            if ($rooms === 1) {
+                $key = '1_rooms';
+            } elseif ($rooms === 2) {
+                $key = '2_rooms';
+            } elseif ($rooms === 3) {
+                $key = '3_rooms';
+            } elseif ($rooms >= 4) {
+                $key = '4_plus_rooms';
+            } else {
+                continue;
+            }
+
+            if ($apartment->price !== null && ($minPrices[$key] === null || $apartment->price < $minPrices[$key])) {
+                $minPrices[$key] = $apartment->price;
+            }
+        }
+
+        return $minPrices;
+    }
+
     public function getSearchData()
     {
         $apartmentData = $this->apartments()->get();
