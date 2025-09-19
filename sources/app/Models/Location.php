@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Location extends Model
 {
@@ -22,4 +23,12 @@ class Location extends Model
     protected $fillable = ['key', 'country', 'region', 'code', 'capital', 'district', 'locality'];
 
     public static $searchableFields = ['locality', 'locality-not', 'district', 'region', 'capital'];
+
+    /**
+     * Получить город, к которому относится локация.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(Cities::class, 'code', 'slug');
+    }
 }

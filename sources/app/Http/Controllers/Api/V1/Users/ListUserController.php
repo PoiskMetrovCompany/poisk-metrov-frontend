@@ -50,7 +50,8 @@ class ListUserController extends AbstractOperations
      *                      "VisitedPage",
      *                      "UserFavoritePlan",
      *                      "Manager",
-     *                      "Interaction"
+     *                      "Interaction",
+     *                      "city"
      *                  }
      *             )
      *         )
@@ -70,7 +71,18 @@ class ListUserController extends AbstractOperations
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $users = $this->userRepository->list([]);
+        // Получаем параметр includes
+        $includes = $request->get('includes', []);
+        
+        // Загружаем пользователей с условной загрузкой связанных данных
+        $query = User::query();
+        
+        // Если в includes указан 'city', загружаем связанный CRM город
+        if (in_array('city', $includes)) {
+            $query->with('crmCity');
+        }
+        
+        $users = $query->get();
         $collect = UserResource::collection($users);
 
         return new JsonResponse(

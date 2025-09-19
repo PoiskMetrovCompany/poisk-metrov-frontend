@@ -26,8 +26,23 @@ class ListManagerController extends AbstractOperations
      *       tags={"Manager"},
      *       path="/api/v1/managers/list",
      *       summary="получение списка менеджеров",
-     *       description="Возвращение JSON объекта",
+     *       description="Возвращение JSON объекта с возможностью включения связанных данных через параметр includes",
      *       security={{"bearerAuth":{}}},
+     *       @OA\Parameter(
+     *           name="includes",
+     *           in="query",
+     *           description="Указывает, какие связанные данные нужно включить",
+     *           required=false,
+     *           style="form",
+     *           explode=true,
+     *           @OA\Schema(
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *                   enum={"city"}
+     *               )
+     *           )
+     *       ),
      *       @OA\Response(response=200, description="УСПЕХ!"),
      *       @OA\Response(
      *           response=404,
@@ -40,7 +55,18 @@ class ListManagerController extends AbstractOperations
      */
     public function __invoke(Request $request)
     {
-        $managers = $this->managersService->getManagersList();
+        // Получаем параметр includes
+        $includes = $request->get('includes', []);
+        
+        // Загружаем менеджеров с условной загрузкой связанных данных
+        $query = Manager::query();
+        
+        // Если в includes указан 'city', загружаем связанный город
+        if (in_array('city', $includes)) {
+            $query->with('city');
+        }
+        
+        $managers = $query->get();
 
         return new JsonResponse(
             data: [
