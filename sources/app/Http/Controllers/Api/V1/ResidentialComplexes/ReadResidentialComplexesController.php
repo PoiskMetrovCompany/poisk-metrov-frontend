@@ -58,7 +58,7 @@ class ReadResidentialComplexesController extends AbstractOperations
      *      @OA\Parameter(
      *           name="filter",
      *           in="query",
-     *           description="фильтрация сущности указанной в includes",
+     *           description="фильтрация сущности указанной в includes. apartments.filters - возвращает агрегированные данные фильтров (этажи, площади, отделка)",
      *           required=false,
      *           style="form",
      *           explode=true,
@@ -68,14 +68,73 @@ class ReadResidentialComplexesController extends AbstractOperations
      *                   type="string",
      *                   enum={
      *                        "apartments.room",
+     *                        "apartments.filters"
      *                    }
      *               )
      *           )
      *      ),
-     *      @OA\Response(response=200, description="УСПЕХ!"),
+     *      @OA\Response(
+     *          response=200,
+     *          description="УСПЕХ! Возвращает данные ЖК. С фильтром apartments.filters возвращает агрегированные данные фильтров.",
+     *          @OA\JsonContent(
+     *              oneOf={
+     *                  @OA\Schema(
+     *                      @OA\Property(property="identifier", type="object",
+     *                          @OA\Property(property="id", type="integer", example=1),
+     *                          @OA\Property(property="type", type="string", example="residential_complex")
+     *                      ),
+     *                      @OA\Property(property="attributes", type="object",
+     *                          @OA\Property(property="id", type="integer", example=1),
+     *                          @OA\Property(property="key", type="string", example="06d561aa-83c2-11f0-a013-10f60a82b815"),
+     *                          @OA\Property(property="name", type="string", example="Эверест"),
+     *                          @OA\Property(property="includes", type="array", @OA\Items(type="object"))
+     *                      ),
+     *                      @OA\Property(property="meta", type="object")
+     *                  ),
+     *                  @OA\Schema(
+     *                      @OA\Property(property="identifier", type="object"),
+     *                      @OA\Property(property="attributes", type="object"),
+     *                      @OA\Property(property="includes", type="array",
+     *                          @OA\Items(
+     *                              @OA\Property(property="type", type="string", example="filters"),
+     *                              @OA\Property(property="attributes", type="object",
+     *                                  @OA\Property(property="floors", type="object",
+     *                                      @OA\Property(property="list", type="array", @OA\Items(type="integer"), example={1,2,3,4,5}),
+     *                                      @OA\Property(property="count", type="integer", example=5)
+     *                                  ),
+     *                                  @OA\Property(property="apartment_area", type="object",
+     *                                      @OA\Property(property="min", type="number", format="float", example=25.5),
+     *                                      @OA\Property(property="max", type="number", format="float", example=120.0)
+     *                                  ),
+     *                                  @OA\Property(property="kitchen_area", type="object",
+     *                                      @OA\Property(property="min", type="number", format="float", example=8.5),
+     *                                      @OA\Property(property="max", type="number", format="float", example=25.0)
+     *                                  ),
+     *                                  @OA\Property(property="finishing", type="object",
+     *                                      @OA\Property(property="list", type="array", @OA\Items(type="string"), example={"Черновая","Под чистовую","Чистовая"}),
+     *                                      @OA\Property(property="count", type="integer", example=3)
+     *                                  )
+     *                                  ),
+     *                                  @OAProperty(property=price, type=object,
+     *                                      @OAProperty(property=min, type=number, format=float, example=3500000),
+     *                                      @OAProperty(property=max, type=number, format=float, example=8500000)
+     *                                  )
+     *                              )
+     *                          )
+     *                      ),
+     *                      @OA\Property(property="meta", type="object")
+     *                  )
+     *              }
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="Resource not found"
+     *          description="Resource not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="identifier", type="object"),
+     *              @OA\Property(property="error", type="string", example="Residential complex not found"),
+     *              @OA\Property(property="message", type="string", example="ЖК с ключом 'invalid-key' не найден")
+     *          )
      *      )
      * )
      *
@@ -86,7 +145,7 @@ class ReadResidentialComplexesController extends AbstractOperations
         $key = $request->input('key');
         $attributes = $this->residentialComplexRepository->findByKey($key);
         
-        // Проверяем, найден ли ЖК
+
         if (!$attributes) {
             return new JsonResponse(
                 data: [

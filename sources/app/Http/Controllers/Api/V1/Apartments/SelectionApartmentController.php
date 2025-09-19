@@ -43,6 +43,23 @@ class SelectionApartmentController extends AbstractOperations
      *           required=false,
      *           description="Ключ юзера"
      *       ),
+     *       @OA\Parameter(
+     *           name="includes",
+     *           in="query",
+     *           description="Указывает, какие связанные данные нужно включить",
+     *           required=false,
+     *           style="form",
+     *           explode=true,
+     *           @OA\Schema(
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *                   enum={
+     *                        "city"
+     *                    }
+     *               )
+     *           )
+     *       ),
      *       @OA\Response(response=200, description="УСПЕХ!"),
      *       @OA\Response(
      *           response=404,
@@ -65,15 +82,21 @@ class SelectionApartmentController extends AbstractOperations
             );
         }
 
+        // Получаем параметр includes и убеждаемся, что это массив
+        $includes = $request->get('includes', []);
+        if (!is_array($includes)) {
+            $includes = $includes ? [$includes] : [];
+        }
+
         if ($request->input('city_code') && $request->input('user_key')) {
             try {
                 $attributes = $this->recommendationsService->getPersonalRecommendations($request->input('user_key'), $request->input('city_code'));
             } catch (\Exception $e) {
                 Log::info("Не удалось получить персональные рекомендации, используем дефолтную подборку: " . $e->getMessage());
-                $attributes = $this->getDefaultSelections($request->input('city_code'));
+                $attributes = $this->getDefaultSelections($request->input('city_code'), $includes);
             }
         } else {
-            $attributes = $this->getDefaultSelections($request->input('city_code'));
+            $attributes = $this->getDefaultSelections($request->input('city_code'), $includes);
         }
 
         return new JsonResponse(
@@ -86,46 +109,67 @@ class SelectionApartmentController extends AbstractOperations
         );
     }
 
-    private function getDefaultSelections(string $cityCode): array
+    private function getDefaultSelections(string $cityCode, array $includes = []): array
     {
         $minPrice = 4000000;
         $targetFloor = 5;
         $allowedRooms = [1, 2];
 
-        $apartments = Apartment::query()
+        $query = Apartment::query()
             ->where('price', '>=', $minPrice)
             ->where('floor', '=', $targetFloor)
             ->whereIn('room_count', $allowedRooms)
             ->whereNotNull('complex_key')
-            ->where('complex_key', '!=', '')
-            ->orderBy('price', 'asc')
+            ->where('complex_key', '!=', '');
+
+        // Если в includes указан 'city', дополнительно загружаем город
+        if (in_array('city', $includes)) {
+            $query->with(['residentialComplex.location.city', 'residentialComplexByKey.location.city']);
+        }
+
+        $apartments = $query->orderBy('price', 'asc')
             ->limit(20)
             ->get();
 
         if ($apartments->count() < 10) {
-            $apartments = Apartment::query()
+            $query = Apartment::query()
                 ->where('price', '>=', $minPrice)
                 ->whereIn('room_count', $allowedRooms)
                 ->whereNotNull('complex_key')
-                ->where('complex_key', '!=', '')
-                ->orderBy('price', 'asc')
+                ->where('complex_key', '!=', '');
+
+            if (in_array('city', $includes)) {
+                $query->with(['residentialComplex.location.city', 'residentialComplexByKey.location.city']);
+            }
+
+            $apartments = $query->orderBy('price', 'asc')
                 ->limit(20)
                 ->get();
         }
 
         if ($apartments->count() < 5) {
-            $apartments = Apartment::query()
+            $query = Apartment::query()
                 ->where('price', '>=', $minPrice)
                 ->whereNotNull('complex_key')
-                ->where('complex_key', '!=', '')
-                ->orderBy('price', 'asc')
+                ->where('complex_key', '!=', '');
+
+            if (in_array('city', $includes)) {
+                $query->with(['residentialComplex.location.city', 'residentialComplexByKey.location.city']);
+            }
+
+            $apartments = $query->orderBy('price', 'asc')
                 ->limit(20)
                 ->get();
         }
 
         if ($apartments->count() === 0) {
-            $apartments = Apartment::query()
-                ->orderBy('price', 'asc')
+            $query = Apartment::query();
+
+            if (in_array('city', $includes)) {
+                $query->with(['residentialComplex.location.city', 'residentialComplexByKey.location.city']);
+            }
+
+            $apartments = $query->orderBy('price', 'asc')
                 ->limit(20)
                 ->get();
         }

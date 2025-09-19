@@ -71,18 +71,19 @@ class ListResidentialComplexesController extends AbstractOperations
       *              type="array",
       *              @OA\Items(
       *                  type="string",
-      *                  enum={
-      *                       "Amenity",
-      *                       "Apartment",
-      *                       "BestOffer",
-      *                       "BuildingProcess",
-      *                       "Doc",
-      *                       "Gallery",
-      *                       "ResidentialComplexCategoryPivot",
-      *                       "SpriteImagePosition",
-      *                       "UserFavoriteBuilding",
-      *                       "Location",
-      *                   }
+     *                  enum={
+     *                       "Amenity",
+     *                       "Apartment",
+     *                       "BestOffer",
+     *                       "BuildingProcess",
+     *                       "Doc",
+     *                       "Gallery",
+     *                       "ResidentialComplexCategoryPivot",
+     *                       "SpriteImagePosition",
+     *                       "UserFavoriteBuilding",
+     *                       "Location",
+     *                       "city",
+     *                   }
       *              )
       *          )
       *      ),
@@ -118,11 +119,26 @@ class ListResidentialComplexesController extends AbstractOperations
         $residentialComplexesCacheName = "residentialComplexes_{$cityName}";
         $cached = Cache::get($residentialComplexesCacheName);
 
+        // Получаем параметр includes
+        $includes = $request->get('includes', []);
+        
         if ($cached === null) {
-            $collection = $this->residentialComplexRepository->getCatalogueForCity($cityName);
+            $query = $this->residentialComplexRepository->getCityQueryBuilder($cityName);
+            
+            // Если в includes указан 'city', загружаем связанный город через локацию
+            if (in_array('city', $includes)) {
+                $query->with(['location.city']);
+            }
+            
+            $collection = $query->get();
             Cache::put($residentialComplexesCacheName, $collection->toArray(), now()->addMinutes(30));
         } else {
             $collection = ResidentialComplex::hydrate($cached);
+            
+            // Если нужно загрузить город, делаем это для кэшированных данных
+            if (in_array('city', $includes)) {
+                $collection->load(['location.city']);
+            }
         }
 
         $perPage = $request->get('per_page', 15);

@@ -51,9 +51,21 @@ class ListBestOfferController extends AbstractOperations
     public function __invoke(Request $request): JsonResponse
     {
         $cityCode = $request->get('city_code');
+        
+        // Получаем лучшие предложения с информацией о городе
+        $bestOffers = BestOffer::with('city')
+            ->where('location_code', $cityCode)
+            ->whereNull('deleted_at')
+            ->get();
+            
+        $residentialComplexes = $this->residentialComplexRepository->getBestOffers($cityCode);
 
         return new JsonResponse(
-            data: $this->residentialComplexRepository->getBestOffers($cityCode)
+            data: [
+                'residential_complexes' => $residentialComplexes,
+                'city_info' => $bestOffers->first()?->city,
+                'best_offers_count' => $bestOffers->count()
+            ]
         );
     }
 

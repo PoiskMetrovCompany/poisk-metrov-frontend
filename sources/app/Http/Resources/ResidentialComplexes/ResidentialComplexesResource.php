@@ -55,6 +55,7 @@ class ResidentialComplexesResource extends AbstractResource
             'ready_quarter' => $this->getBuildingReadyQuarter(),
             'built_year' => $this->getBuildingBuiltYear(),
             'residential_min_price' => $this->getResidentialMinPrice(),
+            'min_prices_by_room_type' => $this->getMinPricesByRoomType(),
             ...self::relationshipListOperation(ResidentialComplex::class, $searchData, $request->all(), ResidentialComplex::RELATIONSHIP)
         ];
     }
