@@ -1285,6 +1285,16 @@
                         }
                     },
                     {
+                        "name": "rop_key",
+                        "in": "query",
+                        "description": "UUID ключа РОПа для фильтрации кандидатов",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
                         "name": "candidate_statuses",
                         "in": "query",
                         "description": "Статусы анкет (множественные значения через запятую).",
@@ -3711,6 +3721,192 @@
                 }
             }
         },
+        "/api/v1/filters/residential-complex": {
+            "get": {
+                "tags": [
+                    "Filters"
+                ],
+                "summary": "Получить агрегированные данные фильтров для жилого комплекса",
+                "description": "Возвращает агрегированные данные фильтров (этажи, площади, отделка) для всех квартир комплекса",
+                "operationId": "d76fee6b0ef085318710cd1ed98c8b9a",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Ключ жилого комплекса",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "06d561aa-83c2-11f0-a013-10f60a82b815"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "УСПЕХ! Возвращает агрегированные данные фильтров",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "identifier": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "residential_complex_filters"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "attributes": {
+                                            "properties": {
+                                                "complex_key": {
+                                                    "type": "string",
+                                                    "example": "06d561aa-83c2-11f0-a013-10f60a82b815"
+                                                },
+                                                "complex_name": {
+                                                    "type": "string",
+                                                    "example": "Эверест"
+                                                },
+                                                "apartments_count": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "filters": {
+                                                    "properties": {
+                                                        "floors": {
+                                                            "properties": {
+                                                                "list": {
+                                                                    "type": "array",
+                                                                    "items": {
+                                                                        "type": "integer"
+                                                                    },
+                                                                    "example": [
+                                                                        1,
+                                                                        2,
+                                                                        3,
+                                                                        4,
+                                                                        5
+                                                                    ]
+                                                                },
+                                                                "count": {
+                                                                    "type": "integer",
+                                                                    "example": 5
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "apartment_area": {
+                                                            "properties": {
+                                                                "min": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "example": 25.5
+                                                                },
+                                                                "max": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "example": 120
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "kitchen_area": {
+                                                            "properties": {
+                                                                "min": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "example": 8.5
+                                                                },
+                                                                "max": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "example": 25
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "finishing": {
+                                                            "properties": {
+                                                                "list": {
+                                                                    "type": "array",
+                                                                    "items": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "example": [
+                                                                        "Черновая",
+                                                                        "Под чистовую",
+                                                                        "Чистовая"
+                                                                    ]
+                                                                },
+                                                                "count": {
+                                                                    "type": "integer",
+                                                                    "example": 3
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - отсутствует ключ комплекса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Complex key is required"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Необходимо указать ключ комплекса"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ЖК не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Residential complex not found"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "ЖК с ключом 'invalid-key' не найден"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/chats/read": {
             "get": {
                 "tags": [
@@ -4274,7 +4470,7 @@
                     {
                         "name": "filter",
                         "in": "query",
-                        "description": "фильтрация сущности указанной в includes",
+                        "description": "фильтрация сущности указанной в includes. apartments.filters - возвращает агрегированные данные фильтров (этажи, площади, отделка)",
                         "required": false,
                         "style": "form",
                         "explode": true,
@@ -4283,7 +4479,8 @@
                             "items": {
                                 "type": "string",
                                 "enum": [
-                                    "apartments.room"
+                                    "apartments.room",
+                                    "apartments.filters"
                                 ]
                             }
                         }
@@ -4291,10 +4488,185 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "УСПЕХ!"
+                        "description": "УСПЕХ! Возвращает данные ЖК. С фильтром apartments.filters возвращает агрегированные данные фильтров.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "identifier": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "type": {
+                                                            "type": "string",
+                                                            "example": "residential_complex"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "attributes": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "key": {
+                                                            "type": "string",
+                                                            "example": "06d561aa-83c2-11f0-a013-10f60a82b815"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Эверест"
+                                                        },
+                                                        "includes": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object"
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "identifier": {
+                                                    "type": "object"
+                                                },
+                                                "attributes": {
+                                                    "type": "object"
+                                                },
+                                                "includes": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "type": {
+                                                                "type": "string",
+                                                                "example": "filters"
+                                                            },
+                                                            "attributes": {
+                                                                "properties": {
+                                                                    "floors": {
+                                                                        "properties": {
+                                                                            "list": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "integer"
+                                                                                },
+                                                                                "example": [
+                                                                                    1,
+                                                                                    2,
+                                                                                    3,
+                                                                                    4,
+                                                                                    5
+                                                                                ]
+                                                                            },
+                                                                            "count": {
+                                                                                "type": "integer",
+                                                                                "example": 5
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "apartment_area": {
+                                                                        "properties": {
+                                                                            "min": {
+                                                                                "type": "number",
+                                                                                "format": "float",
+                                                                                "example": 25.5
+                                                                            },
+                                                                            "max": {
+                                                                                "type": "number",
+                                                                                "format": "float",
+                                                                                "example": 120
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "kitchen_area": {
+                                                                        "properties": {
+                                                                            "min": {
+                                                                                "type": "number",
+                                                                                "format": "float",
+                                                                                "example": 8.5
+                                                                            },
+                                                                            "max": {
+                                                                                "type": "number",
+                                                                                "format": "float",
+                                                                                "example": 25
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "finishing": {
+                                                                        "properties": {
+                                                                            "list": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "example": [
+                                                                                    "Черновая",
+                                                                                    "Под чистовую",
+                                                                                    "Чистовая"
+                                                                                ]
+                                                                            },
+                                                                            "count": {
+                                                                                "type": "integer",
+                                                                                "example": 3
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Resource not found"
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "identifier": {
+                                            "type": "object"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Residential complex not found"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "ЖК с ключом 'invalid-key' не найден"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -5026,6 +5398,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Filters",
+            "description": "API для получения данных фильтров"
+        },
         {
             "name": "Auth",
             "description": "Операции авторизации"
